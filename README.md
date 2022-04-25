@@ -1,4 +1,3 @@
-# gf4-project
 GF4 - "GF" being short for "Graphics Functions" - is a Python program to
 display two-dimensional data, such as time series data, and to perform
 mathematical operations on the data or between two related data sets. We
