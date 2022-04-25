@@ -1,0 +1,23 @@
+; Glucose Readings, 4-25-2011
+;; FIGURELABEL: Glucose Readings for 4-25-2011
+;; XLABEL: Time, minutes
+;; YLABEL: Glucose
+
+; time, minutes  reading
+0   117
+15  117
+30  132
+60  154
+90  153
+105 129
+; Ate bowl of stew at 110 - 115 minutes
+145 135
+175 127
+205  99
+465  98 
+480  98 ; assumed before eating risotto
+520 168
+545 126
+580 142
+610 118
+655 104

@@ -1,0 +1,323 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>GF4 User’s Guide &#8212; GF4  documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/pyramid.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Neuton&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nobile:regular,italic,bold,bolditalic&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
+<!--[if lte IE 6]>
+<link rel="stylesheet" href="_static/ie6.css" type="text/css" media="screen" charset="utf-8" />
+<![endif]-->
+
+  </head><body>
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="nav-item nav-item-0"><a href="#">GF4  documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">GF4 User’s Guide</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="gf4-user-s-guide">
+<h1>GF4 User’s Guide<a class="headerlink" href="#gf4-user-s-guide" title="Permalink to this headline">¶</a></h1>
+<p>This User’s Guide Covers the Use and Capabilities of the GF4 Waveform Calculator.</p>
+<div class="section" id="what-is-gf4">
+<h2>What Is GF4?<a class="headerlink" href="#what-is-gf4" title="Permalink to this headline">¶</a></h2>
+<p>GF4 - “GF” being short for “Graphics Functions” - is a program to display two-dimensional data, such as time series data, and to perform mathematical operations on the data or between two related data sets.  We will often call the 2D data sets “waveforms” for historical reasons, and because the data often represents time domain waveforms.  Otherwise we generally call the data by the term “datasets”.  The program aims to make data exploration easy and enjoyable.</p>
+<p>The program’s interface is modeled after hand-held calculators of the “reverse polish notation” (RPN) style.  This kind of calculator was made famous by Hewlett-Packard, starting with their HP-35 and HP-45 calculators.  GF4 works with waveforms in place of the numbers manipulated by the hand calculators.</p>
+<p>Thus, a waveform can be scaled, squared, have its logarithm taken, integrated and differentiated  <a class="footnote-reference brackets" href="#id2" id="id1">1</a>, be normalized and rectified, and so on. A discrete Fast Fourier Transform is provided that is not limited to powers of two in data length.  Data can be trimmed or padded.  Curve fitting and smoothing of several varieties can be done.  Two waveforms can be added, subtracted, multiplied, and divided (where possible), correlated or convolved together, among others.</p>
+<p>A certain number of basic waveforms can be generated, including a delta function, step, ramp, sine and damped sine, Gaussian PDF and CDF distributions, and more.  Altogether there are nearly 80 different operations available.</p>
+<p>A basic macro facility is provided to automate a sequence of repeated operations.</p>
+<p>Like RPN calculators, GF4 operations are organized around a stack of data sets.  Unlike those calculators, the various stack levels can be accessed directly as well.</p>
+<p class="rubric">Footnote</p>
+<dl class="footnote brackets">
+<dt class="label" id="id2"><span class="brackets"><a class="fn-backref" href="#id1">1</a></span></dt>
+<dd><p>That is, the discrete differencing equivalent of these operations.</p>
+</dd>
+</dl>
+<div class="section" id="typical-screen-shot">
+<h3>Typical Screen Shot<a class="headerlink" href="#typical-screen-shot" title="Permalink to this headline">¶</a></h3>
+<p>Figure IN-1 depicts a fairly typical view of GF4 in action.  The ramp curve generator has produced a straight line, which was copied to the second stack position.  Then a Gaussian noise series was generated and added to the straight line to produce a very noisy ramp.  The underlying straight line, which still was available in its stack position, was then overlayed onto the noisy version.</p>
+<p>Of note is the title of the graph.  It was generated automatically, capturing a description of each processing step as a reminder for the user.  This is one of many “affordances” the program provides to reduce demands on the user.  The title can be changed by clicking on it, which turns the title line into an edit box.</p>
+<div class="figure align-default" id="id3">
+<img alt="_images/GF4_Screen_Example.png" src="_images/GF4_Screen_Example.png" />
+<p class="caption"><span class="caption-text">Figure IN-1. Screen Shot Of GF4 In Action.</span><a class="headerlink" href="#id3" title="Permalink to this image">¶</a></p>
+<div class="legend">
+<p>The main plotting window is on the left, and the command window is on the right.</p>
+</div>
+</div>
+</div>
+<div class="section" id="a-historical-note">
+<h3>A Historical Note<a class="headerlink" href="#a-historical-note" title="Permalink to this headline">¶</a></h3>
+<p>GF4 is a fifth generation implementation of the basic waveform calculator concept (the first generation - implemented on a 64K Z-80 CP/M machine - was not named).  The implementation language has changed from FORTH to Turbo Pascal to Delphi to the current Python.  Over this time the basic concept has not been changed, while the user interface has evolved and been refined, and more math operations added.</p>
+</div>
+<div class="section" id="some-typical-uses">
+<h3>Some Typical Uses<a class="headerlink" href="#some-typical-uses" title="Permalink to this headline">¶</a></h3>
+<p>Typical uses of GF4 include curve fitting and observing the fit quality, comparing observed cdf curves against a gaussian of the same mean and standard distribution, smoothing noisy time series data, and creating FFT transforms to try to identify prominent frequencies in a waveform.
+GF4 would make an excellent educational tool since it makes exploring the data so easy, which would help the student come to understand basic statistical limitations that are hard to convey otherwise.</p>
+<p>The effect of zero-padding and windowing a waveform before running an FFT is quite illuminating and easy to study.  Cumulative data, such as total covid case counts vs time, can be converted into daily rates by differentiating.  This leads to a very noisy dataset, and that can be smoothed with, for example, a LOWESS smoothing routine. The study of the shape of residuals after fitting a function is interesting and easy to do.</p>
+<p>No code need be written to perform any of these operations on datasets.</p>
+</div>
+<div class="section" id="what-gf4-is-not">
+<h3>What GF4 Is Not<a class="headerlink" href="#what-gf4-is-not" title="Permalink to this headline">¶</a></h3>
+<p>GF4 is not a rigorous tool for statistical calculations.  Although the mathematical operations are done as carefully as possible, usually using well-established scientific libraries such as numpy and scipy, various subtleties are not taken into account.  For example, error bars can be shown for a LOWESS smooth, but they do not take into account possible autocorrelation in the dataset.  FFTs, and correlations and convolutions between waveforms, are not normalized according to usual conventions.  This generally makes no practical difference to exploratory use, since it is the relative shapes and features that are normally of interest.  In addition, although processed data sets can be saved to files, and image files of the curves seen on the screen can be saved as well, error bars, regression coefficients, and the like cannot be output.</p>
+<p>GF4 is best used for understanding the features of a 2D dataset, and working out how effective various kinds of processing will be.  Is it too noisy or too contaminated to get useful results? Does a linear least squares fit make sense? Does this kind of a correlation seem to be meaningful? Is a smoothing window of 50 too wide?  Will a cosine or a supergaussian window produce a cleaner FFT for this particular data?  Will zero-padding the dataset improve the resolution?  Is this increase really “exponential”?  What will be the effect of a D.C offset on the FFT?</p>
+<p>If more than this is needed, the user should take that understanding and use it with other tools to produce a more complete analysis in depth.  The “R” language might be one suitable tool, for example.  After that is done, GF4 can again be used to assess the results as a kind of quality check.</p>
+</div>
+</div>
+<div class="section" id="quick-start">
+<h2>Quick Start<a class="headerlink" href="#quick-start" title="Permalink to this headline">¶</a></h2>
+<p>For a quick introduction, we will work through an example. GF4 will generate the data for us. The file to launch is named gf4.pyw.  It can be launched with pythonw as a GUI application with no console, or with python to also have a console.  The console is not needed except it could display error messages, which are unlikely.  GF4 should be run with some version of python 3.6+.</p>
+<p>To launch the program, you can double-click on its icon in the Windows Explorer file manager or the Linux equivalent, or run with python from the directory that contains gf4:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python3</span> <span class="n">gf4</span><span class="o">.</span><span class="n">pyw</span>
+</pre></div>
+</div>
+<p>or, for systems with the “py” launcher, either of:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pyw</span> <span class="n">gf4</span><span class="o">.</span><span class="n">pyw</span>
+<span class="n">py</span> <span class="n">gf4</span><span class="o">.</span><span class="n">pyw</span>
+</pre></div>
+</div>
+<p>With a data file name also on the command line, GF4 will open and plot that file on launch.</p>
+<div class="section" id="the-noisy-ramp-example">
+<h3>The “Noisy Ramp” Example<a class="headerlink" href="#the-noisy-ramp-example" title="Permalink to this headline">¶</a></h3>
+<p>In this example, we will create a dataset that consists of a straight line with Gaussian noise added.  We will fit a line to the noisy data.  Then we will display the fitted line, and overlay the noisy data, the original line, and the error bars for the fit.</p>
+<div class="section" id="create-and-plot-the-noisy-line">
+<h4>Create And Plot The Noisy Line<a class="headerlink" href="#create-and-plot-the-noisy-line" title="Permalink to this headline">¶</a></h4>
+<div class="section" id="create-a-straight-line">
+<h5><strong>Create a Straight Line</strong><a class="headerlink" href="#create-a-straight-line" title="Permalink to this headline">¶</a></h5>
+<p>To generate the line, click the “Ramp” button. The line will be plotted in the left hand plotting window. this line has been placed in the bottom position of the stack, which is always called “<strong>X</strong>”. Copy it to the “<strong>Y</strong>” position (the next one up in the stack) by clicking on the “Copy2Y” button in the “Stack” group.</p>
+</div>
+<div class="section" id="create-a-noise-dataset">
+<h5><strong>Create a Noise Dataset</strong><a class="headerlink" href="#create-a-noise-dataset" title="Permalink to this headline">¶</a></h5>
+<p>With the original line safely stored in <strong>Y</strong>, now create a dataform of noise.  Click on the “Gaussian Noise” button.  In the dialog box that pops up, change the “Sigma” value to 0.3. If we leave it at the default value of 1.0, there will be too much noise.  Even with the smaller value of sigma, there will be a lot of noise.  Accept the values by clicking the OK button or pressing the &lt;ENTER&gt; key.  The noise waveform will display in the plot window.</p>
+</div>
+<div class="section" id="add-the-noise-to-the-original-line">
+<h5><strong>Add The Noise To the Original Line</strong><a class="headerlink" href="#add-the-noise-to-the-original-line" title="Permalink to this headline">¶</a></h5>
+<p>Next we will add the noise to the straight line we saved in <strong>Y</strong>.  In the “Math” column, click on “X + Y”.  This will add the two curves together point-by-point and leave the result in the <strong>X</strong> stack position.  The original straight line is unchanged in <strong>Y</strong>.</p>
+<p>The sum of the two datasets is a noisy line in <strong>X</strong>, and it has been automatically plotted in the plot window.  In one last touch, click on the “Overplot Y” button in the “Plot” column.  This will overlay the original straight line which is still in <strong>Y</strong>. The result is shown in Figure EX-1a.  Your result may be a little different because you will have gotten a different noise dataset.</p>
+<div class="figure align-default" id="id4">
+<img alt="_images/gf4_example_1_noisy.png" src="_images/gf4_example_1_noisy.png" />
+<p class="caption"><span class="caption-text">Figure EX-1a. The Noisy Ramp With Original (Clean) Curve Overlaid.</span><a class="headerlink" href="#id4" title="Permalink to this image">¶</a></p>
+</div>
+</div>
+<div class="section" id="plot-the-noisy-data-with-point-symbols-instead-of-lines">
+<h5><strong>Plot the Noisy Data With Point Symbols Instead Of Lines</strong><a class="headerlink" href="#plot-the-noisy-data-with-point-symbols-instead-of-lines" title="Permalink to this headline">¶</a></h5>
+<p>The Gaussian noise data points don’t really form a curve because they are independent.  Perhaps it would be better to plot the noisy ramp with points instead of lines.  Try this out by using the “Plot” menu on the left-hand plot window. Select Plot/Main Marker Style/Symbol.  Then click on the “Plot” item in the “Plot” Menu or the “Plot X” button in the commands window.  Then overplot the original ramp in <strong>Y</strong> using the “Overplot Y” button.</p>
+<p>The results will resemble Figure EX-1b.</p>
+<div class="figure align-default" id="id5">
+<img alt="_images/gf4_example_1_noisy_symbols.png" src="_images/gf4_example_1_noisy_symbols.png" />
+<p class="caption"><span class="caption-text">Figure EX-1b. The Noisy Ramp Plotted With Symbols Instead Of Lines.</span><a class="headerlink" href="#id5" title="Permalink to this image">¶</a></p>
+</div>
+<p>Finally, set the main marker style back to “Line”</p>
+</div>
+<div class="section" id="save-the-noisy-line-for-later-viewing">
+<h5><strong>Save The Noisy Line For Later Viewing</strong><a class="headerlink" href="#save-the-noisy-line-for-later-viewing" title="Permalink to this headline">¶</a></h5>
+<p>For this example, at the end we will overlay this noisy line on the plot of the fitted line.  Copy it to the <strong>T</strong> stack position by clicking the “Copy2T” button in the “Stack” group.</p>
+</div>
+</div>
+<div class="section" id="fit-and-plot-the-noisy-line">
+<h4>Fit and Plot The Noisy Line<a class="headerlink" href="#fit-and-plot-the-noisy-line" title="Permalink to this headline">¶</a></h4>
+<p>To fit a linear least squares fit to the noisy ramp, click on the “Lst Sqr Lin” button in the upper right of the commands window.  The best fit straight line will plot in the plotting window.</p>
+<div class="section" id="overplot-the-other-datasets-for-comparison">
+<h5><strong>Overplot The Other Datasets For Comparison</strong><a class="headerlink" href="#overplot-the-other-datasets-for-comparison" title="Permalink to this headline">¶</a></h5>
+<p>For this example we will overplot the original ramp and the noisy version of the ramp.  These datasets are still in <strong>Y</strong> and <strong>T</strong> where we put them.</p>
+<p>Click on the “Overplot Y” button in the “Plot” group at the left of the command window. The original straight line will be plotted in a light cyan color.  It will probably be a little different from the fitted line.  That is normal, because the noisy sample we used is unlikely to have exactly the same properties as the original.</p>
+<p>Click on the “Overplot T” button to overplot the noisy dataset.</p>
+</div>
+<div class="section" id="overlay-error-bands-for-the-fit">
+<h5><strong>Overlay Error Bands For The Fit</strong><a class="headerlink" href="#overlay-error-bands-for-the-fit" title="Permalink to this headline">¶</a></h5>
+<p>Error bands for the fit are available for most of the fitting routines.  Click the “Error Bands” button to see them.  Each time this button is clicked, the error band area gets less transparent, so you can adjust the visibility if needed.</p>
+<p>The results are shown in Figure EX-1c.</p>
+<div class="figure align-default" id="id6">
+<img alt="_images/gf4_example_1_fitted.png" src="_images/gf4_example_1_fitted.png" />
+<p class="caption"><span class="caption-text">Figure EX-1c. The Least Squares Fitted Line With Error Bands And Original Data.</span><a class="headerlink" href="#id6" title="Permalink to this image">¶</a></p>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="encouraging-remarks">
+<h3>Encouraging Remarks<a class="headerlink" href="#encouraging-remarks" title="Permalink to this headline">¶</a></h3>
+<p>Examples like this are usually much harder to describe than to do.  With a little practice, these kinds of operations become familiar and they go very quickly.  One gets used to the location of the command buttons that are commonly used, and the stack positions stop feeling strange.  Just like a physical calculator, in fact.</p>
+</div>
+</div>
+<div class="section" id="data-format">
+<h2>Data Format<a class="headerlink" href="#data-format" title="Permalink to this headline">¶</a></h2>
+<p>GF4 accepts one or two-column whitespace-separated text files, one data point per row. If there is only one column, GF4 inserts an imputed first column with values being consecutive integers beginning with 1.</p>
+<p>Here is an example data file:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># A comment line</span>
+<span class="p">;</span> <span class="n">Another</span> <span class="n">comment</span> <span class="n">line</span><span class="o">.</span>  <span class="n">Also</span><span class="p">,</span> <span class="n">blank</span> <span class="n">lines</span> <span class="n">are</span> <span class="n">ignored</span><span class="o">.</span>
+<span class="c1"># x  y</span>
+<span class="mi">1</span>  <span class="mi">1</span>
+<span class="mi">2</span>  <span class="mi">4</span>
+<span class="mi">3</span>  <span class="mi">9</span>
+<span class="c1"># etc</span>
+</pre></div>
+</div>
+<p>Data points do not need to be equally spaced on the x axis.</p>
+<p>There are specially formatted (optional) comments to specify a title, axis labels, and a break between data sets:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">;;</span> <span class="n">FIGURELABEL</span><span class="p">:</span> <span class="n">The</span> <span class="n">Title</span>
+<span class="p">;;</span> <span class="n">XLABEL</span><span class="p">:</span> <span class="n">The</span> <span class="n">x</span> <span class="n">axis</span> <span class="n">label</span>
+<span class="p">;;</span> <span class="n">YLABEL</span><span class="p">:</span> <span class="n">the</span> <span class="n">y</span> <span class="n">axis</span> <span class="n">label</span>
+<span class="mi">1</span>    <span class="mf">3.0</span>
+<span class="mi">2</span>    <span class="mf">4.0</span>
+<span class="mi">3</span>    <span class="mf">6.0</span>
+<span class="mi">4</span>    <span class="mf">7.0</span>
+<span class="p">;;</span> <span class="n">ENDDATASET</span>
+</pre></div>
+</div>
+<p>The special comment key words are case sensitive.  If there is more than one dataset, the second one goes into the <strong>Y</strong> position in the stack, and so on up to the stack depth.  Beyond that additional data sets are ignored.</p>
+</div>
+<div class="section" id="the-waveform-stack">
+<h2>The Waveform Stack<a class="headerlink" href="#the-waveform-stack" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="plotting-curves">
+<h2>Plotting Curves<a class="headerlink" href="#plotting-curves" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="changing-colors-symbols-and-line-styles">
+<h3>Changing Colors, Symbols, and Line Styles<a class="headerlink" href="#changing-colors-symbols-and-line-styles" title="Permalink to this headline">¶</a></h3>
+</div>
+</div>
+<div class="section" id="using-the-waveform-stack">
+<h2>Using the Waveform Stack<a class="headerlink" href="#using-the-waveform-stack" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="reading-and-saving-data">
+<h2>Reading And Saving Data<a class="headerlink" href="#reading-and-saving-data" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="operations-on-one-waveform">
+<h2>Operations On One Waveform<a class="headerlink" href="#operations-on-one-waveform" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="operations-on-two-waveforms">
+<h2>Operations On Two Waveforms<a class="headerlink" href="#operations-on-two-waveforms" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="the-waveform-generators">
+<h2>The Waveform Generators<a class="headerlink" href="#the-waveform-generators" title="Permalink to this headline">¶</a></h2>
+<p>We encountered one of GF4’s waveform generators in the <a class="reference internal" href="#quick-start">Quick Start</a> section.</p>
+</div>
+<div class="section" id="curve-fitting">
+<h2>Curve Fitting<a class="headerlink" href="#curve-fitting" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="curve-smoothing">
+<h2>Curve Smoothing<a class="headerlink" href="#curve-smoothing" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="windowing-and-ffts">
+<h2>Windowing and FFTs<a class="headerlink" href="#windowing-and-ffts" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="using-macros">
+<h2>Using Macros<a class="headerlink" href="#using-macros" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="#">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">GF4 User’s Guide</a><ul>
+<li><a class="reference internal" href="#what-is-gf4">What Is GF4?</a><ul>
+<li><a class="reference internal" href="#typical-screen-shot">Typical Screen Shot</a></li>
+<li><a class="reference internal" href="#a-historical-note">A Historical Note</a></li>
+<li><a class="reference internal" href="#some-typical-uses">Some Typical Uses</a></li>
+<li><a class="reference internal" href="#what-gf4-is-not">What GF4 Is Not</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#quick-start">Quick Start</a><ul>
+<li><a class="reference internal" href="#the-noisy-ramp-example">The “Noisy Ramp” Example</a><ul>
+<li><a class="reference internal" href="#create-and-plot-the-noisy-line">Create And Plot The Noisy Line</a><ul>
+<li><a class="reference internal" href="#create-a-straight-line"><strong>Create a Straight Line</strong></a></li>
+<li><a class="reference internal" href="#create-a-noise-dataset"><strong>Create a Noise Dataset</strong></a></li>
+<li><a class="reference internal" href="#add-the-noise-to-the-original-line"><strong>Add The Noise To the Original Line</strong></a></li>
+<li><a class="reference internal" href="#plot-the-noisy-data-with-point-symbols-instead-of-lines"><strong>Plot the Noisy Data With Point Symbols Instead Of Lines</strong></a></li>
+<li><a class="reference internal" href="#save-the-noisy-line-for-later-viewing"><strong>Save The Noisy Line For Later Viewing</strong></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#fit-and-plot-the-noisy-line">Fit and Plot The Noisy Line</a><ul>
+<li><a class="reference internal" href="#overplot-the-other-datasets-for-comparison"><strong>Overplot The Other Datasets For Comparison</strong></a></li>
+<li><a class="reference internal" href="#overlay-error-bands-for-the-fit"><strong>Overlay Error Bands For The Fit</strong></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#encouraging-remarks">Encouraging Remarks</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#data-format">Data Format</a></li>
+<li><a class="reference internal" href="#the-waveform-stack">The Waveform Stack</a></li>
+<li><a class="reference internal" href="#plotting-curves">Plotting Curves</a><ul>
+<li><a class="reference internal" href="#changing-colors-symbols-and-line-styles">Changing Colors, Symbols, and Line Styles</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#using-the-waveform-stack">Using the Waveform Stack</a></li>
+<li><a class="reference internal" href="#reading-and-saving-data">Reading And Saving Data</a></li>
+<li><a class="reference internal" href="#operations-on-one-waveform">Operations On One Waveform</a></li>
+<li><a class="reference internal" href="#operations-on-two-waveforms">Operations On Two Waveforms</a></li>
+<li><a class="reference internal" href="#the-waveform-generators">The Waveform Generators</a></li>
+<li><a class="reference internal" href="#curve-fitting">Curve Fitting</a></li>
+<li><a class="reference internal" href="#curve-smoothing">Curve Smoothing</a></li>
+<li><a class="reference internal" href="#windowing-and-ffts">Windowing and FFTs</a></li>
+<li><a class="reference internal" href="#using-macros">Using Macros</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/GF4_Users_Guide.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="nav-item nav-item-0"><a href="#">GF4  documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">GF4 User’s Guide</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright Thomas B. Passin 2022.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.4.0.
+    </div>
+  </body>
+</html>
