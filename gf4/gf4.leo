@@ -10396,12 +10396,15 @@ cmd = [executable, '-m', 'sphinx', '-C',
         '-D', 'html_theme=pyramid',
         '-D', 'project=GF4',
         '-D', 'copyright=Thomas B. Passin 2022',
+        '-D', "html_theme_options.sidebarwidth=20em",
 
         # sourcedir, outputdir:
         r'.', r'html']
 
 subprocess.call(cmd)</t>
-<t tx="tom.20220412080628.1">===================
+<t tx="tom.20220412080628.1">:tocdepth: 3
+
+===================
 GF4 User's Guide
 ===================
 This User's Guide Covers the Use and Capabilities of the GF4 Waveform Calculator.</t>
@@ -10606,6 +10609,8 @@ polish of the various operations. This reflects its evolution under the
 interests and changing needs of the author.  Mathematically, many operations
 are implemented by numpy or scipy computations;  others are algorithms
 implemented by the author.
+
+You can read the [User's Guide](http://www.tompassin.net/gf4/GF4_Users_Guide.html).
 </t>
 </tnodes>
 </leo_file>
