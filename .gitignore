@@ -1,0 +1,5 @@
+# Sphinx-generated files
+gf4/doc/html/
+gf4/doc/*.rst
+
+# *.bak
