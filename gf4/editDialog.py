@@ -1,15 +1,22 @@
+#@+leo-ver=5-thin
+#@+node:tom.20211211170820.45: * @file editDialog.py
 """A dialog with an editing pane, an accept button, and a cancel button.
 When closed, returns the text of the editing pane or an empty string.
 """
 # pylint: disable = consider-using-f-string
+#@+others
+#@+node:tom.20211211170820.46: ** Imports
 #import Tkinter as Tk
 try:
     import Tkinter as Tk
 except:
     import tkinter as Tk
 
+#@+node:tom.20211211170820.47: ** class editDialog(Tk.Toplevel)
 class editDialog(Tk.Toplevel):
     # pylint: disable = too-many-ancestors
+    #@+others
+    #@+node:tom.20211211170820.48: *3* editDialog.__init__
     def __init__(self, parent=None, title = None):
         Tk.Toplevel.__init__(self, parent)
 
@@ -40,6 +47,7 @@ class editDialog(Tk.Toplevel):
         self.wait_window(self)
 
 
+    #@+node:tom.20211211170820.49: *3* editDialog.accept
     def accept(self, event=None):
         self.result = self.editor.get('1.0', Tk.END)
         if self.parent:
@@ -47,6 +55,7 @@ class editDialog(Tk.Toplevel):
         self.window.destroy()
 
 
+    #@+node:tom.20211211170820.50: *3* editDialog.cancel
     def cancel(self, event=None):
         # put focus back to the parent window
         self.result = ''
@@ -54,7 +63,13 @@ class editDialog(Tk.Toplevel):
         self.window.destroy()
         return ''
 
+    #@-others
+#@+node:tom.20211211170820.51: ** if __name__ == '__main__':
 if __name__ == '__main__':
     editDialog('Data Input')
 
     Tk.mainloop()
+#@-others
+#@@language python
+#@@tabwidth -4
+#@-leo

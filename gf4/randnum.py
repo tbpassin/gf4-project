@@ -1,8 +1,13 @@
+#@+leo-ver=5-thin
+#@+node:tom.20211211171913.6: * @file randnum.py
+#@+others
+#@+node:tom.20211211171913.7: ** Imports
 from __future__ import print_function
 
 from random import random as rand
 from random import uniform, gauss
 
+#@+node:tom.20211211171913.8: ** rand_vals
 def rand_vals(count=256):
     '''Return values chosen randomly from interval [0,1).
 
@@ -22,6 +27,7 @@ def rand_vals(count=256):
 
     return (x,y)
 
+#@+node:tom.20211211171913.9: ** uniform_vals
 def uniform_vals(a=-0.5, b=0.5, count=256):
     '''Return values chosen randomly from interval [min, max].
 
@@ -43,6 +49,7 @@ def uniform_vals(a=-0.5, b=0.5, count=256):
 
     return (x,y)
 
+#@+node:tom.20211211171913.10: ** gaussian_vals
 def gaussian_vals(mu=0.0, sigma=1.0, count=256):
     '''Return values chosen randomly from gaussian distribution having
     specified mean and standard deviation].
@@ -82,3 +89,7 @@ if __name__ == '__main__':
 
     print ('gaussian_vals')
     print_vals(gaussian_vals(1,.5,20))
+#@-others
+#@@language python
+#@@tabwidth -4
+#@-leo

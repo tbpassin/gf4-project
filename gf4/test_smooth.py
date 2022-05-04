@@ -1,3 +1,8 @@
+#@+leo-ver=5-thin
+#@+node:tom.20211206195731.2: * @file test_smooth.py
+#@+others
+#@+node:tom.20211206210622.1: ** Imports
+#@@language python
 import sys
 import pyperclip
 try:
@@ -5,11 +10,15 @@ try:
 except ImportError:
     path = r'C:/Tom/devel/matplotlib/gf4'
     sys.path.append(path)
+#@+node:tom.20211206200219.1: ** Declarations
+#@@language python
 DATA = [f'{i}   0' for i in range(10)]
 DATA.extend([f'{i}   1' for i in range(10, 100)])
 
 SPAN = 10
 SRANGE = (5,10,15,20,30)
+#@+node:tom.20211206195731.3: ** Main
+#@@language python
 
 if __name__ == '__main__':
 
@@ -63,3 +72,7 @@ if __name__ == '__main__':
             with open(oname, 'w') as of:
                 of.write(header)
                 of.write(''.join(result)) 
+#@-others
+#@@language python
+#@@tabwidth -4
+#@-leo

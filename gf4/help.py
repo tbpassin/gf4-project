@@ -1,3 +1,8 @@
+#@+leo-ver=5-thin
+#@+node:tom.20220411202149.1: * @file help.py
+#@@language python
+#@+others
+#@+node:tom.20220411210428.1: ** imports
 from os.path import dirname, join
 import webbrowser
 
@@ -15,12 +20,14 @@ except:
     # import ttk
 # except:
     # from tkinter import ttk
+#@+node:tom.20220411202245.1: ** tutorial
 def tutorial():
     helpdoc = 'GF4_Users_Guide.html'
     path = join(dirname(__file__), 'doc', 'html', helpdoc)
     path = path.replace('\\', '/')
     url = f'file:///{path}'
     webbrowser.open_new_tab(url)
+#@+node:tom.20220411210306.1: ** msg_window
 def msg_window(text, plotmgr=None):
     _geom = ''
     if plotmgr:
@@ -66,12 +73,15 @@ def msg_window(text, plotmgr=None):
     else:
         win.geometry('600x800')
 
+#@+node:tom.20220411201434.1: ** about
 def about(parent = None):
     msg = """
        GF4 Waveform Calculator/Plotter
 --------------------------------------------------------
 Plots 2D curves and performs calculations on them. GF4 is modeled after a reverse polish notation (RPN) calculator, where 2D waveforms take the place of plain numbers.
 
+#@+others
+#@+node:tom.20220412003223.1: *3* About and Data Format
   Input Data Format
 -----------------------------------------------
 GF4 accepts one or two-column whitespace-separated text files, one data point per row. If there is only one column, GF4 inserts an imputed first column with values being consecutive integers beginning with 1.
@@ -101,6 +111,7 @@ There are specially formatted (optional) comments to specify a title, axis label
 
 The special comment key words are case sensitive.  If there is more than one dataset, the second one goes into the y position in the stack, and so on up to the stack depth.  Beyond that additional data sets are ignored.
 
+#@+node:tom.20220412003352.1: *3* The Waveform Stack
     The Waveform Stack
 -------------------------------------
 The stack is a group of data sets, where new data sets get added to the "bottom" or "X" slot, and there are other slots "above" X, namely "Y" (the next one "up"), and "T", the "topmost" slot.  In computer terms, the stack can be pushed, popped, or rotated. Data sets can also be added directly to the various slots.
@@ -113,6 +124,7 @@ Slots in the stack:
     | ---  Y  --- |
     | ---  X  --- |    <--- Stack Bottom
     
+#@+node:tom.20220412003444.1: *3* Data Input
     Data Input
 ----------------------------
 GF4 has two ways to get data:
@@ -122,6 +134,7 @@ GF4 has two ways to get data:
 
 New data from either source always gets inserted into the "X" slot, replacing whatever was there.  If the data file contains the special comment ";; ENDDATASET", then the data following that comment will get loaded into the next higher slot in the stack, replacing the previous contents.  If there should be another data section, it will load into the next higher slot, the top slot.  Data sections beyond this will get ignored.
 
+#@+node:tom.20220412003456.1: *3* Data Output
     Data Output
 -------------------------
 Data in the "X" slot can be saved in two ways:
@@ -131,13 +144,17 @@ Data in the "X" slot can be saved in two ways:
 
 Saved data will include the plot title and the axis labels, if any have been added.  The are denoted using the special comments described above.
 
+#@+node:tom.20220412003510.1: *3* Plotting Data
     Plotting Data
 -----------------------------
+#@-others
 """
 
     msg_window(msg, parent)
+#@-others
 
 if __name__ == '__main__':
 #    msg_window('This is the help message', None)
     about()
     Tk.mainloop()
+#@-leo

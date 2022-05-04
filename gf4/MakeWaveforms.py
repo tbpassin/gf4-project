@@ -1,3 +1,7 @@
+#@+leo-ver=5-thin
+#@+node:tom.20211211171304.65: * @file MakeWaveforms.py
+#@+others
+#@+node:tom.20211211171304.66: ** Imports
 """Plotting routines for gf4. This code was removed from the
 PlotManager class to reduce the size of the class.  The name
 of the parameter "self" has been retained to simplify this
@@ -12,6 +16,7 @@ from AbstractPlotMgr import MAIN
 from Dataset import Dataset
 from randnum import rand_vals, uniform_vals, gaussian_vals
 
+#@+node:tom.20211211171304.67: ** makeExponential
 def makeExponential(self):
     _id = str(self.makeExponential)
     lastparm = self.parmsaver.get(_id, 3.0)
@@ -28,6 +33,7 @@ def makeExponential(self):
     self.set_data(_ds, MAIN)
     self.plot()
 
+#@+node:tom.20211211171304.68: ** makeSine
 def makeSine(self):
     _id = str(self.makeSine)
     lastparm = self.parmsaver.get(_id, 5)
@@ -45,6 +51,7 @@ def makeSine(self):
     self.set_data(_ds, MAIN)
     self.plot()
 
+#@+node:tom.20211211171304.69: ** makeDampedSine
 def makeDampedSine(self):
     _id = str(self.makeDampedSine)
     lastc, lastd = self.parmsaver.get(_id, (5, 3.0))
@@ -61,6 +68,7 @@ def makeDampedSine(self):
     self.set_data(_ds, MAIN)
     self.plot()
 
+#@+node:tom.20211211171304.70: ** makeStep
 def makeStep(self):
     N = self.num
     _ds = Dataset()
@@ -70,6 +78,7 @@ def makeStep(self):
     self.set_data(_ds, MAIN)
     self.plot()
 
+#@+node:tom.20211211171304.71: ** makeDelta
 def makeDelta(self):
     '''Generate a delta function of amplitude 1, located at the start
     of the waveform
@@ -85,6 +94,7 @@ def makeDelta(self):
     self.set_data(_ds, MAIN)
     self.plot()
 
+#@+node:tom.20211211171304.72: ** makeRamp
 def makeRamp(self):
     N = self.num
     _ds = Dataset()
@@ -94,6 +104,7 @@ def makeRamp(self):
     self.set_data(_ds, MAIN)
     self.plot()
 
+#@+node:tom.20211211171304.73: ** makeSquarewave
 def makeSquarewave(self):
     _id = str(self.makeSquarewave)
     lastparm = self.parmsaver.get(_id, 5)
@@ -112,6 +123,7 @@ def makeSquarewave(self):
     self.set_data(_ds, MAIN)
     self.plot()
 
+#@+node:tom.20211211171304.74: ** makeRandomNoise
 def makeRandomNoise(self):
     _x, _y = rand_vals(self.num)
     _ds = Dataset()
@@ -124,6 +136,7 @@ def makeRandomNoise(self):
     self.set_data(_ds, MAIN)
     self.plot()
 
+#@+node:tom.20211211171304.75: ** makeUniformNoise
 def makeUniformNoise(self):
     _x, _y = uniform_vals(-0.5, 0.5, self.num)
     _ds = Dataset()
@@ -136,6 +149,7 @@ def makeUniformNoise(self):
     self.set_data(_ds, MAIN)
     self.plot()
 
+#@+node:tom.20211211171304.76: ** makeGaussianNoise
 def makeGaussianNoise(self):
     _id = str(self.makeGaussianNoise)
     lastm, lasts = self.parmsaver.get(_id, (0.0, 1.0))
@@ -157,6 +171,7 @@ def makeGaussianNoise(self):
     self.set_data(_ds, MAIN)
     self.plot()
 
+#@+node:tom.20211211171304.77: ** pdfGaussian
 def pdfGaussian(self):
     _id = str(self.pdfGaussian)
     lastm, lasts = self.parmsaver.get(_id, (0.0, 2.0))
@@ -176,6 +191,7 @@ def pdfGaussian(self):
     self.set_data(_ds, MAIN)
     self.plot()
 
+#@+node:tom.20211211171304.78: ** cdfGaussian
 def cdfGaussian(self):
     _id = str(self.cdfGaussian)
     lastm, lasts = self.parmsaver.get(_id, (0.0, 2.0))
@@ -194,3 +210,7 @@ def cdfGaussian(self):
 
     self.set_data(_ds, MAIN)
     self.plot()
+#@-others
+#@@language python
+#@@tabwidth -4
+#@-leo

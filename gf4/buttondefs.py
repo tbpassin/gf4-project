@@ -1,4 +1,8 @@
+#@+leo-ver=5-thin
+#@+node:tom.20211211170819.6: * @file buttondefs.py
 # pylint: disable = consider-using-f-string
+#@+others
+#@+node:tom.20211211170819.7: ** Declarations (buttondefs.py)
 # encoding: utf-8
 '''Button definitions for GF4.  Format:
     (button label, command string, help message)
@@ -153,3 +157,7 @@ TREND_BUTTONS = (
     ('Mann-Kendall', 'mann_kendall', 'Compute Mann-Kendall Trend'),
     ('Windowed Dev', 'sliding_var', 'Standard Deviation In a Sliding Window'),
 )
+#@-others
+#@@language python
+#@@tabwidth -4
+#@-leo

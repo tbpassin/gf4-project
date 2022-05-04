@@ -1,4 +1,10 @@
+#@+leo-ver=5-thin
+#@+node:tom.20211211171913.40: * @file stats.py
+#@@language python
+#@@tabwidth -4
 """Compute various statistical measures for 2D data."""
+#@+others
+#@+node:tom.20211211171913.41: ** Imports
 from __future__ import print_function
 
 import math
@@ -9,6 +15,7 @@ import numpy as np
 
 from smoother import correlationCoeff
 
+#@+node:tom.20211211171913.42: ** cdf
 def cdf(ydata):
     '''Compute Cumulative Distribution Function.  CDF is
     P(X <= x), where X is a value of the random variable, and x
@@ -71,6 +78,7 @@ def cdf(ydata):
 
     return (x, y, upperbound, lowerbound)
 
+#@+node:tom.20211211171913.43: ** histogram
 def histogram(data, nbins=10):
     '''Given a list of data points, compute the histogram.  The histogram's area
     sums to one, so that it is a probability distribution.  A data point
@@ -148,6 +156,7 @@ def histogram(data, nbins=10):
 
     return _x, _y
 
+#@+node:tom.20211211171913.44: ** meanstd
 def meanstd(ydata):
     '''Compute the sample standard deviation s and mean of a set of data.
     Return a tuple (mean, s).
@@ -168,6 +177,7 @@ def meanstd(ydata):
 
     return (mean, std)
 
+#@+node:tom.20211211171913.45: ** fitNormalToCdf
 def fitNormalToCdf(values, probs, N=100):
     '''Fit a normal distribution to a CDF by matching its mean and std dev,
     then computing the normal CDF. A CDF curve has the data values
@@ -202,6 +212,7 @@ def fitNormalToCdf(values, probs, N=100):
 
     return _xdata, _ydata, m, sigma
 
+#@+node:tom.20211211171913.46: ** calcNormalForCdf
 def calcNormalForCdf(values, mean=0.0, sigma=1.0):
     '''For a list of values, calculate the cumulative probability
     for a normal distribution.  Typically, the values are the
@@ -229,6 +240,7 @@ def calcNormalForCdf(values, mean=0.0, sigma=1.0):
 
     return probs
 
+#@+node:tom.20211211171913.47: ** fitNormalToCdfAdaptive
 def fitNormalToCdfAdaptive(values, probs, tolerance=.01):
     '''Given a CDF curve, fit a normal distribution to it by an
     adaptive process.  Return the final calculated probabilities, and
@@ -374,6 +386,7 @@ def fitNormalToCdfAdaptive(values, probs, tolerance=.01):
 
     return _xdata, _ydata, ms, sigma, _correl
 
+#@+node:tom.20211211171913.48: ** spearman
 def spearman(x,y):
     '''Compute Spearman's rank correlation coefficient for two data sequences.
     Return the coefficient and its 95% confidence limit .
@@ -465,6 +478,7 @@ def spearman(x,y):
     C = t_test.interval(0.95, N-2)[1]  # t-test 95% confidence interval
     return R, t, C
 
+#@+node:tom.20211211171913.49: ** pearson
 def pearson(x,y):
     '''Given two sequences of the same length, return the sample Pearson correlation coefficient.
     See
@@ -495,6 +509,7 @@ def pearson(x,y):
     r = xy / (x2*y2)**.5
 
     return r
+#@+node:tom.20211212001620.1: ** __main__
 if __name__ == '__main__':
     import matplotlib.pyplot as plt
     from pylab import gcf  # rcParams
@@ -678,3 +693,5 @@ if __name__ == '__main__':
 
     Tests = (testCalcNorm, )  #, testCorrelations, test_spearmanr#, testSpearman
     runtests(Tests)
+#@-others
+#@-leo

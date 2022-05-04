@@ -1,4 +1,8 @@
+#@+leo-ver=5-thin
+#@+node:tom.20211211170819.26: * @file createMenus.py
 # pylint: disable = consider-using-f-string, undefined-variable
+#@+others
+#@+node:tom.20211211170819.27: ** Imports
 try:
     import Tkinter as Tk
 except:
@@ -11,6 +15,7 @@ from colors import (WHITE, BLACK, LIGHTBLUE, DEEPSKYBLUE, CORNFLOWERBLUE,
 
 from help import about, tutorial
 
+#@+node:tom.20211211170819.28: ** setMenus
 def setMenus(self):
     """Create the menus for gf4.
 
@@ -31,6 +36,8 @@ def setMenus(self):
     # Create a toplevel menu
     mainMenu = Tk.Menu(self.root)
 
+    #@+others
+    #@+node:tom.20220401195652.1: *3* Plot
     plotSubmenu = Tk.Menu(self.root)
 
     commands = (
@@ -55,6 +62,7 @@ def setMenus(self):
     for label, command in commands:
         plotSubmenu.add_radiobutton(label = label, command = command)
 
+    #@+node:tom.20220401201301.1: *4* Marker Submenu
     plotSubmenu.add_separator()
 
     mainMarkerSubmenu = Tk.Menu(self.root)
@@ -85,6 +93,7 @@ def setMenus(self):
     bufferMarkerSubmenu.add_radiobutton(
         label='Both', variable=self.buffer_marker_style, value=3,
         command=self.setBufferMarkerStyle)
+    #@+node:tom.20220401201342.1: *4* Linestyles Submenu
     lineStyleSubmenu = Tk.Menu(self.root)
     plotSubmenu.add_cascade(label='Linestyles', menu=lineStyleSubmenu)
     mainLinestyleSubmenu = Tk.Menu(self.root)
@@ -107,6 +116,7 @@ def setMenus(self):
                 label=_label,
                 variable=self.radio_buffer_linestyle, value=_width,
                 command=self.setBufferLineWidth, underline=0)
+    #@+node:tom.20220401201409.1: *4* Symbol Submenu
     symbolStyleSubmenu = Tk.Menu(self.root)
     plotSubmenu.add_cascade(label='Symbol Shapes', menu=symbolStyleSubmenu)
     mainSymbolstyleSubmenu = Tk.Menu(self.root)
@@ -151,6 +161,7 @@ def setMenus(self):
     bufferSymbolstyleSubmenu.add_radiobutton(
         label='triangle-left', variable=self.buffer_symbol_shape,
         value=TRIANGLE_LEFT, command=self.setSymShapeBuffer)
+    #@+node:tom.20220401201458.1: *4* Color Submenu
     colorSubmenu = Tk.Menu(self.root)
     plotSubmenu.add_cascade(label='Colors', menu=colorSubmenu)
 
@@ -203,6 +214,7 @@ def setMenus(self):
         bufferLineColorSubmenu.add_radiobutton(
                 label=_label, variable=self.buffer_line_color,
                 value=_color, command=self.setLineColorBuffer)
+    #@+node:tom.20220401195940.1: *3* fileSubmenu
     fileSubmenu = Tk.Menu(self.root)
     fileSubmenu.add_command(label='Open',
         command=self.load_data,
@@ -215,6 +227,7 @@ def setMenus(self):
     fileSubmenu.add_separator()
     fileSubmenu.add_command(label="eXit", command=self.quit,
         accelerator='<Alt-F4>', underline=1)
+    #@+node:tom.20220401195954.1: *3* stackSubmenu
     stackSubmenu = Tk.Menu(self.root)
     stackSubmenu.add_command(label='Copy To Buffer', 
                 command=self.copyToBuffer, underline=0)
@@ -236,6 +249,7 @@ def setMenus(self):
                 command=self.rotate_stack_up, underline=7)
     stackSubmenu.add_command(label='Rotate Down', 
                 command=self.rotate_stack_down, underline=7)
+    #@+node:tom.20220401200034.1: *3* curveSubmenu
     curveSubmenu = Tk.Menu(self.root)
     curveSubmenu.add_command(label='Pad/Truncate',
         command=self.pad_truncate,
@@ -257,6 +271,7 @@ def setMenus(self):
         command=self.setNumPoints, underline=4)
     curveSubmenu.add_command(label='Replace X Axis',
         command=self.replaceX, underline=8)
+    #@+node:tom.20220401200047.1: *3* waveformMathSubmenu
     waveformMathSubmenu = Tk.Menu(self.root)
 
     waveformMathSubmenu.add_command(label='Add Buffer',
@@ -294,6 +309,7 @@ def setMenus(self):
         underline=0)
     waveformMathSubmenu.add_command(label='Normalize', command=self.normalize,
         underline=0)
+    #@+node:tom.20220401200120.1: *3* dataProcessingSubmenu 
     dataProcessingSubmenu = Tk.Menu(self.root)
     dataProcessingSubmenu.add_command(label='FFT', command=self.fft,
         underline=0)
@@ -310,6 +326,7 @@ def setMenus(self):
         command=self.lopass, underline=0)
     dataProcessingSubmenu.add_command(label='High Pass RC Filter',
         command=self.hipass, underline=0)
+    #@+node:tom.20220401200152.1: *3* windowSubmenu 
     windowSubmenu = Tk.Menu(self.root)
     dataProcessingSubmenu.add_cascade(label='Window', menu=windowSubmenu)
     windowSubmenu.add_command(label='Half Cos Window',
@@ -322,6 +339,7 @@ def setMenus(self):
         command=self.gaussian_window, underline=0)
     windowSubmenu.add_command(label='Supergaussian Window',
         command=self.super_gaussian, underline=0)
+    #@+node:tom.20220401200202.1: *3* smoothSubmenu
     smoothSubmenu = Tk.Menu(self.root)
     smoothSubmenu.add_command(label='Cubic Spline Fit',
         command=self.cubicSpline)
@@ -346,6 +364,7 @@ def setMenus(self):
 
     smoothSubmenu.add_command(label='Spline Smooth',
         command=self.spline_smooth, underline=0)
+    #@+node:tom.20220401200248.1: *3* generateSubmenu
     generateSubmenu = Tk.Menu(self.root)
     generateSubmenu.add_command(label='Exponential',
         command=self.makeExponential, underline=0)
@@ -378,6 +397,7 @@ def setMenus(self):
     generateSubmenu.add_command(label='Gaussian Noise',
         command=self.makeGaussianNoise, underline=0)
 
+    #@+node:tom.20220401200234.1: *3* statsSubmenu
     statsSubmenu = Tk.Menu(self.root)
     statsSubmenu.add_command(label='CDF', command=self.cdf, underline=1)
     statsSubmenu.add_command(label='Fit CDF With Normal', 
@@ -396,11 +416,13 @@ def setMenus(self):
 
     statsSubmenu.add_command(label='Sliding Variance',
         command = self.sliding_var)
+    #@+node:tom.20220411201602.1: *3* helpSubmenu
     helpSubmenu = Tk.Menu(self.root)
     helpSubmenu.add_command(label='About',
         command=lambda: about(self), underline=0)
     helpSubmenu.add_command(label = "User's Guide",
         command=tutorial, underline = 0)
+    #@+node:tom.20220401200301.1: *3* mainMenu.add_cascade
     mainMenu.add_cascade(label='File', menu=fileSubmenu)
 
     mainMenu.add_cascade(label='Plot', menu=plotSubmenu)
@@ -416,6 +438,7 @@ def setMenus(self):
         # state=Tk.ACTIVE, underline=0)
     # mainMenu.add_cascade(label='Generate', menu=generateSubmenu)
     mainMenu.add_cascade(label='Help', menu = helpSubmenu)
+    #@+node:tom.20220401200321.1: *3* Test Menu
     # ========== Test Only ==================================
     testMenu = Tk.Menu(self.root)
     testMenu.add_command(label='Open Aux Window', command=self.openAuxWin)
@@ -435,5 +458,10 @@ def setMenus(self):
     testMenu.add_command(label='Timehack', command=self.addTimehack)
 
     #mainMenu.add_cascade(label='Test', menu=testMenu)#, state=Tk.DISABLED)
+    #@-others
 
     return mainMenu
+#@-others
+#@@language python
+#@@tabwidth -4
+#@-leo

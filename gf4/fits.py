@@ -1,9 +1,14 @@
+#@+leo-ver=5-thin
+#@+node:tom.20211211181438.12: * @file fits.py
+#@+others
+#@+node:tom.20211211181438.13: ** Imports
 """Piecewise Linear and other curve fitting procedures."""
 
 from __future__ import print_function
 
 import pwlf
 
+#@+node:tom.20211211181438.14: ** piecewiseLinear (fits.py)
 def piecewiseLinear(x, y, num):
     """Return an optimum piece-wise 2-D linear fit.
 
@@ -37,3 +42,7 @@ if __name__ == '__main__':
     yh = piecewiseLinear(x, y, 2)
 
     show(x, yh)
+#@-others
+#@@language python
+#@@tabwidth -4
+#@-leo

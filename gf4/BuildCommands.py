@@ -1,4 +1,8 @@
+#@+leo-ver=5-thin
+#@+node:tom.20211211170819.2: * @file BuildCommands.py
 # pylint: disable = consider-using-f-string
+#@+others
+#@+node:tom.20211211170819.4: ** buildCommands
 def buildCommands(self):
     '''Create a dictionary of commands keyed by strings.
     Intended for use in macros and by an auxilary command
@@ -114,3 +118,7 @@ def buildCommands(self):
        'piecewise': self.fit_piecewise,
        'timehack': self.addTimehack,
     }
+#@-others
+#@@language python
+#@@tabwidth -4
+#@-leo

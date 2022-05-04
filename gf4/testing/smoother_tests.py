@@ -1,3 +1,7 @@
+#@+leo-ver=5-thin
+#@+node:tom.20211206205420.2: * @file testing/smoother_tests.py
+#@+others
+#@+node:tom.20211210160855.3: ** Organizer: Declarations (smoother_tests.py)
 import sys
 import random
 #from random import random as rand
@@ -27,6 +31,7 @@ plt.rcParams['axes.grid'] = True
 plt.rcParams['ytick.direction'] = 'out'
 plt.rcParams['xtick.direction'] = 'out'
 
+#@+node:tom.20211210160855.4: ** self_printer (smoother_tests.py)
 def self_printer(f):
     def new_f(*args):
         print()
@@ -36,6 +41,7 @@ def self_printer(f):
     return new_f
 
 @self_printer
+#@+node:tom.20211210160855.5: ** cspline_fit (smoother_tests.py)
 def cspline_fit():
     'Test Cubic Spline Fit'
     x = [0, 1, 2, 3, 4, 5, 6]
@@ -51,6 +57,7 @@ def cspline_fit():
     plt.show()
 
 @self_printer
+#@+node:tom.20211210160855.6: ** spline_smooth (smoother_tests.py)
 def spline_smooth():
     '''Test Spline Smoother'''
 
@@ -80,6 +87,7 @@ def spline_smooth():
     plt.show()
 
 @self_printer
+#@+node:tom.20211210160855.7: ** lowess_smooth (smoother_tests.py)
 def lowess_smooth():
     'Test LOWESS Smoother lowess()'
 
@@ -107,6 +115,7 @@ def lowess_smooth():
     plt.show()
 
 @self_printer
+#@+node:tom.20211210160855.8: ** lowess2_smooth (smoother_tests.py)
 def lowess2_smooth():
     'Test LOWESS2 Smoother'
 
@@ -139,6 +148,7 @@ def lowess2_smooth():
     plt.show()
 
 @self_printer
+#@+node:tom.20211210160855.9: ** lowess1_autocorr (smoother_tests.py)
 def lowess1_autocorr(func=None):
     'Test LOWESS Adaptive Smoothing Using Residual Autocorrelations'
 
@@ -184,6 +194,7 @@ def lowess1_autocorr(func=None):
     plt.show()
 
 @self_printer
+#@+node:tom.20211210160855.10: ** test_lowess_adaptive_ac (smoother_tests.py)
 def test_lowess_adaptive_ac(func=None):
     '''Test Lowess Autocorrelation Adaptive Fit - lowessAdaptiveAC()'''
 
@@ -217,6 +228,7 @@ def test_lowess_adaptive_ac(func=None):
 
 
 @self_printer
+#@+node:tom.20211210160855.11: ** lstsqr (smoother_tests.py)
 def lstsqr():
     'Test Linear Least Squares'
     # pylint: disable = too-many-locals
@@ -272,6 +284,7 @@ def lstsqr():
     plt.show()
 
 @self_printer
+#@+node:tom.20211210160855.12: ** lowess2_mse (smoother_tests.py)
 def lowess2_mse(func=None):
     """Test LOWESS Adaptive Smoother: MSE with Roughness Penalty"""
     # pylint: disable = too-many-locals
@@ -346,6 +359,7 @@ def lowess2_mse(func=None):
 
 
 @self_printer
+#@+node:tom.20211210160855.13: ** test_adaptive_lowess (smoother_tests.py)
 def test_adaptive_lowess(w):
     'Test lowessAdaptive()'
     N = 200
@@ -380,6 +394,7 @@ def test_adaptive_lowess(w):
     plt.show()
 
 @self_printer
+#@+node:tom.20211210160855.14: ** lowess_smooth_quad (smoother_tests.py)
 def lowess_smooth_quad():
     'Test LOWESS Quadratic Smoother'
 
@@ -413,6 +428,7 @@ def lowess_smooth_quad():
     plt.show()
 
 @self_printer
+#@+node:tom.20211210160855.15: ** slope_var (smoother_tests.py)
 def slope_var():
     """Calculate mean and standard deviation of least-square slope."""
     # pylint: disable = too-many-locals
@@ -487,6 +503,7 @@ def slope_var():
     plt.show()
 
 @self_printer
+#@+node:tom.20211210160855.16: ** test_thiel (smoother_tests.py)
 def test_thiel():
     N = 50
     DELTA = 1.
@@ -508,6 +525,7 @@ def test_thiel():
     plt.show()
 
 @self_printer
+#@+node:tom.20211210160855.17: ** test_lowess_devs (smoother_tests.py)
 def test_lowess_devs():
     N = 50
     DELTA = 1.
@@ -543,6 +561,7 @@ def test_lowess_devs():
     plt.show()
 
 @self_printer
+#@+node:tom.20211210160855.18: ** stdErrOfFit (smoother_tests.py)
 def stdErrOfFit():
     """Test the standard error of a lowess fit.
   Estimated SE -- Standard error of fitted point relative to average
@@ -607,6 +626,7 @@ def stdErrOfFit():
     plt.show()
 
 @self_printer
+#@+node:tom.20211210160855.19: ** test_moving_median (smoother_tests.py)
 def test_moving_median():
     """Test moving median smoothing."""
 
@@ -650,3 +670,7 @@ Tests = (#lstsqr,
 if __name__ == '__main__':
     for t in Tests:
         t()
+#@-others
+#@@language python
+#@@tabwidth -4
+#@-leo

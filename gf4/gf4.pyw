@@ -1,4 +1,8 @@
+#@+leo-ver=5-thin
+#@+node:tom.20211207165051.2: * @file gf4.pyw
 # pylint: disable = consider-using-f-string
+#@+others
+#@+node:tom.20211207165051.3: ** Imports
 from __future__ import print_function
 
 import os.path
@@ -41,12 +45,14 @@ from cmdwin import cmdwindow
 
 matplotlib.use('TkAgg')
 
+#@+node:tom.20211207171026.1: ** Declarations
 COMMENTS = (';', '#')
 
 ENCODING = 'utf-8'
 # Special data import keyword
 ENDDATASET = 'ENDDATASET'
 
+#@+node:tom.20211207165051.4: ** class PlotManager(AbstractPlotManager)
 class PlotManager(AbstractPlotManager):
 
     # pylint: disable = import-outside-toplevel
@@ -64,6 +70,9 @@ class PlotManager(AbstractPlotManager):
         makeUniformNoise, makeGaussianNoise,
         pdfGaussian, cdfGaussian)
 
+    #@+others
+    #@+node:tom.20211207211642.1: *3* Decorators
+    #@+node:tom.20211207165051.5: *4* doErrorBands
     def doErrorBands(method):
         '''A decorator method to process error bands in the same way that
         the y data is processed.  The original method call must return
@@ -82,6 +91,7 @@ class PlotManager(AbstractPlotManager):
 
         return new_method
 
+    #@+node:tom.20211207165051.6: *4* REQUIRE_MAIN
     def REQUIRE_MAIN(procedure):
         """A decorator method to check if there is data in the MAIN slot.
 
@@ -105,6 +115,7 @@ class PlotManager(AbstractPlotManager):
             procedure(*args)
         return new_proc
 
+    #@+node:tom.20211207165051.7: *4* REQUIRE_MAIN_BUFF
     def REQUIRE_MAIN_BUFF(procedure):
         """A decorator method to check if there is data in the MAIN
         and BUFFER slots.
@@ -131,6 +142,7 @@ class PlotManager(AbstractPlotManager):
             procedure(self)
         return new_proc
 
+    #@+node:tom.20211207165051.8: *3* __init__
     def __init__(self, root=None):
         super().__init__(root)
         self.toolbar = None
@@ -163,21 +175,27 @@ class PlotManager(AbstractPlotManager):
         self.buildCommands()
         self.setMenus()
 
+    #@+node:tom.20211207165051.22: *3* setMenus
     def setMenus(self):
         mainMenu = createMenus.setMenus(self)
         self.root.config(menu=mainMenu)
 
+    #@+node:tom.20211207165051.9: *3* openAuxWin
     def openAuxWin(self):
         if not self.hasToplevel():
             cmdwindow(self)
 
+    #@+node:tom.20211207211739.1: *3* Widget Utilities
+    #@+node:tom.20211207165051.10: *4* open_editDialog
     def open_editDialog(self):
         editDialog()
 
+    #@+node:tom.20211207165051.11: *4* setWindowTitle
     def setWindowTitle(self, title=''):
         if self.root:
             self.root.wm_title(title)
 
+    #@+node:tom.20211207165051.12: *4* label_select_all
     def label_select_all(self, event):
         '''Select all text in an edit widget (Tk.Entry) when <CNTRL-A>
         is pressed. It seems that the default key is <CTRL-/>
@@ -188,6 +206,7 @@ class PlotManager(AbstractPlotManager):
         event.widget.selection_range(0, Tk.END)
         return 'break'
 
+    #@+node:tom.20211207165051.13: *4* setupFigure
     def setupFigure(self, title='GF4'):
         root = Tk.Tk()
         root.option_add('*tearOff', False)  # Tk specific menu option
@@ -230,6 +249,7 @@ class PlotManager(AbstractPlotManager):
         self.set_editable_labels()
         self.currentLabelEditing = None
 
+    #@+node:tom.20211207165051.14: *4* fadeit
     def fadeit(self, widget=None):
         '''For TextFade widgets and similar with a fade() method.'''
         if widget and 'fade' not in dir(widget): return
@@ -237,6 +257,7 @@ class PlotManager(AbstractPlotManager):
             widget = self.announcer
         widget.fade()
 
+    #@+node:tom.20211207165051.15: *4* flashit
     def flashit(self, color='yellow', widget=None):
         '''For TextFade widgets and similar with a flash() method.'''
         if widget and 'flash' not in dir(widget): return
@@ -246,6 +267,7 @@ class PlotManager(AbstractPlotManager):
         widget.after(1000)
         self.fadeit(widget)
 
+    #@+node:tom.20211207165051.16: *4* announce
     def announce(self, msg='This is a test'):
         '''Show an message in the announcement area.'''
         _ann = self.announcer
@@ -254,6 +276,7 @@ class PlotManager(AbstractPlotManager):
         _ann.insert(1.0, msg)
         _ann.config(state=Tk.DISABLED)
 
+    #@+node:tom.20211207165051.17: *4* set_editable_labels
     def set_editable_labels(self):
         '''Create a list of those labels that can be edited with the standard
         single-line edit widget.  Return nothing.
@@ -265,6 +288,7 @@ class PlotManager(AbstractPlotManager):
             self.axes.get_yaxis().get_label()]
         )
 
+    #@+node:tom.20211207165051.18: *4* edit_label
     def edit_label(self, event):
         '''Respond to a mouse-press event.  Check all the editable labels,
         plus other Text items in the figure, to see if the event belongs to
@@ -296,6 +320,8 @@ class PlotManager(AbstractPlotManager):
         ew = self.editWidget
         self._sv.set(lab.get_text())
 
+        #@+<< configure editwidget >>
+        #@+node:tom.20220115225226.1: *5* << configure editwidget >>
         lab_fontsize = int(lab.get_size())
         tkfont = tkFont.Font(size=lab_fontsize)
 
@@ -311,11 +337,13 @@ class PlotManager(AbstractPlotManager):
             int(dpi * canvas_bbox_ul[0]), int(dpi * canvas_bbox_ul[1])
 
         ew.configure(font=tkfont)
+        #@-<< configure editwidget >>
         ew.place(x=ulx, y=canv_uly - lry)
         ew.selection_clear()
         ew.focus_set()
         ew.lift()
 
+    #@+node:tom.20211207165051.19: *4* doneEditLabel
     def doneEditLabel(self, event):
         """Receive <Return> and <Escape> events.  For <Escape>, leave.
         For <Return>, also change the label's text, and set the Dataset's
@@ -342,6 +370,8 @@ class PlotManager(AbstractPlotManager):
         event.widget.selection_clear()
         self.currentLabelEditing = None
 
+    #@+node:tom.20211207212159.1: *3* Data Stack
+    #@+node:tom.20211207165051.32: *4* copyToBuffer
     def copyToBuffer(self):
         if not self.stack[MAIN]:
             self.announce("No waveform to copy")
@@ -350,6 +380,7 @@ class PlotManager(AbstractPlotManager):
 
         self.stack[BUFFER] = self.stack[MAIN].copy()
 
+    #@+node:tom.20211207165051.33: *4* swap_data
     def swap_data(self):
         if not self.stack[MAIN] or not self.stack[BUFFER]:
             self.announce("Missing one or both waveforms  - nothing to swap")
@@ -360,6 +391,7 @@ class PlotManager(AbstractPlotManager):
         self.stack[BUFFER] = self.stack[MAIN].copy()
         self.stack[MAIN] = _temp
 
+    #@+node:tom.20211207165051.34: *4* paste_data
     def paste_data(self):
         if not self.stack[BUFFER]:
             self.announce("No waveform to paste")
@@ -368,11 +400,13 @@ class PlotManager(AbstractPlotManager):
 
         self.stack[MAIN] = self.stack[BUFFER].copy()
 
+    #@+node:tom.20211207165051.35: *4* drop_stack
     def drop_stack(self):
         '''Drop stack of datasets, leave top one unchanged.'''
         for i in range(STACKDEPTH - 1):
             self.stack[i] = self.stack[i + 1].copy()
 
+    #@+node:tom.20211207165051.36: *4* push_with_copy
     def push_with_copy(self):
         '''Push dataset stack up, duplicate duplicate bottom:
             top-1 -> top        -2 -> -1
@@ -385,6 +419,7 @@ class PlotManager(AbstractPlotManager):
         for i in range(STACKDEPTH - 1, 0, -1):
             self.stack[i] = self.stack[i - 1].copy()
 
+    #@+node:tom.20211207165051.37: *4* rotate_stack_up
     def rotate_stack_up(self):
         '''Rotate dataset stack up:
             1 -> 2
@@ -397,6 +432,7 @@ class PlotManager(AbstractPlotManager):
         self.push_with_copy()
         self.stack[0] = temp
 
+    #@+node:tom.20211207165051.38: *4* rotate_stack_down
     def rotate_stack_down(self):
         '''Rotate stack downwards:
                 top -> top-1
@@ -408,19 +444,23 @@ class PlotManager(AbstractPlotManager):
         self.drop_stack()
         self.stack[STACKDEPTH - 1] = temp
 
+    #@+node:tom.20211207165051.39: *4* copy_to_top
     def copy_to_top(self):
         '''Copy active dataset to top of stack.'''
         self.stack[STACKDEPTH - 1] = self.stack[MAIN].copy()
 
+    #@+node:tom.20211207165051.40: *4* copy_from_top
     def copy_from_top(self):
         '''Copy top dataset to bottom of stack ("main").'''
         self.stack[MAIN] = self.stack[STACKDEPTH - 1].copy()
 
+    #@+node:tom.20211207165051.66: *4* store1
     def store1(self):
         """Store X dataset in a special location outside the stack."""
         _ds = self.stack[MAIN].copy()
         self.storage = _ds
 
+    #@+node:tom.20211207165051.67: *4* recall1
     def recall1(self):
         """Recall stored dataset to X."""
         if self.storage:
@@ -429,25 +469,31 @@ class PlotManager(AbstractPlotManager):
             self.announce("No stored data to recall")
             self.flashit()
 
+    #@+node:tom.20211207211946.1: *3* Configure Graph
+    #@+node:tom.20211207165051.24: *4* set_axis_bg
     def set_axis_bg(self):
         self.axes.set_facecolor('yellow')
     # =============================================================
 
+    #@+node:tom.20211207165051.20: *4* setYMin
     def setYMin(self, val):
         if not self.axes: return
         axis = self.axes
         axis.set_ybound(self.stack[MAIN].ymin)
 
+    #@+node:tom.20211207165051.26: *4* setSemilogX
     def setSemilogX(self):
         self.semilogY = False
         self.semilogX = True
         self.plot()
 
+    #@+node:tom.20211207165051.25: *4* setSemilogY
     def setSemilogY(self):
         self.semilogY = True
         self.semilogX = False
         self.plot()
 
+    #@+node:tom.20211207165051.21: *4* fix_ticks
     def fix_ticks(self):
         '''Make tick marks point out of the figure's frame rather than the
         default of inwards.
@@ -475,19 +521,23 @@ class PlotManager(AbstractPlotManager):
             label.set_x(-0.02)
             label.set_size('small')
 
+    #@+node:tom.20211207165051.27: *4* setLogLog
     def setLogLog(self):
         self.semilogY = True
         self.semilogX = True
         self.plot()
 
+    #@+node:tom.20211207165051.28: *4* setLinLin
     def setLinLin(self):
         self.semilogY = False
         self.semilogX = False
         self.plot()
 
+    #@+node:tom.20211207165051.41: *4* setPlotLineWidth
     def setPlotLineWidth(self, position, width):
         self.linestyles[position].set_linewidth(width)
 
+    #@+node:tom.20211207165051.42: *4* setLineColor
     def setLineColor(self, stackpos):
         '''Called only though a menu selection, so that self.x_line_color
         is set before this method is called.
@@ -499,12 +549,15 @@ class PlotManager(AbstractPlotManager):
             _color = self.buffer_line_color.get()
         self.linestyles[stackpos].set_linecolor(_color)
 
+    #@+node:tom.20211207165051.43: *4* setLineColorMain
     def setLineColorMain(self):
         self.setLineColor(MAIN)
 
+    #@+node:tom.20211207165051.44: *4* setLineColorBuffer
     def setLineColorBuffer(self):
         self.setLineColor(BUFFER)
 
+    #@+node:tom.20211207165051.45: *4* setSymColor
     def setSymColor(self, stackpos):
         '''Called only though a menu selection, so that self.x_symbol_color
         is set before this method is called.
@@ -516,26 +569,32 @@ class PlotManager(AbstractPlotManager):
             _color = self.buffer_symbol_color.get()
         self.linestyles[stackpos].set_sym_color(_color)
 
+    #@+node:tom.20211207165051.46: *4* setSymColorMain
     def setSymColorMain(self):
         self.setSymColor(MAIN)
 
+    #@+node:tom.20211207165051.47: *4* setSymColorBuffer
     def setSymColorBuffer(self):
         self.setSymColor(BUFFER)
 
+    #@+node:tom.20211207165051.48: *4* setBgColor
     def setBgColor(self):
         _color = self.graph_bg_color.get()
         self.axes.set_facecolor(_color)
         _gridcolor = ColorBgPairs.get(_color, DEFAULTGRIDCOLOR)
         self.gridcolor = _gridcolor
 
+    #@+node:tom.20211207165051.49: *4* setMainLineWidth
     def setMainLineWidth(self):
         _width = float(self.radio_main_linestyle.get())
         self.setPlotLineWidth(MAIN, _width)
 
+    #@+node:tom.20211207165051.50: *4* setBufferLineWidth
     def setBufferLineWidth(self):
         _width = float(self.radio_buffer_linestyle.get())
         self.setPlotLineWidth(BUFFER, _width)
 
+    #@+node:tom.20211207165051.51: *4* setMarkerStyle
     def setMarkerStyle(self, stackpos):
         # pylint: disable = no-member
         if stackpos == MAIN:
@@ -554,12 +613,15 @@ class PlotManager(AbstractPlotManager):
             _ls.useLine = True
             _ls.useSym = True
 
+    #@+node:tom.20211207165051.52: *4* setMainMarkerStyle
     def setMainMarkerStyle(self):
         self.setMarkerStyle(MAIN)
 
+    #@+node:tom.20211207165051.53: *4* setBufferMarkerStyle
     def setBufferMarkerStyle(self):
         self.setMarkerStyle(BUFFER)
 
+    #@+node:tom.20211207165051.54: *4* setSymShape
     def setSymShape(self, stackpos):
         if stackpos == MAIN:
             _shp = self.main_symbol_shape
@@ -569,25 +631,33 @@ class PlotManager(AbstractPlotManager):
         _ls = self.linestyles[stackpos]
         _ls.set_sym_style(_shape)
 
+    #@+node:tom.20211207165051.55: *4* setSymShapeMain
     def setSymShapeMain(self):
         self.setSymShape(MAIN)
 
+    #@+node:tom.20211207165051.56: *4* setSymShapeBuffer
     def setSymShapeBuffer(self):
         self.setSymShape(BUFFER)
 
+    #@+node:tom.20211207165051.57: *4* setXlabel
     def setXlabel(self, label=''):
         self.axes.set_xlabel(label)
 
+    #@+node:tom.20211207165051.58: *4* setYlabel
     def setYlabel(self, label=''):
         self.axes.set_ylabel(label)
 
+    #@+node:tom.20211207165051.59: *4* setFigureTitle
     def setFigureTitle(self, title=''):
         #self.axes.set_title(title, size='x-large', y=1.025)
         self.axes.set_title(title, size='large', y=1.025)
 
+    #@+node:tom.20211207212931.1: *3* Data Load/Save
+    #@+node:tom.20211207165051.60: *4* set_data
     def set_data(self, dataset, stackpos=MAIN):
         self.stack[stackpos] = dataset.copy()
 
+    #@+node:tom.20211207165051.61: *4* save_data
     def save_data(self, saveas=True):
         '''Write x,y data in MAIN to an ASCII file.  Labels and other meta data
         are also written.
@@ -616,6 +686,7 @@ class PlotManager(AbstractPlotManager):
         self.stack[MAIN].writeAsciiData(fname)
         self.stack[MAIN].orig_filename = fname
 
+    #@+node:tom.20211207165051.62: *4* load_data
     def load_data(self, stackpos=MAIN):
         '''Open a file dialog for reading, and remember its directory and filename.
         Use that last stored directory or file as the initial directory when
@@ -679,6 +750,7 @@ class PlotManager(AbstractPlotManager):
         if not self.axes:
             self.plot()
 
+    #@+node:tom.20211207165051.63: *4* load_plot_data
     def load_plot_data(self, fname, overplot=False):
         '''Load the data from the specified file into the specified Dataset.
         Load the dataset into the MAIN stack buffer position.
@@ -728,6 +800,7 @@ class PlotManager(AbstractPlotManager):
             if overplot: self.overplot()
             else: self.plot()
 
+    #@+node:tom.20211207165051.64: *4* copy_data_to_clipboard
     def copy_data_to_clipboard(self):
         '''Copy data from MAIN stack buffer position into the clipboad.
         Do not copy any error bands.
@@ -754,6 +827,7 @@ class PlotManager(AbstractPlotManager):
             self.announce("Error wwriting to clipboard: %s" % (e))
             self.flashit()
 
+    #@+node:tom.20211207165051.65: *4* load_data_from_popup
     def load_data_from_popup(self):
         '''Pop up an editor dialog that returns a string of data lines.
         The data set may be divided into parts by the special
@@ -797,6 +871,8 @@ class PlotManager(AbstractPlotManager):
 
         if not self.axes:
             self.plot()
+    #@+node:tom.20211207213410.1: *3* Curve Operations
+    #@+node:tom.20211207165051.68: *4* setNumPoints
     def setNumPoints(self):
         current = self.num
         dia = GetSingleInt(self.root, 'Set Number Of Points',
@@ -804,6 +880,7 @@ class PlotManager(AbstractPlotManager):
         if dia.result is None: return
         self.setNum(dia.result)
 
+    #@+node:tom.20211207165051.69: *4* replaceX
     def replaceX(self):
         '''Replace X axis values.  New values will be uniformly spaced.
         If there are any error bands, replace their axes too.  If either
@@ -837,6 +914,7 @@ class PlotManager(AbstractPlotManager):
         self.plot()
 
         self.parmsaver[_id] = (new_start, new_delta)
+    #@+node:tom.20211207165051.70: *4* dedup
     @REQUIRE_MAIN
     def dedup(self):
         self.stack[MAIN].dedup()
@@ -850,6 +928,7 @@ class PlotManager(AbstractPlotManager):
 
         self.plot()
 
+    #@+node:tom.20211207165051.71: *4* pad_truncate
     @REQUIRE_MAIN
     def pad_truncate(self):
         _ds = self.stack[MAIN]
@@ -861,6 +940,7 @@ class PlotManager(AbstractPlotManager):
 
         _ds.pad_truncate(dia.result)
         self.plot()
+    #@+node:tom.20211207165051.73: *4* shift
     @REQUIRE_MAIN
     def shift(self):
         _id = 'shift'
@@ -874,6 +954,7 @@ class PlotManager(AbstractPlotManager):
 
         self.stack[MAIN].shift(dia.result)
         self.plot()
+    #@+node:tom.20211207165051.74: *4* transpose
     @REQUIRE_MAIN
     def transpose(self):
         if not self.stack[MAIN]:
@@ -886,10 +967,13 @@ class PlotManager(AbstractPlotManager):
         self.plot()
 
         return _ds, Dataset.transpose
+    #@+node:tom.20211207165051.75: *4* sortX
     @REQUIRE_MAIN
     def sortX(self):
         self.stack[MAIN].sortX()
         self.plot()
+    #@+node:tom.20211207213522.1: *3* Curve Math
+    #@+node:tom.20211207165051.76: *4* scale
     @REQUIRE_MAIN
     def scale(self):
         _id = 'scale'
@@ -907,6 +991,7 @@ class PlotManager(AbstractPlotManager):
             _ds.errorBands[1].scale(dia.result)
 
         self.plot()
+    #@+node:tom.20211207165051.77: *4* add_constant
     @REQUIRE_MAIN
     def add_constant(self):
         _ds = self.stack[MAIN]
@@ -926,18 +1011,21 @@ class PlotManager(AbstractPlotManager):
             _ds.errorBands[1].addConstant(dia.result)
 
         self.plot()
+    #@+node:tom.20211207165051.78: *4* differentiate
     @REQUIRE_MAIN
     def differentiate(self):
         self.stack[MAIN].differentiate()
         self.stack[MAIN].figurelabel = ' Derivative of %s' % \
             (self.stack[MAIN].figurelabel)
         self.plot()
+    #@+node:tom.20211207165051.79: *4* differentiate2
     @REQUIRE_MAIN
     def differentiate2(self):
         self.stack[MAIN].differentiate2()
         self.stack[MAIN].figurelabel = ' Derivative of %s' % \
             (self.stack[MAIN].figurelabel)
         self.plot()
+    #@+node:tom.20211207165051.80: *4* integrate
     @REQUIRE_MAIN
     def integrate(self):
         self.stack[MAIN].integrate()
@@ -945,6 +1033,7 @@ class PlotManager(AbstractPlotManager):
         if lab:
             self.stack[MAIN].figurelabel = ' Integral of %s' % (lab)
         self.plot()
+    #@+node:tom.20211207165051.81: *4* absolute
     @REQUIRE_MAIN
     def absolute(self):
         self.stack[MAIN].absolute()
@@ -952,6 +1041,7 @@ class PlotManager(AbstractPlotManager):
         if lab:
             self.stack[MAIN].figurelabel = ' Absolute Value of %s' % (lab)
         self.plot()
+    #@+node:tom.20211207165051.82: *4* square
     @REQUIRE_MAIN
     def square(self):
         self.stack[MAIN].square()
@@ -959,6 +1049,7 @@ class PlotManager(AbstractPlotManager):
         if lab:
             self.stack[MAIN].figurelabel = ' Square of %s' % (lab)
         self.plot()
+    #@+node:tom.20211207165051.83: *4* rectify
     @REQUIRE_MAIN
     def rectify(self):
         self.stack[MAIN].ydata = [abs(y) for y in self.stack[MAIN].ydata]
@@ -966,6 +1057,7 @@ class PlotManager(AbstractPlotManager):
         lab += ' Rectified'
         self.stack[MAIN].figurelabel += lab
         self.plot()
+    #@+node:tom.20211207165051.84: *4* half_rectify
     @REQUIRE_MAIN
     def half_rectify(self):
         self.stack[MAIN].ydata = [max(y, 0.) for y in self.stack[MAIN].ydata]
@@ -973,6 +1065,7 @@ class PlotManager(AbstractPlotManager):
         lab += ' Half Wave Rectified'
         self.stack[MAIN].figurelabel += lab
         self.plot()
+    #@+node:tom.20211207165051.85: *4* clip
     @REQUIRE_MAIN
     def clip(self):
         _id = 'clip'
@@ -994,6 +1087,7 @@ class PlotManager(AbstractPlotManager):
         lab += ' Clipped'
         self.stack[MAIN].figurelabel += lab
         self.plot()
+    #@+node:tom.20211207165051.86: *4* decimate
     @REQUIRE_MAIN
     def decimate(self):
         _id = 'decimate'
@@ -1013,6 +1107,7 @@ class PlotManager(AbstractPlotManager):
         self.stack[MAIN].figurelabel = lab
 
         self.plot()
+    #@+node:tom.20211207165051.87: *4* trim
     @REQUIRE_MAIN
     def trim(self):
         _id = 'trim'
@@ -1035,6 +1130,7 @@ class PlotManager(AbstractPlotManager):
         self.stack[MAIN].figurelabel = lab
 
         self.plot()
+    #@+node:tom.20211207165051.88: *4* log
     @REQUIRE_MAIN
     def log(self):
         success = self.stack[MAIN].log()
@@ -1046,6 +1142,7 @@ class PlotManager(AbstractPlotManager):
         if lab:
             self.stack[MAIN].figurelabel = 'Natural Log of %s' % (lab)
         self.plot()
+    #@+node:tom.20211207165051.89: *4* log10
     @REQUIRE_MAIN
     def log10(self):
         success = self.stack[MAIN].log10()
@@ -1057,12 +1154,14 @@ class PlotManager(AbstractPlotManager):
         if lab:
             self.stack[MAIN].figurelabel = 'Log base 10 of %s' % (lab)
         self.plot()
+    #@+node:tom.20211207165051.122: *4* normalize
     @REQUIRE_MAIN
     def normalize(self):
         ''' Normalize the X data to 1.0.  Replot.
         '''
         self.stack[MAIN].normalize()
         self.plot()
+    #@+node:tom.20211207165051.90: *4* mulBuffer
     @REQUIRE_MAIN_BUFF
     def mulBuffer(self):
         success = self.stack[MAIN].multiply(self.stack[BUFFER])
@@ -1082,6 +1181,7 @@ class PlotManager(AbstractPlotManager):
             self.stack[MAIN].figurelabel = 'Product'
 
         self.plot()
+    #@+node:tom.20211207165051.91: *4* divBuffer
     @REQUIRE_MAIN_BUFF
     def divBuffer(self):
         '''Divide BUFFER by MAIN, pointwise. Return result in MAIN,
@@ -1108,6 +1208,7 @@ class PlotManager(AbstractPlotManager):
             self.announce('WARNING: The two data sets had different'
                           ' X-axis values')
             self.flashit()
+    #@+node:tom.20211207165051.92: *4* addBuffer
     @REQUIRE_MAIN_BUFF
     def addBuffer(self):
         '''Add y data in the buffer to y data in the main data set,
@@ -1154,6 +1255,7 @@ class PlotManager(AbstractPlotManager):
             self.stack[MAIN].figurelabel = 'Sum'
 
         self.plot()
+    #@+node:tom.20211207165051.93: *4* subFromBuffer
     @REQUIRE_MAIN_BUFF
     def subFromBuffer(self):
         '''subtract y data in the main data set from y data in thebuffer,
@@ -1198,6 +1300,7 @@ class PlotManager(AbstractPlotManager):
         self.plot()
 
         # return _m, suby
+    #@+node:tom.20211207165051.113: *4* make_phasespace
     @REQUIRE_MAIN_BUFF
     def make_phasespace(self):
         '''Replace the X axis data of the MAIN ds by replacing the x axis
@@ -1220,6 +1323,7 @@ class PlotManager(AbstractPlotManager):
         _ds.xaxislabel = 'Y(t1)'
         _ds.yaxislabel = 'Y(t+1)'
         self.plot()
+    #@+node:tom.20211207165051.114: *4* YvsX
     @REQUIRE_MAIN
     def YvsX(self):
         '''Replace the x axis of the data in X with its y data.
@@ -1251,6 +1355,8 @@ class PlotManager(AbstractPlotManager):
         _X.yaxislabel = _Y.yaxislabel
 
         self.sortX()
+    #@+node:tom.20211207213812.1: *3* Data Processing
+    #@+node:tom.20211207165051.123: *4* fft
     @REQUIRE_MAIN
     def fft(self):
         self.stack[MAIN].rfft()
@@ -1260,6 +1366,7 @@ class PlotManager(AbstractPlotManager):
         self.stack[MAIN].xaxislabel = 'Frequency'
         self.stack[MAIN].yaxislabel = 'Relative Amplitude'
         self.plot()
+    #@+node:tom.20211207165051.97: *4* lopass
     @REQUIRE_MAIN
     def lopass(self):
         _id = 'lopass'
@@ -1282,6 +1389,7 @@ class PlotManager(AbstractPlotManager):
         else:
             self.announce('tau  <= 0.0 or no data')
             self.flashit()
+    #@+node:tom.20211207165051.98: *4* hipass
     @REQUIRE_MAIN
     def hipass(self):
         _id = 'hipass'
@@ -1305,6 +1413,7 @@ class PlotManager(AbstractPlotManager):
         else:
             self.announce('tau  <= %s or no data' % _LIMIT)
             self.flashit()
+    #@+node:tom.20211207165051.94: *4* convolveWithBuffer
     @REQUIRE_MAIN
     def convolveWithBuffer(self):
         self.stack[MAIN].convolve(self.stack[BUFFER])
@@ -1319,6 +1428,7 @@ class PlotManager(AbstractPlotManager):
             self.stack[MAIN].figurelabel = 'Convolution'
 
         self.plot()
+    #@+node:tom.20211207165051.95: *4* correlateWithBuffer
     @REQUIRE_MAIN
     def correlateWithBuffer(self):
         self.stack[MAIN].correlate(self.stack[BUFFER])
@@ -1333,6 +1443,7 @@ class PlotManager(AbstractPlotManager):
             self.stack[MAIN].figurelabel = 'Correlation'
 
         self.plot()
+    #@+node:tom.20211207165051.96: *4* autocorrelate
     @REQUIRE_MAIN
     def autocorrelate(self):
         self.stack[MAIN].correlate(self.stack[MAIN])
@@ -1344,6 +1455,7 @@ class PlotManager(AbstractPlotManager):
             self.stack[MAIN].figurelabel = 'Autocorrelation'
 
         self.plot()
+    #@+node:tom.20211207165051.99: *4* moving_median
     @REQUIRE_MAIN
     def moving_median(self):
         _id = 'moving_median'
@@ -1367,6 +1479,8 @@ class PlotManager(AbstractPlotManager):
         self.stack[MAIN].figurelabel = lab
 
         self.plot()
+    #@+node:tom.20211207213827.1: *3* Fit
+    #@+node:tom.20211207165051.100: *4* cubicSpline
     @REQUIRE_MAIN
     def cubicSpline(self):
         _ds = self.stack[MAIN]
@@ -1374,6 +1488,7 @@ class PlotManager(AbstractPlotManager):
         _y = _ds.ydata
         _ds.xdata, _ds.ydata = smoother.cspline(_x, _y)
         self.plot()
+    #@+node:tom.20211207165051.72: *4* fit_piecewise
     @REQUIRE_MAIN
     def fit_piecewise(self):
         _ds = self.stack[MAIN]
@@ -1396,6 +1511,7 @@ class PlotManager(AbstractPlotManager):
         self.stack[MAIN].figurelabel = lab
 
         self.plot()
+    #@+node:tom.20211207165051.110: *4* leastsqr
     @REQUIRE_MAIN
     def leastsqr(self):
         _ds = self.stack[MAIN]
@@ -1425,6 +1541,7 @@ class PlotManager(AbstractPlotManager):
 
         self.plot()
         self.announce('Mean=%0.3f, rms = %0.3f, r=%0.3f' % (mean, rms, r))
+    #@+node:tom.20211207165051.111: *4* leastsqr_quad
     @REQUIRE_MAIN
     def leastsqr_quad(self):
         _ds = self.stack[MAIN]
@@ -1457,6 +1574,7 @@ class PlotManager(AbstractPlotManager):
 
         self.plot()
         self.announce('Mean=%0.3f, rms=%0.3f, r=%0.3f' % (mean, rms, r))
+    #@+node:tom.20211207165051.112: *4* thiel
     @REQUIRE_MAIN
     def thiel(self):
         _ds = self.stack[MAIN]
@@ -1477,9 +1595,12 @@ class PlotManager(AbstractPlotManager):
         int_str = 'Intercept = %0.3g, ' % (intercept)
         sd_str = 'Estimated S.D. of slope: %0.3g, ' % (sd_slope)
         self.announce(slope_str + int_str + sd_str)
+    #@+node:tom.20220402083822.1: *3* Plot Operations
+    #@+node:tom.20211207165051.29: *4* overplotbuff
     def overplotbuff(self):
         self.overplot(BUFFER)
 
+    #@+node:tom.20211207165051.30: *4* overplot_errorbands
     def overplot_errorbands(self, stackposition=MAIN):
         if not self.stack[stackposition].errorBands:
             self.announce('No errorband data to plot')
@@ -1504,9 +1625,12 @@ class PlotManager(AbstractPlotManager):
         for g in [STACKDEPTH + ERRBAND_HI, STACKDEPTH + ERRBAND_LO]:
             self.overplot(g)
 
+    #@+node:tom.20211207165051.31: *4* overplot
     def overplot(self, stackposition=MAIN):
         self.plot(stackposition, False)
 
+    #@+node:tom.20211207214009.1: *3* Smoothing
+    #@+node:tom.20211207165051.101: *4* lowess
     @REQUIRE_MAIN
     def lowess(self):
         _ds = self.stack[MAIN]
@@ -1561,6 +1685,7 @@ class PlotManager(AbstractPlotManager):
         n = float(len(_x))
         msg = f'RMS deviation = {rms:.3f}, r = {r:.3f}'
         self.announce(msg)
+    #@+node:tom.20211207165051.102: *4* lowess2Quad
     @REQUIRE_MAIN
     def lowess2Quad(self):
         _ds = self.stack[MAIN]
@@ -1611,6 +1736,7 @@ class PlotManager(AbstractPlotManager):
         self.plot()
 
         self.announce('RMS Deviation: %0.3f, r=%0.3f' % (rms, r))
+    #@+node:tom.20211207165051.103: *4* lowess_adaptive
     @REQUIRE_MAIN
     def lowess_adaptive(self):
         _ds = self.stack[MAIN]
@@ -1661,6 +1787,7 @@ class PlotManager(AbstractPlotManager):
         self.plot()
         msg = f'Span: {span}, RMS deviation = {rms:.3f}, r = {r:.3f}'
         self.announce(msg)
+    #@+node:tom.20211207165051.104: *4* lowess_adaptive_ac
     @REQUIRE_MAIN
     def lowess_adaptive_ac(self):
         _ds = self.stack[MAIN]
@@ -1703,6 +1830,7 @@ class PlotManager(AbstractPlotManager):
         self.plot()
         self.announce('Span: %s; ac = %0.3f; RMS deviation = %0.3f, '
                       'r=%0.3f' % (span, ac, rms, r))
+    #@+node:tom.20211207165051.105: *4* correlationCoeff
     @REQUIRE_MAIN
     def correlationCoeff(self):
         '''Calculate correlation coefficient between MAIN and BUFFER,
@@ -1727,6 +1855,7 @@ class PlotManager(AbstractPlotManager):
             self.flashit()
         else:
             self.announce('r=%0.3f' % r)
+    #@+node:tom.20211207165051.106: *4* poissonSmooth
     @REQUIRE_MAIN
     def poissonSmooth(self):
         _ds = self.stack[MAIN]
@@ -1772,6 +1901,7 @@ class PlotManager(AbstractPlotManager):
         self.plot()
 
         self.announce('RMS Deviation: %0.3f, r=%0.3f' % (rms, r))
+    #@+node:tom.20211207165051.115: *4* spline_smooth
     @REQUIRE_MAIN
     def spline_smooth(self):
         _ds = self.stack[MAIN]
@@ -1797,6 +1927,8 @@ class PlotManager(AbstractPlotManager):
         _ds.figurelabel = lab
 
         self.plot()
+    #@+node:tom.20211207214046.1: *3* Statistics
+    #@+node:tom.20211207165051.107: *4* spearman
     @REQUIRE_MAIN
     def spearman(self):
         '''Calculate the Spearman rank correlation coefficient of
@@ -1823,6 +1955,7 @@ class PlotManager(AbstractPlotManager):
                       '%0.3f, p = %0.3f'
                       % (r, p))
 
+    #@+node:tom.20211207165051.108: *4* pearson
     @REQUIRE_MAIN
     def pearson(self):
         '''Calculate the Spearman rank correlation coefficient of
@@ -1846,6 +1979,7 @@ class PlotManager(AbstractPlotManager):
         else:
             self.announce("Pearson's Correlation Coefficient=%0.3f" % (r))
 
+    #@+node:tom.20211207165051.116: *4* cdf
     @REQUIRE_MAIN
     def cdf(self):
         _ds = self.stack[MAIN]
@@ -1874,6 +2008,7 @@ class PlotManager(AbstractPlotManager):
 
         self.plot()
 
+    #@+node:tom.20211207165051.118: *4* fitCdfWithNormal
     @REQUIRE_MAIN
     def fitCdfWithNormal(self):
         _ds = self.stack[MAIN]
@@ -1889,6 +2024,7 @@ class PlotManager(AbstractPlotManager):
         self.plot()
         self.announce('mean: %0.3f,sigma: %0.3f'
                       % (mean, sigma))
+    #@+node:tom.20211207165051.119: *4* fitCdfNormalAdaptive
     @REQUIRE_MAIN
     def fitCdfNormalAdaptive(self):
         _ds = self.stack[MAIN]
@@ -1908,6 +2044,7 @@ class PlotManager(AbstractPlotManager):
         self.announce('mean: %0.3f,sigma: %0.3f, correlation coeff: %0.3f'
                       % (mean, sigma, correl))
 
+    #@+node:tom.20211207165051.120: *4* histogram
     @REQUIRE_MAIN
     def histogram(self):
         _id = 'histogram'
@@ -1941,6 +2078,7 @@ class PlotManager(AbstractPlotManager):
 
         self.announce('Total counts: %s' % (len(ydata)))
 
+    #@+node:tom.20211207165051.121: *4* mean_std
     @REQUIRE_MAIN
     def mean_std(self):
         ydata = self.stack[MAIN].ydata
@@ -1976,6 +2114,8 @@ class PlotManager(AbstractPlotManager):
               (_max, _max_x_coord, mean, span, std, area, rho, len(ydata))
         self.announce(msg)
 
+    #@+node:tom.20211207214310.1: *3* Trend
+    #@+node:tom.20211207165051.117: *4* trend_mann_kendall
     @REQUIRE_MAIN
     def trend_mann_kendall(self):
         _ds = self.stack[MAIN]
@@ -1983,6 +2123,8 @@ class PlotManager(AbstractPlotManager):
         self.announce('s: %s, z: %0.3f, trend? %s, p: %0.3f'
                       % (s, z, YESNO[h], p))
 
+    #@+node:tom.20211207214759.1: *3* Windowing
+    #@+node:tom.20211207165051.124: *4* h_super_gaussian
     @REQUIRE_MAIN
     def h_super_gaussian(self):
         self.stack[MAIN].halfSupergaussian()
@@ -1992,6 +2134,7 @@ class PlotManager(AbstractPlotManager):
 
         self.plot()
 
+    #@+node:tom.20211207165051.125: *4* gaussian_window
     @REQUIRE_MAIN
     def gaussian_window(self):
         self.stack[MAIN].fullSuperGaussian(2)
@@ -2001,6 +2144,7 @@ class PlotManager(AbstractPlotManager):
 
         self.plot()
 
+    #@+node:tom.20211207165051.126: *4* super_gaussian
     @REQUIRE_MAIN
     def super_gaussian(self):
         self.stack[MAIN].fullSuperGaussian()
@@ -2010,6 +2154,7 @@ class PlotManager(AbstractPlotManager):
 
         self.plot()
 
+    #@+node:tom.20211207165051.127: *4* h_cosine
     @REQUIRE_MAIN
     def h_cosine(self):
         self.stack[MAIN].halfCosine()
@@ -2019,6 +2164,7 @@ class PlotManager(AbstractPlotManager):
 
         self.plot()
 
+    #@+node:tom.20211207165051.128: *4* full_cosine
     @REQUIRE_MAIN
     def full_cosine(self):
         self.stack[MAIN].fullCosine()
@@ -2028,6 +2174,8 @@ class PlotManager(AbstractPlotManager):
 
         self.plot()
 
+    #@+node:tom.20220402084339.1: *3* Misc
+    #@+node:tom.20211207165051.109: *4* sliding_var
     @REQUIRE_MAIN
     def sliding_var(self):
         '''Calculate the standard deviations in a window that slides across the
@@ -2056,6 +2204,7 @@ class PlotManager(AbstractPlotManager):
         self.plot()
         self.announce('Overall Standard Deviation = %0.3f' % sigma)
 
+    #@+node:tom.20211207165051.129: *4* var_ratio
     @REQUIRE_MAIN
     def var_ratio(self):
         _id = 'var_ratio'
@@ -2073,6 +2222,7 @@ class PlotManager(AbstractPlotManager):
         self.stack[MAIN].var_ratio(dia.result)
         self.plot()
 
+    #@+node:tom.20211207165051.130: *4* y_vs_y
     @REQUIRE_MAIN_BUFF
     def y_vs_y(self):
         '''Plot y values from BUFFER against y values from MAIN,
@@ -2089,6 +2239,7 @@ class PlotManager(AbstractPlotManager):
 
         self.plot()
 
+    #@+node:tom.20211207165051.131: *4* addTimehack
     def addTimehack(self):
         if not self.stack[MAIN]:
             self.announce('No data')
@@ -2104,6 +2255,7 @@ class PlotManager(AbstractPlotManager):
         self.parmsaver[_id] = dia.result
         self.timehack(dia.result)
 
+    #@+node:tom.20211207165051.132: *4* runMacro
     def runMacro(self, cmdlist=''):
         '''Given a string of commands, one per line, execute the commands
         in order.  First check to make sure all commands are valid;
@@ -2142,6 +2294,7 @@ class PlotManager(AbstractPlotManager):
         for cmd in cmds:
             self.interpret(cmd)
 
+    #@+node:tom.20211207165051.133: *4* testMacro
     def testMacro(self):
         self.runMacro('''dsin
                         copy2buff
@@ -2152,6 +2305,7 @@ class PlotManager(AbstractPlotManager):
                         # another comment
                         ''')
 
+    #@+node:tom.20211207165051.134: *4* interpret
     def interpret(self, command=''):
         '''Given a string alias for a command, find and execute the command.
         If no such command is found, announce an error.
@@ -2177,16 +2331,20 @@ class PlotManager(AbstractPlotManager):
 
         self.commands[command]()
 
+    #@+node:tom.20211207165051.135: *4* hasToplevel
     def hasToplevel(self):
         for c in self.root.winfo_children():
             if c.winfo_class() == 'Toplevel':
                 return True
         return False
 
+    #@+node:tom.20211207165051.23: *4* test_announce
     def test_announce(self):
         self.announce('testing the Announcer')
 
+    #@-others
 
+#@+node:tom.20211207165051.136: ** __main__
 if __name__ == '__main__':
     matplotlib.rcParams['xtick.direction'] = 'out'
     matplotlib.rcParams['ytick.direction'] = 'out'
@@ -2213,3 +2371,7 @@ if __name__ == '__main__':
     plotmgr.fadeit()
 
     Tk.mainloop()
+#@-others
+#@@language python
+#@@tabwidth -4
+#@-leo

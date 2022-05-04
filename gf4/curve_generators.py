@@ -1,10 +1,15 @@
+#@+leo-ver=5-thin
+#@+node:tom.20211211170819.30: * @file curve_generators.py
 # pylint: disable = consider-using-f-string
+#@+others
+#@+node:tom.20211211170819.31: ** Imports
 from __future__ import print_function
 
 import math
 import numpy as np
 from scipy.stats import norm
 
+#@+node:tom.20211211170819.32: ** generateSine
 def generateSine(n=256, cycles=5):
     '''Compute a sine wave with evenly spaced abscissa points.  
     Return a tuple of two arrays (xdata, ydata).
@@ -27,6 +32,7 @@ def generateSine(n=256, cycles=5):
 
     return (_x, _y)
 
+#@+node:tom.20211211170819.33: ** generateSquarewave
 def generateSquarewave(n=256, cycles=5):
     '''Compute a square wave with evenly spaced abscissa points. 
     The waveform has an amplitude of 1, and is centered on 0.
@@ -62,6 +68,7 @@ def generateSquarewave(n=256, cycles=5):
 
     return (_x, _y)
 
+#@+node:tom.20211211170819.34: ** generateDampedSine
 def generateDampedSine(N=256, cycles = 5, decay=3.0):
     '''Compute a damped sine wave with evenly spaced abscissa points.  
     Return a tuple of two arrays (xdata, ydata).
@@ -82,6 +89,7 @@ def generateDampedSine(N=256, cycles = 5, decay=3.0):
     
     return (_x, _yd)
 
+#@+node:tom.20211211170819.35: ** generateExponential
 def generateExponential(N=256, decay=3.0):
     '''Compute an exponential curve with evenly spaced abscissa points. 
     A positive decay parameter specifies decay, negative specifies 
@@ -106,6 +114,7 @@ def generateExponential(N=256, decay=3.0):
     return (_x, _y)
 
 
+#@+node:tom.20211211170819.36: ** generateRectangle
 def generateRectangle(N=256):
     '''Compute a rectangular waveform with evenly spaced points.
     Return a tuple of two arrays (xdata, ydata).
@@ -123,6 +132,7 @@ def generateRectangle(N=256):
 
     return (_x, _y)
 
+#@+node:tom.20211211170819.38: ** generateGaussian
 def generateGaussian(N=256, m=0.0, sigma=128): 
     '''Compute a Gaussian probability curve.  Return a tuple of two arrays
     (xdata, ydata).
@@ -152,6 +162,7 @@ def generateGaussian(N=256, m=0.0, sigma=128):
 
     return _xdata,_ydata
 
+#@+node:tom.20211211170819.39: ** generateGaussianCdf
 def generateGaussianCdf(N=256, m=0.0, sigma=128): 
     '''Compute a Gaussian probability curve.  Return a tuple of two arrays
     (xdata, ydata).
@@ -214,6 +225,7 @@ if __name__ == '__main__':
     runtests(Tests)
     
 
+#@+node:tom.20211211170819.37: ** generateRamp
 def generateRamp(N=256):
     '''Compute a linear ramp with evenly spaced points. Maximum
     amplitude is 1.0. Return a tuple of two arrays (xdata, ydata).
@@ -231,3 +243,7 @@ def generateRamp(N=256):
     _y = [_y0 + _ydelta * i for i in range(N)]
 
     return (_x, _y)
+#@-others
+#@@language python
+#@@tabwidth -4
+#@-leo

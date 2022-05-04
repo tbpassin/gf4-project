@@ -1,6 +1,10 @@
+#@+leo-ver=5-thin
+#@+node:tom.20211211170819.9: * @file cmdwin.py
 """Auxilliary controller window for gf4."""
 
 # pylint: disable = consider-using-f-string
+#@+others
+#@+node:tom.20211211223207.1: ** Imports
 from __future__ import print_function
 
 try:
@@ -28,6 +32,7 @@ from buttondefs import (SPACER, CURVE_FIT_BUTTONS, STATS_BUTTONS,
                         STACK_BUTTONS, CURVE_BUTTONS, MATH_BUTTONS,
                         DATA_PROCESSING_BUTTONS, WINDOW_BUTTONS, 
                         SMOOTHER_FIT_BUTTONS, TREND_BUTTONS)
+#@+node:tom.20211211170819.10: ** Declarations
 COLS = 6
 BUTTONWIDTH = 9
 BUTTON_BG = 'white'
@@ -41,6 +46,7 @@ entry = None
 is_recording = False
 macro = ''
 NEWFONT = None
+#@+node:tom.20211211170819.11: ** click
 def click(event): 
     global is_recording, macro
     w = event.widget
@@ -57,6 +63,7 @@ def click(event):
             is_recording = True
             macro = ''
 
+#@+node:tom.20211211170819.12: ** on_enter
 def on_enter(event):
     global entry
     global is_recording
@@ -74,6 +81,7 @@ def on_enter(event):
     except Exception:
         pass
 
+#@+node:tom.20211211170819.13: ** on_leave
 def on_leave(event):
     global entry
     global is_recording
@@ -87,6 +95,7 @@ def on_leave(event):
         if not is_recording:
             w.configure(bg=BUTTON_BG)
 
+#@+node:tom.20211211170819.14: ** default_command
 def default_command(cmd, plotmgr=None):
     global is_recording, macro
     if is_recording:
@@ -96,6 +105,7 @@ def default_command(cmd, plotmgr=None):
     else:
         print (cmd)
 
+#@+node:tom.20211211170819.15: ** play_macro
 def play_macro(plotmgr):
     global macro
     if plotmgr:
@@ -104,10 +114,12 @@ def play_macro(plotmgr):
         print ('Run Macro:')
         print (macro)
 
+#@+node:tom.20211211170819.16: ** clear_macro
 def clear_macro():
     global macro
     macro = ''
 
+#@+node:tom.20211211170819.17: ** configure_button_list
 def configure_button_list(parent, button_list, plotmgr):
     global NEWFONT
     for b in button_list:
@@ -126,6 +138,7 @@ def configure_button_list(parent, button_list, plotmgr):
             _b.fulltext = fulltext
             _b.cmd = cmd
 
+#@+node:tom.20211211170819.18: ** configure_horizontal_button_list
 def configure_horizontal_button_list(parent, button_list, plotmgr):
     global NEWFONT
     cols = 0
@@ -146,6 +159,7 @@ def configure_horizontal_button_list(parent, button_list, plotmgr):
 
         cols += 1
 
+#@+node:tom.20211211170819.19: ** configure_macro_buttons
 def configure_macro_buttons(parent, plotmgr):
     global NEWFONT
     global macro
@@ -175,11 +189,14 @@ def configure_macro_buttons(parent, plotmgr):
     but_clear.bind('<Leave>', on_leave)
     but_clear.fulltext = 'Clear Macro'
 
+#@+node:tom.20211211170819.20: ** create_buttons_pack
 def create_buttons_pack(host, plotmgr):
     # pylint: disable = too-many-locals
     # Custom font for smaller button font size
     global entry, NEWFONT
 
+    #@+<< Make new Tk font >>
+    #@+node:tom.20220402001046.1: *3* << Make new Tk font >>
     phantom = Tk.Button(text='phantom')
     _font =  tkFont.nametofont(phantom['font'])
     sz_def = _font['size']
@@ -189,6 +206,9 @@ def create_buttons_pack(host, plotmgr):
     NEWFONT.config(**_font.config())
     NEWFONT.config(size=sz, weight='bold')
     phantom = None
+    #@-<< Make new Tk font >>
+    #@+<< Set window  geometry >>
+    #@+node:tom.20220402001212.1: *3* << Set window  geometry >>
     host_height = sz*3*(len(CURVE_FIT_BUTTONS)
                         + len(STATS_BUTTONS)
                         + len(GENERATOR_BUTTONS)
@@ -199,6 +219,9 @@ def create_buttons_pack(host, plotmgr):
     #host.geometry('%sx650' % (BUTTONWIDTH*COLS*10 + 12))
     host.geometry('%sx%s' % (host_width, host_height))
 
+    #@-<< Set window  geometry >>
+    #@+<< Create Button Containers >>
+    #@+node:tom.20220402001714.1: *3* << Create Button Containers >>
     entryframe = Tk.Frame(host, height=20, bd=3, relief='groove', bg='lightblue')
     entryframe.pack_propagate(0)
     entryframe.pack(fill=Tk.X)
@@ -211,6 +234,7 @@ def create_buttons_pack(host, plotmgr):
 
     configure_horizontal_button_list(host, GENERATOR_BUTTONS, plotmgr)
     configure_macro_buttons(host, plotmgr)
+    #@-<< Create Button Containers >>
 
     # Create Button Groups
     but_frame_1 = Tk.LabelFrame(cmd_frame, text='Plot', bd=3, bg='lightgrey')
@@ -257,6 +281,7 @@ def create_buttons_pack(host, plotmgr):
     but_frame_stats.pack(fill=Tk.BOTH)
     configure_button_list(but_frame_stats, STATS_BUTTONS, plotmgr)
 
+#@+node:tom.20211211170819.21: ** cmdwindow
 def cmdwindow(plotmgr=None):
     _geom = ''
     if plotmgr:
@@ -301,3 +326,7 @@ if __name__ == '__main__':
 #            #print 
 
     Tk.mainloop()
+#@-others
+#@@language python
+#@@tabwidth -4
+#@-leo

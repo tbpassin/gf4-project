@@ -1,4 +1,8 @@
+#@+leo-ver=5-thin
+#@+node:tom.20211211181438.2: * @file fit_test.py
 # pylint: disable = consider-using-f-string
+#@+others
+#@+node:tom.20211211181438.3: ** Organizer: Declarations (fit_test.py)
 '''Test a fitted regression against the null hypothesis of no relationship.'''
 
 import sys
@@ -9,6 +13,7 @@ from numpy import polyfit, poly1d
 from smoother import lowess2, sqr
 
 ENCODING = 'utf-8'
+#@+node:tom.20211211181438.4: ** null_rss (fit_test.py)
 def null_rss(ydata):
     '''Calculate the residual sum of squares of a sequence (i.e.,
     the square deviations from the mean).
@@ -42,6 +47,7 @@ def null_rss(ydata):
 
     return rss0, mean, stddev
 
+#@+node:tom.20211211181438.5: ** null_T (fit_test.py)
 def null_T(rss0, rssx):
     '''Calculate a T statistic for two sets of points, using their residual
     sum of squares.  Return the T statistic.  T is used to assess
@@ -61,6 +67,7 @@ def null_T(rss0, rssx):
 
     return (rss0 - rssx) / rss0
 
+#@+node:tom.20211211181438.6: ** permuted_T (fit_test.py)
 def permuted_T(xdata, ydata, N, smooth, rss0):
     '''Permute xdata, then fit using LOWESS.  Repeat N times.
     Return the T statistic of the permuted data.
@@ -85,6 +92,7 @@ def permuted_T(xdata, ydata, N, smooth, rss0):
         
     return Tstat
 
+#@+node:tom.20211211181438.7: ** permuted_lstsqr (fit_test.py)
 def permuted_lstsqr(xdata, ydata, N, deg=1):
     '''Permute xdata, then fit using linear least sqiares.  Repeat N times.
     Return a list of the fitted curves
@@ -107,6 +115,7 @@ def permuted_lstsqr(xdata, ydata, N, deg=1):
 
     return fitted_curves
 
+#@+node:tom.20211211181438.8: ** pnull (fit_test.py)
 def pnull(tstats, tfit):
     '''Calculate probability that the null hypothesis is correct.
     Return the probability.
@@ -126,6 +135,7 @@ def pnull(tstats, tfit):
 
     return (1.0 * count) / len(tstats)
 
+#@+node:tom.20211211181438.9: ** dist (fit_test.py)
 def dist(tstats):
     '''Calculate the probability distribution of the test statistic.
     Return a list of (p, count) values.
@@ -151,6 +161,7 @@ def dist(tstats):
 
     return probs
 
+#@+node:tom.20211211181438.10: ** readfile (fit_test.py)
 def readfile(fname):
     if not fname: return None
     with open(fname, encoding = ENCODING) as f:
@@ -296,3 +307,7 @@ if __name__ == '__main__':
     t = 'Permute-Lstsqr'
     #t = 'Permute-LOWESS'
     tests[t](parms[t])
+#@-others
+#@@language python
+#@@tabwidth -4
+#@-leo

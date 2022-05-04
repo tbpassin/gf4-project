@@ -1,5 +1,9 @@
+#@+leo-ver=5-thin
+#@+node:tom.20211211171913.55: * @file trend.py
 """This module contains tests relating to trends in data series."""
 
+#@+others
+#@+node:tom.20211211171913.56: ** Imports and Declarations
 from __future__ import print_function
 
 import numpy as np
@@ -7,8 +11,11 @@ import scipy.stats
 
 YESNO = {True:'yes', False:'no'}
 
+#@+node:tom.20211211171913.57: ** mann_kendall (trend.py)
 def mann_kendall(x, alpha = 0.05):
     """
+    #@+<<docstring >>
+    #@+node:tom.20220402002421.1: *3* <<docstring >>
     Perform Mann-Kendall non-parametric test for existence of a monotonic trend.
     Adapted from https://www.uni-goettingen.de/en/524376.html
     which was originally from:
@@ -46,6 +53,7 @@ def mann_kendall(x, alpha = 0.05):
     z -- the number of standard deviations from 0 of the "S" statistic.
     h -- boolean where True indicates a trend is present
     p -- p-value for the trend's existence.
+    #@-<<docstring >>
     """
 
     n = len(x)
@@ -85,3 +93,7 @@ if __name__ == '__main__':
     dat = np.random.rand(100)
     s, z, h, p = mann_kendall(dat)
     print(f's: {s}, z: {z:.3f}, trend? {YESNO[h]}, p: {p:.3f}')
+#@-others
+#@@language python
+#@@tabwidth -4
+#@-leo
