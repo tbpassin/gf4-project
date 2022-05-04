@@ -98,9 +98,15 @@ Permission is hereby granted, free of charge, to any person obtaining a copy of 
 The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.</t>
-<t tx="tom.20220411171338.1">GF4 is a computer program for visualizing and processing two-dimensional data such as X-Y and time series data.  The user interface is modeled after a reverse-polish notation (RPN) style of desk calculator, with the roles of numbers being replaced by 2D data sets.
+<t tx="tom.20220411171338.1">GF4 is a computer program for visualizing and processing two-dimensional data
+such as X-Y and time series data. The user interface is modeled after a
+reverse-polish notation (RPN) style of desk calculator, with the roles of
+numbers being replaced by 2D data sets.
 
-As in Hewlett-Packard RPN calculators, the stack bottom is called "X", the stack position above that is called "Y", and the top of the stack is called "T".  Data sets may be pushed, popped, or rotated on the stack.  GF4's stack has a depth of 3.
+As in Hewlett-Packard RPN calculators, the stack bottom is called "X", the stack
+position above that is called "Y", and the top of the stack is called "T". Data
+sets may be pushed, popped, or rotated on the stack. GF4's stack has a depth of
+three.
 
 The main program is called "gf4.pyw".</t>
 <t tx="tom.20220411232217.1"></t>
@@ -134,17 +140,35 @@ subprocess.call(cmd)</t>
 GF4 User's Guide
 ===================
 This User's Guide Covers the Use and Capabilities of the GF4 Waveform Calculator.</t>
-<t tx="tom.20220412080711.1">GF4 - "GF" being short for "Graphics Functions" - is a program to display two-dimensional data, such as time series data, and to perform mathematical operations on the data or between two related data sets.  We will often call the 2D data sets "waveforms" for historical reasons, and because the data often represents time domain waveforms.  Otherwise we generally call the data by the term "datasets".  The program aims to make data exploration easy and enjoyable.
+<t tx="tom.20220412080711.1">GF4 - "GF" being short for "Graphics Framework" - is a program to display
+two-dimensional data, such as time series data, and to perform mathematical
+operations on the data or between two related data sets. We will often call the
+2D data sets "waveforms" for historical reasons, and because the data often
+represents time domain waveforms. Otherwise we generally call the data by the
+term "datasets". The program aims to make data exploration easy and enjoyable.
 
-The program's interface is modeled after hand-held calculators of the "reverse polish notation" (RPN) style.  This kind of calculator was made famous by Hewlett-Packard, starting with their HP-35 and HP-45 calculators.  GF4 works with waveforms in place of the numbers manipulated by the hand calculators.
+The program's interface is modeled after hand-held calculators of the "reverse
+polish notation" (RPN) style. This kind of calculator was made famous by
+Hewlett-Packard, starting with their HP-35 and HP-45 calculators. GF4 works with
+waveforms in place of the numbers manipulated by the hand calculators.
 
-Thus, a waveform can be scaled, squared, have its logarithm taken, integrated and differentiated  [1]_, be normalized and rectified, and so on. A discrete Fast Fourier Transform is provided that is not limited to powers of two in data length.  Data can be trimmed or padded.  Curve fitting and smoothing of several varieties can be done.  Two waveforms can be added, subtracted, multiplied, and divided (where possible), correlated or convolved together, among others.
+Thus, a waveform can be scaled, squared, have its logarithm taken, integrated
+and differentiated [1]_, be normalized and rectified, and so on. A discrete Fast
+Fourier Transform is provided that is not limited to powers of two in data
+length. Data can be trimmed or padded. Curve fitting and smoothing of several
+varieties can be done. Two waveforms can be added, subtracted, multiplied, and
+divided (where possible), correlated or convolved together, among others.
 
-A certain number of basic waveforms can be generated, including a delta function, step, ramp, sine and damped sine, Gaussian PDF and CDF distributions, and more.  Altogether there are nearly 80 different operations available.
+A certain number of basic waveforms can be generated, including a delta
+function, step, ramp, sine and damped sine, Gaussian PDF and CDF distributions,
+and more. Altogether there are nearly 80 different operations available.
 
-A basic macro facility is provided to automate a sequence of repeated operations.
+A basic macro facility is provided to automate a sequence of repeated
+operations.
 
-Like RPN calculators, GF4 operations are organized around a stack of data sets.  Unlike those calculators, the various stack levels can be accessed directly as well.
+Like RPN calculators, GF4 operations are organized around a stack of data sets.
+Unlike those calculators, the various stack levels can be accessed directly as
+well.
 
 
 .. rubric:: Footnote
@@ -294,47 +318,44 @@ The results are shown in Figure EX-1c.
 @tabwidth -4
 @others
 </t>
-<t tx="tom.20220425082631.3">GF4 - "GF" being short for "Graphics Functions" - is a Python program to
-display two-dimensional data, such as time series data, and to perform
-mathematical operations on the data or between two related data sets. We
-sometimes call the 2D data sets "waveforms" because the data often
-represents time domain waveforms. Otherwise we generally call the data by
-the term "datasets". The program aims to make data exploration easy and
-enjoyable.
+<t tx="tom.20220425082631.3">GF4 - "GF" being short for "Graphics Framework" - is a Python program to display
+two-dimensional data, such as time series data, and to perform mathematical
+operations on the data or between two related data sets. The program aims to
+make data exploration easy and enjoyable.
 
-The program's interface is modeled after hand-held calculators of the
-"reverse polish notation" (RPN) style. This kind of calculator was made
-famous by Hewlett-Packard, starting with their HP-35 and HP-45 calculators.
-GF4 works with waveforms in place of the numbers manipulated by the hand
-calculators.
+The program's interface is modeled after hand-held calculators of the "reverse
+polish notation" (RPN) style. This kind of calculator was made famous by
+Hewlett-Packard, starting with their HP-35 and HP-45 calculators. GF4 works with
+waveforms in place of the numbers manipulated by the hand calculators.
 
-Thus, a waveform can be scaled, squared, have its logarithm taken,
-integrated and differentiated, be normalized and rectified, and so on. A
-discrete Fast Fourier Transform is provided that is not limited to powers
-of two in data length. Data can be trimmed or padded. Curve fitting and
-smoothing of several varieties can be done. Two waveforms can be added,
-subtracted, multiplied, and divided (where possible), correlated or
-convolved together, among others.  A smoothed waveform can be overplotted
-on the unsmoothed original.  Linear, semilog, and log-log plots are 
-available.
+We sometimes call the 2D data sets "waveforms" because the data often represents
+time domain waveforms. Otherwise we generally call the data by the term
+"datasets".
+
+Thus, a waveform can be scaled, squared, have its logarithm taken, integrated
+and differentiated, be normalized and rectified, and so on. A discrete Fast
+Fourier Transform is provided that is not limited to powers of two in data
+length. Data can be trimmed or padded. Curve fitting and smoothing of several
+varieties can be done. Two waveforms can be added, subtracted, multiplied, and
+divided (where possible), correlated or convolved together, among others. A
+smoothed waveform can be overplotted on the unsmoothed original. Linear,
+semilog, and log-log plots are available.
 
 A certain number of basic waveforms can be generated, including a delta
-function, step, ramp, sine and damped sine, Gaussian PDF and CDF
-distributions, and more. Altogether there are nearly 80 different
-operations available.
+function, step, ramp, sine and damped sine, Gaussian PDF and CDF distributions,
+and more. Altogether there are nearly 80 different operations available.
 
 A basic macro facility is provided to automate a sequence of repeated
 operations.
 
-Like RPN calculators, GF4 operations are organized around a stack of data
-sets. Unlike those calculators, the various stack levels can be accessed
-directly as well.
+Like RPN calculators, GF4 operations are organized around a stack of data sets.
+Unlike those calculators, the various stack levels can be accessed directly as
+well.
 
-The current version of the program is somewhat uneven in the degree of
-polish of the various operations. This reflects its evolution under the
-interests and changing needs of the author.  Mathematically, many operations
-are implemented by numpy or scipy computations;  others are algorithms
-implemented by the author.
+The current version of the program is somewhat uneven in the degree of polish of
+the various operations. This reflects its evolution under the interests and
+changing needs of the author. Mathematically, many operations are implemented by
+numpy or scipy computations; others are algorithms implemented by the author.
 
 You can read the [User's Guide](http://www.tompassin.net/gf4/GF4_Users_Guide.html).
 </t>

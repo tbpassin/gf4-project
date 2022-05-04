@@ -1,5 +1,11 @@
-GF4 is a computer program for visualizing and processing two-dimensional data such as X-Y and time series data.  The user interface is modeled after a reverse-polish notation (RPN) style of desk calculator, with the roles of numbers being replaced by 2D data sets.
+GF4 is a computer program for visualizing and processing two-dimensional data
+such as X-Y and time series data. The user interface is modeled after a
+reverse-polish notation (RPN) style of desk calculator, with the roles of
+numbers being replaced by 2D data sets.
 
-As in Hewlett-Packard RPN calculators, the stack bottom is called "X", the stack position above that is called "Y", and the top of the stack is called "T".  Data sets may be pushed, popped, or rotated on the stack.  GF4's stack has a depth of 3.
+As in Hewlett-Packard RPN calculators, the stack bottom is called "X", the stack
+position above that is called "Y", and the top of the stack is called "T". Data
+sets may be pushed, popped, or rotated on the stack. GF4's stack has a depth of
+three.
 
 The main program is called "gf4.pyw".
