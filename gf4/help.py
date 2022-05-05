@@ -39,9 +39,12 @@ branch: {branch}; build: {version}
 H1 = """
   Input Data Format
 -----------------------------------------------
-GF4 accepts one or two-column whitespace-separated text files, one data point
+GF4 accepts text files with whitespace-separated columns, one data point
 per row. If there is only one column, GF4 inserts an imputed first column with
-values being consecutive integers beginning with 1.
+values being consecutive integers beginning with 1.  If there are more than two
+columns, a dialog is displayed so the user can choose the two desired columns.
+The number of columns is derived based on the first non-comment, non-blank
+line whose first field is a legal floating point number.
 
 Here is an example data file:
 
@@ -104,6 +107,10 @@ ENDDATASET", then the data following that comment will get loaded into the next
 higher slot in the stack, replacing the previous contents. If there should be
 another data section, it will load into the next higher slot, the top slot. Data
 sections beyond this will get ignored.
+
+The first data loaded after startup will be automatically plotted.  Later
+data loads will not be plotted.  This gives the user a chance to overlay the
+new data over the old, which can be convient.
 '''
 #@+node:tom.20220412003456.1: *3* Data Output
 H4 = '''
@@ -117,10 +124,22 @@ Data in the "X" slot can be saved in two ways:
 Saved data will include the plot title and the axis labels, if any have been
 added.  The are denoted using the special comments described above.
 '''
-#@+node:tom.20220412003510.1: *3* Plotting Data4
+#@+node:tom.20220412003510.1: *3* Plotting Data
 H5 = '''
     Plotting Data
 -----------------------------
+Data in the X position - the stack bottom - is displayed with the "Plot X"
+command button.  The "Overplot Y" button overlays the data in the Y position
+onto the existing plot.  By default the color and line thickness contrast
+with the X plotted line.  The Y slot cannot be plotted on its own directly.
+The stack top ("T") can be plotted or overplotted.
+
+The difference between plotting and overplotting is that the first clears
+the screen before showing the data.
+
+The display auto-scales to accommodate all the data.  The scale boundaries
+can be set using the toolbar controls on the plot window, or by using the
+Pan/Zoom control that is also located on the toolbar.
 '''
 #@-others
 helpmsg = (INTRO
