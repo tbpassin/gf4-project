@@ -10,7 +10,10 @@ import math
 import copy
 import numpy as np
 
+from entry import GetTwoInts
+
 ENCODING = 'utf-8'
+parmsaver = {}
 #@+node:tom.20211211170820.4: ** class Dataset
 class Dataset:
     '''Class to represent a 2D curve.
@@ -75,7 +78,7 @@ class Dataset:
         self.ydata = [1.0*y/_max for y in self.ydata]
 
     #@+node:tom.20211211170820.10: *3* Dataset.setAsciiData
-    def setAsciiData(self, lines, filename=''):
+    def setAsciiData(self, lines, filename='', root = None):
         """
         #@+<< docstring >>
         #@+node:tom.20220401205037.1: *4* << docstring >>
@@ -126,6 +129,8 @@ class Dataset:
         _rowcount = 0
         _datalines = 0
         _isSingleCol = False
+        _hasTwoCols = False
+        _numcols = 0
         _firstline = True
         e = None
         retval = ''
@@ -183,22 +188,53 @@ class Dataset:
             #@-<< handle special comments >>
             #@+<< get numeric data >>
             #@+node:tom.20220401205749.1: *5* << get numeric data >>
-            fields = line.split()
+            line = line.strip()
+            #fields = line.split()
 
             # Use first non-blank, non-comment line to decide one or 2 column data
-            if _firstline and len(fields) == 1:
-                _isSingleCol = True
-            _firstline = False
+            # if _firstline and len(fields) == 1:
+                # _isSingleCol = True
+            if not line.strip(): continue
+            if line[0] in (';', '#'): continue
+            fields = line.split()
 
-            #retval = None
+            # First Numeric line
+            if _firstline:
+                try:
+                    _ = float(fields[0])
+                    _firstline = False
+                except Exception as e:
+                    print(e)
+                    continue
+
+                _numcols = len(fields)
+                _isSingleCol = _numcols == 1
+                _hasTwoCols = _numcols == 2
+
+                if _numcols > 2:
+                    _id = 'selectcols'
+                    if parmsaver.get(_id):
+                        col1, col2 = parmsaver[_id]
+                    else:
+                        col1, col2 = 0, 1
+                    dia = GetTwoInts(root, 'Select Data Columns (zero-based)', 'X', 'Y', col1, col2)
+                    if not dia.result:
+                        return "No data columns selected"
+                    col1, col2 = dia.result
+                    parmsaver[_id] = col1, col2
+
             try:
                 if _isSingleCol:
                     count = count + 1
                     _x.append(count)
                     _y.append(float(fields[0]))
-                else:
+                elif _hasTwoCols:
                     _x.append(float(fields[0]))
                     _y.append(float(fields[1]))
+                else:
+                    _x.append(float(fields[col1]))
+                    _y.append(float(fields[col2]))
+
                 _datalines += 1
             except Exception:
                 sys.stderr.write('%s at line %s\n' % (e, _rowcount))
@@ -1306,7 +1342,6 @@ if __name__ == '__main__':
         plt.plot((ds.xdata[0], ds.xdata[-1]), (sigma, sigma), 'black')
         plt.show()
 
-                                                   
     Tests = [test_halfsupergauss, test_supergauss]#test_sliding_var, test_lopass]
     for f in Tests:
         #print f.__doc__ or ''

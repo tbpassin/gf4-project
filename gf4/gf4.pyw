@@ -693,6 +693,9 @@ class PlotManager(AbstractPlotManager):
         opening the file dialog.  Load the data from the selected file into
         the specified Dataset. Assumes data is in ASCII format.  Plot
         the data if no other data has yet been plotted.
+        
+        If there are more than two numeric columns,
+        show a dialog for the user to select the two columns to use.
 
         The data set may be divided into parts by the special
         comment string ';;ENDDATASET'.  If so, load each such delineated
@@ -735,7 +738,7 @@ class PlotManager(AbstractPlotManager):
             lines = block.split('\n')
             _data = Dataset()
             _data.orig_filename = fname
-            err = _data.setAsciiData(lines)
+            err = _data.setAsciiData(lines, root = self.root)
             if err:
                 self.announce(f'No data in block {n}')
                 self.flashit()
@@ -940,6 +943,7 @@ class PlotManager(AbstractPlotManager):
 
         _ds.pad_truncate(dia.result)
         self.plot()
+        print(len(_ds))
     #@+node:tom.20211207165051.73: *4* shift
     @REQUIRE_MAIN
     def shift(self):

@@ -126,7 +126,7 @@ def generateRectangle(N=256):
     a tuple (xdata, ydata)
     '''
 
-    _x = range(N)
+    _x = list(range(N))
     _y = [1.0 for i in range(N)]
     _y[0] = 0
 
@@ -239,7 +239,7 @@ def generateRamp(N=256):
 
     _ydelta = 1.0 / (N - 1)
     _y0 = 0.0
-    _x = range(N)
+    _x = list(range(N))
     _y = [_y0 + _ydelta * i for i in range(N)]
 
     return (_x, _y)
