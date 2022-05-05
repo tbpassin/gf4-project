@@ -267,7 +267,7 @@ class Dataset:
     def pad_truncate(self, num):
         '''Change number of data points in data to num.  if num is > than
         existing number of points, pad the end with zero for the y 
-        values.  The padded values are they same type as the existing 
+        values.  The padded values are the same type as the existing 
         ones (int or float).  The x values will be incremented by
         the mean x spacing.  This obviously makes most sense when the
         x values are evenly spaced.
@@ -299,7 +299,6 @@ class Dataset:
             _y = self.ydata.tolist()
         else:
             _y = self.ydata[:]
-
         if diff > 0:
             xdelta = (max(_x) - min(_x)) /(_len - 1)
             nextx = _x[-1]

@@ -42,6 +42,7 @@
 <v t="tom.20211211171913.40"><vh>@file stats.py</vh></v>
 <v t="tom.20211211171913.51"><vh>@file Timehack.py</vh></v>
 <v t="tom.20211211171913.55"><vh>@file trend.py</vh></v>
+<v t="tom.20220505114147.1"><vh>@file gitVersion.py</vh></v>
 </v>
 <v t="tom.20220412075521.1"><vh>Docs</vh>
 <v t="tom.20220425082631.2"><vh>@clean ../README.md</vh>
