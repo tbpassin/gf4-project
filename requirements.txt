@@ -1,0 +1,6 @@
+csaps
+matplotlib
+numpy
+pwlf
+pyperclip
+scipy
