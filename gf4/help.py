@@ -6,23 +6,14 @@
 from os.path import dirname, join
 import webbrowser
 import gitVersion
+import appVersion
 
-branch, version = gitVersion.gitInfo
+version, (branch, changeset) = appVersion.version, gitVersion.gitInfo
 
 try:
     import Tkinter as Tk
 except:
     import tkinter as Tk
-
-# try:
-    # import tkFont
-# except:
-    # import tkinter.font as tkFont
-
-# try:
-    # import ttk
-# except:
-    # from tkinter import ttk
 #@+node:tom.20220505131030.1: ** helpmsg
 #@+others
 #@+node:tom.20220505130330.1: *3* Intro
@@ -33,7 +24,7 @@ Plots 2D curves and performs calculations on them. GF4 is modeled
 after a reverse polish notation (RPN) calculator, where 2D waveforms take 
 the place of plain numbers.
 
-branch: {branch}; build: {version}
+Version: {version}; Branch:{branch}; Changeset: {changeset}
 """
 #@+node:tom.20220412003223.1: *3* Data Format
 H1 = """
@@ -166,7 +157,7 @@ def msg_window(text, plotmgr=None):
     else:
         win = Tk.Tk()
 
-    win.title("GF4 Information")
+    win.title("About GF4")
 
     win.grid_columnconfigure(0, weight=1)
     win.grid_rowconfigure(0, weight=1)

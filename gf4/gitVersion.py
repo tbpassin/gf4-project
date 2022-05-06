@@ -6,10 +6,11 @@
 import sys
 import os.path
 
-branch = version = ''
-gitbase = os.path.join('..', '.git')
-
 def getGitInfo():
+    branch = version = ''
+    rootdir = os.path.dirname(os.path.dirname(__file__))
+    gitbase = os.path.join(rootdir, '.git')
+
     try:
         head = os.path.join(gitbase, 'HEAD')
         with open(head) as f:
