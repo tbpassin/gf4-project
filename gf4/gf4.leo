@@ -13,11 +13,6 @@
 <v t="tom.20220411171338.1"><vh>@clean ABOUT.txt</vh></v>
 </v>
 <v t="tom.20211211170532.1"><vh>Program files</vh>
-<v t="tom.20211207165011.1"><vh>Smoother and Tests</vh>
-<v t="tom.20211211171913.12"><vh>@file smoother.py</vh></v>
-<v t="tom.20211206195731.2"><vh>@file test_smooth.py</vh></v>
-<v t="tom.20211206205420.2"><vh>@file testing/smoother_tests.py</vh></v>
-</v>
 <v t="tom.20211207165051.2"><vh>@file gf4.pyw</vh></v>
 <v t="tom.20211211170701.2"><vh>@file AbstractPlotMgr.py</vh></v>
 <v t="tom.20211211170819.2"><vh>@file BuildCommands.py</vh></v>
@@ -38,11 +33,18 @@
 <v t="tom.20211211171304.65"><vh>@file MakeWaveforms.py</vh></v>
 <v t="tom.20211211171913.2"><vh>@file Plot.py</vh></v>
 <v t="tom.20211211171913.6"><vh>@file randnum.py</vh></v>
-<v t="tom.20211211171913.12"></v>
+<v t="tom.20211211171913.12"><vh>@file smoother.py</vh></v>
 <v t="tom.20211211171913.40"><vh>@file stats.py</vh></v>
 <v t="tom.20211211171913.51"><vh>@file Timehack.py</vh></v>
 <v t="tom.20211211171913.55"><vh>@file trend.py</vh></v>
 <v t="tom.20220506081351.1"><vh>@file versions.py</vh></v>
+</v>
+<v t="tom.20220506082557.1"><vh>Tests</vh>
+<v t="tom.20211207165011.1"><vh>Smoother and Tests</vh>
+<v t="tom.20211211171913.12"></v>
+<v t="tom.20211206195731.2"><vh>@file test_smooth.py</vh></v>
+<v t="tom.20211206205420.2"><vh>@file testing/smoother_tests.py</vh></v>
+</v>
 </v>
 <v t="tom.20220412075521.1"><vh>Docs</vh>
 <v t="tom.20220425082631.2"><vh>@clean ../README.md</vh>
@@ -360,5 +362,6 @@ numpy or scipy computations; others are algorithms implemented by the author.
 
 You can read the [User's Guide](http://www.tompassin.net/gf4/GF4_Users_Guide.html).
 </t>
+<t tx="tom.20220506082557.1"></t>
 </tnodes>
 </leo_file>
