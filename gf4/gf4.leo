@@ -28,7 +28,6 @@
 <v t="tom.20211211181438.2"><vh>@file fit_test.py</vh></v>
 <v t="tom.20220411202149.1"><vh>@file help.py</vh></v>
 <v t="tom.20211211171304.51"><vh>@file Linestyle.py</vh></v>
-<v t="tom.20211211171304.61"><vh>@file logger.py</vh></v>
 <v t="tom.20211211171304.65"><vh>@file MakeWaveforms.py</vh></v>
 <v t="tom.20211211171913.2"><vh>@file Plot.py</vh></v>
 <v t="tom.20211211171913.6"><vh>@file randnum.py</vh></v>
