@@ -687,7 +687,7 @@ if __name__ == '__main__':
             plt.get_current_fig_manager().set_window_title(t.__name__)
             t()
 
-    Tests = (testCalcNorm)#, testCorrelations, test_spearmanr)#, testSpearman
+    Tests = (testCalcNorm,)#, testCorrelations, test_spearmanr)#, testSpearman
     runtests(Tests)
 #@-others
 #@-leo

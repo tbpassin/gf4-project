@@ -1,6 +1,6 @@
-# Sphinx-generated files
-gf4/doc/html/
-gf4/doc/*.rst
-
-# *.bak
+*.bak
+*.doctree
+*.pickle
+objects.inv
+*.buildinfo
 __pycache__/
