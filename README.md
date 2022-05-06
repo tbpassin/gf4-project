@@ -37,4 +37,4 @@ the various operations. This reflects its evolution under the interests and
 changing needs of the author. Mathematically, many operations are implemented by
 numpy or scipy computations; others are algorithms implemented by the author.
 
-You can read the [User's Guide](http://www.tompassin.net/gf4/GF4_Users_Guide.html).
+You can read the [User's Guide](gf4/doc/html/GF4_Users_Guide.html).
