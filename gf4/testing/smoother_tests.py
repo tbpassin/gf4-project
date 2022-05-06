@@ -2,34 +2,27 @@
 #@+node:tom.20211206205420.2: * @file testing/smoother_tests.py
 #@+others
 #@+node:tom.20211210160855.3: ** Organizer: Declarations (smoother_tests.py)
-import sys
 import random
-#from random import random as rand
 from random import gauss
 import math
 import matplotlib.pyplot as plt
 
-from pylab import rcParams, gcf, gca
+rcParams = plt.rcParams
+gcf = plt.gcf
+gca = plt.gca
 
-try:
-    from smoother import deriv
-except ImportError:
-    path = r'C:/Tom/devel/matplotlib/gf4'
-    sys.path.append(path)
-    from smoother import deriv
-
-from smoother import sqr, lowess, lowess2Quad, thiel_sen
-from smoother import lowess2, moving_median, cspline, splineSmooth, lowess1
-from smoother import lowessAdaptiveAC, leastsqr, lowessAdaptive
+from smoother import (deriv, sqr, lowess, lowess2Quad, thiel_sen,
+                      lowess2, moving_median, cspline, splineSmooth, lowess1,
+                      lowessAdaptiveAC, leastsqr, lowessAdaptive)
 from randnum import gaussian_vals
 
 
 STYLE = 'ggplot'
 
-plt.rcParams['figure.figsize'] = (12,9)
-plt.rcParams['axes.grid'] = True
-plt.rcParams['ytick.direction'] = 'out'
-plt.rcParams['xtick.direction'] = 'out'
+rcParams['figure.figsize'] = (12,9)
+rcParams['axes.grid'] = True
+rcParams['ytick.direction'] = 'out'
+rcParams['xtick.direction'] = 'out'
 
 #@+node:tom.20211210160855.4: ** self_printer (smoother_tests.py)
 def self_printer(f):
@@ -172,7 +165,7 @@ def lowess1_autocorr(func=None):
     param.sort()
     rmin, sbest = param[0]
 
-    print ( 'Best:')
+    print ( 'Best')
     print ( 'Span\tAutocorr.')
     print ( '%(sbest)s \t%(rmin)0.3f' % (locals()))
 
@@ -336,7 +329,7 @@ def lowess2_mse(func=None):
 
     bestindex = penalty.index( min(penalty))
     best = smooth[bestindex]
-    print ( '\nBest:')
+    print ( '\nBest')
     print ( 'Span\tMSE\tRough\tPenalty')
     print ( '%s\t%0.3f\t%0.3f\t%0.3f' % \
         (best, mse[bestindex], rough[bestindex], penalty[bestindex]))

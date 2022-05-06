@@ -511,9 +511,10 @@ def pearson(x,y):
     return r
 #@+node:tom.20211212001620.1: ** __main__
 if __name__ == '__main__':
-    import matplotlib.pyplot as plt
-    from pylab import gcf  # rcParams
     import randnum
+    import matplotlib.pyplot as plt
+
+    gcf = plt.gcf
 
     def self_printer(f):
         def new_f():
@@ -683,15 +684,10 @@ if __name__ == '__main__':
 
     def runtests(testlist):
         for t in testlist:
-            #print 'Running %s' % t.func_name
-            #if t.func_doc: print t.func_doc
-            figure = gcf()
-            #figure.canvas.set_window_title(t.func_doc or t.func_name)
-            figure.canvas.set_window_title(t.__name__)
+            plt.get_current_fig_manager().set_window_title(t.__name__)
             t()
-            print()
 
-    Tests = (testCalcNorm, )  #, testCorrelations, test_spearmanr#, testSpearman
+    Tests = (testCalcNorm)#, testCorrelations, test_spearmanr)#, testSpearman
     runtests(Tests)
 #@-others
 #@-leo

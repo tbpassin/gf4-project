@@ -1082,7 +1082,6 @@ class Dataset:
 if __name__ == '__main__':
     import random 
     import matplotlib.pyplot as plt
-    #from pylab import rcParams,  gcf
 
     passfail = {True:'Pass', False:'Fail'}
     base_xdata = [1,2,3,4,5,6,7,8,9,10]
@@ -1090,12 +1089,13 @@ if __name__ == '__main__':
 
     def self_printer(f):
         def new_f():
-            print (f.func_name)
-            print (f.func_doc or '')
+            print (f.__name__)
+            print (f.__doc__ or '')
             f()
             print()
         return new_f
 
+    @self_printer
     def test_pad():
         '''Test padding'''
         ds = Dataset()
@@ -1113,8 +1113,8 @@ if __name__ == '__main__':
             print ('Actual:')
             print (ds.ydata, ds.xdata)
             print ('====Fail=====')
-        print()
 
+    @self_printer
     def test_truncate():
         '''Test truncation'''
         ds = Dataset()
@@ -1132,8 +1132,8 @@ if __name__ == '__main__':
             print ('Actual:')
             print ((ds.ydata, ds.xdata))
             print ('====Fail=====')
-        print()
 
+    @self_printer
     def shift_right():
         '''Test shifting right by 3'''
         ds = Dataset()
@@ -1150,8 +1150,8 @@ if __name__ == '__main__':
             print ('Actual:')
             print (ds.ydata)
             print ('====Fail=====')
-        print()
 
+    @self_printer
     def shift_left():
         '''Test shifting left by 3'''
         ds = Dataset()
@@ -1168,8 +1168,8 @@ if __name__ == '__main__':
             print ('Actual:')
             print (ds.ydata)
             print ('====Fail=====')
-        print()
 
+    @self_printer
     def shift_right_many():
         '''Test shift right by too many points'''
         ds = Dataset()
@@ -1186,8 +1186,8 @@ if __name__ == '__main__':
             print ('Actual:')
             print (ds.ydata)
             print ('====Fail=====')
-        print()
 
+    @self_printer
     def test_scale():
         '''Test Scaling by factor 2'''
         ds = Dataset()
@@ -1204,8 +1204,8 @@ if __name__ == '__main__':
             print ('Actual:')
             print (ds.ydata)
             print ('====Fail=====')
-        print()
 
+    @self_printer
     def test_transpose():
         '''Test Transposing Axes'''
         ds = Dataset()
@@ -1222,8 +1222,8 @@ if __name__ == '__main__':
             print ('Actual:')
             print ((ds.ydata, ds.xdata))
             print ('====Fail=====')
-        print()
 
+    @self_printer
     def test_add_constant():
         '''Test Adding constant 2.5 to Y axis data'''
         ds = Dataset()
@@ -1240,8 +1240,8 @@ if __name__ == '__main__':
             print ('Actual:')
             print (ds.ydata)
             print ('====Fail=====')
-        print()
 
+    @self_printer
     def test_halfsupergauss():
         '''Test half Supergaussian window of order 6'''
         ds = Dataset()
@@ -1256,8 +1256,8 @@ if __name__ == '__main__':
 
         ds.halfSupergaussian(6)
         print (''.join(['%0.4f\n' % (ds.ydata[i]) for i in range(len(ds.ydata))]))
-        print()
 
+    @self_printer
     def test_supergauss():
         '''Test Supergaussian window of order 2'''
         ds = Dataset()
@@ -1272,8 +1272,8 @@ if __name__ == '__main__':
 
         ds.fullSuperGaussian(2)
         print (''.join(['%0.4f\n' % (ds.ydata[i]) for i in range(len(ds.ydata))]))
-        print()
 
+    @self_printer
     def test_len_method():
         '''Test len() function on Dataset'''
 
@@ -1296,7 +1296,6 @@ if __name__ == '__main__':
         if len(ds): passed = False
         else: passed =  True
         print (passfail[passed])
-        print()
 
         ds = Dataset()
         print ('  New ds' )
@@ -1304,10 +1303,10 @@ if __name__ == '__main__':
         if ds: passed =  False
         else: passed =  True
         print (passfail[passed])
-        print()
 
+    @self_printer
     def test_lopass():
-        '''Test Low-pass filter lopass()'''
+        '''Test lopass()'''
         ds = Dataset()
         ds.xdata = base_xdata[:]
         ds.ydata = [0,1,1,1,1,1,1,1,1,1]
@@ -1324,7 +1323,6 @@ if __name__ == '__main__':
             print ('Actual:')
             print (results)
             print ('====Fail====')
-        print()
 
     @self_printer
     def test_sliding_var():
@@ -1342,9 +1340,9 @@ if __name__ == '__main__':
         plt.plot((ds.xdata[0], ds.xdata[-1]), (sigma, sigma), 'black')
         plt.show()
 
-    Tests = [test_halfsupergauss, test_supergauss]#test_sliding_var, test_lopass]
+    # Tests = [test_halfsupergauss, test_supergauss]#test_sliding_var, test_lopass]
+    Tests = [test_sliding_var, test_lopass, test_pad]
     for f in Tests:
-        #print f.__doc__ or ''
         f()
 #@-others
 #@@language python
