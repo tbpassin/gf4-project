@@ -5,6 +5,7 @@
 ===================
 GF4 User's Guide
 ===================
+
 This User's Guide Covers the Use and Capabilities of the GF4 Waveform Calculator.
 
 What Is GF4?
@@ -173,7 +174,16 @@ Data Format
 
 Input Data Format
 ------------------
-GF4 accepts one or two-column whitespace-separated text files, one data point per row. If there is only one column, GF4 inserts an imputed first column with values being consecutive integers beginning with 1.
+GF4 accepts text files with whitespace-separated columns, one data point per
+row. If there is only one column, GF4 inserts an imputed first column with
+values being consecutive integers beginning with 1. The "first" column becomes
+the "x", or horizontal, axis. If there are more than two columns, a dialog is
+displayed so the user can choose the two desired columns. The number of columns
+is derived based on the first non-comment, non-blank line whose first field is a
+legal floating point number.
+
+Data fields must be numeric.  GF4 cannot make use of non-numeric data.  Data
+fields are converted to floating point numbers.
 
 Here is an example data file::
 

@@ -180,7 +180,15 @@ GF4 would make an excellent educational tool since it makes exploring the data s
 </div>
 <div class="section" id="data-format">
 <h2>Data Format<a class="headerlink" href="#data-format" title="Permalink to this headline">¶</a></h2>
-<p>GF4 accepts one or two-column whitespace-separated text files, one data point per row. If there is only one column, GF4 inserts an imputed first column with values being consecutive integers beginning with 1.</p>
+<p>GF4 accepts text files with whitespace-separated columns, one data point per
+row. If there is only one column, GF4 inserts an imputed first column with
+values being consecutive integers beginning with 1. The “first” column becomes
+the “x”, or horizontal, axis. If there are more than two columns, a dialog is
+displayed so the user can choose the two desired columns. The number of columns
+is derived based on the first non-comment, non-blank line whose first field is a
+legal floating point number.</p>
+<p>Data fields must be numeric.  GF4 cannot make use of non-numeric data.  Data
+fields are converted to floating point numbers.</p>
 <p>Here is an example data file:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># A comment line</span>
 <span class="p">;</span> <span class="n">Another</span> <span class="n">comment</span> <span class="n">line</span><span class="o">.</span>  <span class="n">Also</span><span class="p">,</span> <span class="n">blank</span> <span class="n">lines</span> <span class="n">are</span> <span class="n">ignored</span><span class="o">.</span>
