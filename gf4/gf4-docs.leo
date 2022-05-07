@@ -27,12 +27,15 @@
 <v t="tom.20220507132007.16"><vh>Encouraging Remarks</vh></v>
 </v>
 <v t="tom.20220507132007.17"><vh>Data Format</vh></v>
-<v t="tom.20220507132007.18"><vh>The Waveform Stack</vh></v>
+<v t="tom.20220507132007.18"><vh>The Waveform Stack</vh>
+<v t="tom.20220507135125.1"><vh>Stack Operations</vh></v>
+<v t="tom.20220507140739.1"><vh>Direct Access</vh></v>
+</v>
+<v t="tom.20220507143340.1"><vh>Non-Stack Storage</vh></v>
 <v t="tom.20220507132007.19"><vh>Plotting Curves</vh>
 <v t="tom.20220507132007.20"><vh>Changing Colors, Symbols, and Line Styles</vh></v>
 </v>
-<v t="tom.20220507132007.21"><vh>Using the Waveform Stack</vh></v>
-<v t="tom.20220507132007.22"><vh>Reading And Saving Data</vh></v>
+<v t="tom.20220507132007.22"><vh>Loading And Saving Data</vh></v>
 <v t="tom.20220507132007.23"><vh>Operations On One Waveform</vh></v>
 <v t="tom.20220507132007.24"><vh>Operations On Two Waveforms</vh></v>
 <v t="tom.20220507132007.25"><vh>The Waveform Generators</vh></v>
@@ -106,7 +109,7 @@ Finally, set the main marker style back to "Line"
 
 **Save The Noisy Line For Later Viewing**
 ------------------------------------------
-For this example, at the end we will overlay this noisy line on the plot of the fitted line.  Copy it to the **T** stack position by clicking the "Copy2T" button in the "Stack" group.
+For this example, at the end we will overlay this noisy line on the plot of the fitted line.  Copy it to the **T** stack position by clicking the "Copy2T" button in the "Stack" group (see `Direct Access`_).
 </t>
 <t tx="tom.20220507132007.15">To fit a linear least squares fit to the noisy ramp, click on the "Lst Sqr Lin" button in the upper right of the commands window.  The best fit straight line will plot in the plotting window.
 
@@ -169,15 +172,22 @@ There are specially formatted (optional) comments to specify a title, axis label
 The special comment key words are case sensitive.  If there is more than one dataset, the second one goes into the **Y** position in the stack, and so on up to the stack depth.  Beyond that additional data sets are ignored.
 
 </t>
-<t tx="tom.20220507132007.18"></t>
+<t tx="tom.20220507132007.18">The waveform stack is the primary organizing concept of GF4.  Modeled after
+the stack in Hewlett-Packard RPN calculators, the stack is an array with positions
+that can hold data elements.  Conceptually, the stack is arranged as a vertical 
+column with a "bottom" and a "top".  Items on the stack can be "pushed" upwards,
+"dropped" downwards, "rotated" and "swapped". These operations are illustrated
+in the next section.
+
+The most common stack oprations in practice are "Swap" and direct access.  The
+T position is often used as a temporary data cache.</t>
 <t tx="tom.20220507132007.19"></t>
 <t tx="tom.20220507132007.2">@language md
 @tabwidth -4
 @others
 </t>
 <t tx="tom.20220507132007.20"></t>
-<t tx="tom.20220507132007.21"></t>
-<t tx="tom.20220507132007.22"></t>
+<t tx="tom.20220507132007.22">All data is saved from and loaded to the X stack position.</t>
 <t tx="tom.20220507132007.23"></t>
 <t tx="tom.20220507132007.24"></t>
 <t tx="tom.20220507132007.25">We encountered one of GF4's waveform generators in the `Quick Start`_ section.</t>
@@ -304,5 +314,93 @@ Of note is the title of the graph.  It was generated automatically, capturing a 
     The main plotting window is on the left, and the command window is on the right.
 </t>
 <t tx="tom.20220507132007.9">GF4 is a fifth generation implementation of the basic waveform calculator concept (the first generation - implemented on a 64K Z-80 CP/M machine - was not named).  The implementation language has changed from FORTH to Turbo Pascal to Delphi to the current Python.  Over this time the basic concept has not been changed, while the user interface has evolved and been refined, and more math operations added.</t>
+<t tx="tom.20220507135125.1">The stack can be "pushed", causing the existing
+elements to be moved one slot "higher"::
+
+    Stack populated with data elements A, B, and C
+
+    |   A   |   &lt;-- "T": stack top
+    |   B   |   &lt;-- "Y"
+    |   C   |   &lt;-- "X": stack bottom
+
+    "Pushing" stack duplicates "X" element (top element is lost)
+
+    |   B   |   &lt;-- "T": stack top
+    |   C   |   &lt;-- "Y"
+    |   C   |   &lt;-- "X": stack bottom
+
+
+"Dropping" the stack moves elements one slot lower::
+
+    Stack populated with data elements A, B, and C
+
+    |   A   |   &lt;-- "T": stack top
+    |   B   |   &lt;-- "Y"
+    |   C   |   &lt;-- "X": stack bottom
+
+    "Dropping" stack duplicates "T" element (bottom element is lost)
+
+    |   A   |   &lt;-- "T": stack top
+    |   A   |   &lt;-- "Y"
+    |   B   |   &lt;-- "X": stack bottom
+
+The stack can also be cyclically rotated up or down::
+
+    Stack populated with data elements A, B, and C
+
+    |   A   |   &lt;-- "T": stack top
+    |   B   |   &lt;-- "Y"
+    |   C   |   &lt;-- "X": stack bottom
+
+    Rotated "up" (T -&gt; X, X -&gt; Y, Y -&gt; T)
+
+    |   B   |   &lt;-- "T": stack top
+    |   C   |   &lt;-- "Y"
+    |   A   |   &lt;-- "X": stack bottom
+
+    Stack populated with data elements A, B, and C
+
+    |   A   |   &lt;-- "T": stack top
+    |   B   |   &lt;-- "Y"
+    |   C   |   &lt;-- "X": stack bottom
+
+    Rotated "down" (T -&gt; Y, Y -&gt; X, X -&gt; T)
+
+    |   C   |   &lt;-- "T": stack top
+    |   A   |   &lt;-- "Y"
+    |   B   |   &lt;-- "X": stack bottom
+
+"Swap" exchanges the X and Y data elements::
+
+    Stack populated with data elements A, B, and C
+
+    |   A   |   &lt;-- "T": stack top
+    |   B   |   &lt;-- "Y"
+    |   C   |   &lt;-- "X": stack bottom
+
+    Stack after a "Swap"
+
+    |   A   |   &lt;-- "T": stack top
+    |   C   |   &lt;-- "Y"
+    |   B   |   &lt;-- "X": stack bottom
+</t>
+<t tx="tom.20220507140739.1">The data element in X, the stack bottom, can be copied to the Y and T positions.
+The Y and T data elements can be copied to the X postion.  All the stack
+operations are carried out by clicking buttons in the auxiliary command window.
+
+.. image:: images/stack_ops.png</t>
+<t tx="tom.20220507143340.1">In addition to the stack, there are several other data storage locations:
+
+1. A single slot accessed by the "Store 1" and "Recall 1" buttons.
+These store from and retrieve to the X position.
+
+2. The system clipboard, accessed by the "Copy To Clipboard" and "Load From Dialog"
+buttons. The latter opens an editing window into which the clipboard can be
+copied.
+
+These buttons are marked in the image below:
+
+.. image:: images/loadsave.png
+</t>
 </tnodes>
 </leo_file>

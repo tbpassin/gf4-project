@@ -150,7 +150,7 @@ GF4 would make an excellent educational tool since it makes exploring the data s
 </div>
 <div class="section" id="save-the-noisy-line-for-later-viewing">
 <h5><strong>Save The Noisy Line For Later Viewing</strong><a class="headerlink" href="#save-the-noisy-line-for-later-viewing" title="Permalink to this headline">¶</a></h5>
-<p>For this example, at the end we will overlay this noisy line on the plot of the fitted line.  Copy it to the <strong>T</strong> stack position by clicking the “Copy2T” button in the “Stack” group.</p>
+<p>For this example, at the end we will overlay this noisy line on the plot of the fitted line.  Copy it to the <strong>T</strong> stack position by clicking the “Copy2T” button in the “Stack” group (see <a class="reference internal" href="#direct-access">Direct Access</a>).</p>
 </div>
 </div>
 <div class="section" id="fit-and-plot-the-noisy-line">
@@ -215,6 +215,104 @@ fields are converted to floating point numbers.</p>
 </div>
 <div class="section" id="the-waveform-stack">
 <h2>The Waveform Stack<a class="headerlink" href="#the-waveform-stack" title="Permalink to this headline">¶</a></h2>
+<p>The waveform stack is the primary organizing concept of GF4.  Modeled after
+the stack in Hewlett-Packard RPN calculators, the stack is an array with positions
+that can hold data elements.  Conceptually, the stack is arranged as a vertical
+column with a “bottom” and a “top”.  Items on the stack can be “pushed” upwards,
+“dropped” downwards, “rotated” and “swapped”. These operations are illustrated
+in the next section.</p>
+<p>The most common stack oprations in practice are “Swap” and direct access.  The
+T position is often used as a temporary data cache.</p>
+<div class="section" id="stack-operations">
+<h3>Stack Operations<a class="headerlink" href="#stack-operations" title="Permalink to this headline">¶</a></h3>
+<p>The stack can be “pushed”, causing the existing
+elements to be moved one slot “higher”:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Stack</span> <span class="n">populated</span> <span class="k">with</span> <span class="n">data</span> <span class="n">elements</span> <span class="n">A</span><span class="p">,</span> <span class="n">B</span><span class="p">,</span> <span class="ow">and</span> <span class="n">C</span>
+
+<span class="o">|</span>   <span class="n">A</span>   <span class="o">|</span>   <span class="o">&lt;--</span> <span class="s2">&quot;T&quot;</span><span class="p">:</span> <span class="n">stack</span> <span class="n">top</span>
+<span class="o">|</span>   <span class="n">B</span>   <span class="o">|</span>   <span class="o">&lt;--</span> <span class="s2">&quot;Y&quot;</span>
+<span class="o">|</span>   <span class="n">C</span>   <span class="o">|</span>   <span class="o">&lt;--</span> <span class="s2">&quot;X&quot;</span><span class="p">:</span> <span class="n">stack</span> <span class="n">bottom</span>
+
+<span class="s2">&quot;Pushing&quot;</span> <span class="n">stack</span> <span class="n">duplicates</span> <span class="s2">&quot;X&quot;</span> <span class="n">element</span> <span class="p">(</span><span class="n">top</span> <span class="n">element</span> <span class="ow">is</span> <span class="n">lost</span><span class="p">)</span>
+
+<span class="o">|</span>   <span class="n">B</span>   <span class="o">|</span>   <span class="o">&lt;--</span> <span class="s2">&quot;T&quot;</span><span class="p">:</span> <span class="n">stack</span> <span class="n">top</span>
+<span class="o">|</span>   <span class="n">C</span>   <span class="o">|</span>   <span class="o">&lt;--</span> <span class="s2">&quot;Y&quot;</span>
+<span class="o">|</span>   <span class="n">C</span>   <span class="o">|</span>   <span class="o">&lt;--</span> <span class="s2">&quot;X&quot;</span><span class="p">:</span> <span class="n">stack</span> <span class="n">bottom</span>
+</pre></div>
+</div>
+<p>“Dropping” the stack moves elements one slot lower:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Stack</span> <span class="n">populated</span> <span class="k">with</span> <span class="n">data</span> <span class="n">elements</span> <span class="n">A</span><span class="p">,</span> <span class="n">B</span><span class="p">,</span> <span class="ow">and</span> <span class="n">C</span>
+
+<span class="o">|</span>   <span class="n">A</span>   <span class="o">|</span>   <span class="o">&lt;--</span> <span class="s2">&quot;T&quot;</span><span class="p">:</span> <span class="n">stack</span> <span class="n">top</span>
+<span class="o">|</span>   <span class="n">B</span>   <span class="o">|</span>   <span class="o">&lt;--</span> <span class="s2">&quot;Y&quot;</span>
+<span class="o">|</span>   <span class="n">C</span>   <span class="o">|</span>   <span class="o">&lt;--</span> <span class="s2">&quot;X&quot;</span><span class="p">:</span> <span class="n">stack</span> <span class="n">bottom</span>
+
+<span class="s2">&quot;Dropping&quot;</span> <span class="n">stack</span> <span class="n">duplicates</span> <span class="s2">&quot;T&quot;</span> <span class="n">element</span> <span class="p">(</span><span class="n">bottom</span> <span class="n">element</span> <span class="ow">is</span> <span class="n">lost</span><span class="p">)</span>
+
+<span class="o">|</span>   <span class="n">A</span>   <span class="o">|</span>   <span class="o">&lt;--</span> <span class="s2">&quot;T&quot;</span><span class="p">:</span> <span class="n">stack</span> <span class="n">top</span>
+<span class="o">|</span>   <span class="n">A</span>   <span class="o">|</span>   <span class="o">&lt;--</span> <span class="s2">&quot;Y&quot;</span>
+<span class="o">|</span>   <span class="n">B</span>   <span class="o">|</span>   <span class="o">&lt;--</span> <span class="s2">&quot;X&quot;</span><span class="p">:</span> <span class="n">stack</span> <span class="n">bottom</span>
+</pre></div>
+</div>
+<p>The stack can also be cyclically rotated up or down:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Stack</span> <span class="n">populated</span> <span class="k">with</span> <span class="n">data</span> <span class="n">elements</span> <span class="n">A</span><span class="p">,</span> <span class="n">B</span><span class="p">,</span> <span class="ow">and</span> <span class="n">C</span>
+
+<span class="o">|</span>   <span class="n">A</span>   <span class="o">|</span>   <span class="o">&lt;--</span> <span class="s2">&quot;T&quot;</span><span class="p">:</span> <span class="n">stack</span> <span class="n">top</span>
+<span class="o">|</span>   <span class="n">B</span>   <span class="o">|</span>   <span class="o">&lt;--</span> <span class="s2">&quot;Y&quot;</span>
+<span class="o">|</span>   <span class="n">C</span>   <span class="o">|</span>   <span class="o">&lt;--</span> <span class="s2">&quot;X&quot;</span><span class="p">:</span> <span class="n">stack</span> <span class="n">bottom</span>
+
+<span class="n">Rotated</span> <span class="s2">&quot;up&quot;</span> <span class="p">(</span><span class="n">T</span> <span class="o">-&gt;</span> <span class="n">X</span><span class="p">,</span> <span class="n">X</span> <span class="o">-&gt;</span> <span class="n">Y</span><span class="p">,</span> <span class="n">Y</span> <span class="o">-&gt;</span> <span class="n">T</span><span class="p">)</span>
+
+<span class="o">|</span>   <span class="n">B</span>   <span class="o">|</span>   <span class="o">&lt;--</span> <span class="s2">&quot;T&quot;</span><span class="p">:</span> <span class="n">stack</span> <span class="n">top</span>
+<span class="o">|</span>   <span class="n">C</span>   <span class="o">|</span>   <span class="o">&lt;--</span> <span class="s2">&quot;Y&quot;</span>
+<span class="o">|</span>   <span class="n">A</span>   <span class="o">|</span>   <span class="o">&lt;--</span> <span class="s2">&quot;X&quot;</span><span class="p">:</span> <span class="n">stack</span> <span class="n">bottom</span>
+
+<span class="n">Stack</span> <span class="n">populated</span> <span class="k">with</span> <span class="n">data</span> <span class="n">elements</span> <span class="n">A</span><span class="p">,</span> <span class="n">B</span><span class="p">,</span> <span class="ow">and</span> <span class="n">C</span>
+
+<span class="o">|</span>   <span class="n">A</span>   <span class="o">|</span>   <span class="o">&lt;--</span> <span class="s2">&quot;T&quot;</span><span class="p">:</span> <span class="n">stack</span> <span class="n">top</span>
+<span class="o">|</span>   <span class="n">B</span>   <span class="o">|</span>   <span class="o">&lt;--</span> <span class="s2">&quot;Y&quot;</span>
+<span class="o">|</span>   <span class="n">C</span>   <span class="o">|</span>   <span class="o">&lt;--</span> <span class="s2">&quot;X&quot;</span><span class="p">:</span> <span class="n">stack</span> <span class="n">bottom</span>
+
+<span class="n">Rotated</span> <span class="s2">&quot;down&quot;</span> <span class="p">(</span><span class="n">T</span> <span class="o">-&gt;</span> <span class="n">Y</span><span class="p">,</span> <span class="n">Y</span> <span class="o">-&gt;</span> <span class="n">X</span><span class="p">,</span> <span class="n">X</span> <span class="o">-&gt;</span> <span class="n">T</span><span class="p">)</span>
+
+<span class="o">|</span>   <span class="n">C</span>   <span class="o">|</span>   <span class="o">&lt;--</span> <span class="s2">&quot;T&quot;</span><span class="p">:</span> <span class="n">stack</span> <span class="n">top</span>
+<span class="o">|</span>   <span class="n">A</span>   <span class="o">|</span>   <span class="o">&lt;--</span> <span class="s2">&quot;Y&quot;</span>
+<span class="o">|</span>   <span class="n">B</span>   <span class="o">|</span>   <span class="o">&lt;--</span> <span class="s2">&quot;X&quot;</span><span class="p">:</span> <span class="n">stack</span> <span class="n">bottom</span>
+</pre></div>
+</div>
+<p>“Swap” exchanges the X and Y data elements:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Stack</span> <span class="n">populated</span> <span class="k">with</span> <span class="n">data</span> <span class="n">elements</span> <span class="n">A</span><span class="p">,</span> <span class="n">B</span><span class="p">,</span> <span class="ow">and</span> <span class="n">C</span>
+
+<span class="o">|</span>   <span class="n">A</span>   <span class="o">|</span>   <span class="o">&lt;--</span> <span class="s2">&quot;T&quot;</span><span class="p">:</span> <span class="n">stack</span> <span class="n">top</span>
+<span class="o">|</span>   <span class="n">B</span>   <span class="o">|</span>   <span class="o">&lt;--</span> <span class="s2">&quot;Y&quot;</span>
+<span class="o">|</span>   <span class="n">C</span>   <span class="o">|</span>   <span class="o">&lt;--</span> <span class="s2">&quot;X&quot;</span><span class="p">:</span> <span class="n">stack</span> <span class="n">bottom</span>
+
+<span class="n">Stack</span> <span class="n">after</span> <span class="n">a</span> <span class="s2">&quot;Swap&quot;</span>
+
+<span class="o">|</span>   <span class="n">A</span>   <span class="o">|</span>   <span class="o">&lt;--</span> <span class="s2">&quot;T&quot;</span><span class="p">:</span> <span class="n">stack</span> <span class="n">top</span>
+<span class="o">|</span>   <span class="n">C</span>   <span class="o">|</span>   <span class="o">&lt;--</span> <span class="s2">&quot;Y&quot;</span>
+<span class="o">|</span>   <span class="n">B</span>   <span class="o">|</span>   <span class="o">&lt;--</span> <span class="s2">&quot;X&quot;</span><span class="p">:</span> <span class="n">stack</span> <span class="n">bottom</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="direct-access">
+<h3>Direct Access<a class="headerlink" href="#direct-access" title="Permalink to this headline">¶</a></h3>
+<p>The data element in X, the stack bottom, can be copied to the Y and T positions.
+The Y and T data elements can be copied to the X postion.  All the stack
+operations are carried out by clicking buttons in the auxiliary command window.</p>
+<img alt="_images/stack_ops.png" src="_images/stack_ops.png" />
+</div>
+</div>
+<div class="section" id="non-stack-storage">
+<h2>Non-Stack Storage<a class="headerlink" href="#non-stack-storage" title="Permalink to this headline">¶</a></h2>
+<p>In addition to the stack, there are several other data storage locations:</p>
+<p>1. A single slot accessed by the “Store 1” and “Recall 1” buttons.
+These store from and retrieve to the X position.</p>
+<p>2. The system clipboard, accessed by the “Copy To Clipboard” and “Load From Dialog”
+buttons. The latter opens an editing window into which the clipboard can be
+copied.</p>
+<p>These buttons are marked in the image below:</p>
+<img alt="_images/loadsave.png" src="_images/loadsave.png" />
 </div>
 <div class="section" id="plotting-curves">
 <h2>Plotting Curves<a class="headerlink" href="#plotting-curves" title="Permalink to this headline">¶</a></h2>
@@ -222,11 +320,9 @@ fields are converted to floating point numbers.</p>
 <h3>Changing Colors, Symbols, and Line Styles<a class="headerlink" href="#changing-colors-symbols-and-line-styles" title="Permalink to this headline">¶</a></h3>
 </div>
 </div>
-<div class="section" id="using-the-waveform-stack">
-<h2>Using the Waveform Stack<a class="headerlink" href="#using-the-waveform-stack" title="Permalink to this headline">¶</a></h2>
-</div>
-<div class="section" id="reading-and-saving-data">
-<h2>Reading And Saving Data<a class="headerlink" href="#reading-and-saving-data" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="loading-and-saving-data">
+<h2>Loading And Saving Data<a class="headerlink" href="#loading-and-saving-data" title="Permalink to this headline">¶</a></h2>
+<p>All data is saved from and loaded to the X stack position.</p>
 </div>
 <div class="section" id="operations-on-one-waveform">
 <h2>Operations On One Waveform<a class="headerlink" href="#operations-on-one-waveform" title="Permalink to this headline">¶</a></h2>
@@ -276,13 +372,17 @@ fields are converted to floating point numbers.</p>
 </ul>
 </li>
 <li><a class="reference internal" href="#data-format">Data Format</a></li>
-<li><a class="reference internal" href="#the-waveform-stack">The Waveform Stack</a></li>
+<li><a class="reference internal" href="#the-waveform-stack">The Waveform Stack</a><ul>
+<li><a class="reference internal" href="#stack-operations">Stack Operations</a></li>
+<li><a class="reference internal" href="#direct-access">Direct Access</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#non-stack-storage">Non-Stack Storage</a></li>
 <li><a class="reference internal" href="#plotting-curves">Plotting Curves</a><ul>
 <li><a class="reference internal" href="#changing-colors-symbols-and-line-styles">Changing Colors, Symbols, and Line Styles</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#using-the-waveform-stack">Using the Waveform Stack</a></li>
-<li><a class="reference internal" href="#reading-and-saving-data">Reading And Saving Data</a></li>
+<li><a class="reference internal" href="#loading-and-saving-data">Loading And Saving Data</a></li>
 <li><a class="reference internal" href="#operations-on-one-waveform">Operations On One Waveform</a></li>
 <li><a class="reference internal" href="#operations-on-two-waveforms">Operations On Two Waveforms</a></li>
 <li><a class="reference internal" href="#the-waveform-generators">The Waveform Generators</a></li>

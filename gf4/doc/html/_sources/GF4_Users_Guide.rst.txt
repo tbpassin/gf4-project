@@ -139,7 +139,7 @@ Finally, set the main marker style back to "Line"
 
 **Save The Noisy Line For Later Viewing**
 ------------------------------------------
-For this example, at the end we will overlay this noisy line on the plot of the fitted line.  Copy it to the **T** stack position by clicking the "Copy2T" button in the "Stack" group.
+For this example, at the end we will overlay this noisy line on the plot of the fitted line.  Copy it to the **T** stack position by clicking the "Copy2T" button in the "Stack" group (see `Direct Access`_).
 
 Fit and Plot The Noisy Line
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -213,17 +213,124 @@ The special comment key words are case sensitive.  If there is more than one dat
 The Waveform Stack
 ++++++++++++++++++
 
+The waveform stack is the primary organizing concept of GF4.  Modeled after
+the stack in Hewlett-Packard RPN calculators, the stack is an array with positions
+that can hold data elements.  Conceptually, the stack is arranged as a vertical 
+column with a "bottom" and a "top".  Items on the stack can be "pushed" upwards,
+"dropped" downwards, "rotated" and "swapped". These operations are illustrated
+in the next section.
+
+The most common stack oprations in practice are "Swap" and direct access.  The
+T position is often used as a temporary data cache.
+
+Stack Operations
+****************
+
+The stack can be "pushed", causing the existing
+elements to be moved one slot "higher"::
+
+    Stack populated with data elements A, B, and C
+
+    |   A   |   <-- "T": stack top
+    |   B   |   <-- "Y"
+    |   C   |   <-- "X": stack bottom
+
+    "Pushing" stack duplicates "X" element (top element is lost)
+
+    |   B   |   <-- "T": stack top
+    |   C   |   <-- "Y"
+    |   C   |   <-- "X": stack bottom
+
+
+"Dropping" the stack moves elements one slot lower::
+
+    Stack populated with data elements A, B, and C
+
+    |   A   |   <-- "T": stack top
+    |   B   |   <-- "Y"
+    |   C   |   <-- "X": stack bottom
+
+    "Dropping" stack duplicates "T" element (bottom element is lost)
+
+    |   A   |   <-- "T": stack top
+    |   A   |   <-- "Y"
+    |   B   |   <-- "X": stack bottom
+
+The stack can also be cyclically rotated up or down::
+
+    Stack populated with data elements A, B, and C
+
+    |   A   |   <-- "T": stack top
+    |   B   |   <-- "Y"
+    |   C   |   <-- "X": stack bottom
+
+    Rotated "up" (T -> X, X -> Y, Y -> T)
+
+    |   B   |   <-- "T": stack top
+    |   C   |   <-- "Y"
+    |   A   |   <-- "X": stack bottom
+
+    Stack populated with data elements A, B, and C
+
+    |   A   |   <-- "T": stack top
+    |   B   |   <-- "Y"
+    |   C   |   <-- "X": stack bottom
+
+    Rotated "down" (T -> Y, Y -> X, X -> T)
+
+    |   C   |   <-- "T": stack top
+    |   A   |   <-- "Y"
+    |   B   |   <-- "X": stack bottom
+
+"Swap" exchanges the X and Y data elements::
+
+    Stack populated with data elements A, B, and C
+
+    |   A   |   <-- "T": stack top
+    |   B   |   <-- "Y"
+    |   C   |   <-- "X": stack bottom
+
+    Stack after a "Swap"
+
+    |   A   |   <-- "T": stack top
+    |   C   |   <-- "Y"
+    |   B   |   <-- "X": stack bottom
+
+Direct Access
+*************
+
+The data element in X, the stack bottom, can be copied to the Y and T positions.
+The Y and T data elements can be copied to the X postion.  All the stack
+operations are carried out by clicking buttons in the auxiliary command window.
+
+.. image:: images/stack_ops.png
+
+Non-Stack Storage
++++++++++++++++++
+
+In addition to the stack, there are several other data storage locations:
+
+1. A single slot accessed by the "Store 1" and "Recall 1" buttons.
+These store from and retrieve to the X position.
+
+2. The system clipboard, accessed by the "Copy To Clipboard" and "Load From Dialog"
+buttons. The latter opens an editing window into which the clipboard can be
+copied.
+
+These buttons are marked in the image below:
+
+.. image:: images/loadsave.png
+
 Plotting Curves
 +++++++++++++++
 
 Changing Colors, Symbols, and Line Styles
 *****************************************
 
-Using the Waveform Stack
-++++++++++++++++++++++++
-
-Reading And Saving Data
+Loading And Saving Data
 +++++++++++++++++++++++
+
+All data is saved from and loaded to the X stack position.
 
 Operations On One Waveform
 ++++++++++++++++++++++++++
