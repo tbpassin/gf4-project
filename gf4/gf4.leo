@@ -140,6 +140,7 @@ subprocess.call(cmd)</t>
 ===================
 GF4 User's Guide
 ===================
+
 This User's Guide Covers the Use and Capabilities of the GF4 Waveform Calculator.</t>
 <t tx="tom.20220412080711.1">GF4 - "GF" being short for "Graphics Framework" - is a program to display
 two-dimensional data, such as time series data, and to perform mathematical
@@ -192,7 +193,16 @@ or, for systems with the "py" launcher, either of::
 With a data file name also on the command line, GF4 will open and plot that file on launch.</t>
 <t tx="tom.20220412085326.1">Input Data Format
 ------------------
-GF4 accepts one or two-column whitespace-separated text files, one data point per row. If there is only one column, GF4 inserts an imputed first column with values being consecutive integers beginning with 1.
+GF4 accepts text files with whitespace-separated columns, one data point per
+row. If there is only one column, GF4 inserts an imputed first column with
+values being consecutive integers beginning with 1. The "first" column becomes
+the "x", or horizontal, axis. If there are more than two columns, a dialog is
+displayed so the user can choose the two desired columns. The number of columns
+is derived based on the first non-comment, non-blank line whose first field is a
+legal floating point number.
+
+Data fields must be numeric.  GF4 cannot make use of non-numeric data.  Data
+fields are converted to floating point numbers.
 
 Here is an example data file::
 
@@ -358,7 +368,7 @@ the various operations. This reflects its evolution under the interests and
 changing needs of the author. Mathematically, many operations are implemented by
 numpy or scipy computations; others are algorithms implemented by the author.
 
-You can read the [User's Guide](http://www.tompassin.net/gf4/GF4_Users_Guide.html).
+You can read the [User's Guide](gf4/doc/html/GF4_Users_Guide.html).
 </t>
 <t tx="tom.20220506082557.1"></t>
 </tnodes>
