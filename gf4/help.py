@@ -13,6 +13,9 @@ try:
     import Tkinter as Tk
 except:
     import tkinter as Tk
+#@+node:tom.20220506224955.1: ** Declarations
+BRANCH_STR = f'; Branch: {branch}' if branch else ""
+GIT_STR = f'; Changeset; {changeset}' if changeset else ""
 #@+node:tom.20220505131030.1: ** helpmsg
 #@+others
 #@+node:tom.20220505130330.1: *3* Intro
@@ -23,7 +26,7 @@ Plots 2D curves and performs calculations on them. GF4 is modeled
 after a reverse polish notation (RPN) calculator, where 2D waveforms take 
 the place of plain numbers.
 
-Version: {version}; Branch:{branch}; Changeset: {changeset}
+Version: {version}{BRANCH_STR}{GIT_STR}
 """
 #@+node:tom.20220412003223.1: *3* Data Format
 H1 = """
