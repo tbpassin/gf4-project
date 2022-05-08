@@ -1,0 +1,273 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Data Format &#8212; GF4  documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/pyramid.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Generating And Operating on Waveforms" href="waveforms.html" />
+    <link rel="prev" title="Quick Start" href="quickstart.html" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Neuton&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nobile:regular,italic,bold,bolditalic&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
+<!--[if lte IE 6]>
+<link rel="stylesheet" href="_static/ie6.css" type="text/css" media="screen" charset="utf-8" />
+<![endif]-->
+
+  </head><body>
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="waveforms.html" title="Generating And Operating on Waveforms"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="quickstart.html" title="Quick Start"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="GF4_Users_Guide.html">GF4  documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Data Format</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="data-format">
+<h1>Data Format<a class="headerlink" href="#data-format" title="Permalink to this headline">¶</a></h1>
+<p>GF4 accepts text files with whitespace-separated columns, one data point per
+row. If there is only one column, GF4 inserts an imputed first column with
+values being consecutive integers beginning with 1. The “first” column becomes
+the “x”, or horizontal, axis. If there are more than two columns, a dialog is
+displayed so the user can choose the two desired columns. The number of columns
+is derived based on the first non-comment, non-blank line whose first field is a
+legal floating point number.</p>
+<p>Data fields must be numeric.  GF4 cannot make use of non-numeric data.  Data
+fields are converted to floating point numbers.</p>
+<p>Here is an example data file:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># A comment line</span>
+<span class="p">;</span> <span class="n">Another</span> <span class="n">comment</span> <span class="n">line</span><span class="o">.</span>  <span class="n">Also</span><span class="p">,</span> <span class="n">blank</span> <span class="n">lines</span> <span class="n">are</span> <span class="n">ignored</span><span class="o">.</span>
+<span class="c1"># x  y</span>
+<span class="mi">1</span>  <span class="mi">1</span>
+<span class="mi">2</span>  <span class="mi">4</span>
+<span class="mi">3</span>  <span class="mi">9</span>
+<span class="c1"># etc</span>
+</pre></div>
+</div>
+<p>Data points do not need to be equally spaced on the x axis.</p>
+<p>There are specially formatted (optional) comments to specify a title, axis labels, and a break between data sets:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">;;</span> <span class="n">FIGURELABEL</span><span class="p">:</span> <span class="n">The</span> <span class="n">Title</span>
+<span class="p">;;</span> <span class="n">XLABEL</span><span class="p">:</span> <span class="n">The</span> <span class="n">x</span> <span class="n">axis</span> <span class="n">label</span>
+<span class="p">;;</span> <span class="n">YLABEL</span><span class="p">:</span> <span class="n">the</span> <span class="n">y</span> <span class="n">axis</span> <span class="n">label</span>
+<span class="mi">1</span>    <span class="mf">3.0</span>
+<span class="mi">2</span>    <span class="mf">4.0</span>
+<span class="mi">3</span>    <span class="mf">6.0</span>
+<span class="mi">4</span>    <span class="mf">7.0</span>
+<span class="p">;;</span> <span class="n">ENDDATASET</span>
+</pre></div>
+</div>
+<p>The special comment key words are case sensitive.  If there is more than one dataset, the second one goes into the <strong>Y</strong> position in the stack, and so on up to the stack depth.  Beyond that additional data sets are ignored.</p>
+</div>
+<div class="section" id="the-waveform-stack">
+<h1>The Waveform Stack<a class="headerlink" href="#the-waveform-stack" title="Permalink to this headline">¶</a></h1>
+<p>The waveform stack is the primary organizing concept of GF4.  Modeled after
+the stack in Hewlett-Packard RPN calculators, the stack is an array with positions
+that can hold data elements.  Conceptually, the stack is arranged as a vertical
+column with a “bottom” and a “top”.  Items on the stack can be “pushed” upwards,
+“dropped” downwards, “rotated” and “swapped”. These operations are illustrated
+in the next section.</p>
+<p>The most common stack oprations in practice are “Swap” and direct access.  The
+T position is often used as a temporary data cache.</p>
+<div class="section" id="stack-operations">
+<h2>Stack Operations<a class="headerlink" href="#stack-operations" title="Permalink to this headline">¶</a></h2>
+<p>The stack can be “pushed”, causing the existing
+elements to be moved one slot “higher”:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Stack</span> <span class="n">populated</span> <span class="k">with</span> <span class="n">data</span> <span class="n">elements</span> <span class="n">A</span><span class="p">,</span> <span class="n">B</span><span class="p">,</span> <span class="ow">and</span> <span class="n">C</span>
+
+<span class="o">|</span>   <span class="n">A</span>   <span class="o">|</span>   <span class="o">&lt;--</span> <span class="s2">&quot;T&quot;</span><span class="p">:</span> <span class="n">stack</span> <span class="n">top</span>
+<span class="o">|</span>   <span class="n">B</span>   <span class="o">|</span>   <span class="o">&lt;--</span> <span class="s2">&quot;Y&quot;</span>
+<span class="o">|</span>   <span class="n">C</span>   <span class="o">|</span>   <span class="o">&lt;--</span> <span class="s2">&quot;X&quot;</span><span class="p">:</span> <span class="n">stack</span> <span class="n">bottom</span>
+
+<span class="s2">&quot;Pushing&quot;</span> <span class="n">stack</span> <span class="n">duplicates</span> <span class="s2">&quot;X&quot;</span> <span class="n">element</span> <span class="p">(</span><span class="n">top</span> <span class="n">element</span> <span class="ow">is</span> <span class="n">lost</span><span class="p">)</span>
+
+<span class="o">|</span>   <span class="n">B</span>   <span class="o">|</span>   <span class="o">&lt;--</span> <span class="s2">&quot;T&quot;</span><span class="p">:</span> <span class="n">stack</span> <span class="n">top</span>
+<span class="o">|</span>   <span class="n">C</span>   <span class="o">|</span>   <span class="o">&lt;--</span> <span class="s2">&quot;Y&quot;</span>
+<span class="o">|</span>   <span class="n">C</span>   <span class="o">|</span>   <span class="o">&lt;--</span> <span class="s2">&quot;X&quot;</span><span class="p">:</span> <span class="n">stack</span> <span class="n">bottom</span>
+</pre></div>
+</div>
+<p>“Dropping” the stack moves elements one slot lower:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Stack</span> <span class="n">populated</span> <span class="k">with</span> <span class="n">data</span> <span class="n">elements</span> <span class="n">A</span><span class="p">,</span> <span class="n">B</span><span class="p">,</span> <span class="ow">and</span> <span class="n">C</span>
+
+<span class="o">|</span>   <span class="n">A</span>   <span class="o">|</span>   <span class="o">&lt;--</span> <span class="s2">&quot;T&quot;</span><span class="p">:</span> <span class="n">stack</span> <span class="n">top</span>
+<span class="o">|</span>   <span class="n">B</span>   <span class="o">|</span>   <span class="o">&lt;--</span> <span class="s2">&quot;Y&quot;</span>
+<span class="o">|</span>   <span class="n">C</span>   <span class="o">|</span>   <span class="o">&lt;--</span> <span class="s2">&quot;X&quot;</span><span class="p">:</span> <span class="n">stack</span> <span class="n">bottom</span>
+
+<span class="s2">&quot;Dropping&quot;</span> <span class="n">stack</span> <span class="n">duplicates</span> <span class="s2">&quot;T&quot;</span> <span class="n">element</span> <span class="p">(</span><span class="n">bottom</span> <span class="n">element</span> <span class="ow">is</span> <span class="n">lost</span><span class="p">)</span>
+
+<span class="o">|</span>   <span class="n">A</span>   <span class="o">|</span>   <span class="o">&lt;--</span> <span class="s2">&quot;T&quot;</span><span class="p">:</span> <span class="n">stack</span> <span class="n">top</span>
+<span class="o">|</span>   <span class="n">A</span>   <span class="o">|</span>   <span class="o">&lt;--</span> <span class="s2">&quot;Y&quot;</span>
+<span class="o">|</span>   <span class="n">B</span>   <span class="o">|</span>   <span class="o">&lt;--</span> <span class="s2">&quot;X&quot;</span><span class="p">:</span> <span class="n">stack</span> <span class="n">bottom</span>
+</pre></div>
+</div>
+<p>The stack can also be cyclically rotated up or down:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Stack</span> <span class="n">populated</span> <span class="k">with</span> <span class="n">data</span> <span class="n">elements</span> <span class="n">A</span><span class="p">,</span> <span class="n">B</span><span class="p">,</span> <span class="ow">and</span> <span class="n">C</span>
+
+<span class="o">|</span>   <span class="n">A</span>   <span class="o">|</span>   <span class="o">&lt;--</span> <span class="s2">&quot;T&quot;</span><span class="p">:</span> <span class="n">stack</span> <span class="n">top</span>
+<span class="o">|</span>   <span class="n">B</span>   <span class="o">|</span>   <span class="o">&lt;--</span> <span class="s2">&quot;Y&quot;</span>
+<span class="o">|</span>   <span class="n">C</span>   <span class="o">|</span>   <span class="o">&lt;--</span> <span class="s2">&quot;X&quot;</span><span class="p">:</span> <span class="n">stack</span> <span class="n">bottom</span>
+
+<span class="n">Rotated</span> <span class="s2">&quot;up&quot;</span> <span class="p">(</span><span class="n">T</span> <span class="o">-&gt;</span> <span class="n">X</span><span class="p">,</span> <span class="n">X</span> <span class="o">-&gt;</span> <span class="n">Y</span><span class="p">,</span> <span class="n">Y</span> <span class="o">-&gt;</span> <span class="n">T</span><span class="p">)</span>
+
+<span class="o">|</span>   <span class="n">B</span>   <span class="o">|</span>   <span class="o">&lt;--</span> <span class="s2">&quot;T&quot;</span><span class="p">:</span> <span class="n">stack</span> <span class="n">top</span>
+<span class="o">|</span>   <span class="n">C</span>   <span class="o">|</span>   <span class="o">&lt;--</span> <span class="s2">&quot;Y&quot;</span>
+<span class="o">|</span>   <span class="n">A</span>   <span class="o">|</span>   <span class="o">&lt;--</span> <span class="s2">&quot;X&quot;</span><span class="p">:</span> <span class="n">stack</span> <span class="n">bottom</span>
+
+<span class="n">Stack</span> <span class="n">populated</span> <span class="k">with</span> <span class="n">data</span> <span class="n">elements</span> <span class="n">A</span><span class="p">,</span> <span class="n">B</span><span class="p">,</span> <span class="ow">and</span> <span class="n">C</span>
+
+<span class="o">|</span>   <span class="n">A</span>   <span class="o">|</span>   <span class="o">&lt;--</span> <span class="s2">&quot;T&quot;</span><span class="p">:</span> <span class="n">stack</span> <span class="n">top</span>
+<span class="o">|</span>   <span class="n">B</span>   <span class="o">|</span>   <span class="o">&lt;--</span> <span class="s2">&quot;Y&quot;</span>
+<span class="o">|</span>   <span class="n">C</span>   <span class="o">|</span>   <span class="o">&lt;--</span> <span class="s2">&quot;X&quot;</span><span class="p">:</span> <span class="n">stack</span> <span class="n">bottom</span>
+
+<span class="n">Rotated</span> <span class="s2">&quot;down&quot;</span> <span class="p">(</span><span class="n">T</span> <span class="o">-&gt;</span> <span class="n">Y</span><span class="p">,</span> <span class="n">Y</span> <span class="o">-&gt;</span> <span class="n">X</span><span class="p">,</span> <span class="n">X</span> <span class="o">-&gt;</span> <span class="n">T</span><span class="p">)</span>
+
+<span class="o">|</span>   <span class="n">C</span>   <span class="o">|</span>   <span class="o">&lt;--</span> <span class="s2">&quot;T&quot;</span><span class="p">:</span> <span class="n">stack</span> <span class="n">top</span>
+<span class="o">|</span>   <span class="n">A</span>   <span class="o">|</span>   <span class="o">&lt;--</span> <span class="s2">&quot;Y&quot;</span>
+<span class="o">|</span>   <span class="n">B</span>   <span class="o">|</span>   <span class="o">&lt;--</span> <span class="s2">&quot;X&quot;</span><span class="p">:</span> <span class="n">stack</span> <span class="n">bottom</span>
+</pre></div>
+</div>
+<p>“Swap” exchanges the X and Y data elements:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Stack</span> <span class="n">populated</span> <span class="k">with</span> <span class="n">data</span> <span class="n">elements</span> <span class="n">A</span><span class="p">,</span> <span class="n">B</span><span class="p">,</span> <span class="ow">and</span> <span class="n">C</span>
+
+<span class="o">|</span>   <span class="n">A</span>   <span class="o">|</span>   <span class="o">&lt;--</span> <span class="s2">&quot;T&quot;</span><span class="p">:</span> <span class="n">stack</span> <span class="n">top</span>
+<span class="o">|</span>   <span class="n">B</span>   <span class="o">|</span>   <span class="o">&lt;--</span> <span class="s2">&quot;Y&quot;</span>
+<span class="o">|</span>   <span class="n">C</span>   <span class="o">|</span>   <span class="o">&lt;--</span> <span class="s2">&quot;X&quot;</span><span class="p">:</span> <span class="n">stack</span> <span class="n">bottom</span>
+
+<span class="n">Stack</span> <span class="n">after</span> <span class="n">a</span> <span class="s2">&quot;Swap&quot;</span>
+
+<span class="o">|</span>   <span class="n">A</span>   <span class="o">|</span>   <span class="o">&lt;--</span> <span class="s2">&quot;T&quot;</span><span class="p">:</span> <span class="n">stack</span> <span class="n">top</span>
+<span class="o">|</span>   <span class="n">C</span>   <span class="o">|</span>   <span class="o">&lt;--</span> <span class="s2">&quot;Y&quot;</span>
+<span class="o">|</span>   <span class="n">B</span>   <span class="o">|</span>   <span class="o">&lt;--</span> <span class="s2">&quot;X&quot;</span><span class="p">:</span> <span class="n">stack</span> <span class="n">bottom</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="direct-access">
+<h2>Direct Access<a class="headerlink" href="#direct-access" title="Permalink to this headline">¶</a></h2>
+<p>The data element in X, the stack bottom, can be copied to the Y and T positions.
+The Y and T data elements can be copied to the X postion.  All the stack
+operations are carried out by clicking buttons in the auxiliary command window.</p>
+<img alt="_images/stack_ops.png" src="_images/stack_ops.png" />
+</div>
+</div>
+<div class="section" id="non-stack-storage">
+<h1>Non-Stack Storage<a class="headerlink" href="#non-stack-storage" title="Permalink to this headline">¶</a></h1>
+<p>In addition to the stack, there are several other data storage locations:</p>
+<p>1. A single slot accessed by the “Store 1” and “Recall 1” buttons.
+These store from and retrieve to the X position.</p>
+<p>2. The system clipboard, accessed by the “Copy To Clipboard” and “Load From Dialog”
+buttons. The latter opens an editing window into which the clipboard can be
+copied.</p>
+<p>These buttons are marked in the image below:</p>
+<img alt="_images/loadsave.png" src="_images/loadsave.png" />
+</div>
+<div class="section" id="loading-and-saving-data">
+<h1>Loading And Saving Data<a class="headerlink" href="#loading-and-saving-data" title="Permalink to this headline">¶</a></h1>
+<p>All data is saved from and loaded to the X stack position.</p>
+</div>
+<div class="section" id="plotting-curves">
+<h1>Plotting Curves<a class="headerlink" href="#plotting-curves" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="changing-colors-symbols-and-line-styles">
+<h2>Changing Colors, Symbols, and Line Styles<a class="headerlink" href="#changing-colors-symbols-and-line-styles" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="GF4_Users_Guide.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">Data Format</a></li>
+<li><a class="reference internal" href="#the-waveform-stack">The Waveform Stack</a><ul>
+<li><a class="reference internal" href="#stack-operations">Stack Operations</a></li>
+<li><a class="reference internal" href="#direct-access">Direct Access</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#non-stack-storage">Non-Stack Storage</a></li>
+<li><a class="reference internal" href="#loading-and-saving-data">Loading And Saving Data</a></li>
+<li><a class="reference internal" href="#plotting-curves">Plotting Curves</a><ul>
+<li><a class="reference internal" href="#changing-colors-symbols-and-line-styles">Changing Colors, Symbols, and Line Styles</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="quickstart.html"
+                          title="previous chapter">Quick Start</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="waveforms.html"
+                          title="next chapter">Generating And Operating on Waveforms</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/basics.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="waveforms.html" title="Generating And Operating on Waveforms"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="quickstart.html" title="Quick Start"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="GF4_Users_Guide.html">GF4  documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Data Format</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright Thomas B. Passin 2022.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.4.0.
+    </div>
+  </body>
+</html>
