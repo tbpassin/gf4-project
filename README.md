@@ -37,4 +37,18 @@ the various operations. This reflects its evolution under the interests and
 changing needs of the author. Mathematically, many operations are implemented by
 numpy or scipy computations; others are algorithms implemented by the author.
 
-You can read the [User's Guide](http://tompassin.net/gf4/GF4_Users_Guide.html).
+You can read the [User's Guide](http://tompassin.net/gf4/docs/GF4_Users_Guide.html).
+
+How To Get GF4
+===============
+1. Clone this Github repository; or
+
+2. Select a branch, such as `Master`.  Download a zip file from this Github page:
+Press the `Code` button on this page, then select `Download Zip`.  When the file
+has downloaded, unzip it to some convenient location.
+
+How To Run GF4
+===============
+No installation is required.  Navigate to the gf4-project/gf4 directory and
+run the file `gf4.pyw` with either python or pythonw.  Make sure the python 
+version is Python 3.6+/
