@@ -594,8 +594,8 @@ class Dataset:
         # The minimum frequency step is max / N = 0.5 / (n * delta_x)
         max_f = 0.5 / (self.xdata[1] - self.xdata[0])
         min_f = max_f / len(self.ydata)
-        self.xdata = [(1 + i) * min_f for i in range(len(self.ydata))]
-        #self.xdata = [i for i in range(len(self.ydata))]
+        # self.xdata = [(1 + i) * min_f for i in range(len(self.ydata))]
+        self.xdata = [i * min_f for i in range(len(self.ydata))]
 
     #@+node:tom.20211211170820.31: *3* Dataset.halfSupergaussian
     def halfSupergaussian(self, order=6):
