@@ -38,6 +38,7 @@ changing needs of the author. Mathematically, many operations are implemented by
 numpy or scipy computations; others are algorithms implemented by the author.
 
 You can read the [User's Guide](http://tompassin.net/gf4/docs/GF4_Users_Guide.html).
+There is a [blog](http://tompassin.net/gf4/blogsite/).
 
 How To Get GF4
 ===============
