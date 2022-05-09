@@ -270,9 +270,17 @@ has downloaded, unzip it to some convenient location.
 
 How To Run GF4
 ===============
-No installation is required.  Navigate to the gf4-project/gf4 directory and
-run the file `gf4.pyw` with either python or pythonw.  Make sure the python 
-version is Python 3.6+.
+No installation is required.  You may need to install some python libraries from Pypi.
+Navigate to the gf4-project, which has a file named `requirements.txt`. Run pip 
+to install them::
+
+    python3 -m pip -r requirements.txt.
+
+Your Python may have a different name, so use that.
+
+To run the program, navigate to the gf4-project/gf4 directory and
+run the file `gf4.pyw` with either python or pythonw.  Make sure the python
+version is same as you used to install the libraries.
 </t>
 <t tx="tom.20220507132007.4"></t>
 <t tx="tom.20220507132007.5">@language python
