@@ -40,6 +40,8 @@ numpy or scipy computations; others are algorithms implemented by the author.
 You can read the [User's Guide](http://tompassin.net/gf4/docs/GF4_Users_Guide.html).
 There is a [blog](http://tompassin.net/gf4/blogsite/).
 
+Here is a screenshot: ![Screenshot](gf4/doc/images/GF4_Screen_Example.png)
+
 How To Get GF4
 ===============
 1. Clone this Github repository; or
