@@ -153,6 +153,7 @@ def dist(tstats):
         counts[t] = counts.get(t, 0) + 1
 
     N = float(len(tstats))
+    # pylint: disable = modified-iterating-dict
     for t in counts:
         counts[t] = counts[t] / N
 
