@@ -7,6 +7,7 @@ import sys
 import os.path
 
 APPVERSION = '1.0'
+ENCODING = 'utf-8'
 
 def getGitInfo():
     branch = version = ''
@@ -15,14 +16,14 @@ def getGitInfo():
 
     try:
         head = os.path.join(gitbase, 'HEAD')
-        with open(head) as f:
+        with open(head, encoding = ENCODING) as f:
             ref, br = f.readline().split()
             branch = br.split('/')[-1]
         if ref == 'ref:':
             if sys.platform.startswith('win'):
                 br = br.replace('/', '\\')
             refspath = os.path.join(gitbase, br)
-            with open(refspath) as f:
+            with open(refspath, encoding = ENCODING) as f:
                 version = f.readline().strip()
     except Exception:
         pass

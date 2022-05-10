@@ -942,8 +942,13 @@ class PlotManager(AbstractPlotManager):
         if dia.result is None: return
 
         _ds.pad_truncate(dia.result)
+
+        lab = self.stack[MAIN].figurelabel
+        if lab:
+            label_str = f'{lab} Padded' if dia.result > num else f'{lab} Truncated'
+            self.stack[MAIN].figurelabel = label_str
+
         self.plot()
-        print(len(_ds))
     #@+node:tom.20211207165051.73: *4* shift
     @REQUIRE_MAIN
     def shift(self):

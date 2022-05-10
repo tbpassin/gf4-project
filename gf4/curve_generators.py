@@ -13,6 +13,10 @@ from scipy.stats import norm
 def generateSine(n=256, cycles=5):
     '''Compute a sine wave with evenly spaced abscissa points.  
     Return a tuple of two arrays (xdata, ydata).
+    
+    The returned curve ends one time step before the sine wave returns to
+    zero.  So the next time step, which would be the start of the next cycle,
+    if the waveform were to be continued, would start at zero again.
 
     ARGUMENTS
     n -- number of points to return
@@ -22,15 +26,41 @@ def generateSine(n=256, cycles=5):
     a tuple (xdata, ydata)
     '''
 
-    delta = (2.0*cycles*math.pi)/(n-1)
+    delta = (2.0*cycles*math.pi)/n
+    delx = 1.
     _x = []
     _y = []
+    phs = 0.
+    x = 0
 
     for i in range(n):
-        _x.append(i)
-        _y.append(math.sin(i*delta))
+        _x.append(x)
+        _y.append(math.sin(phs))
+        x += delx
+        phs += delta
 
     return (_x, _y)
+
+#@+node:tom.20211211170819.34: ** generateDampedSine
+def generateDampedSine(N=256, cycles = 5, decay=3.0):
+    '''Compute a damped sine wave with evenly spaced abscissa points.  
+    Return a tuple of two arrays (xdata, ydata).
+
+    ARGUMENTS
+    N -- number of points to return.
+    cycles -- number of complete cycles.
+    decay -- number of decay time constants across the entire curve
+
+    RETURNS
+    a tuple (xdata, ydata)
+    '''
+
+    _x, _y = generateSine(N, cycles)
+    _expon = -decay /(N + 1)
+
+    _yd = [_y[n] * math.exp(_expon * n) for n in range(N)]
+    
+    return (_x, _yd)
 
 #@+node:tom.20211211170819.33: ** generateSquarewave
 def generateSquarewave(n=256, cycles=5):
@@ -68,27 +98,6 @@ def generateSquarewave(n=256, cycles=5):
 
     return (_x, _y)
 
-#@+node:tom.20211211170819.34: ** generateDampedSine
-def generateDampedSine(N=256, cycles = 5, decay=3.0):
-    '''Compute a damped sine wave with evenly spaced abscissa points.  
-    Return a tuple of two arrays (xdata, ydata).
-
-    ARGUMENTS
-    N -- number of points to return.
-    cycles -- number of complete cycles.
-    decay -- number of decay time constants across the entire curve
-
-    RETURNS
-    a tuple (xdata, ydata)
-    '''
-
-    _x, _y = generateSine(N, cycles)
-    _expon = -decay /(N-1)
-
-    _yd = [_y[n] * math.exp(_expon * n) for n in range(N)]
-    
-    return (_x, _yd)
-
 #@+node:tom.20211211170819.35: ** generateExponential
 def generateExponential(N=256, decay=3.0):
     '''Compute an exponential curve with evenly spaced abscissa points. 
@@ -103,7 +112,7 @@ def generateExponential(N=256, decay=3.0):
     a tuple (xdata, ydata)
     '''
 
-    _expon = -decay /(N-1)
+    _expon = -decay /(N + 1)
     _x = []
     _y = []
 

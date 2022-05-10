@@ -587,16 +587,20 @@ class Dataset:
     def rfft(self):
         '''Calculate the (amplitude of the) FFT of a real sequence.  The data
         is assumed to be equally spaced on the X axis.  Note that the number
-        of points will be changed.'''
-
+        of points will be changed.
+        
+        See https://numpy.org/doc/stable/reference/generated/numpy.fft.rfft.html
+        '''
+        tdN = len(self.ydata)
         self.ydata = np.abs(np.fft.rfft(self.ydata))
-        # The maximum frequency is 0.5  / (delta_x)
-        # The minimum frequency step is max / N = 0.5 / (n * delta_x)
-        max_f = 0.5 / (self.xdata[1] - self.xdata[0])
-        min_f = max_f / len(self.ydata)
-        # self.xdata = [(1 + i) * min_f for i in range(len(self.ydata))]
-        self.xdata = [i * min_f for i in range(len(self.ydata))]
 
+        # fft[0] = DC value => f = 0.
+        # Let N = number of points in time domain input
+        # Number of fft points = # points of (N / 2) + 1 for even input
+        # Num fft pts = (N + 1) / 2 for odd N
+        # Min freq = 1 / N 
+        fstep = 1. / tdN
+        self.xdata = [i * fstep for i in range(len(self.ydata))]
     #@+node:tom.20211211170820.31: *3* Dataset.halfSupergaussian
     def halfSupergaussian(self, order=6):
         '''Apply a half-sided supergaussian window to the ydata.
