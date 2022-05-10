@@ -943,7 +943,6 @@ class PlotManager(AbstractPlotManager):
 
         _ds.pad_truncate(dia.result)
         self.plot()
-        print(len(_ds))
     #@+node:tom.20211207165051.73: *4* shift
     @REQUIRE_MAIN
     def shift(self):
