@@ -10,6 +10,9 @@
 <v t="tom.20220507132007.2"><vh>@clean ../README.md</vh>
 <v t="tom.20220507132007.3"><vh>gf4-project</vh></v>
 </v>
+<v t="tom.20220509230416.1"><vh>@clean ../DEVELOPERS_READ_THIS.md</vh>
+<v t="tom.20220509230545.1"><vh>Leo-Editor, Or Those Strange Comment Lines</vh></v>
+</v>
 <v t="tom.20220507132007.4"><vh>@path doc</vh>
 <v t="tom.20220507132007.5"><vh>@button Build HTML</vh></v>
 <v t="tom.20220507180306.1"><vh>GF4 User's Guide</vh>
@@ -259,6 +262,9 @@ changing needs of the author. Mathematically, many operations are implemented by
 numpy or scipy computations; others are algorithms implemented by the author.
 
 You can read the [User's Guide](http://tompassin.net/gf4/docs/GF4_Users_Guide.html).
+There is a [blog](http://tompassin.net/gf4/blogsite/).
+
+Here is a screenshot: ![Screenshot](gf4/doc/images/GF4_Screen_Example.png)
 
 How To Get GF4
 ===============
@@ -473,5 +479,54 @@ These buttons are marked in the image below:
 <t tx="tom.20220507191015.1"></t>
 <t tx="tom.20220507191131.1"></t>
 <t tx="tom.20220507191549.1"></t>
+<t tx="tom.20220509230416.1">@language md
+@tabwidth -4
+@others
+</t>
+<t tx="tom.20220509230545.1">@language md
+
+GF4 is written in Python.  A look at any of the GF4 source files will show
+a number of comment lines scattered throughout the file.  These are not
+normal comment lines;  here are a few examples::
+
+    #@+leo-ver=5-thin
+    #@+node:tom.20211207165051.2: * @file gf4.pyw
+    # pylint: disable = consider-using-f-string
+    #@+others
+    #@+node:tom.20211207165051.3: ** Imports
+    #@+node:tom.20211207165051.4: ** class PlotManager(AbstractPlotManager)
+
+All these lines start with the prefix **#@**. What in the world are these? These
+special comment lines are metadata inserted by the Leo-Editor IDE (Leo for
+short). Leo is much more than an IDE. As an IDE, Leo lets you overlay structure
+onto a file or project beyond the usual breakdown into classes, methods, and
+functions. This along with Leo's structure handling abilities (among other
+capabilities) makes understanding and managing large and complex code bases much
+easier than most other programs. These metadata comment lines are called
+*sentinels*.
+
+The sentinel lines tell Leo, when it reads a file, how to create the overlay
+structure.  **Do not move or change them!**
+
+Since these lines are comments, they will not affect execution in any way.
+But they can be annoying when reading the code outside of Leo.  It is possible
+for Leo to write these files without sentinels.  Leo can load the files and 
+re-apply the overlay structure.  But the results will be less robust against
+significant restructuring, since Leo may not be able to match up old and new
+material as intended.  This could lead to a loss of some of the overlay structure.
+
+The creator of GF4 has elected to keep the sentinel lines in the files.  This
+decision could be revisited at some point.  In the meantime, files can be edited
+outside of Leo as long as the sentinels are not moved or changed.
+
+Ideally developers would install Leo and use it for all work on GF4.  But Leo
+has a significant learning curve, and if GF4 is to be the only use for Leo,
+the effort may not be worthwhile.
+
+For those interested in taking a look at Leo - and Leo is a very fine tool
+for development and producing documentation - it is
+[on Github](https://github.com/leo-editor/leo-editor).
+
+</t>
 </tnodes>
 </leo_file>
