@@ -5,7 +5,6 @@ normal comment lines;  here are a few examples::
 
     #@+leo-ver=5-thin
     #@+node:tom.20211207165051.2: * @file gf4.pyw
-    # pylint: disable = consider-using-f-string
     #@+others
     #@+node:tom.20211207165051.3: ** Imports
     #@+node:tom.20211207165051.4: ** class PlotManager(AbstractPlotManager)
