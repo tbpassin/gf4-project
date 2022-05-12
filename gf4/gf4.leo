@@ -32,6 +32,7 @@
 <v t="tom.20211211171913.2"><vh>@file Plot.py</vh></v>
 <v t="tom.20211211171913.6"><vh>@file randnum.py</vh></v>
 <v t="tom.20211211171913.12"><vh>@file smoother.py</vh></v>
+<v t="tom.20220511095316.1"><vh>@file stackview.py</vh></v>
 <v t="tom.20211211171913.40"><vh>@file stats.py</vh></v>
 <v t="tom.20211211171913.51"><vh>@file Timehack.py</vh></v>
 <v t="tom.20211211171913.55"><vh>@file trend.py</vh></v>
