@@ -21,7 +21,14 @@ With a data file name also on the command line, GF4 will open and plot that file
 The "Noisy Ramp" Example
 ************************
 
-In this example, we will create a dataset that consists of a straight line with Gaussian noise added.  We will fit a line to the noisy data.  Then we will display the fitted line, and overlay the noisy data, the original line, and the error bars for the fit.
+In this example, we will create a dataset that consists of a straight line with
+Gaussian noise added. We will fit a line to the noisy data. Then we will display
+the fitted line, and overlay the noisy data, the original line, and the error
+bars for the fit.
+
+It will be helpful to open the stack viewer window before starting.  This will
+make it easier to grasp how the stack works and what data set is in which stack
+position.  Open the stack viewer from the Help menu.
 
 Create And Plot The Noisy Line
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
