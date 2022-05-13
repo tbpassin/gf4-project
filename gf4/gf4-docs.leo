@@ -95,10 +95,14 @@ or, for systems with the "py" launcher, either of::
     py gf4.pyw
 
 With a data file name also on the command line, GF4 will open and plot that file on launch.</t>
-<t tx="tom.20220507132007.13">In this example, we will create a dataset that consists of a straight line with Gaussian noise added.  We will fit a line to the noisy data.  Then we will display the fitted line, and overlay the noisy data, the original line, and the error bars for the fit.
+<t tx="tom.20220507132007.13">In this example, we will create a dataset that consists of a straight line with
+Gaussian noise added. We will fit a line to the noisy data. Then we will display
+the fitted line, and overlay the noisy data, the original line, and the error
+bars for the fit.
 
-
-
+It will be helpful to open the stack viewer window before starting.  This will
+make it easier to grasp how the stack works and what data set is in which stack
+position.  Open the stack viewer from the Help menu.
 </t>
 <t tx="tom.20220507132007.14">**Create a Straight Line**
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -491,7 +495,6 @@ normal comment lines;  here are a few examples::
 
     #@+leo-ver=5-thin
     #@+node:tom.20211207165051.2: * @file gf4.pyw
-    # pylint: disable = consider-using-f-string
     #@+others
     #@+node:tom.20211207165051.3: ** Imports
     #@+node:tom.20211207165051.4: ** class PlotManager(AbstractPlotManager)
