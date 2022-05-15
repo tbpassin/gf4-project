@@ -961,6 +961,10 @@ class PlotManager(AbstractPlotManager):
 
         self.parmsaver[_id] = dia.result
 
+        lab = self.stack[MAIN].figurelabel
+        if lab and lab != 'Figure Label':
+            self.stack[MAIN].figurelabel = f'Shifted {lab}'
+
         self.stack[MAIN].shift(dia.result)
         self.plot()
     #@+node:tom.20211207165051.74: *4* transpose
@@ -1169,6 +1173,11 @@ class PlotManager(AbstractPlotManager):
         ''' Normalize the X data to 1.0.  Replot.
         '''
         self.stack[MAIN].normalize()
+
+        lab = self.stack[MAIN].figurelabel
+        if lab and lab != 'Figure Label':
+            self.stack[MAIN].figurelabel = f'Normalized {lab}'
+
         self.plot()
     #@+node:tom.20211207165051.90: *4* mulBuffer
     @REQUIRE_MAIN_BUFF
@@ -2169,7 +2178,7 @@ class PlotManager(AbstractPlotManager):
         self.stack[MAIN].halfCosine()
         lab = self.stack[MAIN].figurelabel
         if lab and lab != 'Figure Label':
-            self.stack[MAIN].figurelabel = ' Windowed %s' % (lab)
+            self.stack[MAIN].figurelabel = f' Half Cosine Windowed {lab}'
 
         self.plot()
 
@@ -2179,7 +2188,7 @@ class PlotManager(AbstractPlotManager):
         self.stack[MAIN].fullCosine()
         lab = self.stack[MAIN].figurelabel
         if lab and lab != 'Figure Label':
-            self.stack[MAIN].figurelabel = ' Windowed %s' % (lab)
+            self.stack[MAIN].figurelabel = f'Cosine Windowed {lab}'
 
         self.plot()
 
