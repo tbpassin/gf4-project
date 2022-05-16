@@ -52,7 +52,7 @@ STACK_BUTTONS = (
 )
 
 CURVE_BUTTONS = (
-    ('Pad', 'pad', 'Pad or Truncate x Axis'),
+    ('Pad/Truncate', 'pad', 'Pad or Truncate x Axis'),
     ('Shift', 'shift', 'Shift x Axis Left or Right'),
     ('Dedup', 'dedup', 'Delete Points With Value Equal To Previous Value'),
     ('Thin', 'thin', 'Thin x Axis (Reduce number of points)'),
