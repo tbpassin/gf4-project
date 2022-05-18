@@ -217,6 +217,8 @@ class PlotManager(AbstractPlotManager):
         ax = None  # f.add_subplot(111, axisbg='0.3')
 
         canvas = FigureCanvasTkAgg(f, master=root)
+        self.toolbar = NavigationToolbar2Tk(canvas, root)
+        self.toolbar.pack()
         canvas.get_tk_widget().pack(side=Tk.TOP, fill=Tk.BOTH, expand=1)
 
         self._sv = Tk.StringVar()
@@ -235,7 +237,6 @@ class PlotManager(AbstractPlotManager):
 
         canvas.mpl_connect('button_press_event', self.edit_label)
 
-        self.toolbar = NavigationToolbar2Tk(canvas, root)
         self.toolbar.update()
 
         _ann = TextFade(root, height=1, font='size 12',
@@ -2321,6 +2322,7 @@ class PlotManager(AbstractPlotManager):
                         ; comment
                         overplotbuf
                         # another comment
+                        loglog
                         ''')
 
     #@+node:tom.20211207165051.134: *4* interpret
