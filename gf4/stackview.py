@@ -20,6 +20,7 @@ class stackwin:
     def __init__(self, plotmgr = None):
         _geom = ''
         self.stopped = False
+        self.busy = False
         self.plotmgr = plotmgr
         if plotmgr:
             win = Tk.Toplevel(plotmgr.root)
@@ -75,7 +76,16 @@ class stackwin:
         if self.plotmgr:
             self.stopped = True
             self.timer.cancel()
+            if self.busy:
+                self.timer1 = Timer(.1, self.del_callback, [])
+                self.timer1.start()
+            elif self.win:
+                self.win.destroy()
 
+
+    def del_callback(self):
+        if self.win:
+            self.win.destroy()
     #@+node:tom.20220511100559.1: *3* getstack
     def getstack(self):
         if not self.plotmgr:
@@ -104,6 +114,7 @@ class stackwin:
             return
 
         try:
+            self.busy = True
             tb['state'] = 'normal'
             tb.delete('1.0', Tk.END)
             tb.insert('1.0', stack_str)
@@ -118,9 +129,9 @@ class stackwin:
 
             self.timer = Timer(.5, self.getstack, [])
             self.timer.start()
+            self.busy = False
         # Tk may throw an exception if our window is closing
-        except Tk._tkinter.TclError as e:
-            print(e)
+        except Tk._tkinter.TclError:
             pass  # hope we don't leak resources here
         except Exception as e:
             print('Unexpected exception during stack string handling:', type(e), e)
