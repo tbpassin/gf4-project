@@ -218,8 +218,8 @@ class PlotManager(AbstractPlotManager):
 
         canvas = FigureCanvasTkAgg(f, master=root)
         self.toolbar = NavigationToolbar2Tk(canvas, root)
-        self.toolbar.pack()
         canvas.get_tk_widget().pack(side=Tk.TOP, fill=Tk.BOTH, expand=1)
+        self.toolbar.pack()
 
         self._sv = Tk.StringVar()
         self._sv.set('')
