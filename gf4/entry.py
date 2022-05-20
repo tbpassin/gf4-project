@@ -55,12 +55,14 @@ class Dialog(Tk.Toplevel):
             self.initial_focus = self
 
         self.protocol("WM_DELETE_WINDOW", self.cancel)
-        if hasattr(self, 'geometry'):
+        if hasattr(parent, 'geometry'):
             try:
                 self.geometry("+%d+%d" % (parent.winfo_rootx()+50,
                                           parent.winfo_rooty()+50))
             except:
                 pass
+        else:
+            self.geometry("350x100")
 
         self.initial_focus.focus_set()
 
