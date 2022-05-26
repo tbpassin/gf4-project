@@ -83,11 +83,15 @@ class Dataset:
         #@+<< docstring >>
         #@+node:tom.20220401205037.1: *4* << docstring >>
         Get data from a sequence of ASCII text lines - normally read from a file.
+
         Blank lines and lines that start with a ';' or '#' are ignored. 
         If the first non-ignorable line has only a single field, then
         the file is assumed to contain single-column data, and the X-axis data
-        equals the data row count.  Otherwise, the first two columns are used,
-        split into floating point numbers.
+        equals the data row count.  If it has two fields, the first two columns are used,
+        split into floating point numbers.  Otherwise, a dialog box is opened for
+        the user to choose which two fields to use.  If the two selected column
+        numbers are the same, the data is considered to have only that one column,
+        and the x-axis values are automatically assigned.
 
         The x- and y- data sequences are assigned to the data set
 
@@ -129,7 +133,7 @@ class Dataset:
         _rowcount = 0
         _datalines = 0
         _isSingleCol = False
-        _hasTwoCols = False
+        #_hasTwoCols = False
         _numcols = 0
         _firstline = True
         e = None
@@ -209,7 +213,9 @@ class Dataset:
 
                 _numcols = len(fields)
                 _isSingleCol = _numcols == 1
-                _hasTwoCols = _numcols == 2
+                # _hasTwoCols = _numcols == 2
+                col1 = 0
+                col2 = 1
 
                 if _numcols > 2:
                     _id = 'selectcols'
@@ -223,14 +229,12 @@ class Dataset:
                     col1, col2 = dia.result
                     parmsaver[_id] = col1, col2
 
+                    _isSingleCol = col1 == col2
             try:
                 if _isSingleCol:
                     count = count + 1
                     _x.append(count)
-                    _y.append(float(fields[0]))
-                elif _hasTwoCols:
-                    _x.append(float(fields[0]))
-                    _y.append(float(fields[1]))
+                    _y.append(float(fields[col1]))
                 else:
                     _x.append(float(fields[col1]))
                     _y.append(float(fields[col2]))
