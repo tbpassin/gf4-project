@@ -893,7 +893,7 @@ class PlotManager(AbstractPlotManager):
         '''
 
         _ds = self.stack[MAIN]
-        if not _ds or not _ds.xdata:
+        if not (_ds and len(_ds.xdata)):
             self.announce("No data to work with")
             self.flashit()
             return
