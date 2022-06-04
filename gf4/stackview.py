@@ -87,8 +87,6 @@ class Stackwin(Tk.Toplevel):
             textbox.tag_add(name, l, r)
             textbox.tag_config(name, font = MONO)
 
-        self.timer = None
-
         X_INTRO = 'X ==> |'
         Y_INTRO = 'Y ==> |'
         T_INTRO = 'T ==> |'
