@@ -55,8 +55,14 @@ class Dialog(Tk.Toplevel):
             self.initial_focus = self
 
         self.protocol("WM_DELETE_WINDOW", self.cancel)
-        self.geometry("+%d+%d" % (parent.winfo_rootx()+50,
-                                  parent.winfo_rooty()+50))
+        if hasattr(parent, 'geometry'):
+            try:
+                self.geometry("+%d+%d" % (parent.winfo_rootx()+50,
+                                          parent.winfo_rooty()+50))
+            except:
+                pass
+        else:
+            self.geometry("350x100")
 
         self.initial_focus.focus_set()
 
@@ -107,7 +113,8 @@ class Dialog(Tk.Toplevel):
     def cancel(self, event=None):
         # put focus back to the parent window
         self.fade()
-        self.parent.focus_set()
+        if self.parent:
+            self.parent.focus_set()
         self.destroy()
 
     #
@@ -493,7 +500,7 @@ class GetTwoNumbers(TwoLineInput):
             )
             return False
 
-# ============================================================================
+    # ============================================================================
     #@-others
 #@+node:tom.20211211171304.37: ** class TextFade(Tk.Text)
 class TextFade(Tk.Text):
