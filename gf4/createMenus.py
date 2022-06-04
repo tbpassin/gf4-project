@@ -14,7 +14,7 @@ from colors import (WHITE, BLACK, LIGHTBLUE, DEEPSKYBLUE, CORNFLOWERBLUE,
                     MEDGRAY)
 
 from help import about, tutorial, blog
-from stackview import stackwin
+from stackview import Stackwin
 
 #@+node:tom.20211211170819.28: ** setMenus
 def setMenus(self):
@@ -427,7 +427,7 @@ def setMenus(self):
         command=blog, underline = 0)
 
     helpSubmenu.add_command(label='Show Stack',
-        command=lambda: stackwin(self), underline=0)
+        command=lambda: Stackwin(self), underline=0)
     #@+node:tom.20220401200301.1: *3* mainMenu.add_cascade
     mainMenu.add_cascade(label='File', menu=fileSubmenu)
 

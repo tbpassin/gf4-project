@@ -3,7 +3,6 @@
 #@@language python
 #@+others
 #@+node:tom.20220511095404.1: ** imports
-from threading import Timer
 import tkinter as Tk
 
 from AbstractPlotMgr import MAIN, BUFFER, STACKDEPTH
@@ -12,26 +11,30 @@ TOP = STACKDEPTH - 1
 MONO = ('Courier', 10, 'normal')
 SANS = ('sans-serif', 10, 'normal')
 
-#@+node:tom.20220511095552.1: ** class stackwin
-class stackwin:
+#@+node:tom.20220511095552.1: ** class Stackwin
+class Stackwin(Tk.Toplevel):
 
     #@+others
     #@+node:tom.20220511233803.1: *3* __init__
     def __init__(self, plotmgr = None):
+        if plotmgr:
+            self.parent = parent = plotmgr.root
+        else:
+            parent = None
+
+        Tk.Toplevel.__init__(self, parent)
+        if parent:
+            self.transient(plotmgr.root)
+            _geom = plotmgr.root.geometry()
+        self.protocol("WM_DELETE_WINDOW", self.cancel)
+
         _geom = ''
         self.stopped = False
-        self.busy = False
+        self.last_stack_str = ''
         self.plotmgr = plotmgr
-        if plotmgr:
-            win = Tk.Toplevel(plotmgr.root)
-            win.transient(plotmgr.root)
-            _geom = plotmgr.root.geometry()
-        else:
-            win = Tk.Tk()
-        self.win = win
-        win.title("Stack Contents")
+        self.title("Stack Contents")
 
-        self.text_box = text_box = Tk.Text(win, padx = 15, width = 100, height = 50)
+        self.text_box = text_box = Tk.Text(self, padx = 15, width = 100, height = 50)
         self.text_box.pack()
         text_box.configure(font = SANS, wrap = Tk.NONE)
 
@@ -39,7 +42,7 @@ class stackwin:
             TEXT = "This is a test\nand now for something completely different"
             text_box.insert(Tk.END, TEXT)
 
-        win.update_idletasks()
+        self.update_idletasks()
         if plotmgr:
             plotmgr.root.update_idletasks()
 
@@ -50,14 +53,15 @@ class stackwin:
             root_width, root_height = root_dims.split('x')
             xoffset = int(root_xoffset) + int(root_width) - 50
             yoffset = 50
-            win.geometry('800x100')
-            win.geometry('+%s+%s' %(xoffset, yoffset))
+            self.geometry('800x100')
+            self.geometry('+%s+%s' %(xoffset, yoffset))
         else:
-            win.geometry('600x100')
+            self.geometry('600x100')
 
         if plotmgr:
-            self.timer = Timer(.5, self.getstack, [])
-            self.timer.start()
+            # self.timer = Timer(.5, self.getstack, [])
+            # self.timer.start()
+            parent.after(500, self.getstack)
         else:
             # self testing
             phrase = 'something completely'
@@ -71,21 +75,9 @@ class stackwin:
             #text_box.tag_add('t2', rng, idx2)
             text_box.tag_config('t1', background = 'red')
             print(idx1, idx2, '===', text_box.get(idx1, idx2))
-    #@+node:tom.20220511234102.1: *3* __del__
-    def __del__(self):
-        if self.plotmgr:
-            self.stopped = True
-            self.timer.cancel()
-            if self.busy:
-                self.timer1 = Timer(.1, self.del_callback, [])
-                self.timer1.start()
-            elif self.win:
-                self.win.destroy()
-
-
-    def del_callback(self):
-        if self.win:
-            self.win.destroy()
+    #@+node:tom.20220604115230.1: *3* cancel
+    def cancel(self):
+        self.destroy()
     #@+node:tom.20220511100559.1: *3* getstack
     def getstack(self):
         if not self.plotmgr:
@@ -109,37 +101,33 @@ class stackwin:
                    + f'{Y_INTRO} {y_label}\n'
                    + f'{X_INTRO} {x_label}')
 
-
         if self.stopped:
             return
 
         try:
-            self.busy = True
-            tb['state'] = 'normal'
-            tb.delete('1.0', Tk.END)
-            tb.insert('1.0', stack_str)
-            tb['state'] = 'disabled'
+            if stack_str != self.last_stack_str:
+                tb['state'] = 'normal'
+                tb.delete('1.0', Tk.END)
+                tb.insert('1.0', stack_str)
+                tb['state'] = 'disabled'
+                self.last_stack_str = stack_str
 
-            for i, phrase in enumerate((X_INTRO, Y_INTRO, T_INTRO)):
-                left = tb.search(phrase, "1.0")
-                l, idx_1 = left.split('.')
-                idx_1 = int(idx_1)
-                idx2 = idx_1 + len(phrase)
-                set_tag(tb, f't{i}', left, f'{l}.{idx2}')
-
-            self.timer = Timer(.5, self.getstack, [])
-            self.timer.start()
-            self.busy = False
+                for i, phrase in enumerate((X_INTRO, Y_INTRO, T_INTRO)):
+                    left = tb.search(phrase, "1.0")
+                    l, idx_1 = left.split('.')
+                    idx_1 = int(idx_1)
+                    idx2 = idx_1 + len(phrase)
+                    set_tag(tb, f't{i}', left, f'{l}.{idx2}')
+            self.parent.after(500, self.getstack)
         # Tk may throw an exception if our window is closing
-        except Tk._tkinter.TclError:
-            pass  # hope we don't leak resources here
-        except Exception as e:
-            print('Unexpected exception during stack string handling:', type(e), e)
+        except Tk._tkinter.TclError as e:
+            print(e)
+            # hope we don't leak resources here
 
     #@-others
 #@-others
 
 if __name__ == '__main__':
-    stackwin()
+    Stackwin()
     Tk.mainloop()
 #@-leo
