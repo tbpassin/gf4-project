@@ -148,10 +148,11 @@ helpmsg = (INTRO
 )
 #@+node:tom.20220411202245.1: ** tutorial
 def tutorial():
-    helpdoc = 'GF4_Users_Guide.html'
-    path = join(dirname(__file__), 'doc', 'html', helpdoc)
-    path = path.replace('\\', '/')
-    url = f'file:///{path}'
+    # helpdoc = 'GF4_Users_Guide.html'
+    # path = join(dirname(__file__), 'doc', 'html', helpdoc)
+    # path = path.replace('\\', '/')
+    # url = f'file:///{path}'
+    url = 'http://tompassin.net/gf4/docs/GF4_Users_Guide.html'
     webbrowser.open_new_tab(url)
 #@+node:tom.20220508124357.1: ** blog
 def blog():
