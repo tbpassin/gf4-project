@@ -54,7 +54,7 @@ How To Run GF4
 ===============
 No installation is required.  You may need to install some python libraries from Pypi.
 Navigate to the gf4-project, which has a file named `requirements.txt`. Run pip 
-to install them::
+to install them:
 
     python3 -m pip -r requirements.txt.
 
