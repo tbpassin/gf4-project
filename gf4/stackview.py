@@ -22,19 +22,20 @@ class Stackwin(Tk.Toplevel):
         else:
             parent = None
 
+        _geom = ''
         Tk.Toplevel.__init__(self, parent)
         if parent:
             self.transient(plotmgr.root)
             _geom = plotmgr.root.geometry()
         self.protocol("WM_DELETE_WINDOW", self.cancel)
 
-        _geom = ''
         self.stopped = False
         self.last_stack_str = ''
         self.plotmgr = plotmgr
         self.title("Stack Contents")
 
         self.text_box = text_box = Tk.Text(self, padx = 15, width = 100, height = 50)
+        self.text_box.height = 3  # lines
         self.text_box.pack()
         text_box.configure(font = SANS, wrap = Tk.NONE)
 
@@ -53,7 +54,7 @@ class Stackwin(Tk.Toplevel):
             root_width, root_height = root_dims.split('x')
             xoffset = int(root_xoffset) + int(root_width) - 50
             yoffset = 50
-            self.geometry('800x100')
+            self.geometry('700x70')
             self.geometry('+%s+%s' %(xoffset, yoffset))
         else:
             self.geometry('600x100')
