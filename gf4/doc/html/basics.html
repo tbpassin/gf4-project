@@ -4,7 +4,8 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
     <title>Data Format &#8212; GF4  documentation</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="_static/pyramid.css" />
@@ -46,7 +47,7 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="data-format">
+  <section id="data-format">
 <h1>Data Format<a class="headerlink" href="#data-format" title="Permalink to this headline">¶</a></h1>
 <p>GF4 accepts text files with whitespace-separated columns, one data point per
 row. If there is only one column, GF4 inserts an imputed first column with
@@ -80,8 +81,8 @@ fields are converted to floating point numbers.</p>
 </pre></div>
 </div>
 <p>The special comment key words are case sensitive.  If there is more than one dataset, the second one goes into the <strong>Y</strong> position in the stack, and so on up to the stack depth.  Beyond that additional data sets are ignored.</p>
-</div>
-<div class="section" id="the-waveform-stack">
+</section>
+<section id="the-waveform-stack">
 <h1>The Waveform Stack<a class="headerlink" href="#the-waveform-stack" title="Permalink to this headline">¶</a></h1>
 <p>The waveform stack is the primary organizing concept of GF4.  Modeled after
 the stack in Hewlett-Packard RPN calculators, the stack is an array with positions
@@ -89,9 +90,13 @@ that can hold data elements.  Conceptually, the stack is arranged as a vertical
 column with a “bottom” and a “top”.  Items on the stack can be “pushed” upwards,
 “dropped” downwards, “rotated” and “swapped”. These operations are illustrated
 in the next section.</p>
-<p>The most common stack oprations in practice are “Swap” and direct access.  The
+<p>The state of the stack can be viewed by using the <em>Help/ Show Stack</em> menu item in the main window.  This opens a small window that shows the name of the dataset
+currently in each stack position. It is helpful to keep this window open while
+one gains experience with GF4.  The image below depicts the stack viewer window:</p>
+<a class="reference internal image-reference" href="_images/stack_viewer_window.png"><img alt="_images/stack_viewer_window.png" src="_images/stack_viewer_window.png" style="width: 757.5px; height: 412.5px;" /></a>
+<p>The most common stack operations in practice are “Swap” and direct access.  The
 T position is often used as a temporary data cache.</p>
-<div class="section" id="stack-operations">
+<section id="stack-operations">
 <h2>Stack Operations<a class="headerlink" href="#stack-operations" title="Permalink to this headline">¶</a></h2>
 <p>The stack can be “pushed”, causing the existing
 elements to be moved one slot “higher”:</p>
@@ -162,16 +167,16 @@ elements to be moved one slot “higher”:</p>
 <span class="o">|</span>   <span class="n">B</span>   <span class="o">|</span>   <span class="o">&lt;--</span> <span class="s2">&quot;X&quot;</span><span class="p">:</span> <span class="n">stack</span> <span class="n">bottom</span>
 </pre></div>
 </div>
-</div>
-<div class="section" id="direct-access">
+</section>
+<section id="direct-access">
 <h2>Direct Access<a class="headerlink" href="#direct-access" title="Permalink to this headline">¶</a></h2>
 <p>The data element in X, the stack bottom, can be copied to the Y and T positions.
-The Y and T data elements can be copied to the X postion.  All the stack
+The Y and T data elements can be copied to the X position.  All the stack
 operations are carried out by clicking buttons in the auxiliary command window.</p>
 <img alt="_images/stack_ops.png" src="_images/stack_ops.png" />
-</div>
-</div>
-<div class="section" id="non-stack-storage">
+</section>
+</section>
+<section id="non-stack-storage">
 <h1>Non-Stack Storage<a class="headerlink" href="#non-stack-storage" title="Permalink to this headline">¶</a></h1>
 <p>In addition to the stack, there are several other data storage locations:</p>
 <p>1. A single slot accessed by the “Store 1” and “Recall 1” buttons.
@@ -181,17 +186,17 @@ buttons. The latter opens an editing window into which the clipboard can be
 copied.</p>
 <p>These buttons are marked in the image below:</p>
 <img alt="_images/loadsave.png" src="_images/loadsave.png" />
-</div>
-<div class="section" id="loading-and-saving-data">
+</section>
+<section id="loading-and-saving-data">
 <h1>Loading And Saving Data<a class="headerlink" href="#loading-and-saving-data" title="Permalink to this headline">¶</a></h1>
 <p>All data is saved from and loaded to the X stack position.</p>
-</div>
-<div class="section" id="plotting-curves">
+</section>
+<section id="plotting-curves">
 <h1>Plotting Curves<a class="headerlink" href="#plotting-curves" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="changing-colors-symbols-and-line-styles">
+<section id="changing-colors-symbols-and-line-styles">
 <h2>Changing Colors, Symbols, and Line Styles<a class="headerlink" href="#changing-colors-symbols-and-line-styles" title="Permalink to this headline">¶</a></h2>
-</div>
-</div>
+</section>
+</section>
 
 
             <div class="clearer"></div>
@@ -267,7 +272,7 @@ copied.</p>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright Thomas B. Passin 2022.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.4.0.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.5.0.
     </div>
   </body>
 </html>

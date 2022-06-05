@@ -4,7 +4,8 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
     <title>Quick Start &#8212; GF4  documentation</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="_static/pyramid.css" />
@@ -46,7 +47,7 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="quick-start">
+  <section id="quick-start">
 <h1>Quick Start<a class="headerlink" href="#quick-start" title="Permalink to this headline">¶</a></h1>
 <p>For a quick introduction, we will work through an example. GF4 will generate the data for us. The file to launch is named gf4.pyw.  It can be launched with pythonw as a GUI application with no console, or with python to also have a console.  The console is not needed except it could display error messages, which are unlikely.  GF4 should be run with some version of python 3.6+.</p>
 <p>To launch the program, you can double-click on its icon in the Windows Explorer file manager or the Linux equivalent, or run with python from the directory that contains gf4:</p>
@@ -59,7 +60,7 @@
 </pre></div>
 </div>
 <p>With a data file name also on the command line, GF4 will open and plot that file on launch.</p>
-<div class="section" id="the-noisy-ramp-example">
+<section id="the-noisy-ramp-example">
 <h2>The “Noisy Ramp” Example<a class="headerlink" href="#the-noisy-ramp-example" title="Permalink to this headline">¶</a></h2>
 <p>In this example, we will create a dataset that consists of a straight line with
 Gaussian noise added. We will fit a line to the noisy data. Then we will display
@@ -68,65 +69,71 @@ bars for the fit.</p>
 <p>It will be helpful to open the stack viewer window before starting.  This will
 make it easier to grasp how the stack works and what data set is in which stack
 position.  Open the stack viewer from the Help menu.</p>
-<div class="section" id="create-and-plot-the-noisy-line">
+<section id="create-and-plot-the-noisy-line">
 <h3>Create And Plot The Noisy Line<a class="headerlink" href="#create-and-plot-the-noisy-line" title="Permalink to this headline">¶</a></h3>
-<div class="section" id="create-a-straight-line">
+<section id="create-a-straight-line">
 <h4><strong>Create a Straight Line</strong><a class="headerlink" href="#create-a-straight-line" title="Permalink to this headline">¶</a></h4>
 <p>To generate the line, click the “Ramp” button. The line will be plotted in the left hand plotting window. this line has been placed in the bottom position of the stack, which is always called “<strong>X</strong>”. Copy it to the “<strong>Y</strong>” position (the next one up in the stack) by clicking on the “Copy2Y” button in the “Stack” group.</p>
-</div>
-<div class="section" id="create-a-noise-dataset">
+</section>
+<section id="create-a-noise-dataset">
 <h4><strong>Create a Noise Dataset</strong><a class="headerlink" href="#create-a-noise-dataset" title="Permalink to this headline">¶</a></h4>
 <p>With the original line safely stored in <strong>Y</strong>, now create a dataform of noise.  Click on the “Gaussian Noise” button.  In the dialog box that pops up, change the “Sigma” value to 0.3. If we leave it at the default value of 1.0, there will be too much noise.  Even with the smaller value of sigma, there will be a lot of noise.  Accept the values by clicking the OK button or pressing the &lt;ENTER&gt; key.  The noise waveform will display in the plot window.</p>
-</div>
-<div class="section" id="add-the-noise-to-the-original-line">
+</section>
+<section id="add-the-noise-to-the-original-line">
 <h4><strong>Add The Noise To the Original Line</strong><a class="headerlink" href="#add-the-noise-to-the-original-line" title="Permalink to this headline">¶</a></h4>
 <p>Next we will add the noise to the straight line we saved in <strong>Y</strong>.  In the “Math” column, click on “X + Y”.  This will add the two curves together point-by-point and leave the result in the <strong>X</strong> stack position.  The original straight line is unchanged in <strong>Y</strong>.</p>
 <p>The sum of the two datasets is a noisy line in <strong>X</strong>, and it has been automatically plotted in the plot window.  In one last touch, click on the “Overplot Y” button in the “Plot” column.  This will overlay the original straight line which is still in <strong>Y</strong>. The result is shown in Figure EX-1a.  Your result may be a little different because you will have gotten a different noise dataset.</p>
-<div class="figure align-default" id="id1">
+<figure class="align-default" id="id1">
 <img alt="_images/gf4_example_1_noisy.png" src="_images/gf4_example_1_noisy.png" />
-<p class="caption"><span class="caption-text">Figure EX-1a. The Noisy Ramp With Original (Clean) Curve Overlaid.</span><a class="headerlink" href="#id1" title="Permalink to this image">¶</a></p>
-</div>
-</div>
-<div class="section" id="plot-the-noisy-data-with-point-symbols-instead-of-lines">
+<figcaption>
+<p><span class="caption-text">Figure EX-1a. The Noisy Ramp With Original (Clean) Curve Overlaid.</span><a class="headerlink" href="#id1" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+</section>
+<section id="plot-the-noisy-data-with-point-symbols-instead-of-lines">
 <h4><strong>Plot the Noisy Data With Point Symbols Instead Of Lines</strong><a class="headerlink" href="#plot-the-noisy-data-with-point-symbols-instead-of-lines" title="Permalink to this headline">¶</a></h4>
 <p>The Gaussian noise data points don’t really form a curve because they are independent.  Perhaps it would be better to plot the noisy ramp with points instead of lines.  Try this out by using the “Plot” menu on the left-hand plot window. Select Plot/Main Marker Style/Symbol.  Then click on the “Plot” item in the “Plot” Menu or the “Plot X” button in the commands window.  Then overplot the original ramp in <strong>Y</strong> using the “Overplot Y” button.</p>
 <p>The results will resemble Figure EX-1b.</p>
-<div class="figure align-default" id="id2">
+<figure class="align-default" id="id2">
 <img alt="_images/gf4_example_1_noisy_symbols.png" src="_images/gf4_example_1_noisy_symbols.png" />
-<p class="caption"><span class="caption-text">Figure EX-1b. The Noisy Ramp Plotted With Symbols Instead Of Lines.</span><a class="headerlink" href="#id2" title="Permalink to this image">¶</a></p>
-</div>
+<figcaption>
+<p><span class="caption-text">Figure EX-1b. The Noisy Ramp Plotted With Symbols Instead Of Lines.</span><a class="headerlink" href="#id2" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
 <p>Finally, set the main marker style back to “Line”</p>
-</div>
-<div class="section" id="save-the-noisy-line-for-later-viewing">
+</section>
+<section id="save-the-noisy-line-for-later-viewing">
 <h4><strong>Save The Noisy Line For Later Viewing</strong><a class="headerlink" href="#save-the-noisy-line-for-later-viewing" title="Permalink to this headline">¶</a></h4>
 <p>For this example, at the end we will overlay this noisy line on the plot of the fitted line.  Copy it to the <strong>T</strong> stack position by clicking the “Copy2T” button in the “Stack” group (see <a class="reference external" href="basics.html#direct-access">Direct Access</a>).</p>
-</div>
-</div>
-<div class="section" id="fit-and-plot-the-noisy-line">
+</section>
+</section>
+<section id="fit-and-plot-the-noisy-line">
 <h3>Fit and Plot The Noisy Line<a class="headerlink" href="#fit-and-plot-the-noisy-line" title="Permalink to this headline">¶</a></h3>
 <p>To fit a linear least squares fit to the noisy ramp, click on the “Lst Sqr Lin” button in the upper right of the commands window.  The best fit straight line will plot in the plotting window.</p>
-<div class="section" id="overplot-the-other-datasets-for-comparison">
+<section id="overplot-the-other-datasets-for-comparison">
 <h4><strong>Overplot The Other Datasets For Comparison</strong><a class="headerlink" href="#overplot-the-other-datasets-for-comparison" title="Permalink to this headline">¶</a></h4>
 <p>For this example we will overplot the original ramp and the noisy version of the ramp.  These datasets are still in <strong>Y</strong> and <strong>T</strong> where we put them.</p>
 <p>Click on the “Overplot Y” button in the “Plot” group at the left of the command window. The original straight line will be plotted in a light cyan color.  It will probably be a little different from the fitted line.  That is normal, because the noisy sample we used is unlikely to have exactly the same properties as the original.</p>
 <p>Click on the “Overplot T” button to overplot the noisy dataset.</p>
-</div>
-<div class="section" id="overlay-error-bands-for-the-fit">
+</section>
+<section id="overlay-error-bands-for-the-fit">
 <h4><strong>Overlay Error Bands For The Fit</strong><a class="headerlink" href="#overlay-error-bands-for-the-fit" title="Permalink to this headline">¶</a></h4>
 <p>Error bands for the fit are available for most of the fitting routines.  Click the “Error Bands” button to see them.  Each time this button is clicked, the error band area gets less transparent, so you can adjust the visibility if needed.</p>
 <p>The results are shown in Figure EX-1c.</p>
-<div class="figure align-default" id="id3">
+<figure class="align-default" id="id3">
 <img alt="_images/gf4_example_1_fitted.png" src="_images/gf4_example_1_fitted.png" />
-<p class="caption"><span class="caption-text">Figure EX-1c. The Least Squares Fitted Line With Error Bands And Original Data.</span><a class="headerlink" href="#id3" title="Permalink to this image">¶</a></p>
-</div>
-</div>
-</div>
-</div>
-<div class="section" id="encouraging-remarks">
+<figcaption>
+<p><span class="caption-text">Figure EX-1c. The Least Squares Fitted Line With Error Bands And Original Data.</span><a class="headerlink" href="#id3" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+</section>
+</section>
+</section>
+<section id="encouraging-remarks">
 <h2>Encouraging Remarks<a class="headerlink" href="#encouraging-remarks" title="Permalink to this headline">¶</a></h2>
 <p>Examples like this are usually much harder to describe than to do.  With a little practice, these kinds of operations become familiar and they go very quickly.  One gets used to the location of the command buttons that are commonly used, and the stack positions stop feeling strange.  Just like a physical calculator, in fact.</p>
-</div>
-</div>
+</section>
+</section>
 
 
             <div class="clearer"></div>
@@ -195,7 +202,7 @@ position.  Open the stack viewer from the Help menu.</p>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright Thomas B. Passin 2022.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.4.0.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.5.0.
     </div>
   </body>
 </html>
