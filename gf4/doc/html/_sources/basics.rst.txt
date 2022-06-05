@@ -49,7 +49,14 @@ column with a "bottom" and a "top".  Items on the stack can be "pushed" upwards,
 "dropped" downwards, "rotated" and "swapped". These operations are illustrated
 in the next section.
 
-The most common stack oprations in practice are "Swap" and direct access.  The
+The state of the stack can be viewed by using the *Help/ Show Stack* menu item in the main window.  This opens a small window that shows the name of the dataset 
+currently in each stack position. It is helpful to keep this window open while
+one gains experience with GF4.  The image below depicts the stack viewer window:
+
+.. image:: images/stack_viewer_window.png
+    :scale: 50
+
+The most common stack operations in practice are "Swap" and direct access.  The
 T position is often used as a temporary data cache.
 
 Stack Operations
@@ -130,7 +137,7 @@ Direct Access
 *************
 
 The data element in X, the stack bottom, can be copied to the Y and T positions.
-The Y and T data elements can be copied to the X postion.  All the stack
+The Y and T data elements can be copied to the X position.  All the stack
 operations are carried out by clicking buttons in the auxiliary command window.
 
 .. image:: images/stack_ops.png
