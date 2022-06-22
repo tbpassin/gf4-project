@@ -487,9 +487,9 @@ class Dataset:
         for i in range(N - 1):
             sum += 0.5*(_y[i+1] + _y[i]) * (_x[i+1] - _x[i])
             result.append(sum)
-        
+
         self.ydata = result
-        del(self.xdata[N-1])
+        self.xdata = self.xdata[:-1]
 
     #@+node:tom.20211211170820.24: *3* Dataset.square
     def square(self):
