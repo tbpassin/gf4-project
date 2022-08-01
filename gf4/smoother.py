@@ -61,7 +61,7 @@ def splineSmooth(x, y, s=.5):
     ARGUMENTS
     x -- the x-axis data.  May be a sequence or a numpy array.
     y -- the y-axis data.  May be a sequence or a numpy array.
-    s -- a floating point positive number.
+    s -- a floating point positive number in the range 0 -> 1.
 
     RETURNS
     an array containing the y smoothed values.
@@ -69,8 +69,9 @@ def splineSmooth(x, y, s=.5):
     ys = csaps(x, y, x, smooth=s)
     return (x, ys)
 
-# ========== Auxiliary classes for use in smoothing routines ======
 #@+node:tom.20211211171913.17: ** class WtStats
+# ========== Auxiliary classes for use in smoothing routines ======
+
 class WtStats:
     #@+others
     #@+node:tom.20211211171913.18: *3* WtStats.__init__
