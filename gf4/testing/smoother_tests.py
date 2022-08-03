@@ -7,7 +7,12 @@ import os.path
 import random
 from random import gauss
 import math
+import matplotlib
 import matplotlib.pyplot as plt
+
+# use this so figure.canvas.manager.window.wm_geometry() works
+# Otherwise system might choose Qt backend for which wm_geometry() doesn't exist
+matplotlib.use('TkAgg')
 
 rcParams = plt.rcParams
 gcf = plt.gcf
@@ -206,6 +211,7 @@ def test_lowess_adaptive_ac(func=None):
     xi, yi, span, rms, ac, upperbound, lowerbound = lowessAdaptiveAC(x, y)
 
     rcParams['figure.figsize'] = 12, 8
+    rcParams['figure.facecolor']= 'lightgrey'
 
     plt.plot(x, true_y, 'black', linewidth=2)
     plt.plot(x, y, 'co', mfc='white')
@@ -339,8 +345,8 @@ def lowess2_mse(func=None):
 
     xi, yi = lowess(x, y, best, False)
 
-    rcParams['figure.figsize'] = 12, 10
-    plt.subplot(2, 1, 2)
+    rcParams['figure.figsize'] = 9, 7
+    #plt.subplot(2, 1, 2)
     plt.plot(xi, y, 'bo')
     plt.plot(xi, yi, 'b')
     plt.title('LOWESS Adaptive Smooth For Least Roughness - Span %s, MSE %0.3f' % \
@@ -670,7 +676,7 @@ Tests = (#lstsqr,
          #lowess2_mse,
          #lowess_smooth_quad,
          #lambda w=.5: test_adaptive_lowess(w),
-         #test_lowess_adaptive_ac,
+         test_lowess_adaptive_ac,
          #slope_var,
          #test_thiel,
          #test_lowess_devs,
