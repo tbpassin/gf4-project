@@ -83,7 +83,7 @@ class WtStats:
     #@+node:tom.20211211171913.19: *3* WtStats.MakeGaussianWeights
     def MakeGaussianWeights(self, smoothwidth=4):
         '''Compute weights to use with smoother. These weights
-        form a gaussian curve, with a half-width of 2 sigma.
+        form a gaussian curve normalized to 1.0.
 
         ARGUMENT
         smoothwidth -- width of window in data points
@@ -99,7 +99,7 @@ class WtStats:
         self.smoothzone = _smoothzone
         numwts = _smoothzone + 1 # total number of weights
         icenter = _smoothzone / 2 # index of center point
-        nSigma = 2
+        nSigma = 2.0
         self.Swt = 0
 
         # Half-width is nSigma sigma, so sigma = half-width / nSigma
