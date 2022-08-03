@@ -737,7 +737,7 @@ class PlotManager(AbstractPlotManager):
                 continue
 
             lines = block.split('\n')
-            _data = Dataset()
+            _data = Dataset(None, None, os.path.basename(fname))
             _data.orig_filename = fname
             err = _data.setAsciiData(lines, root = self.root)
             if err:
