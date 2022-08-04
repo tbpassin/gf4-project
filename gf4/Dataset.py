@@ -12,6 +12,7 @@ import numpy as np
 
 from entry import GetTwoInts
 
+COMMENTS = '#;'
 ENCODING = 'utf-8'
 parmsaver = {}
 #@+node:tom.20211211170820.4: ** class Dataset
@@ -145,24 +146,30 @@ class Dataset:
             #@+node:tom.20220401205417.1: *4* << process lines >>
             _rowcount += 1
             line = line.strip()
-            if line and line[0] in (';', '#') and line[:2] != ';;': continue
-            if not line or line == ';' or line == ';;': continue
-            if line[0] == ';' and line[1] != ';': continue
+            if not line: continue
+            comment = ''
+            if line[0] in COMMENTS:
+                comment = line[0]
+            # Special comments start with a double comment char, and then a space
+            # Skip comment lines if they are not special comments
+            is_special_comment = comment and line.startswith(f'{comment * 2} ')
+            if comment and not is_special_comment: continue
 
+            # E.g., ## XLABEL:
             #@+<< handle special comments >>
             #@+node:tom.20220401205645.1: *5* << handle special comments >>
-            if line[0] == ';' and line[1] == ';':
-                _line = line.lstrip(';')
+            if is_special_comment:
+                _line = line.lstrip(comment)
                 _line = _line.lstrip()
-                if _line.strip()  == ';;':
+                if _line.lstrip()[0] == comment:
                     continue
                 try:
-                    key, val = _line.split(':',1)
+                    key, val = _line.split(':', 1)
                     key = key.strip()
                     val = val.strip()
                 except ValueError:
                     try:
-                        key, val = _line.split(' ',1)
+                        key, val = _line.split(' ', 1)
                         key = key.strip()
                         val = val.strip()
                     except ValueError:
@@ -179,11 +186,11 @@ class Dataset:
                         _ylabel = _ylabel.lstrip()
                         self.yaxislabel = _ylabel
                 elif key == 'YLABEL': self.yaxislabel = val
-                elif key == 'YMIN': 
+                elif key == 'YMIN':
                     try:
                         self.ymin = float(val)
                     except Exception: pass
-                elif key == 'YMAX': 
+                elif key == 'YMAX':
                     try:
                         self.ymax = float(val)
                     except Exception: pass
