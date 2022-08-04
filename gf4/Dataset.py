@@ -161,7 +161,7 @@ class Dataset:
             if is_special_comment:
                 _line = line.lstrip(comment)
                 _line = _line.lstrip()
-                if _line.lstrip()[0] == comment:
+                if _line[0] == comment:
                     continue
                 try:
                     key, val = _line.split(':', 1)
@@ -177,15 +177,18 @@ class Dataset:
 
                 if not (key and val): continue
 
-                if key == 'FIGURELABEL': self.figurelabel = val
-                elif key == 'XLABEL': 
+                if key == 'FIGURELABEL':
+                    self.figurelabel = val
+                elif key == 'XLABEL':
+                    # Ylabel may be inline after Xlabel
                     _label_parts = val.split('YLABEL')
                     self.xaxislabel = _label_parts[0].strip()
                     if len(_label_parts) > 1:
                         _ylabel = _label_parts[1].replace(':', ' ', 1)
                         _ylabel = _ylabel.lstrip()
                         self.yaxislabel = _ylabel
-                elif key == 'YLABEL': self.yaxislabel = val
+                elif key == 'YLABEL':
+                    self.yaxislabel = val
                 elif key == 'YMIN':
                     try:
                         self.ymin = float(val)
