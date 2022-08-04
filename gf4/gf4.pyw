@@ -1678,9 +1678,9 @@ class PlotManager(AbstractPlotManager):
 
         lab = self.stack[MAIN].figurelabel or ''
         if lab:
-            lab = 'LOWESS Smooth of %s' % (lab)
+            lab = f'LOWESS Smooth ({dia.result}) of {lab}'
         else:
-            lab = 'LOWESS Smooth'
+            lab = f'LOWESS Smooth ({dia.result})'
         self.stack[MAIN].figurelabel = lab
 
         lower = Dataset()
