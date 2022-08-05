@@ -33,6 +33,8 @@ from Linestyle import (Linestyle, LINETHIN, LINEMED)
 #from Linestyle import (CIRCLE, HEXAGON, DIAMOND, SQUARE, TRIANGLE,
 #                       SYM_NONE, LINE_NONE, LINE_SOLID, LINETHICK)
 import smoother
+lowess2_stddev = smoother.lowess2_stddev
+
 from fits import piecewiseLinear
 import stats
 
@@ -2203,6 +2205,10 @@ class PlotManager(AbstractPlotManager):
     def sliding_var(self):
         '''Calculate the standard deviations in a window that slides across the
         MAIN data set. The result replaces the MAIN data set.
+        
+        Uses a LOWESS weighted sliding window, and computes the std deviation
+        at each fitted point (not the standard error of the mean).  The result
+        is plotted.
         '''
 
         _ds = self.stack[MAIN]
@@ -2219,13 +2225,20 @@ class PlotManager(AbstractPlotManager):
         if not dia.result: return
         self.parmsaver[_id] = dia.result
 
-        _newx, _stds, sigma = _ds.sliding_var(dia.result)
-
+        # _newx, _stds, sigma = _ds.sliding_var(dia.result)
+        _newx, _stds = lowess2_stddev(_ds.xdata, _ds.ydata, dia.result)
         _ds.xdata = _newx
         _ds.ydata = _stds
 
+        lab = self.stack[MAIN].figurelabel or ''
+        if lab:
+            lab = f'Weighted Windowed ({dia.result}) Standard Deviations of {lab}'
+        else:
+            lab = f'Weighted Windowed ({dia.result}) Standard Deviations'
+        self.stack[MAIN].figurelabel = lab
+
+
         self.plot()
-        self.announce('Overall Standard Deviation = %0.3f' % sigma)
 
     #@+node:tom.20211207165051.129: *4* var_ratio
     @REQUIRE_MAIN

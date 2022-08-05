@@ -155,7 +155,7 @@ GENERATOR_BUTTONS = (
 
 TREND_BUTTONS = (
     ('Mann-Kendall', 'mann_kendall', 'Compute Mann-Kendall Trend'),
-    ('Windowed Dev', 'sliding_var', 'Standard Deviation In a Sliding Window'),
+    ('Windowed Dev', 'sliding_var', 'Standard Deviations for a LOWESS Fit'),
 )
 #@-others
 #@@language python
