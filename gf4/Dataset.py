@@ -1095,6 +1095,21 @@ class Dataset:
         self.ydata = new_ydata
         return self
         
+    #@+node:tom.20220806224532.1: *3* Dataset.zero
+    def zero(self):
+        """Subtract the mean of the Y values from the originals.
+        
+        The new values replace hte originals.
+
+        RETURNS
+        False if the Dataset has no points, True otherwise.
+
+        """
+        if not (self.ydata and len(self.ydata)):
+            return False
+        mean = np.mean(self.ydata)
+        self.ydata = [y - mean for y in self.ydata]
+        return True
     #@-others
 #@+node:tom.20211211170820.43: ** Organizer: if __name__ == '__main__': (Dataset.py)
 if __name__ == '__main__':

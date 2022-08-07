@@ -1173,8 +1173,8 @@ class PlotManager(AbstractPlotManager):
     #@+node:tom.20211207165051.122: *4* normalize
     @REQUIRE_MAIN
     def normalize(self):
-        ''' Normalize the X data to 1.0.  Replot.
-        '''
+        """ Normalize the X data to 1.0.  Replot.
+        """
         self.stack[MAIN].normalize()
 
         lab = self.stack[MAIN].figurelabel
@@ -1376,6 +1376,17 @@ class PlotManager(AbstractPlotManager):
         _X.yaxislabel = _Y.yaxislabel
 
         self.sortX()
+    #@+node:tom.20220806224143.1: *4* zero
+    @REQUIRE_MAIN
+    def zero(self):
+        """Subtract the mean of the Y data of the MAIN Dataset. Replot"""
+        self.stack[MAIN].zero()
+
+        lab = self.stack[MAIN].figurelabel
+        if lab and lab != 'Figure Label':
+            self.stack[MAIN].figurelabel = f'{lab} Zeroed'
+
+        self.plot()
     #@+node:tom.20211207213812.1: *3* Data Processing
     #@+node:tom.20211207165051.123: *4* fft
     @REQUIRE_MAIN
