@@ -109,7 +109,7 @@ class PlotManager(AbstractPlotManager):
             # args[0] will be the calling instance (i.e., self)
             self = args[0]
             _main = self.stack[MAIN]
-            if not (_main and len(_main.xdata)):
+            if not (_main and any(_main.xdata)):
                 msg = 'Missing Waveform'
                 self.announce(msg)
                 self.flashit()
@@ -136,8 +136,8 @@ class PlotManager(AbstractPlotManager):
             self = args[0]
             _main = self.stack[MAIN]
             _buff = self.stack[BUFFER]
-            if not (_main and len(_main.xdata) and
-                    _buff and len(_buff.xdata)):
+            if not (_main and any(_main.xdata) and
+                    _buff and any(_buff.xdata)):
                 self.announce("Missing one or both waveforms")
                 self.flashit()
                 return
@@ -895,7 +895,7 @@ class PlotManager(AbstractPlotManager):
         '''
 
         _ds = self.stack[MAIN]
-        if not (_ds and len(_ds.xdata)):
+        if not (_ds and any(_ds.xdata)):
             self.announce("No data to work with")
             self.flashit()
             return
@@ -2223,7 +2223,7 @@ class PlotManager(AbstractPlotManager):
         '''
 
         _ds = self.stack[MAIN]
-        if not (_ds and len(_ds)):
+        if not (_ds and any(_ds)):
             self.announce("No data to work with")
             self.flashit()
             return

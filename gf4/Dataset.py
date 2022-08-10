@@ -203,12 +203,8 @@ class Dataset:
             #@+<< get numeric data >>
             #@+node:tom.20220401205749.1: *5* << get numeric data >>
             line = line.strip()
-            #fields = line.split()
-
-            # Use first non-blank, non-comment line to decide one or 2 column data
-            # if _firstline and len(fields) == 1:
-                # _isSingleCol = True
             if not line.strip(): continue
+
             if line[0] in (';', '#'): continue
             fields = line.split()
 
@@ -1099,13 +1095,13 @@ class Dataset:
     def zero(self):
         """Subtract the mean of the Y values from the originals.
         
-        The new values replace hte originals.
+        The new values replace the originals.
 
         RETURNS
         False if the Dataset has no points, True otherwise.
 
         """
-        if not (self.ydata and len(self.ydata)):
+        if not any(self.ydata):
             return False
         mean = np.mean(self.ydata)
         self.ydata = [y - mean for y in self.ydata]
