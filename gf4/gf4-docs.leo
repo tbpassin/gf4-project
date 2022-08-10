@@ -210,6 +210,8 @@ column with a "bottom" and a "top".  Items on the stack can be "pushed" upwards,
 "dropped" downwards, "rotated" and "swapped". These operations are illustrated
 in the next section.
 
+All operations that change data operate on the data in the stack bottom (the X position). All operations between two datasets, such as addition and correlation, use the X and Y positions (Y is the next position up from X);  the result of these operations only change data in the X position.
+
 The state of the stack can be viewed by using the *Help/ Show Stack* menu item in the main window.  This opens a small window that shows the name of the dataset 
 currently in each stack position. It is helpful to keep this window open while
 one gains experience with GF4.  The image below depicts the stack viewer window:
@@ -289,7 +291,7 @@ How To Run GF4
 ===============
 No installation is required.  You may need to install some python libraries from Pypi.
 Navigate to the gf4-project, which has a file named `requirements.txt`. Run pip 
-to install them::
+to install them:
 
     python3 -m pip -r requirements.txt.
 
