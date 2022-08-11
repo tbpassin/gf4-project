@@ -781,10 +781,10 @@ class Dataset:
         '''
 
         if self.isNumpyArray(self.ydata):
-            if not self.ydata.any():
+            if not any(self.ydata):
                 return False
         elif self.isNumpyArray(ds.ydata):
-            if not ds.ydata.any():
+            if not any(ds.ydata):
                 return False
         else:
             if not self.ydata or not ds.ydata:
