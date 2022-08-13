@@ -2223,7 +2223,7 @@ class PlotManager(AbstractPlotManager):
         '''
 
         _ds = self.stack[MAIN]
-        if not (_ds and any(_ds)):
+        if not (_ds and any(_ds.ydata)):
             self.announce("No data to work with")
             self.flashit()
             return
