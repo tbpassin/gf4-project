@@ -8,7 +8,12 @@
 <vnodes>
 <v t="tom.20220507132007.1"><vh>Docs</vh>
 <v t="tom.20220507132007.2"><vh>@clean ../README.md</vh>
-<v t="tom.20220507132007.3"><vh>gf4-project</vh></v>
+<v t="tom.20220507132007.3"><vh>gf4-project</vh>
+<v t="tom.20220816202839.1"><vh>Installing</vh>
+<v t="tom.20220816202850.1"><vh>Linux Issues</vh></v>
+</v>
+<v t="tom.20220816202934.1"><vh>Running GF4</vh></v>
+</v>
 </v>
 <v t="tom.20220509230416.1"><vh>@clean ../DEVELOPERS_READ_THIS.md</vh>
 <v t="tom.20220509230545.1"><vh>Leo-Editor, Or Those Strange Comment Lines</vh></v>
@@ -287,19 +292,6 @@ How To Get GF4
 Press the `Code` button on this page, then select `Download Zip`.  When the file
 has downloaded, unzip it to some convenient location.
 
-How To Run GF4
-===============
-No installation is required.  You may need to install some python libraries from Pypi.
-Navigate to the gf4-project, which has a file named `requirements.txt`. Run pip 
-to install them:
-
-    python3 -m pip -r requirements.txt.
-
-Your Python may have a different name, so use that.
-
-To run the program, navigate to the gf4-project/gf4 directory and
-run the file `gf4.pyw` with either python or pythonw.  Make sure the python
-version is same as you used to install the libraries.
 </t>
 <t tx="tom.20220507132007.4"></t>
 <t tx="tom.20220507132007.5">@language python
@@ -539,6 +531,46 @@ For those interested in taking a look at Leo - and Leo is a very fine tool
 for development and producing documentation - it is
 [on Github](https://github.com/leo-editor/leo-editor).
 
+</t>
+<t tx="tom.20220816202839.1">You may need to install some python libraries from Pypi.
+Navigate to the gf4-project, which has a file named `requirements.txt`. Run pip 
+to install them:
+
+    python3 -m pip -r requirements.txt.
+
+Your Python program may have a different name, so use that.
+
+If one of the pre-requisites has not been installed, GF4 will emit a message about
+the missing library, which you can then install (see below for possible Linux-specific
+issues).</t>
+<t tx="tom.20220816202850.1">Some Linux operating systems, including Debian and Ubuntu, require that
+certain libraries must be installed with the OS's package manager and not with 
+the usual pip utility.  On Debian/Ubuntu, tkinter has to be installed by 
+the package manager:
+
+    sudo apt-get install python3-tk
+
+This may also be the case with some non-Debian systems.
+The package manager command will be different.  For the Yum package manager 
+(you might have to use sudo, su root, or its equivalent to get administrative
+permissions):
+
+    yum install tkinter
+
+You may also need to install ImageTk.  On Debian-based systems:
+
+    sudo apt-get install python3-pil.imagetk
+
+On CentOS/RHEL, the PIL-related packages to install with the package manager 
+are (*pillow*has replaced the older *PIL* imaging library):
+
+    python3-pillow
+    python3-pillow-tk
+</t>
+<t tx="tom.20220816202934.1">To run the program, navigate to the gf4-project/gf4 directory and
+run the file `gf4.pyw` with either python or pythonw.  Or you can supply the 
+entire path to gf4.pyw without changing to its directory. Make sure the python
+version is same as you used to install the libraries.
 </t>
 </tnodes>
 </leo_file>
