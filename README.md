@@ -64,23 +64,23 @@ issues).
 Some Linux operating systems, including Debian and Ubuntu, require that
 certain libraries must be installed with the OS's package manager and not with 
 the usual pip utility.  On Debian/Ubuntu, tkinter has to be installed by 
-the package manager::
+the package manager:
 
     sudo apt-get install python3-tk
 
 This may also be the case with some non-Debian systems.
 The package manager command will be different.  For the Yum package manager 
 (you might have to use sudo, su root, or its equivalent to get administrative
-permissions)::
+permissions):
 
     yum install tkinter
 
-You may also need to install ImageTk.  On Debian-based systems::
+You may also need to install ImageTk.  On Debian-based systems:
 
     sudo apt-get install python3-pil.imagetk
 
-On CentOS/RHEL, the packages to install with the package manager are (*pillow*
-has replaced the older *PIL* imaging library)::
+On CentOS/RHEL, the PIL-related packages to install with the package manager 
+are (*pillow*has replaced the older *PIL* imaging library):
 
     python3-pillow
     python3-pillow-tk
