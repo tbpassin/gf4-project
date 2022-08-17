@@ -80,7 +80,7 @@ You may also need to install ImageTk.  On Debian-based systems:
     sudo apt-get install python3-pil.imagetk
 
 On CentOS/RHEL, the PIL-related packages to install with the package manager 
-are (*pillow*has replaced the older *PIL* imaging library):
+are (*pillow* has replaced the older *PIL* imaging library):
 
     python3-pillow
     python3-pillow-tk
