@@ -50,16 +50,41 @@ How To Get GF4
 Press the `Code` button on this page, then select `Download Zip`.  When the file
 has downloaded, unzip it to some convenient location.
 
-How To Run GF4
-===============
-No installation is required.  You may need to install some python libraries from Pypi.
+You may need to install some python libraries from Pypi.
 Navigate to the gf4-project, which has a file named `requirements.txt`. Run pip 
 to install them:
 
     python3 -m pip -r requirements.txt.
 
-Your Python may have a different name, so use that.
+Your Python program may have a different name, so use that.
 
+If one of the pre-requisites has not been installed, GF4 will emit a message about
+the missing library, which you can then install (see below for possible Linux-specific
+issues).
+Some Linux operating systems, including Debian and Ubuntu, require that
+certain libraries must be installed with the OS's package manager and not with 
+the usual pip utility.  On Debian/Ubuntu, tkinter has to be installed by 
+the package manager::
+
+    sudo apt-get install python3-tk
+
+This may also be the case with some non-Debian systems.
+The package manager command will be different.  For the Yum package manager 
+(you might have to use sudo, su root, or its equivalent to get administrative
+permissions)::
+
+    yum install tkinter
+
+You may also need to install ImageTk.  On Debian-based systems::
+
+    sudo apt-get install python3-pil.imagetk
+
+On CentOS/RHEL, the packages to install with the package manager are (*pillow*
+has replaced the older *PIL* imaging library)::
+
+    python3-pillow
+    python3-pillow-tk
 To run the program, navigate to the gf4-project/gf4 directory and
-run the file `gf4.pyw` with either python or pythonw.  Make sure the python
+run the file `gf4.pyw` with either python or pythonw.  Or you can supply the 
+entire path to gf4.pyw without changing to its directory. Make sure the python
 version is same as you used to install the libraries.
