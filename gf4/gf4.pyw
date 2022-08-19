@@ -33,6 +33,8 @@ from Linestyle import (Linestyle, LINETHIN, LINEMED)
 #from Linestyle import (CIRCLE, HEXAGON, DIAMOND, SQUARE, TRIANGLE,
 #                       SYM_NONE, LINE_NONE, LINE_SOLID, LINETHICK)
 import smoother
+lowess2_stddev = smoother.lowess2_stddev
+
 from fits import piecewiseLinear
 import stats
 
@@ -107,7 +109,7 @@ class PlotManager(AbstractPlotManager):
             # args[0] will be the calling instance (i.e., self)
             self = args[0]
             _main = self.stack[MAIN]
-            if not (_main and len(_main.xdata)):
+            if not (_main and any(_main.xdata)):
                 msg = 'Missing Waveform'
                 self.announce(msg)
                 self.flashit()
@@ -134,8 +136,8 @@ class PlotManager(AbstractPlotManager):
             self = args[0]
             _main = self.stack[MAIN]
             _buff = self.stack[BUFFER]
-            if not (_main and len(_main.xdata) and
-                    _buff and len(_buff.xdata)):
+            if not (_main and any(_main.xdata) and
+                    _buff and any(_buff.xdata)):
                 self.announce("Missing one or both waveforms")
                 self.flashit()
                 return
@@ -737,7 +739,7 @@ class PlotManager(AbstractPlotManager):
                 continue
 
             lines = block.split('\n')
-            _data = Dataset()
+            _data = Dataset(None, None, os.path.basename(fname))
             _data.orig_filename = fname
             err = _data.setAsciiData(lines, root = self.root)
             if err:
@@ -893,7 +895,7 @@ class PlotManager(AbstractPlotManager):
         '''
 
         _ds = self.stack[MAIN]
-        if not (_ds and len(_ds.xdata)):
+        if not (_ds and any(_ds.xdata)):
             self.announce("No data to work with")
             self.flashit()
             return
@@ -1171,8 +1173,8 @@ class PlotManager(AbstractPlotManager):
     #@+node:tom.20211207165051.122: *4* normalize
     @REQUIRE_MAIN
     def normalize(self):
-        ''' Normalize the X data to 1.0.  Replot.
-        '''
+        """ Normalize the X data to 1.0.  Replot.
+        """
         self.stack[MAIN].normalize()
 
         lab = self.stack[MAIN].figurelabel
@@ -1374,6 +1376,17 @@ class PlotManager(AbstractPlotManager):
         _X.yaxislabel = _Y.yaxislabel
 
         self.sortX()
+    #@+node:tom.20220806224143.1: *4* zero
+    @REQUIRE_MAIN
+    def zero(self):
+        """Subtract the mean of the Y data of the MAIN Dataset. Replot"""
+        self.stack[MAIN].zero()
+
+        lab = self.stack[MAIN].figurelabel
+        if lab and lab != 'Figure Label':
+            self.stack[MAIN].figurelabel = f'{lab} Zeroed'
+
+        self.plot()
     #@+node:tom.20211207213812.1: *3* Data Processing
     #@+node:tom.20211207165051.123: *4* fft
     @REQUIRE_MAIN
@@ -1678,9 +1691,9 @@ class PlotManager(AbstractPlotManager):
 
         lab = self.stack[MAIN].figurelabel or ''
         if lab:
-            lab = 'LOWESS Smooth of %s' % (lab)
+            lab = f'LOWESS Smooth ({dia.result}) of {lab}'
         else:
-            lab = 'LOWESS Smooth'
+            lab = f'LOWESS Smooth ({dia.result})'
         self.stack[MAIN].figurelabel = lab
 
         lower = Dataset()
@@ -2103,6 +2116,7 @@ class PlotManager(AbstractPlotManager):
         ydata = self.stack[MAIN].ydata
         mean, std = stats.meanstd(ydata)
         _max = max(ydata)
+        se = std / (len(ydata) - 1)**0.5
 
         # Check ydata type because it might not be a list
         # pylint: disable = unidiomatic-typecheck
@@ -2131,6 +2145,9 @@ class PlotManager(AbstractPlotManager):
         msg = 'Max: %0.3f at x=%0.3f  Mean: %0.4f  Span: %0.4f, Std Dev: %0.4f  '\
               'Area: %.2e  rho: %0.3f N = %s' %\
               (_max, _max_x_coord, mean, span, std, area, rho, len(ydata))
+        msg = (f' Max: {_max:0.3f} at x={_max_x_coord:0.3f}  Mean: {mean:0.4f}  '
+              f'Span: {span:0.3f}  Std Dev: {std:0.4f}  SE: {se:0.4f}  area: {area: .2e}  '
+              f'rho: {rho:0.3f}  N = {len(ydata)}')
         self.announce(msg)
 
     #@+node:tom.20211207214310.1: *3* Trend
@@ -2199,10 +2216,14 @@ class PlotManager(AbstractPlotManager):
     def sliding_var(self):
         '''Calculate the standard deviations in a window that slides across the
         MAIN data set. The result replaces the MAIN data set.
+        
+        Uses a LOWESS weighted sliding window, and computes the std deviation
+        at each fitted point (not the standard error of the mean).  The result
+        is plotted.
         '''
 
         _ds = self.stack[MAIN]
-        if not (_ds and len(_ds)):
+        if not (_ds and any(_ds.ydata)):
             self.announce("No data to work with")
             self.flashit()
             return
@@ -2215,13 +2236,20 @@ class PlotManager(AbstractPlotManager):
         if not dia.result: return
         self.parmsaver[_id] = dia.result
 
-        _newx, _stds, sigma = _ds.sliding_var(dia.result)
-
+        # _newx, _stds, sigma = _ds.sliding_var(dia.result)
+        _newx, _stds = lowess2_stddev(_ds.xdata, _ds.ydata, dia.result)
         _ds.xdata = _newx
         _ds.ydata = _stds
 
+        lab = self.stack[MAIN].figurelabel or ''
+        if lab:
+            lab = f'Weighted Windowed ({dia.result}) Standard Deviations of {lab}'
+        else:
+            lab = f'Weighted Windowed ({dia.result}) Standard Deviations'
+        self.stack[MAIN].figurelabel = lab
+
+
         self.plot()
-        self.announce('Overall Standard Deviation = %0.3f' % sigma)
 
     #@+node:tom.20211207165051.129: *4* var_ratio
     @REQUIRE_MAIN

@@ -222,7 +222,7 @@ def setMenus(self):
         underline=0)
     fileSubmenu.add_command(label='Load From Dialog', 
         command=self.load_data_from_popup, underline=0)
-    fileSubmenu.add_command(label='Save',
+    fileSubmenu.add_command(label='Save As',
         command=self.save_data,
         underline=0, state=Tk.ACTIVE)
     fileSubmenu.add_separator()

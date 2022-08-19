@@ -53,6 +53,12 @@
 <v t="tom.20211206205420.2"><vh>@file testing/smoother_tests.py</vh></v>
 </v>
 </v>
+<v t="tom.20220816175920.1"><vh>Install Problems</vh>
+<v t="tom.20220816175933.1"><vh>Linux</vh>
+<v t="tom.20220816180207.1"><vh>No tkinter</vh></v>
+<v t="tom.20220816175947.1"><vh>cannot import name 'ImageTK'</vh></v>
+</v>
+</v>
 </v>
 </vnodes>
 <tnodes>
@@ -217,6 +223,34 @@ SANS = ('sans-serif', 10, 'normal')
         # hope we don't leak resources here
     # except Exception as e:
         # print('Unexpected exception during stack string handling:', type(e), e)
+
+</t>
+<t tx="tom.20220816175920.1"></t>
+<t tx="tom.20220816175933.1"></t>
+<t tx="tom.20220816175947.1">See 
+
+https://stackoverflow.com/questions/44835909/cannot-import-name-imagetk-python-3-5
+
+On Debian, this fixed this problem::
+
+    sudo apt-get install python3-pil.imagetk
+
+On CentOS/RHEL, the packages to install with the package manager are (*pillow*
+has replaced the imaging library *PIL*)::
+
+    python3-pillow
+    python3-pillow-tk
+</t>
+<t tx="tom.20220816180207.1">On Debian/Ubuntu, tkinter has to be installed by the package manager::
+
+    sudo apt-get install python3-tk
+
+Apparently this may also be the case with some non-Debian systems.
+The package manager command will be different.  For the Yum package manager 
+(you might have to use sudo, su root, or its equivalent to get administrative
+permissions) - see https://riptutorial.com/tkinter/example/3206/installation-or-setup::
+
+    yum install tkinter
 
 </t>
 </tnodes>

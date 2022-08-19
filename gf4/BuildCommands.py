@@ -74,10 +74,12 @@ def buildCommands(self):
        'log': self.log10,
        'ln': self.log,
        'sqr': self.square,
+
        'rectify': self.rectify,
        'halfrect': self.half_rectify, 
        'clip': self.clip,
        'normalize': self.normalize,
+       'zero_data': self.zero,
 
        'cubicspln': self.cubicSpline,
        'lstsqrlin': self.leastsqr,

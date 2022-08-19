@@ -12,6 +12,7 @@ import numpy as np
 
 from entry import GetTwoInts
 
+COMMENTS = '#;'
 ENCODING = 'utf-8'
 parmsaver = {}
 #@+node:tom.20211211170820.4: ** class Dataset
@@ -84,6 +85,10 @@ class Dataset:
         #@+node:tom.20220401205037.1: *4* << docstring >>
         Get data from a sequence of ASCII text lines - normally read from a file.
 
+        Data columns are expected to whitespace-separated.  Optionally they can be
+        separated by a comma.  All data lines in a file must use the same separator.
+        Currently headers are not extracted from header lines of comma-separated lines.
+
         Blank lines and lines that start with a ';' or '#' are ignored. 
         If the first non-ignorable line has only a single field, then
         the file is assumed to contain single-column data, and the X-axis data
@@ -93,7 +98,7 @@ class Dataset:
         numbers are the same, the data is considered to have only that one column,
         and the x-axis values are automatically assigned.
 
-        The x- and y- data sequences are assigned to the data set
+        The x- and y- data sequences are assigned to the data set.
 
         Metadata such as labels are each on a single line starting with 
         two or more ';' characters.  The name of the metadata follows, 
@@ -140,29 +145,57 @@ class Dataset:
         retval = ''
         #@-<< init  >>
 
+        #@+<< detect_csv >>
+        #@+node:tom.20220819125339.1: *4* << detect_csv >>
+        # Try to discover if this data is comma-separated.  If so,
+        # Change the separator to a tab.
+        # Note that a csv file may have one or more non-comment header lines,
+        # typically the column headings.
+        is_csv = False
+        for line in lines:
+            if not line.strip():
+                continue
+            line = line.lstrip()
+            if line[0] in COMMENTS:
+                continue
+            if "," in line:
+                # Assume we are comma-separated
+                is_csv = True
+                break
+
+        if is_csv:
+            lines = [line.replace(',', '\t') for line in lines]
+        #@-<< detect_csv >>
+
         for line in lines:
             #@+<< process lines >>
             #@+node:tom.20220401205417.1: *4* << process lines >>
             _rowcount += 1
             line = line.strip()
-            if line and line[0] in (';', '#') and line[:2] != ';;': continue
-            if not line or line == ';' or line == ';;': continue
-            if line[0] == ';' and line[1] != ';': continue
+            if not line: continue
+            comment = ''
+            if line[0] in COMMENTS:
+                comment = line[0]
+            # Special comments start with a double comment char, and then a space
+            # Skip comment lines if they are not special comments
+            is_special_comment = comment and line.startswith(f'{comment * 2} ')
+            if comment and not is_special_comment: continue
 
+            # E.g., ## XLABEL:
             #@+<< handle special comments >>
             #@+node:tom.20220401205645.1: *5* << handle special comments >>
-            if line[0] == ';' and line[1] == ';':
-                _line = line.lstrip(';')
+            if is_special_comment:
+                _line = line.lstrip(comment)
                 _line = _line.lstrip()
-                if _line.strip()  == ';;':
+                if _line[0] == comment:
                     continue
                 try:
-                    key, val = _line.split(':',1)
+                    key, val = _line.split(':', 1)
                     key = key.strip()
                     val = val.strip()
                 except ValueError:
                     try:
-                        key, val = _line.split(' ',1)
+                        key, val = _line.split(' ', 1)
                         key = key.strip()
                         val = val.strip()
                     except ValueError:
@@ -170,20 +203,23 @@ class Dataset:
 
                 if not (key and val): continue
 
-                if key == 'FIGURELABEL': self.figurelabel = val
-                elif key == 'XLABEL': 
+                if key == 'FIGURELABEL':
+                    self.figurelabel = val
+                elif key == 'XLABEL':
+                    # Ylabel may be inline after Xlabel
                     _label_parts = val.split('YLABEL')
                     self.xaxislabel = _label_parts[0].strip()
                     if len(_label_parts) > 1:
                         _ylabel = _label_parts[1].replace(':', ' ', 1)
                         _ylabel = _ylabel.lstrip()
                         self.yaxislabel = _ylabel
-                elif key == 'YLABEL': self.yaxislabel = val
-                elif key == 'YMIN': 
+                elif key == 'YLABEL':
+                    self.yaxislabel = val
+                elif key == 'YMIN':
                     try:
                         self.ymin = float(val)
                     except Exception: pass
-                elif key == 'YMAX': 
+                elif key == 'YMAX':
                     try:
                         self.ymax = float(val)
                     except Exception: pass
@@ -193,12 +229,8 @@ class Dataset:
             #@+<< get numeric data >>
             #@+node:tom.20220401205749.1: *5* << get numeric data >>
             line = line.strip()
-            #fields = line.split()
-
-            # Use first non-blank, non-comment line to decide one or 2 column data
-            # if _firstline and len(fields) == 1:
-                # _isSingleCol = True
             if not line.strip(): continue
+
             if line[0] in (';', '#'): continue
             fields = line.split()
 
@@ -487,9 +519,9 @@ class Dataset:
         for i in range(N - 1):
             sum += 0.5*(_y[i+1] + _y[i]) * (_x[i+1] - _x[i])
             result.append(sum)
-        
+
         self.ydata = result
-        del(self.xdata[N-1])
+        self.xdata = self.xdata[:-1]
 
     #@+node:tom.20211211170820.24: *3* Dataset.square
     def square(self):
@@ -775,10 +807,10 @@ class Dataset:
         '''
 
         if self.isNumpyArray(self.ydata):
-            if not self.ydata.any():
+            if not any(self.ydata):
                 return False
         elif self.isNumpyArray(ds.ydata):
-            if not ds.ydata.any():
+            if not any(ds.ydata):
                 return False
         else:
             if not self.ydata or not ds.ydata:
@@ -1085,6 +1117,21 @@ class Dataset:
         self.ydata = new_ydata
         return self
         
+    #@+node:tom.20220806224532.1: *3* Dataset.zero
+    def zero(self):
+        """Subtract the mean of the Y values from the originals.
+        
+        The new values replace the originals.
+
+        RETURNS
+        False if the Dataset has no points, True otherwise.
+
+        """
+        if not any(self.ydata):
+            return False
+        mean = np.mean(self.ydata)
+        self.ydata = [y - mean for y in self.ydata]
+        return True
     #@-others
 #@+node:tom.20211211170820.43: ** Organizer: if __name__ == '__main__': (Dataset.py)
 if __name__ == '__main__':

@@ -80,12 +80,13 @@ MATH_BUTTONS = (
     ('Scale', 'scale', 'Scale: Multipy Each Value by a Constant'),
     ('Log 10', 'log', 'Replace values with their Logs Base 10'),
     ('Ln', 'ln',  'Replace values with their Natural Logs'),
-    SPACER, SPACER,
     ('Square', 'sqr', 'Square Values'),
+    SPACER, SPACER,
     ('Full Rectify', 'rectify', 'Full-wave Rectify Values'),
     ('Half Rectify', 'halfrect', 'Half-wave Rectify Values'),
     ('Clip', 'clip', 'Clip Values'),
-    ('Normalize', 'normalize', 'Normalize curve values to 1.0')
+    ('Normalize', 'normalize', 'Normalize curve values to 1.0'),
+    ('Zero', 'zero_data', 'Center curve by subtracting its mean'),
 )
 
 CURVE_FIT_BUTTONS = (
@@ -155,7 +156,7 @@ GENERATOR_BUTTONS = (
 
 TREND_BUTTONS = (
     ('Mann-Kendall', 'mann_kendall', 'Compute Mann-Kendall Trend'),
-    ('Windowed Dev', 'sliding_var', 'Standard Deviation In a Sliding Window'),
+    ('Windowed Dev', 'sliding_var', 'Standard Deviations for a LOWESS Fit'),
 )
 #@-others
 #@@language python

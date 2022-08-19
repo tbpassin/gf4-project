@@ -129,7 +129,7 @@ def configure_button_list(parent, button_list, plotmgr):
         else:
             text, cmd, fulltext = b
             _b = Tk.Button(parent, text=text, relief='raised', width=BUTTONWIDTH, bg=BUTTON_BG,
-                    font=NEWFONT, padx=2, 
+                    font=NEWFONT, padx=8, 
                     command=lambda x=cmd: default_command(x, plotmgr))
             _b.pack(fill=Tk.X)
             _b.bind('<Button-1>', click)
@@ -199,9 +199,9 @@ def create_buttons_pack(host, plotmgr):
     #@+node:tom.20220402001046.1: *3* << Make new Tk font >>
     phantom = Tk.Button(text='phantom')
     _font =  tkFont.nametofont(phantom['font'])
-    sz_def = _font['size']
-    sz = int(.9*sz_def)
-
+    # sz_def = _font['size']
+    # sz = int(.9*sz_def)
+    sz = 8
     NEWFONT = tkFont.Font()
     NEWFONT.config(**_font.config())
     NEWFONT.config(size=sz, weight='bold')
@@ -209,16 +209,14 @@ def create_buttons_pack(host, plotmgr):
     #@-<< Make new Tk font >>
     #@+<< Set window  geometry >>
     #@+node:tom.20220402001212.1: *3* << Set window  geometry >>
-    host_height = sz*3*(len(CURVE_FIT_BUTTONS)
+    host_height = sz*3*(len(SMOOTHER_FIT_BUTTONS)
+                        + len(CURVE_FIT_BUTTONS)
                         + len(STATS_BUTTONS)
-                        + len(GENERATOR_BUTTONS)
-                        + 4
-                        + 6*sz_def)
+                        + 5)
 
-    host_width = BUTTONWIDTH*(COLS)*sz + len('Data Processing')*sz_def + 6*COLS
-    #host.geometry('%sx650' % (BUTTONWIDTH*COLS*10 + 12))
+    host_width = BUTTONWIDTH*(COLS)*sz + len('Data Processing')*sz + 6*COLS
+    host_height = max(host_height, plotmgr.root.winfo_height())
     host.geometry('%sx%s' % (host_width, host_height))
-
     #@-<< Set window  geometry >>
     #@+<< Create Button Containers >>
     #@+node:tom.20220402001714.1: *3* << Create Button Containers >>
@@ -300,14 +298,14 @@ def cmdwindow(plotmgr=None):
 
     # Set initial window position in screen
     #win.geometry('+1250+100')
-
     if _geom:
         #902x670+182+182
         root_dims, root_xoffset, root_yoffset = _geom.split('+')
         root_width, root_height = root_dims.split('x')
         xoffset = int(root_xoffset) + int(root_width) + 5
         yoffset = int(root_yoffset)
-        win.geometry(f'600x{root_height}')
+        #print(root_height)
+        #win.geometry(f'600x{root_height}')
         win.geometry('+%s+%s' %(xoffset, yoffset))
     else:
         win.geometry('600x700')

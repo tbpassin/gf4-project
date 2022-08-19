@@ -61,7 +61,7 @@ def splineSmooth(x, y, s=.5):
     ARGUMENTS
     x -- the x-axis data.  May be a sequence or a numpy array.
     y -- the y-axis data.  May be a sequence or a numpy array.
-    s -- a floating point positive number.
+    s -- a floating point positive number in the range 0 -> 1.
 
     RETURNS
     an array containing the y smoothed values.
@@ -69,8 +69,9 @@ def splineSmooth(x, y, s=.5):
     ys = csaps(x, y, x, smooth=s)
     return (x, ys)
 
-# ========== Auxiliary classes for use in smoothing routines ======
 #@+node:tom.20211211171913.17: ** class WtStats
+# ========== Auxiliary classes for use in smoothing routines ======
+
 class WtStats:
     #@+others
     #@+node:tom.20211211171913.18: *3* WtStats.__init__
@@ -82,7 +83,7 @@ class WtStats:
     #@+node:tom.20211211171913.19: *3* WtStats.MakeGaussianWeights
     def MakeGaussianWeights(self, smoothwidth=4):
         '''Compute weights to use with smoother. These weights
-        form a gaussian curve, with a half-width of 2 sigma.
+        form a gaussian curve normalized to 1.0.
 
         ARGUMENT
         smoothwidth -- width of window in data points
@@ -98,7 +99,7 @@ class WtStats:
         self.smoothzone = _smoothzone
         numwts = _smoothzone + 1 # total number of weights
         icenter = _smoothzone / 2 # index of center point
-        nSigma = 2
+        nSigma = 2.0
         self.Swt = 0
 
         # Half-width is nSigma sigma, so sigma = half-width / nSigma
@@ -382,7 +383,7 @@ def deriv(xdata, ydata):
 
     return xdata[:-1], derivs
 
-#@+node:tom.20211211171913.26: ** lowess2
+#@+node:tom.20220805142529.1: ** lowess2
 def lowess2(xdata, ydata, smoothzone=10, omitOne=False):
     '''Smooth sequence of points using Cleveland's LOWESS algorithm.
     Return the smoothed points, and the rms of the residuals
@@ -437,6 +438,47 @@ def lowess2(xdata, ydata, smoothzone=10, omitOne=False):
     mean_err = sum(ses) / len(xdata)
 
     return (xdata, smooths, mean_err, upperlimit, lowerlimit)
+
+#@+node:tom.20220805142822.1: ** lowess2_stddev
+def lowess2_stddev(xdata, ydata, smoothzone=10, omitOne=False):
+    '''Smooth sequence of points using Cleveland's LOWESS algorithm.
+    Return the smoothed points, the standard deviations, and the rms of the residuals
+    (calculated according to p36 of
+
+    "Nonparametric Simple Regression", J. Fox, Sage University, 2000.)
+
+    For each point, neighboring points are used to calculate the fit,
+    using a table of weights to weight the points.  The window includes
+    smoothzone points on either side of the given point.  The window width
+    is adjusted when the given point gets too close to either end of the data.
+
+    ARGUMENTS
+    xdata,ydata -- sequences containing the x and y data values.
+    smoothzone -- the full window width for the smoothing weights.
+    omitOne -- For each point, omit that point when computing the fit.
+               This can be used for cross-validation assessment.
+               Implemented by setting the weight for the point to 0.
+
+    RETURNS
+    A tuple (x, stddev) where x is the original x series,
+    and stddev is a list of the weighted standard deviations at the given
+    data points x.
+    '''
+    wt = WtStats()
+    N = len(xdata)
+    if N % 2 == 1:
+        smoothzone = smoothzone + 1
+    smoothzone = min(N - 1, smoothzone)
+    wt.MakeGaussianWeights(smoothzone)
+    if omitOne:
+        wt.omitOne()
+    stddevs = []
+
+    for i, _ in enumerate(xdata):
+        y, v, se, is_flier = SmoothPointLowess(xdata, ydata, wt, i)
+        stddevs.append(v**0.5)
+
+    return (xdata, stddevs)
 
 #@+node:tom.20211211171913.27: ** lowessAdaptive
 def lowessAdaptive(xdata, ydata, weight=1.0,
