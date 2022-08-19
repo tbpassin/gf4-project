@@ -85,6 +85,10 @@ class Dataset:
         #@+node:tom.20220401205037.1: *4* << docstring >>
         Get data from a sequence of ASCII text lines - normally read from a file.
 
+        Data columns are expected to whitespace-separated.  Optionally they can be
+        separated by a comma.  All data lines in a file must use the same separator.
+        Currently headers are not extracted from header lines of comma-separated lines.
+
         Blank lines and lines that start with a ';' or '#' are ignored. 
         If the first non-ignorable line has only a single field, then
         the file is assumed to contain single-column data, and the X-axis data
@@ -94,7 +98,7 @@ class Dataset:
         numbers are the same, the data is considered to have only that one column,
         and the x-axis values are automatically assigned.
 
-        The x- and y- data sequences are assigned to the data set
+        The x- and y- data sequences are assigned to the data set.
 
         Metadata such as labels are each on a single line starting with 
         two or more ';' characters.  The name of the metadata follows, 
@@ -140,6 +144,28 @@ class Dataset:
         e = None
         retval = ''
         #@-<< init  >>
+
+        #@+<< detect_csv >>
+        #@+node:tom.20220819125339.1: *4* << detect_csv >>
+        # Try to discover if this data is comma-separated.  If so,
+        # Change the separator to a tab.
+        # Note that a csv file may have one or more non-comment header lines,
+        # typically the column headings.
+        is_csv = False
+        for line in lines:
+            if not line.strip():
+                continue
+            line = line.lstrip()
+            if line[0] in COMMENTS:
+                continue
+            if "," in line:
+                # Assume we are comma-separated
+                is_csv = True
+                break
+
+        if is_csv:
+            lines = [line.replace(',', '\t') for line in lines]
+        #@-<< detect_csv >>
 
         for line in lines:
             #@+<< process lines >>
