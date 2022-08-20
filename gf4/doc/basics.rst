@@ -4,7 +4,11 @@ Data Format
 +++++++++++
 
 GF4 accepts text files with whitespace-separated columns, one data point per
-row. If there is only one column, GF4 inserts an imputed first column with
+row. It also accepts comma-separated columns (CSV files); these are converted 
+internally to TAB-separated columns.  If a CSV file contains a header line before
+the data rows, the header is not recognized, though it does not cause an import error.
+
+If there is only one column, GF4 inserts an imputed first column with
 values being consecutive integers beginning with 1. The "first" column becomes
 the "x", or horizontal, axis. If there are more than two columns, a dialog is
 displayed so the user can choose the two desired columns. The number of columns
@@ -48,6 +52,8 @@ that can hold data elements.  Conceptually, the stack is arranged as a vertical
 column with a "bottom" and a "top".  Items on the stack can be "pushed" upwards,
 "dropped" downwards, "rotated" and "swapped". These operations are illustrated
 in the next section.
+
+All operations that change data operate on the data in the stack bottom (the X position). All operations between two datasets, such as addition and correlation, use the X and Y positions (Y is the next position up from X);  the result of these operations only change data in the X position.
 
 The state of the stack can be viewed by using the *Help/ Show Stack* menu item in the main window.  This opens a small window that shows the name of the dataset 
 currently in each stack position. It is helpful to keep this window open while
@@ -161,10 +167,77 @@ These buttons are marked in the image below:
 Loading And Saving Data
 +++++++++++++++++++++++
 
-All data is saved from and loaded to the X stack position.
+All data is saved from and loaded to the X stack position. This will overwrite
+the previous contents.  If you want to keep the previous data set, push or copy 
+it to one of the other positions.  Most often, the Y position is used for this.
+
+The data format is described in :ref:`Data Format`.  Data is saved in TAB-separated
+format (even if it was originally in CSV format) and includes the special comments 
+that will recreate the title and axis labels.  Error bars are not saved.
+
+Data can be saved to a file (using the *File/Save* menu item) or copied to the
+system clipboard (using the *Copy To Clipboard* button).  A data file can be read
+using th *File/Open* menu item.  Data, including CSV-format
+data, can also be loaded into the X position from the system clipboard using the
+*Load From Dialog* button.  Note that this dialog's entry panel is a basic text editor,
+so the data from the clipboard can be edited before it is processed.
+
+Saving Graphs
++++++++++++++
+
+The visible graph can be saved as an image file, such as a .png file.  The
+standard MatPlotLib toolbar that GF4 displays near the bottom of the main window
+includes a button with an icon of a floppy disk.  Clicking this button opens
+the image save dialog.  There is no provision for loading an image into GF4, since
+it would not contain the numeric data in a form that GF4 could use.
 
 Plotting Curves
 +++++++++++++++
+
+Plotting are grouped together in the Command Window:
+
+.. figure:: images/plot_cmd_buttons.png
+
+    Figure BA-1. Plotting Buttons in the Command Window.
+
+These same commands are also available in the *Plot* menu in the main GF4
+window.  This menu is also the only place where the graph properties can be
+changed.  These properties include line width and color, whether to use symbols
+instead of lines and if so, which symbol shape to use.
+
+Data in any of the three stack positions X, Y, and T can be plotted or overplotted.
+These terms mean the following:
+
+- Plot -- create a new graph at displays the specified data set;
+
+- Overplot -- plot a dataset on top of an existing graph.  The axes may rescale if the new data would overflow the previous bounds of the graph.
+
+Overplotting is essential to getting the most out of GF4, since it provides a way 
+to compare several data sets, or several ways of processing the same data.
+
+Default Plotting Settings
+---------------------------
+When GF4 starts up, it sets the following values for the plotting attributes:
+
+.. csv-table:: Default Plot Settings
+    :header: "Stack Position", "Color", "Line Thickness", "Line/Symbol"
+
+    "X", black, medium, line
+    "Y", cyan, medium, line
+    "T", black, thin, line
+
+These values are chosen to make it easy to distinguish between the data sets
+when overplotted.  The lighter color of the medium cyan line of the Y dataset is 
+easy to distingish from the medium weight black of the X dataset, while the lighter
+appearance of the cyan does not distract much from the heavier weight black line.
+The thin black line of the T dataset is easy to distingish from the other two.
+
+When GF4 starts up, no stack position has data, so there is nothing to plot.
+When the first data set is read, it is automatically plotted.  When other datasets
+are read, GF4 notices that there is already data in the X stack position, and it
+does not plot the new data.  This allows the user to keep reading data files and
+overplotting them - possibly in different colors - without destroying an existing
+graph.  This can be a very useful capability.
 
 Changing Colors, Symbols, and Line Styles
 *****************************************

@@ -18,6 +18,7 @@
 <v t="tom.20220509230416.1"><vh>@clean ../DEVELOPERS_READ_THIS.md</vh>
 <v t="tom.20220509230545.1"><vh>Leo-Editor, Or Those Strange Comment Lines</vh></v>
 </v>
+<v t="tom.20220820141745.1"><vh>@clean ../requirements.txt</vh></v>
 <v t="tom.20220507132007.4"><vh>@path doc</vh>
 <v t="tom.20220507132007.5"><vh>@button Build HTML</vh></v>
 <v t="tom.20220507180306.1"><vh>GF4 User's Guide</vh>
@@ -39,6 +40,7 @@
 <v t="tom.20220507132007.16"><vh>Encouraging Remarks</vh></v>
 </v>
 </v>
+<v t="tom.20220820134816.1"><vh>@rst philosophy</vh></v>
 <v t="tom.20220507180611.1"><vh>@rst basics</vh>
 <v t="tom.20220507132007.17"><vh>Data Format</vh></v>
 <v t="tom.20220507132007.18"><vh>The Waveform Stack</vh>
@@ -47,6 +49,7 @@
 </v>
 <v t="tom.20220507143340.1"><vh>Non-Stack Storage</vh></v>
 <v t="tom.20220507132007.22"><vh>Loading And Saving Data</vh></v>
+<v t="tom.20220820114259.1"><vh>Saving Graphs</vh></v>
 <v t="tom.20220507132007.19"><vh>Plotting Curves</vh>
 <v t="tom.20220507132007.20"><vh>Changing Colors, Symbols, and Line Styles</vh></v>
 </v>
@@ -172,7 +175,11 @@ The results are shown in Figure EX-1c.
 </t>
 <t tx="tom.20220507132007.16">Examples like this are usually much harder to describe than to do.  With a little practice, these kinds of operations become familiar and they go very quickly.  One gets used to the location of the command buttons that are commonly used, and the stack positions stop feeling strange.  Just like a physical calculator, in fact.</t>
 <t tx="tom.20220507132007.17">GF4 accepts text files with whitespace-separated columns, one data point per
-row. If there is only one column, GF4 inserts an imputed first column with
+row. It also accepts comma-separated columns (CSV files); these are converted 
+internally to TAB-separated columns.  If a CSV file contains a header line before
+the data rows, the header is not recognized, though it does not cause an import error.
+
+If there is only one column, GF4 inserts an imputed first column with
 values being consecutive integers beginning with 1. The "first" column becomes
 the "x", or horizontal, axis. If there are more than two columns, a dialog is
 displayed so the user can choose the two desired columns. The number of columns
@@ -226,13 +233,71 @@ one gains experience with GF4.  The image below depicts the stack viewer window:
 
 The most common stack operations in practice are "Swap" and direct access.  The
 T position is often used as a temporary data cache.</t>
-<t tx="tom.20220507132007.19"></t>
+<t tx="tom.20220507132007.19">Plotting are grouped together in the Command Window:
+
+.. figure:: images/plot_cmd_buttons.png
+
+    Figure BA-1. Plotting Buttons in the Command Window.
+
+These same commands are also available in the *Plot* menu in the main GF4
+window.  This menu is also the only place where the graph properties can be
+changed.  These properties include line width and color, whether to use symbols
+instead of lines and if so, which symbol shape to use.
+
+Data in any of the three stack positions X, Y, and T can be plotted or overplotted.
+These terms mean the following:
+
+- Plot -- create a new graph at displays the specified data set;
+
+- Overplot -- plot a dataset on top of an existing graph.  The axes may rescale if the new data would overflow the previous bounds of the graph.
+
+Overplotting is essential to getting the most out of GF4, since it provides a way 
+to compare several data sets, or several ways of processing the same data.
+
+Default Plotting Settings
+---------------------------
+When GF4 starts up, it sets the following values for the plotting attributes:
+
+.. csv-table:: Default Plot Settings
+    :header: "Stack Position", "Color", "Line Thickness", "Line/Symbol"
+
+    "X", black, medium, line
+    "Y", cyan, medium, line
+    "T", black, thin, line
+
+These values are chosen to make it easy to distinguish between the data sets
+when overplotted.  The lighter color of the medium cyan line of the Y dataset is 
+easy to distingish from the medium weight black of the X dataset, while the lighter
+appearance of the cyan does not distract much from the heavier weight black line.
+The thin black line of the T dataset is easy to distingish from the other two.
+
+When GF4 starts up, no stack position has data, so there is nothing to plot.
+When the first data set is read, it is automatically plotted.  When other datasets
+are read, GF4 notices that there is already data in the X stack position, and it
+does not plot the new data.  This allows the user to keep reading data files and
+overplotting them - possibly in different colors - without destroying an existing
+graph.  This can be a very useful capability.
+</t>
 <t tx="tom.20220507132007.2">@language md
 @tabwidth -4
 @others
 </t>
 <t tx="tom.20220507132007.20"></t>
-<t tx="tom.20220507132007.22">All data is saved from and loaded to the X stack position.</t>
+<t tx="tom.20220507132007.22">All data is saved from and loaded to the X stack position. This will overwrite
+the previous contents.  If you want to keep the previous data set, push or copy 
+it to one of the other positions.  Most often, the Y position is used for this.
+
+The data format is described in :ref:`Data Format`.  Data is saved in TAB-separated
+format (even if it was originally in CSV format) and includes the special comments 
+that will recreate the title and axis labels.  Error bars are not saved.
+
+Data can be saved to a file (using the *File/Save* menu item) or copied to the
+system clipboard (using the *Copy To Clipboard* button).  A data file can be read
+using th *File/Open* menu item.  Data, including CSV-format
+data, can also be loaded into the X position from the system clipboard using the
+*Load From Dialog* button.  Note that this dialog's entry panel is a basic text editor,
+so the data from the clipboard can be edited before it is processed.
+</t>
 <t tx="tom.20220507132007.23"></t>
 <t tx="tom.20220507132007.24"></t>
 <t tx="tom.20220507132007.25">We encountered one of GF4's waveform generators in the `Quick Start &lt;quickstart&gt;`_ section.</t>
@@ -310,6 +375,7 @@ cmd = [executable, '-m', 'sphinx', '-C',
         '-D', 'source_suffix=.rst',
         '-D', 'html_theme=pyramid',
         '-D', 'project=GF4',
+        '-D', 'extensions=sphinx.ext.autosectionlabel',
         '-D', 'copyright=Thomas B. Passin 2022',
         '-D', "html_theme_options.sidebarwidth=20em",
 
@@ -334,6 +400,7 @@ Table of Contents
 
     whatis
     quickstart
+    philosophy
     basics
     waveforms
     curvefitting
@@ -370,8 +437,10 @@ Like RPN calculators, GF4 operations are organized around a stack of data sets.
 Unlike those calculators, the various stack levels can be accessed directly as
 well.
 
-.. [1] That is, the discrete differencing equivalent of these operations.
+GF4 is written in Python 3, and makes use of MatPlotLib, NumPy, Scipy, and
+some other standard libraries.
 
+.. [1] That is, the discrete differencing equivalent of these operations.
 </t>
 <t tx="tom.20220507132007.8">Figure IN-1 depicts a fairly typical view of GF4 in action.  The ramp curve generator has produced a straight line, which was copied to the second stack position.  Then a Gaussian noise series was generated and added to the straight line to produce a very noisy ramp.  The underlying straight line, which still was available in its stack position, was then overlayed onto the noisy version.
 
@@ -479,7 +548,8 @@ These buttons are marked in the image below:
 <t tx="tom.20220507180306.1"></t>
 <t tx="tom.20220507180611.1"></t>
 <t tx="tom.20220507185750.1"></t>
-<t tx="tom.20220507190251.1"></t>
+<t tx="tom.20220507190251.1">
+</t>
 <t tx="tom.20220507190615.1"></t>
 <t tx="tom.20220507191015.1"></t>
 <t tx="tom.20220507191131.1"></t>
@@ -571,6 +641,43 @@ are (*pillow* has replaced the older *PIL* imaging library):
 run the file `gf4.pyw` with either python or pythonw.  Or you can supply the 
 entire path to gf4.pyw without changing to its directory. Make sure the python
 version is same as you used to install the libraries.
+</t>
+<t tx="tom.20220820114259.1">The visible graph can be saved as an image file, such as a .png file.  The
+standard MatPlotLib toolbar that GF4 displays near the bottom of the main window
+includes a button with an icon of a floppy disk.  Clicking this button opens
+the image save dialog.  There is no provision for loading an image into GF4, since
+it would not contain the numeric data in a form that GF4 could use.</t>
+<t tx="tom.20220820134816.1">GF4's Design Philosopy
+=======================
+
+There are some definite guiding principles that underline the design of GF4.
+In general, common user actions should be made as similar and simple as possible.
+So for example, operations that need input for parameters from the user (such as a scale factor)
+always use the same dialogs, and each operation remembers the values that were
+used the last time.
+
+The program should try to remove aggravations for the user.  So there are no
+modal error message boxes.  Instead, important messages flash gently at the
+bottom of the window, then fade away so the user needs to do nothing to get 
+rid of them.  Since dialog boxes that flash out of existence can be annoying,
+GF4 dialog boxes fade away gently (system dialogs like the file save dialog
+do whatever the underlying system wants to do).
+
+As another example of convenience for the user, GF4's parameter input dialogs accept Python 
+numerical expressions so that the user may not have to calculate a value
+separately.
+
+There can be conflicts between the principles, or between the principles and
+ease of programming.  GF4 tries for simplicity in programming too, but user
+ease and consistency are given priority.  Many potentially intersting features 
+have never been implemented because they would complicate the user interface.
+</t>
+<t tx="tom.20220820141745.1">csaps
+matplotlib
+numpy
+pwlf
+pyperclip
+scipy
 </t>
 </tnodes>
 </leo_file>

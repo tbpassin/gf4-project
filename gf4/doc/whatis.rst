@@ -33,6 +33,9 @@ Like RPN calculators, GF4 operations are organized around a stack of data sets.
 Unlike those calculators, the various stack levels can be accessed directly as
 well.
 
+GF4 is written in Python 3, and makes use of MatPlotLib, NumPy, Scipy, and
+some other standard libraries.
+
 .. [1] That is, the discrete differencing equivalent of these operations.
 
 Typical Screen Shot
