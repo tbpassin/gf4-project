@@ -3,7 +3,6 @@
 #@@language python
 #@+others
 #@+node:tom.20220411210428.1: ** imports
-from os.path import dirname, join
 import webbrowser
 from versions import APPVERSION, gitInfo
 
@@ -33,7 +32,11 @@ H1 = """
   Input Data Format
 -----------------------------------------------
 GF4 accepts text files with whitespace-separated columns, one data point per
-row. If there is only one column, GF4 inserts an imputed first column with
+row.  Optionally they can be separated by a comma.  All data lines in a file 
+must use the same separator. Currently headers are not extracted from header 
+lines of comma-separated lines.
+
+If there is only one column, GF4 inserts an imputed first column with
 values being consecutive integers beginning with 1. The "first" column becomes
 the "x", or horizontal, axis. If there are more than two columns, a dialog is
 displayed so the user can choose the two desired columns. The number of columns
