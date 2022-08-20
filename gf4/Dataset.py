@@ -178,7 +178,7 @@ class Dataset:
                 comment = line[0]
             # Special comments start with a double comment char, and then a space
             # Skip comment lines if they are not special comments
-            is_special_comment = comment and line.startswith(f'{comment * 2} ')
+            is_special_comment = comment and line.startswith(f'{comment * 2}')
             if comment and not is_special_comment: continue
 
             # E.g., ## XLABEL:
