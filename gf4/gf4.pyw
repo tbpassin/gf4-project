@@ -2142,12 +2142,9 @@ class PlotManager(AbstractPlotManager):
         area = _temp.ydata[-1]
         span = abs(max(ydata) - min(ydata))
 
-        msg = 'Max: %0.3f at x=%0.3f  Mean: %0.4f  Span: %0.4f, Std Dev: %0.4f  '\
-              'Area: %.2e  rho: %0.3f N = %s' %\
-              (_max, _max_x_coord, mean, span, std, area, rho, len(ydata))
-        msg = (f' Max: {_max:0.3f} at x={_max_x_coord:0.3f}  Mean: {mean:0.4f}  '
-              f'Span: {span:0.3f}  Std Dev: {std:0.4f}  SE: {se:0.4f}  area: {area: .2e}  '
-              f'rho: {rho:0.3f}  N = {len(ydata)}')
+        msg = (f' Max: {_max:0.4g} at x={_max_x_coord:0.3g}  Mean: {mean:0.4g}  '
+              f'Span: {span:0.4g}  Std Dev: {std:0.4}  SE: {se:0.4g}  area: {area: .2g}  '
+              f'rho: {rho:0.3g}  N = {len(ydata)}')
         self.announce(msg)
 
     #@+node:tom.20211207214310.1: *3* Trend
