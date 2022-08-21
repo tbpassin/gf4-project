@@ -178,8 +178,9 @@ The results are shown in Figure EX-1c.
 <t tx="tom.20220507132007.16">Examples like this are usually much harder to describe than to do.  With a little practice, these kinds of operations become familiar and they go very quickly.  One gets used to the location of the command buttons that are commonly used, and the stack positions stop feeling strange.  Just like a physical calculator, in fact.</t>
 <t tx="tom.20220507132007.17">GF4 accepts text files with whitespace-separated columns, one data point per
 row. It also accepts comma-separated columns (CSV files); these are converted 
-internally to TAB-separated columns.  If a CSV file contains a header line before
-the data rows, the header is not recognized, though it does not cause an import error.
+internally to TAB-separated columns.  If the input file is a CSV file, GF4
+tries to identify the column headers by looking at the row just before the first
+data row.
 
 If there is only one column, GF4 inserts an imputed first column with
 values being consecutive integers beginning with 1. The "first" column becomes

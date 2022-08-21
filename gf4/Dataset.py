@@ -154,7 +154,6 @@ class Dataset:
         data_start_line = -1
         header_start_line = -1
         headers = []
-        csv_xlabel = csv_ylabel = ''
 
         for i, line in enumerate(lines):
             if not line.strip():
@@ -268,9 +267,6 @@ class Dataset:
                 # _hasTwoCols = _numcols == 2
                 col1 = 0
                 col2 = 1
-                if is_csv and headers:
-                    csv_xlabel = headers[col1]
-                    csv_ylabel = headers[col2]
 
                 if _numcols > 2:
                     _id = 'selectcols'
@@ -285,6 +281,7 @@ class Dataset:
                     parmsaver[_id] = col1, col2
 
                     _isSingleCol = col1 == col2
+
             try:
                 if _isSingleCol:
                     count = count + 1
@@ -308,9 +305,10 @@ class Dataset:
         if _datalines:
             self.xdata = _x or [0]
             self.ydata = _y or [0]
-            if is_csv:
-                self.xaxislabel = csv_xlabel
-                self.yaxislabel = csv_ylabel
+            if is_csv and headers:
+                self.xaxislabel = headers[col1]
+                self.yaxislabel = headers[col2]
+
             if error_count > 0:
                 self.figurelabel = f'Skipped {error_count} rows because of data errors'
         else:
