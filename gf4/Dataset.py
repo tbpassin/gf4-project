@@ -833,7 +833,7 @@ class Dataset:
         don't overlap properly.
 
         ARGUMENT
-        ds -- the other Dataset to use in the convolution.
+        ds -- the other Dataset to use in the correlation.
 
         RETURNS
         False if either of the Datasets has no points, True otherwise.
