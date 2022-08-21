@@ -162,12 +162,13 @@ class Dataset:
             if line[0] in COMMENTS:
                 continue
             if "," in line and not is_csv:
-                # Assume we are comma-separated, look for first data line
                 is_csv = True
+            # Assume we are comma-separated, look for first data line
             if is_csv:
                 # Find first data line and the column headers, if any
                 fields = line.split(',')
                 try:
+                    # we don't actually use val; just seeing if all fields are numeric 
                     for f in fields:
                         val = float(f)
                     data_start_line = i
@@ -196,11 +197,11 @@ class Dataset:
             if line[0] in COMMENTS:
                 comment = line[0]
             # Special comments start with a double comment char, and then a space
+            # E.g., ## XLABEL:
             # Skip comment lines if they are not special comments
             is_special_comment = comment and line.startswith(f'{comment * 2}')
             if comment and not is_special_comment: continue
 
-            # E.g., ## XLABEL:
             #@+<< handle special comments >>
             #@+node:tom.20220401205645.1: *5* << handle special comments >>
             if is_special_comment:
@@ -255,6 +256,8 @@ class Dataset:
 
             # First Numeric line
             if _firstline:
+                #@+<< detect number of data columns >>
+                #@+node:tom.20220821124613.1: *6* << detect number of data columns >>
                 try:
                     _ = float(fields[0])
                     _firstline = False
@@ -267,8 +270,10 @@ class Dataset:
                 # _hasTwoCols = _numcols == 2
                 col1 = 0
                 col2 = 1
-
+                #@-<< detect number of data columns >>
                 if _numcols > 2:
+                    #@+<< choose data columns >>
+                    #@+node:tom.20220821124400.1: *6* << choose data columns >>
                     _id = 'selectcols'
                     if parmsaver.get(_id):
                         col1, col2 = parmsaver[_id]
@@ -281,6 +286,7 @@ class Dataset:
                     parmsaver[_id] = col1, col2
 
                     _isSingleCol = col1 == col2
+                    #@-<< choose data columns >>
 
             try:
                 if _isSingleCol:
@@ -306,6 +312,8 @@ class Dataset:
             self.xdata = _x or [0]
             self.ydata = _y or [0]
             if is_csv and headers:
+                # At this point, we know which data columns are being used, so we
+                # use the corresponding csv headers
                 self.xaxislabel = headers[col1]
                 self.yaxislabel = headers[col2]
 
