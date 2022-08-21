@@ -73,6 +73,8 @@ operations.</p>
 <p>Like RPN calculators, GF4 operations are organized around a stack of data sets.
 Unlike those calculators, the various stack levels can be accessed directly as
 well.</p>
+<p>GF4 is written in Python 3, and makes use of MatPlotLib, NumPy, Scipy, and
+some other standard libraries.</p>
 <dl class="footnote brackets">
 <dt class="label" id="id2"><span class="brackets"><a class="fn-backref" href="#id1">1</a></span></dt>
 <dd><p>That is, the discrete differencing equivalent of these operations.</p>
@@ -98,7 +100,7 @@ well.</p>
 </section>
 <section id="some-typical-uses">
 <h2>Some Typical Uses<a class="headerlink" href="#some-typical-uses" title="Permalink to this headline">¶</a></h2>
-<p>Typical uses of GF4 include curve fitting and observing the fit quality, comparing observed cdf curves against a gaussian of the same mean and standard distribution, smoothing noisy time series data, and creating FFT transforms to try to identify prominent frequencies in a waveform.</p>
+<p>Typical uses of GF4 include curve fitting and observing the fit quality, comparing observed cdf curves against a Gaussian of the same mean and standard distribution, smoothing noisy time series data, and creating FFT transforms to try to identify prominent frequencies in a waveform.</p>
 <p>GF4 would make an excellent educational tool since it makes exploring the data so easy, which would help the student come to understand basic statistical limitations that are hard to convey otherwise.</p>
 <p>The effect of zero-padding and windowing a waveform before running an FFT is quite illuminating and easy to study.  Cumulative data, such as total covid case counts vs time, can be converted into daily rates by differentiating.  This leads to a very noisy dataset, and that can be smoothed with, for example, a LOWESS smoothing routine. The study of the shape of residuals after fitting a function is interesting and easy to do.</p>
 <p>No code need be written to perform any of these operations on datasets.</p>

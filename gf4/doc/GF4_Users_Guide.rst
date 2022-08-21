@@ -17,6 +17,7 @@ Table of Contents
 
     whatis
     quickstart
+    philosophy
     basics
     waveforms
     curvefitting

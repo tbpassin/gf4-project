@@ -33,6 +33,9 @@ Like RPN calculators, GF4 operations are organized around a stack of data sets.
 Unlike those calculators, the various stack levels can be accessed directly as
 well.
 
+GF4 is written in Python 3, and makes use of MatPlotLib, NumPy, Scipy, and
+some other standard libraries.
+
 .. [1] That is, the discrete differencing equivalent of these operations.
 
 Typical Screen Shot
@@ -56,7 +59,7 @@ GF4 is a fifth generation implementation of the basic waveform calculator concep
 Some Typical Uses
 *****************
 
-Typical uses of GF4 include curve fitting and observing the fit quality, comparing observed cdf curves against a gaussian of the same mean and standard distribution, smoothing noisy time series data, and creating FFT transforms to try to identify prominent frequencies in a waveform.
+Typical uses of GF4 include curve fitting and observing the fit quality, comparing observed cdf curves against a Gaussian of the same mean and standard distribution, smoothing noisy time series data, and creating FFT transforms to try to identify prominent frequencies in a waveform.
 
 GF4 would make an excellent educational tool since it makes exploring the data so easy, which would help the student come to understand basic statistical limitations that are hard to convey otherwise.
 

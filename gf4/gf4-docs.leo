@@ -42,7 +42,10 @@
 </v>
 <v t="tom.20220820134816.1"><vh>@rst philosophy</vh></v>
 <v t="tom.20220507180611.1"><vh>@rst basics</vh>
-<v t="tom.20220507132007.17"><vh>Data Format</vh></v>
+<v t="tom.20220507132007.17"><vh>Data Format</vh>
+<v t="tom.20220821142158.1"><vh>Invalid or Missing Data</vh></v>
+<v t="tom.20220821142224.1"><vh>Editing and Censoring of Data Points</vh></v>
+</v>
 <v t="tom.20220507132007.18"><vh>The Waveform Stack</vh>
 <v t="tom.20220507135125.1"><vh>Stack Operations</vh></v>
 <v t="tom.20220507140739.1"><vh>Direct Access</vh></v>
@@ -51,6 +54,7 @@
 <v t="tom.20220507132007.22"><vh>Loading And Saving Data</vh></v>
 <v t="tom.20220820114259.1"><vh>Saving Graphs</vh></v>
 <v t="tom.20220507132007.19"><vh>Plotting Curves</vh>
+<v t="tom.20220821142540.1"><vh>Default Plotting Settings</vh></v>
 <v t="tom.20220507132007.20"><vh>Changing Colors, Symbols, and Line Styles</vh></v>
 </v>
 </v>
@@ -217,18 +221,6 @@ There are specially formatted (optional) comments to specify a title, axis label
 
 The special comment key words are case sensitive.  If there is more than one dataset, the second one goes into the **Y** position in the stack, and so on up to the stack depth.  Beyond that additional data sets are ignored.
 
-Invalid or Missing Data
-------------------------
-GF4 has no provision for handling invalid or missing data, except that a line
-in the data file that fails the attempt to convert its fields into floating
-point numbers will be ignored.
-
-Editing and Censoring of Data Points
--------------------------------------
-The only way that individual data points can be modified within GF4 is to copy
-the dataset to the system clipboard and then paste it into the *Load From Dialog*
-edit pane.  In the edit pane, individual rows can be corrected or commented out.
-
 </t>
 <t tx="tom.20220507132007.18">The waveform stack is the primary organizing concept of GF4.  Modeled after
 the stack in Hewlett-Packard RPN calculators, the stack is an array with positions
@@ -271,29 +263,6 @@ Only **X** and **T** can be plotted. These terms mean the following:
 Overplotting is essential to getting the most out of GF4, since it provides a way 
 to compare several data sets, or several ways of processing the same data.
 
-Default Plotting Settings
----------------------------
-When GF4 starts up, it sets the following values for the plotting attributes:
-
-.. csv-table:: Default Plot Settings
-    :header: "Stack Position", "Color", "Line Thickness", "Line/Symbol"
-
-    "X", black, medium, line
-    "Y", cyan, medium, line
-    "T", black, thin, line
-
-These values are chosen to make it easy to distinguish between the data sets
-when overplotted.  The lighter color of the medium cyan line of the **Y** dataset is 
-easy to distinguish from the medium weight black of the X dataset, while the lighter
-appearance of the cyan does not distract much from the heavier weight black line.
-The thin black line of the **T** dataset is easy to distinguish from the other two.
-
-When GF4 starts up, no stack position has data, so there is nothing to plot.
-When the first data set is read, it is automatically plotted.  When other datasets
-are read, GF4 notices that there is already data in the **X** stack position, and it
-does not plot the new data.  This allows the user to keep reading data files and
-overplotting them - possibly in different colors - without destroying an existing
-graph.  This can be a very useful capability.
 </t>
 <t tx="tom.20220507132007.2">@language md
 @tabwidth -4
@@ -350,7 +319,18 @@ examples, among many others, are
     - Scale
     - Transpose
     - Truncate
-</t>
+
+The *Mean, STD* button does not change the dataset.  Instead, it displays some
+basic statistic values in a message band below the main plotting pane.  The
+message reports the data maximum, mean, standard deviation, standard error,
+area, lag-one correlation coefficient [1]_, and number of data points.  The values can be
+highlighted with the mouse and copied to the clipboard with &lt;CTRL-C&gt;
+
+Here is a typical message::
+
+    Max: 0.500 at x=4.000  Mean: -0.0319  Span: 0.999  Std Dev: 0.2802  SE: 0.0175  area: -8.48e+00  rho: 0.047  N = 256
+
+.. [1] Gives an indication of short-range correlation in the data.</t>
 <t tx="tom.20220507132007.24">Operations on two waveforms operate on the **X** and **Y** datasets. The results
 replace the **X** dataset. No other datasets are modified. The result dataset is
 plotted. Currently the two-dataset operations are
@@ -794,5 +774,36 @@ The *Uniform Noise* command draws a random sample with equal probabilities in th
 range of  0 - 1.0. When not specified, the maximum height of a waveform is 1.0.
 If a different value is needed, the waveform can be scaled using the *Scale*
 button.</t>
+<t tx="tom.20220821142158.1">GF4 has no provision for handling invalid or missing data, except that a line
+in the data file that fails the attempt to convert its fields into floating
+point numbers will be ignored.
+
+</t>
+<t tx="tom.20220821142224.1">The only way that individual data points can be modified within GF4 is to copy
+the dataset to the system clipboard and then paste it into the *Load From Dialog*
+edit pane.  In the edit pane, individual rows can be corrected or commented out.
+</t>
+<t tx="tom.20220821142540.1">When GF4 starts up, it sets the following values for the plotting attributes:
+
+.. csv-table:: Default Plot Settings
+    :header: "Stack Position", "Color", "Line Thickness", "Line/Symbol"
+
+    "X", black, medium, line
+    "Y", cyan, medium, line
+    "T", black, thin, line
+
+These values are chosen to make it easy to distinguish between the data sets
+when overplotted.  The lighter color of the medium cyan line of the **Y** dataset is 
+easy to distinguish from the medium weight black of the X dataset, while the lighter
+appearance of the cyan does not distract much from the heavier weight black line.
+The thin black line of the **T** dataset is easy to distinguish from the other two.
+
+When GF4 starts up, no stack position has data, so there is nothing to plot.
+When the first data set is read, it is automatically plotted.  When other datasets
+are read, GF4 notices that there is already data in the **X** stack position, and it
+does not plot the new data.  This allows the user to keep reading data files and
+overplotting them - possibly in different colors - without destroying an existing
+graph.  This can be a very useful capability.
+</t>
 </tnodes>
 </leo_file>

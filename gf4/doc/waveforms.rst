@@ -65,6 +65,18 @@ examples, among many others, are
     - Transpose
     - Truncate
 
+The *Mean, STD* button does not change the dataset.  Instead, it displays some
+basic statistic values in a message band below the main plotting pane.  The
+message reports the data maximum, mean, standard deviation, standard error,
+area, lag-one correlation coefficient [1]_, and number of data points.  The values can be
+highlighted with the mouse and copied to the clipboard with <CTRL-C>
+
+Here is a typical message::
+
+    Max: 0.500 at x=4.000  Mean: -0.0319  Span: 0.999  Std Dev: 0.2802  SE: 0.0175  area: -8.48e+00  rho: 0.047  N = 256
+
+.. [1] Gives an indication of short-range correlation in the data.
+
 Operations On Two Waveforms
 ***************************
 
