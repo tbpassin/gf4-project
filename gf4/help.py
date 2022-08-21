@@ -33,15 +33,15 @@ H1 = """
 -----------------------------------------------
 GF4 accepts text files with whitespace-separated columns, one data point per
 row.  Optionally they can be separated by a comma.  All data lines in a file 
-must use the same separator. Currently headers are not extracted from header 
-lines of comma-separated lines.
+must use the same separator. Column headers for csv files are extracted from
+the line immediately before the first data line if possible.
 
-If there is only one column, GF4 inserts an imputed first column with
-values being consecutive integers beginning with 1. The "first" column becomes
-the "x", or horizontal, axis. If there are more than two columns, a dialog is
-displayed so the user can choose the two desired columns. The number of columns
-is derived based on the first non-comment, non-blank line whose first field is a
-legal floating point number.
+If there is only one column, GF4 inserts an imputed first column with values
+being consecutive integers beginning with 1. The one (and only) data column
+becomes the "x", or vertical, axis. If there are more than two columns, a dialog
+is displayed so the user can choose the two desired columns. The number of
+columns is derived based on the first non-comment, non-blank line whose first
+field is a legal floating point number.
 
 Data fields must be numeric.  GF4 cannot make use of non-numeric data.  Data
 fields are converted to floating point numbers.
