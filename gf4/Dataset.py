@@ -87,7 +87,8 @@ class Dataset:
 
         Data columns are expected to whitespace-separated.  Optionally they can be
         separated by a comma.  All data lines in a file must use the same separator.
-        Currently headers are not extracted from header lines of comma-separated lines.
+        For comma-separated data, column headers are assumed to be in the line
+        immediately before the first data line.
 
         Blank lines and lines that start with a ';' or '#' are ignored. 
         If the first non-ignorable line has only a single field, then
@@ -127,15 +128,15 @@ class Dataset:
         the exception if data can't be converted, else None
         #@-<< docstring >>
         """
-
         # pylint: disable = too-many-branches
-        #@+<< init  >>
-        #@+node:tom.20220401205124.1: *4* << init  >>
+        #@+<< init >>
+        #@+node:tom.20220401205124.1: *4* << init >>
         self.orig_filename = filename
         _x = []
         _y = []
         count = 0
         _rowcount = 0
+        error_count = 0
         _datalines = 0
         _isSingleCol = False
         #_hasTwoCols = False
@@ -143,33 +144,52 @@ class Dataset:
         _firstline = True
         e = None
         retval = ''
-        #@-<< init  >>
-
+        #@-<< init >>
         #@+<< detect_csv >>
         #@+node:tom.20220819125339.1: *4* << detect_csv >>
-        # Try to discover if this data is comma-separated.  If so,
-        # Change the separator to a tab.
-        # Note that a csv file may have one or more non-comment header lines,
-        # typically the column headings.
+        # Try to discover if this data is comma-separated.  If so, change the separator
+        # to a tab.
+        # Assume that the line just before the first data line contains the column headers.
         is_csv = False
-        for line in lines:
+        data_start_line = -1
+        header_start_line = -1
+        headers = []
+        csv_xlabel = csv_ylabel = ''
+
+        for i, line in enumerate(lines):
             if not line.strip():
                 continue
             line = line.lstrip()
             if line[0] in COMMENTS:
                 continue
-            if "," in line:
-                # Assume we are comma-separated
+            if "," in line and not is_csv:
+                # Assume we are comma-separated, look for first data line
                 is_csv = True
-                break
+            if is_csv:
+                # Find first data line and the column headers, if any
+                fields = line.split(',')
+                try:
+                    for f in fields:
+                        val = float(f)
+                    data_start_line = i
+                    header_start_line = data_start_line - 1
+                    if header_start_line > -1:
+                        headers = lines[header_start_line].split(',')
+                    break
+                except ValueError:
+                    continue
 
+        # Fix up data so we can use standard whitespace-separated processing
         if is_csv:
             lines = [line.replace(',', '\t') for line in lines]
+            # Comment out all lines before first data line
+            for i, line in enumerate(lines[:data_start_line]):
+                lines[i] = '#' + line
         #@-<< detect_csv >>
 
         for line in lines:
-            #@+<< process lines >>
-            #@+node:tom.20220401205417.1: *4* << process lines >>
+            #@+<< process line >>
+            #@+node:tom.20220401205417.1: *4* << process line >>
             _rowcount += 1
             line = line.strip()
             if not line: continue
@@ -248,6 +268,9 @@ class Dataset:
                 # _hasTwoCols = _numcols == 2
                 col1 = 0
                 col2 = 1
+                if is_csv and headers:
+                    csv_xlabel = headers[col1]
+                    csv_ylabel = headers[col2]
 
                 if _numcols > 2:
                     _id = 'selectcols'
@@ -272,20 +295,24 @@ class Dataset:
                     _y.append(float(fields[col2]))
 
                 _datalines += 1
-            except Exception:
-                sys.stderr.write('%s at line %s\n' % (e, _rowcount))
+            except ValueError as e:
+                error_count += 1
                 retained_length = min(len(_x), len(_y))
+                sys.stderr.write(f'Skipping row {_rowcount}: {e}\n')
                 _x = _x[:retained_length]
                 _y = _y[:retained_length]
-                self.figurelabel = 'Data truncated: error  at line %s; %s' % (_rowcount, e)
-                #retval = f'{e}'
-                #break
+
             #@-<< get numeric data >>
-            #@-<< process lines >>
+            #@-<< process line >>
 
         if _datalines:
             self.xdata = _x or [0]
             self.ydata = _y or [0]
+            if is_csv:
+                self.xaxislabel = csv_xlabel
+                self.yaxislabel = csv_ylabel
+            if error_count > 0:
+                self.figurelabel = f'Skipped {error_count} rows because of data errors'
         else:
             retval = 'Dataset: No data'
         return retval

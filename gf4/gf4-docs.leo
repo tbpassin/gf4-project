@@ -56,7 +56,9 @@
 </v>
 <v t="tom.20220507185750.1"><vh>@rst waveforms</vh>
 <v t="tom.20220507190615.1"><vh>Generating And Operating on Waveforms</vh>
-<v t="tom.20220507132007.25"><vh>The Waveform Generators</vh></v>
+<v t="tom.20220507132007.25"><vh>The Waveform Generators</vh>
+<v t="tom.20220820182510.1"><vh>Meaning of Parameters For Some Waveforms</vh></v>
+</v>
 <v t="tom.20220507132007.23"><vh>Operations On One Waveform</vh></v>
 <v t="tom.20220507132007.24"><vh>Operations On Two Waveforms</vh></v>
 </v>
@@ -79,7 +81,7 @@
 </vnodes>
 <tnodes>
 <t tx="tom.20220507132007.1"></t>
-<t tx="tom.20220507132007.10">Typical uses of GF4 include curve fitting and observing the fit quality, comparing observed cdf curves against a gaussian of the same mean and standard distribution, smoothing noisy time series data, and creating FFT transforms to try to identify prominent frequencies in a waveform.
+<t tx="tom.20220507132007.10">Typical uses of GF4 include curve fitting and observing the fit quality, comparing observed cdf curves against a Gaussian of the same mean and standard distribution, smoothing noisy time series data, and creating FFT transforms to try to identify prominent frequencies in a waveform.
 
 GF4 would make an excellent educational tool since it makes exploring the data so easy, which would help the student come to understand basic statistical limitations that are hard to convey otherwise.
 
@@ -119,7 +121,7 @@ To generate the line, click the "Ramp" button. The line will be plotted in the l
 **Create a Noise Dataset**
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-With the original line safely stored in **Y**, now create a dataform of noise.  Click on the "Gaussian Noise" button.  In the dialog box that pops up, change the "Sigma" value to 0.3. If we leave it at the default value of 1.0, there will be too much noise.  Even with the smaller value of sigma, there will be a lot of noise.  Accept the values by clicking the OK button or pressing the &lt;ENTER&gt; key.  The noise waveform will display in the plot window.
+With the original line safely stored in **Y**, now create a dataset of noise.  Click on the "Gaussian Noise" button.  In the dialog box that pops up, change the "Sigma" value to 0.3. If we leave it at the default value of 1.0, there will be too much noise.  Even with the smaller value of sigma, there will be a lot of noise.  Accept the values by clicking the OK button or pressing the &lt;ENTER&gt; key.  The noise waveform will display in the plot window.
 
 **Add The Noise To the Original Line**
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -214,6 +216,18 @@ There are specially formatted (optional) comments to specify a title, axis label
 
 The special comment key words are case sensitive.  If there is more than one dataset, the second one goes into the **Y** position in the stack, and so on up to the stack depth.  Beyond that additional data sets are ignored.
 
+Invalid or Missing Data
+------------------------
+GF4 has no provision for handling invalid or missing data, except that a line
+in the data file that fails the attempt to convert its fields into floating
+point numbers will be ignored.
+
+Editing and Censoring of Data Points
+-------------------------------------
+The only way that individual data points can be modified within GF4 is to copy
+the dataset to the system clipboard and then paste it into the *Load From Dialog*
+edit pane.  In the edit pane, individual rows can be corrected or commented out.
+
 </t>
 <t tx="tom.20220507132007.18">The waveform stack is the primary organizing concept of GF4.  Modeled after
 the stack in Hewlett-Packard RPN calculators, the stack is an array with positions
@@ -222,7 +236,7 @@ column with a "bottom" and a "top".  Items on the stack can be "pushed" upwards,
 "dropped" downwards, "rotated" and "swapped". These operations are illustrated
 in the next section.
 
-All operations that change data operate on the data in the stack bottom (the X position). All operations between two datasets, such as addition and correlation, use the X and Y positions (Y is the next position up from X);  the result of these operations only change data in the X position.
+All operations that change data operate on the data in the stack bottom (the **X** position). All operations between two datasets, such as addition and correlation, use the **X** and **Y** positions (**Y** is the next position up from **X** [1]_). the result of these operations only change data in the **X** position. The data in **Y** remains unchanged.
 
 The state of the stack can be viewed by using the *Help/ Show Stack* menu item in the main window.  This opens a small window that shows the name of the dataset 
 currently in each stack position. It is helpful to keep this window open while
@@ -232,8 +246,10 @@ one gains experience with GF4.  The image below depicts the stack viewer window:
     :scale: 50
 
 The most common stack operations in practice are "Swap" and direct access.  The
-T position is often used as a temporary data cache.</t>
-<t tx="tom.20220507132007.19">Plotting are grouped together in the Command Window:
+**T** position is often used as a temporary data cache.
+
+.. [1] For historical reasons, the **Y** stack position is also called the *Buffer* and the **X** position is also called *Main*.</t>
+<t tx="tom.20220507132007.19">Plotting commands are grouped together in the Command Window:
 
 .. figure:: images/plot_cmd_buttons.png
 
@@ -244,8 +260,8 @@ window.  This menu is also the only place where the graph properties can be
 changed.  These properties include line width and color, whether to use symbols
 instead of lines and if so, which symbol shape to use.
 
-Data in any of the three stack positions X, Y, and T can be plotted or overplotted.
-These terms mean the following:
+Data in any of the three stack positions **X**, **Y**, and **T** can be overplotted;
+Only **X** and **T** can be plotted. These terms mean the following:
 
 - Plot -- create a new graph at displays the specified data set;
 
@@ -266,14 +282,14 @@ When GF4 starts up, it sets the following values for the plotting attributes:
     "T", black, thin, line
 
 These values are chosen to make it easy to distinguish between the data sets
-when overplotted.  The lighter color of the medium cyan line of the Y dataset is 
-easy to distingish from the medium weight black of the X dataset, while the lighter
+when overplotted.  The lighter color of the medium cyan line of the **Y** dataset is 
+easy to distinguish from the medium weight black of the X dataset, while the lighter
 appearance of the cyan does not distract much from the heavier weight black line.
-The thin black line of the T dataset is easy to distingish from the other two.
+The thin black line of the **T** dataset is easy to distinguish from the other two.
 
 When GF4 starts up, no stack position has data, so there is nothing to plot.
 When the first data set is read, it is automatically plotted.  When other datasets
-are read, GF4 notices that there is already data in the X stack position, and it
+are read, GF4 notices that there is already data in the **X** stack position, and it
 does not plot the new data.  This allows the user to keep reading data files and
 overplotting them - possibly in different colors - without destroying an existing
 graph.  This can be a very useful capability.
@@ -282,10 +298,32 @@ graph.  This can be a very useful capability.
 @tabwidth -4
 @others
 </t>
-<t tx="tom.20220507132007.20"></t>
-<t tx="tom.20220507132007.22">All data is saved from and loaded to the X stack position. This will overwrite
+<t tx="tom.20220507132007.20">Curve plotting options can be changed for plotting/overplotting data in the **X** 
+and **Y** stack positions.  The data in **T** cannot be changed.  In practice,
+this is rarely a problem.  Technically there would be no problem in providing
+for changes in the **T** appearance, but up until now it has seemed not to be 
+worth the extra complexity for the user.  Changing these properties using menus
+is a little tedious, but adding buttons to the command window would be bad for
+its readability and usability.
+
+Figure BA-2 depicts the Plot menu items that can change the appearance of
+**X** and **Y** data:
+
+.. figure:: images/line_style_options.png
+
+    Figure BA-2. Plot Menu Items For Changing Plotting Options.
+
+These menu items are reasonably self-explanatory.  For example, Figure BA-3 shows
+one of the menus expanded:
+
+.. figure:: images/selecting_marker_style.png
+
+    Figure BA-3.  Selecting the "Buffer" (**Y**) Plotting Style [2]_.
+
+.. [2] As mentioned in :ref:`The Waveform Stack`, the **Y** position is also called the *Buffer*, and the **X** position may be called *Main*.</t>
+<t tx="tom.20220507132007.22">All data is saved from and loaded to the **X** stack position. This will overwrite
 the previous contents.  If you want to keep the previous data set, push or copy 
-it to one of the other positions.  Most often, the Y position is used for this.
+it to one of the other positions.  Most often, the **Y** position is used for this.
 
 The data format is described in :ref:`Data Format`.  Data is saved in TAB-separated
 format (even if it was originally in CSV format) and includes the special comments 
@@ -293,14 +331,67 @@ that will recreate the title and axis labels.  Error bars are not saved.
 
 Data can be saved to a file (using the *File/Save* menu item) or copied to the
 system clipboard (using the *Copy To Clipboard* button).  A data file can be read
-using th *File/Open* menu item.  Data, including CSV-format
+using the *File/Open* menu item.  Data, including CSV-format
 data, can also be loaded into the X position from the system clipboard using the
 *Load From Dialog* button.  Note that this dialog's entry panel is a basic text editor,
 so the data from the clipboard can be edited before it is processed.
 </t>
-<t tx="tom.20220507132007.23"></t>
-<t tx="tom.20220507132007.24"></t>
-<t tx="tom.20220507132007.25">We encountered one of GF4's waveform generators in the `Quick Start &lt;quickstart&gt;`_ section.</t>
+<t tx="tom.20220507132007.23">All operations on one waveform operate on the **X** (or *Main*) dataset.
+No other datasets are modified. The new or modified dataset is plotted. Some
+examples, among many others, are
+
+    - Add Const
+    - Differentiate
+    - Full Rectify
+    - Ln (the natural logarithm)
+    - Log 10 (logarithm base 10)
+    - LOWESS Lin
+    - Scale
+    - Transpose
+    - Truncate
+</t>
+<t tx="tom.20220507132007.24">Operations on two waveforms operate on the **X** and **Y** datasets. The results
+replace the **X** dataset. No other datasets are modified. The result dataset is
+plotted. Currently the two-dataset operations are
+
+    - Convolve (form the convolution of **X** and **Y**)
+    - Correl (correlate **X** and **Y**)
+    - Y + X (pointwise sum)
+    - Y - X (pointwise difference)
+    - Y * X (pointwise product)
+    - Y / X (pointwise division)
+
+Note that the four pointwise arithmetical operations require that both datasets
+have the same number of points.  Pointwise division cannot succeed if any of the
+divisor's points has a zero value: the operation is canceled, an error messsage
+is shown, and the original contents of **X** are unchanged.
+
+There are three other operations between **X** and **Y** datasets that do not
+change the **X** dataset, because they result in a plain number -
+
+    - Corr Coeff (not widely useful, and may not succeed)
+    - Pearson (Pearson's Correlation Coefficient)
+    - Spearman (Spearman Rank Correlation Coefficient)
+
+These three display their results in a message band below the plotting pane.
+The values can be highlighted with the mouse and copied to the clipboard with
+&lt;CTRL-C&gt;.
+</t>
+<t tx="tom.20220507132007.25">We encountered two of GF4's waveform generators in the `Quick Start &lt;quickstart.html&gt;`_ section.
+There we used the ramp and Gaussian noise generators.  Figure WA-1 depicts the
+generator command buttons:
+
+.. figure:: images/generator_buttons.png
+
+    Figure WA-1. Waveform Generators.
+
+The generated waveforms will contain a number of equally-spaced data points.  The
+default number is 256. There is no provision for setting the x-axis scale: it can 
+be changed afterwards using the *NewX* button. The number of points in a generated
+waveform can be set using the *NumPts* button.  There is no specific limit to
+the number of points, but if it is too large, some operations on the dataset
+might take a long time.
+</t>
 <t tx="tom.20220507132007.26"></t>
 <t tx="tom.20220507132007.27"></t>
 <t tx="tom.20220507132007.28"></t>
@@ -524,15 +615,15 @@ The stack can also be cyclically rotated up or down::
     |   C   |   &lt;-- "Y"
     |   B   |   &lt;-- "X": stack bottom
 </t>
-<t tx="tom.20220507140739.1">The data element in X, the stack bottom, can be copied to the Y and T positions.
-The Y and T data elements can be copied to the X position.  All the stack
+<t tx="tom.20220507140739.1">The data element in **X**, the stack bottom, can be copied to the **Y** and **T** positions.
+The **Y** and **T** data elements can be copied to the **X** position.  All the stack
 operations are carried out by clicking buttons in the auxiliary command window.
 
 .. image:: images/stack_ops.png</t>
 <t tx="tom.20220507143340.1">In addition to the stack, there are several other data storage locations:
 
 1. A single slot accessed by the "Store 1" and "Recall 1" buttons.
-These store from and retrieve to the X position.
+These store from and retrieve to the **X** position.
 
 2. The system clipboard, accessed by the "Copy To Clipboard" and "Load From Dialog"
 buttons. The latter opens an editing window into which the clipboard can be
@@ -550,7 +641,9 @@ These buttons are marked in the image below:
 <t tx="tom.20220507185750.1"></t>
 <t tx="tom.20220507190251.1">
 </t>
-<t tx="tom.20220507190615.1"></t>
+<t tx="tom.20220507190615.1">Operations on waveforms operate in a pointwise manner. For the most part, the
+actual values of the x-axis (horizontal) are ignored.  Exceptions are differentiation, integration, smoothing, and curve fitting, because the step size is significant.  Some operations such as
+the FFT (Fast Fourier Transform) assume that the points are uniformly spaced.</t>
 <t tx="tom.20220507191015.1"></t>
 <t tx="tom.20220507191131.1"></t>
 <t tx="tom.20220507191549.1"></t>
@@ -646,8 +739,10 @@ version is same as you used to install the libraries.
 standard MatPlotLib toolbar that GF4 displays near the bottom of the main window
 includes a button with an icon of a floppy disk.  Clicking this button opens
 the image save dialog.  There is no provision for loading an image into GF4, since
-it would not contain the numeric data in a form that GF4 could use.</t>
-<t tx="tom.20220820134816.1">GF4's Design Philosopy
+it would not contain the numeric data in a form that GF4 could use.
+
+</t>
+<t tx="tom.20220820134816.1">GF4's Design Philosophy
 =======================
 
 There are some definite guiding principles that underline the design of GF4.
@@ -669,7 +764,7 @@ separately.
 
 There can be conflicts between the principles, or between the principles and
 ease of programming.  GF4 tries for simplicity in programming too, but user
-ease and consistency are given priority.  Many potentially intersting features 
+ease and consistency are given priority.  Many potentially interesting features 
 have never been implemented because they would complicate the user interface.
 </t>
 <t tx="tom.20220820141745.1">csaps
@@ -679,5 +774,24 @@ pwlf
 pyperclip
 scipy
 </t>
+<t tx="tom.20220820182510.1">
+.. csv-table:: Waveform Generator Parameters
+    :header: "Command", "Param", "Meaning or Scale"
+    :widths: 18, 10, 35
+
+    "Sine", "Cycles", "Number of cycles across the screen"
+    "Damp Sin", "Cycles", "Number of cycles across the screen"
+    "Damp Sin", "Decay", "Decay time constants across the screen"
+    "Expon", "Decay", "Decay time constants across the screen"
+    "Square Wave", "Cycles", "Number of cycles across the screen"
+    "Gaussian PDF", "Mean", "Mean of the generated Gaussian distribution"
+    "Gaussian PDF", "Sigma", "Standard Deviation of the generated Gaussian distribution"
+    "Gaussian CDF", "Same as", "for Gaussian PDF"
+    "Gaussian Noise", "Same as", "for Gaussian PDF"
+
+The *Uniform Noise* command draws a random sample with equal probabilities in the 
+range of  0 - 1.0. When not specified, the maximum height of a waveform is 1.0.
+If a different value is needed, the waveform can be scaled using the *Scale*
+button.</t>
 </tnodes>
 </leo_file>

@@ -40,7 +40,7 @@ To generate the line, click the "Ramp" button. The line will be plotted in the l
 **Create a Noise Dataset**
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-With the original line safely stored in **Y**, now create a dataform of noise.  Click on the "Gaussian Noise" button.  In the dialog box that pops up, change the "Sigma" value to 0.3. If we leave it at the default value of 1.0, there will be too much noise.  Even with the smaller value of sigma, there will be a lot of noise.  Accept the values by clicking the OK button or pressing the <ENTER> key.  The noise waveform will display in the plot window.
+With the original line safely stored in **Y**, now create a dataset of noise.  Click on the "Gaussian Noise" button.  In the dialog box that pops up, change the "Sigma" value to 0.3. If we leave it at the default value of 1.0, there will be too much noise.  Even with the smaller value of sigma, there will be a lot of noise.  Accept the values by clicking the OK button or pressing the <ENTER> key.  The noise waveform will display in the plot window.
 
 **Add The Noise To the Original Line**
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

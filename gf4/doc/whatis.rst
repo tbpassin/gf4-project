@@ -59,7 +59,7 @@ GF4 is a fifth generation implementation of the basic waveform calculator concep
 Some Typical Uses
 *****************
 
-Typical uses of GF4 include curve fitting and observing the fit quality, comparing observed cdf curves against a gaussian of the same mean and standard distribution, smoothing noisy time series data, and creating FFT transforms to try to identify prominent frequencies in a waveform.
+Typical uses of GF4 include curve fitting and observing the fit quality, comparing observed cdf curves against a Gaussian of the same mean and standard distribution, smoothing noisy time series data, and creating FFT transforms to try to identify prominent frequencies in a waveform.
 
 GF4 would make an excellent educational tool since it makes exploring the data so easy, which would help the student come to understand basic statistical limitations that are hard to convey otherwise.
 
