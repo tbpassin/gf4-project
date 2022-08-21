@@ -40,8 +40,8 @@ If there is only one column, GF4 inserts an imputed first column with values
 being consecutive integers beginning with 1. The one (and only) data column
 becomes the "x", or vertical, axis. If there are more than two columns, a dialog
 is displayed so the user can choose the two desired columns. The number of
-columns is derived based on the first non-comment, non-blank line whose first
-field is a legal floating point number.
+columns is derived based on the first non-comment, non-blank line whose
+fields are all legal floating point number.
 
 Data fields must be numeric.  GF4 cannot make use of non-numeric data.  Data
 fields are converted to floating point numbers.
