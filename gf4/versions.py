@@ -1,12 +1,12 @@
 #@+leo-ver=5-thin
 #@+node:tom.20220506081351.1: * @file versions.py
 #@@language python
-"""Return the git branch and changset id."""
+"""Return the git branch and changeset id as a tuple."""
 
 import sys
 import os.path
 
-APPVERSION = '1.11'
+APPVERSION = '1.12'
 ENCODING = 'utf-8'
 
 def getGitInfo():
@@ -26,6 +26,7 @@ def getGitInfo():
             with open(refspath, encoding = ENCODING) as f:
                 version = f.readline().strip()
     except Exception:
+        # Most likely because git isn't available
         pass
     return branch, version
 

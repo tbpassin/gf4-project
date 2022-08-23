@@ -4,9 +4,9 @@
 #@+others
 #@+node:tom.20220411210428.1: ** imports
 import webbrowser
-from versions import APPVERSION, gitInfo
+from versions import APPVERSION, getGitInfo
 
-version, (branch, changeset) = APPVERSION, gitInfo
+version, (branch, changeset) = APPVERSION, getGitInfo()
 
 try:
     import Tkinter as Tk
