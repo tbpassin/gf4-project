@@ -879,15 +879,15 @@ class Dataset:
         has some points,, False otherwise.
 
         '''
-        
         if a <= 0.0: return False
         if self.isNumpyArray(self.ydata):
             if not self.ydata.any():
                 return False
         else:
             if not self.ydata:
+
                 return False
-        
+        a = float(a)
         #aa = a / (1.0 + a)
         aa = math.exp(-1.0 / a)
         b = 1.0 - aa
@@ -924,7 +924,6 @@ class Dataset:
         has some points, False otherwise.
 
         '''
-
         if a < limit: return False
         if self.isNumpyArray(self.ydata):
             if not self.ydata.any():
@@ -933,6 +932,7 @@ class Dataset:
             if not self.ydata:
                 return False
 
+        a = float(a)
         aa = math.exp(-1.0/a)
         lasty = 0
         lastyo = 0

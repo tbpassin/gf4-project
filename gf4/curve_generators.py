@@ -26,12 +26,14 @@ def generateSine(n=256, cycles=5):
     a tuple (xdata, ydata)
     '''
 
-    delta = (2.0*cycles*math.pi)/n
+    cycles = float(cycles)
+    _n = float(n)
+    delta = (2.0*cycles*math.pi)/_n
     delx = 1.
     _x = []
     _y = []
     phs = 0.
-    x = 0
+    x = 0.
 
     for i in range(n):
         _x.append(x)
@@ -56,10 +58,10 @@ def generateDampedSine(N=256, cycles = 5, decay=3.0):
     '''
 
     _x, _y = generateSine(N, cycles)
-    _expon = -decay /(N + 1)
+    _expon = -float(decay) /float(N + 1)
 
-    _yd = [_y[n] * math.exp(_expon * n) for n in range(N)]
-    
+    _yd = [_y[n] * math.exp(_expon * float(n)) for n in range(N)]
+
     return (_x, _yd)
 
 #@+node:tom.20211211170819.33: ** generateSquarewave
@@ -112,7 +114,7 @@ def generateExponential(N=256, decay=3.0):
     a tuple (xdata, ydata)
     '''
 
-    _expon = -decay /(N + 1)
+    _expon = -decay /float(N + 1)
     _x = []
     _y = []
 
