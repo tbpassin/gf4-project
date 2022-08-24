@@ -810,12 +810,18 @@ class Dataset:
            or len(self.ydata) == 0 or  len(ds.ydata) == 0):
             return False
 
-        self.ydata = np.convolve(self.ydata, ds.ydata, mode='same')
+        N0 = len(self.xdata)
+        self.ydata = np.convolve(self.ydata, ds.ydata, mode='full')
         if len(self.xdata) != len(self.ydata):
             if len(self.xdata) == len(ds.xdata):
                 self.xdata = ds.xdata[:]
             else:
                 self.xdata = list(range(len(self.ydata)))
+
+        # Full overlap ends up with too many points to the right
+        # so trim to the original number.
+        self.ydata = self.ydata[:N0]
+        self.xdata = self.xdata[:N0]
 
         return True
 
@@ -849,12 +855,18 @@ class Dataset:
             if not self.ydata or not ds.ydata:
                 return False
 
-        self.ydata = np.correlate(self.ydata, ds.ydata, mode='same')
+        N0 = len(self.xdata)
+        self.ydata = np.correlate(self.ydata, ds.ydata, mode='full')
         if len(self.xdata) != len(self.ydata):
             if len(self.xdata) == len(ds.xdata):
                 self.xdata = ds.xdata[:]
             else:
                 self.xdata = list(range(len(self.ydata)))
+
+        # Full overlap ends up with too many points to the right
+        # so trim to the original number.
+        self.ydata = self.ydata[:N0]
+        self.xdata = self.xdata[:N0]
 
         return True
 
