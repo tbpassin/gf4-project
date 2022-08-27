@@ -810,8 +810,11 @@ class Dataset:
            or len(self.ydata) == 0 or  len(ds.ydata) == 0):
             return False
 
-        N0 = len(self.xdata)
+        # N0 = len(self.xdata)
+        norm = float(sum(self.ydata))
         self.ydata = np.convolve(self.ydata, ds.ydata, mode='full')
+        self.ydata = [y / norm for y in self.ydata]
+
         if len(self.xdata) != len(self.ydata):
             if len(self.xdata) == len(ds.xdata):
                 self.xdata = ds.xdata[:]
@@ -820,8 +823,8 @@ class Dataset:
 
         # Full overlap ends up with too many points to the right
         # so trim to the original number.
-        self.ydata = self.ydata[:N0]
-        self.xdata = self.xdata[:N0]
+        # self.ydata = self.ydata[:N0]
+        # self.xdata = self.xdata[:N0]
 
         return True
 
