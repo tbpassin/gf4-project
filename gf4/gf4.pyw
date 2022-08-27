@@ -1445,21 +1445,6 @@ class PlotManager(AbstractPlotManager):
         else:
             self.announce('tau  <= %s or no data' % _LIMIT)
             self.flashit()
-    #@+node:tom.20211207165051.94: *4* convolveWithBuffer
-    @REQUIRE_MAIN
-    def convolveWithBuffer(self):
-        self.stack[MAIN].convolve(self.stack[BUFFER])
-
-        lab = self.stack[MAIN].figurelabel or ''
-        lab1 = self.stack[BUFFER].figurelabel or ''
-        if lab:
-            self.stack[MAIN].figurelabel = 'Convolution of %s' % (lab)
-            if lab1:
-                self.stack[MAIN].figurelabel += ' with %s' % (lab1)
-        else:
-            self.stack[MAIN].figurelabel = 'Convolution'
-
-        self.plot()
     #@+node:tom.20211207165051.95: *4* correlateWithBuffer
     @REQUIRE_MAIN
     def correlateWithBuffer(self):
@@ -1473,6 +1458,21 @@ class PlotManager(AbstractPlotManager):
                 self.stack[MAIN].figurelabel += ' with %s' % (lab1)
         else:
             self.stack[MAIN].figurelabel = 'Correlation'
+
+        self.plot()
+    #@+node:tom.20211207165051.94: *4* convolveWithBuffer
+    @REQUIRE_MAIN
+    def convolveWithBuffer(self):
+        self.stack[MAIN].convolve(self.stack[BUFFER])
+
+        lab = self.stack[MAIN].figurelabel or ''
+        lab1 = self.stack[BUFFER].figurelabel or ''
+        if lab:
+            self.stack[MAIN].figurelabel = 'Convolution of %s' % (lab)
+            if lab1:
+                self.stack[MAIN].figurelabel += ' with %s' % (lab1)
+        else:
+            self.stack[MAIN].figurelabel = 'Convolution'
 
         self.plot()
     #@+node:tom.20211207165051.96: *4* autocorrelate
