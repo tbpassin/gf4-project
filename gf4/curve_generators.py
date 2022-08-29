@@ -130,7 +130,7 @@ def generateRectangle(N = 256, w = 256):
     '''Compute a rectangular waveform with evenly spaced points.
     The non-zero region starts at point 1.
     
-    Return a tuple of two arrays (xdata, ydata).
+    Return a tuple (xdata, ydata, actual_width).
 
     ARGUMENT
     N -- the total length of the waveform
