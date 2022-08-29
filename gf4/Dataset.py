@@ -798,6 +798,12 @@ class Dataset:
 
         There can be boundary effects, since there may be areas where
         the two data sets don't overlap properly.
+        
+        This operation is expected to be used to compare a convolved
+        result with the original dataset.  Convolutions are generally
+        shifted to the right, and an attempt is made to correct for this
+        shift.  An attempt is also made to normalize the convolution to
+        the input dataset.  This may not be successful.
 
         ARGUMENT
         ds -- the other Dataset to use in the convolution.
@@ -810,21 +816,39 @@ class Dataset:
            or len(self.ydata) == 0 or  len(ds.ydata) == 0):
             return False
 
-        # N0 = len(self.xdata)
-        norm = float(sum(self.ydata))
-        self.ydata = np.convolve(self.ydata, ds.ydata, mode='full')
-        self.ydata = [y / norm for y in self.ydata]
+        # Final result should be shifted left.
+        # To find the size of the shift create a delta function and convolve with 
+        # ourself. Then find the peak of the convolution and use it to calculate 
+        # the shift.
+        OFFSET = 10
+        delta = [0] * len(ds.ydata)  # Delta "function"
+        delta[10] = 1
+        probe = self.ydata[:]
+        convolved = np.convolve(probe, delta, mode = 'full')
+        # The desired shift is found by looking for the maximum of the convolution
+        max_ = max(convolved)
+        for shift, y in enumerate(convolved):
+            if y == max_:
+                break
+        shift = shift - OFFSET
+        scale_factor = 1. / max_
 
-        if len(self.xdata) != len(self.ydata):
-            if len(self.xdata) == len(ds.xdata):
-                self.xdata = ds.xdata[:]
-            else:
-                self.xdata = list(range(len(self.ydata)))
+        # Pad the other dataset's data so that we can scan ourselves completely
+        # across the other
+        self_len = len(self.ydata)
+        other_len = len(ds.ydata)
+        full_len = other_len + 2 * self_len
+        other = ds.copy()
+        other.pad_truncate(full_len)
 
-        # Full overlap ends up with too many points to the right
-        # so trim to the original number.
-        # self.ydata = self.ydata[:N0]
-        # self.xdata = self.xdata[:N0]
+        self.ydata = np.convolve(self.ydata, other.ydata, mode='full')
+        self.ydata = [y * scale_factor for y in self.ydata]
+
+        # Fix up new length of the xdata - extend the x list as needed
+        # Find the spacing between points
+        origin = other.xdata[0]
+        incr = other.xdata[1] - origin
+        self.xdata = [origin - shift + i * incr for i, _ in enumerate(self.ydata)]
 
         return True
 

@@ -1463,10 +1463,14 @@ class PlotManager(AbstractPlotManager):
     #@+node:tom.20211207165051.94: *4* convolveWithBuffer
     @REQUIRE_MAIN
     def convolveWithBuffer(self):
-        self.stack[MAIN].convolve(self.stack[BUFFER])
-
         lab = self.stack[MAIN].figurelabel or ''
         lab1 = self.stack[BUFFER].figurelabel or ''
+
+        d1 = self.stack[MAIN]
+        d2 = self.stack[BUFFER]
+
+        d1.convolve(d2)
+
         if lab:
             self.stack[MAIN].figurelabel = 'Convolution of %s' % (lab)
             if lab1:
