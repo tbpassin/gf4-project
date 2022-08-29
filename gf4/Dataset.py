@@ -850,6 +850,11 @@ class Dataset:
         incr = other.xdata[1] - origin
         self.xdata = [origin - shift + i * incr for i, _ in enumerate(self.ydata)]
 
+        # Because of the left shift, data will extend left of the origin.  Correct
+        # for this.
+        self.xdata = self.xdata[shift:]
+        self.ydata = self.ydata[shift:]
+
         return True
 
     #@+node:tom.20211211170820.36: *3* Dataset.correlate
