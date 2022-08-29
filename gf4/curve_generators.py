@@ -126,22 +126,34 @@ def generateExponential(N=256, decay=3.0):
 
 
 #@+node:tom.20211211170819.36: ** generateRectangle
-def generateRectangle(N=256):
+def generateRectangle(N = 256, w = 256):
     '''Compute a rectangular waveform with evenly spaced points.
+    The non-zero region starts at point 1.
+    
     Return a tuple of two arrays (xdata, ydata).
 
     ARGUMENT
-    N -- number of points to return.
+    N -- the total length of the waveform
+    w -- width of non-zero region. if w > N - 1, set w = N - 1
 
     RETURNS
-    a tuple (xdata, ydata)
+    a tuple (xdata, ydata, actual_width)
     '''
 
+    w = min(w, N - 1)
     _x = list(range(N))
-    _y = [1.0 for i in range(N)]
-    _y[0] = 0
 
-    return (_x, _y)
+    # The actual width of the step is one less than the number of points
+    # so we need to have w + 1 points in the non-zero region.
+    _y = [0] + [1] * (w + 1)
+    if w < N - 2:
+        _y.extend([0] * (N - w - 2))
+
+    # Sanity check: length of _x, _y lists must be equal
+    if len(_y) > len(_x):
+        _y = _y[:len(_x)]
+
+    return (_x, _y, w)
 
 #@+node:tom.20211211170819.38: ** generateGaussian
 def generateGaussian(N=256, m=0.0, sigma=128): 

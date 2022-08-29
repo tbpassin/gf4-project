@@ -10,7 +10,7 @@ refactoring."""
 from curve_generators import (generateExponential, generateSine, generateDampedSine,
                    generateRectangle, generateRamp, generateSquarewave,
                    generateGaussian,generateGaussianCdf)
-from entry import GetSingleFloat, GetTwoFloats
+from entry import GetSingleFloat, GetTwoFloats, GetSingleInt
 
 from AbstractPlotMgr import MAIN
 from Dataset import Dataset
@@ -70,13 +70,23 @@ def makeDampedSine(self):
 
 #@+node:tom.20211211171304.70: ** makeStep
 def makeStep(self):
-    N = self.num
+    _id = str(self.makeStep)
+    lastparm = self.parmsaver.get(_id, self.num)
+
+    dia = GetSingleInt(self.root, 'Width', 'Points', lastparm)
+    if not dia.result: return
+    self.parmsaver[_id] = dia.result
+
     _ds = Dataset()
-    _ds.xdata, _ds.ydata = generateRectangle(N)
-    _ds.figurelabel = 'Rectangular Step'
+    _ds.xdata, _ds.ydata, actual_width = generateRectangle(self.num, dia.result)
+    _ds.figurelabel = f'Step [{actual_width}]'
 
     self.set_data(_ds, MAIN)
     self.plot()
+
+    if actual_width < dia.result:
+        self.announce('Step width trimmed to actual_width')
+        self.fadeit()
 
 #@+node:tom.20211211171304.71: ** makeDelta
 def makeDelta(self):
