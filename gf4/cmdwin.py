@@ -124,7 +124,6 @@ def configure_button_list(parent, button_list, plotmgr):
     global NEWFONT
     for b in button_list:
         if b is SPACER:
-            #Tk.Frame(parent, height=2, relief='sunken',  bg='black').pack(fill=Tk.BOTH)
             ttk.Separator(parent, style='gf.TSeparator').pack(fill=Tk.BOTH)
         else:
             text, cmd, fulltext = b
@@ -215,7 +214,10 @@ def create_buttons_pack(host, plotmgr):
                         + 5)
 
     host_width = BUTTONWIDTH*(COLS)*sz + len('Data Processing')*sz + 6*COLS
-    host_height = max(host_height, plotmgr.root.winfo_height())
+    if plotmgr:
+        host_height = max(host_height, plotmgr.root.winfo_height())
+    else:
+        host_height = 250
     host.geometry('%sx%s' % (host_width, host_height))
     #@-<< Set window  geometry >>
     #@+<< Create Button Containers >>
