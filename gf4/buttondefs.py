@@ -170,7 +170,10 @@ TREND_BUTTONS = (
 
 PLUGIN_BUTTONS = []
 for m in plugin_modules:
-    PLUGIN_BUTTONS.append((getattr(m, 'BUTTON_DEF')))
+    try:
+        PLUGIN_BUTTONS.append((getattr(m, 'BUTTON_DEF')))
+    except ValueError:
+        print(f'Bad plugin button definition in {m}')
 
 #@-others
 if __name__ == '__main__':

@@ -1,7 +1,21 @@
 #@+leo-ver=5-thin
 #@+node:tom.20211211170819.2: * @file BuildCommands.py
+#@@language python
+#@@tabwidth -4
 # pylint: disable = consider-using-f-string
+from import_plugins import import_all_plugins
+plugin_modules = import_all_plugins()
 #@+others
+#@+node:tom.20220830130425.1: ** buildPluginCommands
+def buildPluginCommands(cmd_dict, plotmgr):
+    for i, m in enumerate(plugin_modules):
+        try:
+            m.plotmgr = plotmgr
+            _, cmd, _ = m.BUTTON_DEF
+            cmd_dict[cmd] = m.proc
+        except ValueError:
+            print(f'Bad plugin button definition in {m}')
+
 #@+node:tom.20211211170819.4: ** buildCommands
 def buildCommands(self):
     '''Create a dictionary of commands keyed by strings.
@@ -120,7 +134,7 @@ def buildCommands(self):
        'piecewise': self.fit_piecewise,
        'timehack': self.addTimehack,
     }
+
+    buildPluginCommands(self.commands, self)
 #@-others
-#@@language python
-#@@tabwidth -4
 #@-leo
