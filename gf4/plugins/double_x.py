@@ -3,13 +3,13 @@
 #@@language python
 """Developmental plugin - does nothing useful."""
 
-from AbstractPlotMgr import MAIN, BUFFER, STACKDEPTH
+from AbstractPlotMgr import MAIN, BUFFER
 try:
     from .require_datasets import needs_main
 except Exception as e:
     print(e)
 
-BUTTON_DEF  = ('Double X', 'double-x', 'Double Y values of the X dataset')
+BUTTON_DEF  = ('Double X', 'double-x', 'Double y values of the X dataset')
 
 # plotmgr will have been injected into the module by the time this is called
 def proc():
