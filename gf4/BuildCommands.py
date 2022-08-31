@@ -8,13 +8,18 @@ plugin_modules = import_all_plugins()
 #@+others
 #@+node:tom.20220830130425.1: ** buildPluginCommands
 def buildPluginCommands(cmd_dict, plotmgr):
-    for i, m in enumerate(plugin_modules):
+    """Add plugin commands to the command dictionary.
+    
+    "BUTTON_DEF" and "proc()" must be defined in each plugin file. See
+    README.txt in the "plugins" directory.
+    """
+    for m in plugin_modules:
         try:
             m.plotmgr = plotmgr
             _, cmd, _ = m.BUTTON_DEF
             cmd_dict[cmd] = m.proc
         except ValueError:
-            print(f'Bad plugin button definition in {m}')
+            print(f'Bad plugin command definition in {m.__name__}')
 
 #@+node:tom.20211211170819.4: ** buildCommands
 def buildCommands(self):
