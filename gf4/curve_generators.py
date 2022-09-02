@@ -26,12 +26,14 @@ def generateSine(n=256, cycles=5):
     a tuple (xdata, ydata)
     '''
 
-    delta = (2.0*cycles*math.pi)/n
+    cycles = float(cycles)
+    _n = float(n)
+    delta = (2.0*cycles*math.pi)/_n
     delx = 1.
     _x = []
     _y = []
     phs = 0.
-    x = 0
+    x = 0.
 
     for i in range(n):
         _x.append(x)
@@ -56,10 +58,10 @@ def generateDampedSine(N=256, cycles = 5, decay=3.0):
     '''
 
     _x, _y = generateSine(N, cycles)
-    _expon = -decay /(N + 1)
+    _expon = -float(decay) /float(N + 1)
 
-    _yd = [_y[n] * math.exp(_expon * n) for n in range(N)]
-    
+    _yd = [_y[n] * math.exp(_expon * float(n)) for n in range(N)]
+
     return (_x, _yd)
 
 #@+node:tom.20211211170819.33: ** generateSquarewave
@@ -112,7 +114,7 @@ def generateExponential(N=256, decay=3.0):
     a tuple (xdata, ydata)
     '''
 
-    _expon = -decay /(N + 1)
+    _expon = -decay /float(N + 1)
     _x = []
     _y = []
 
@@ -124,22 +126,34 @@ def generateExponential(N=256, decay=3.0):
 
 
 #@+node:tom.20211211170819.36: ** generateRectangle
-def generateRectangle(N=256):
+def generateRectangle(N = 256, w = 256):
     '''Compute a rectangular waveform with evenly spaced points.
-    Return a tuple of two arrays (xdata, ydata).
+    The non-zero region starts at point 1.
+    
+    Return a tuple (xdata, ydata, actual_width).
 
     ARGUMENT
-    N -- number of points to return.
+    N -- the total length of the waveform
+    w -- width of non-zero region. if w > N - 1, set w = N - 1
 
     RETURNS
-    a tuple (xdata, ydata)
+    a tuple (xdata, ydata, actual_width)
     '''
 
+    w = min(w, N - 1)
     _x = list(range(N))
-    _y = [1.0 for i in range(N)]
-    _y[0] = 0
 
-    return (_x, _y)
+    # The actual width of the step is one less than the number of points
+    # so we need to have w + 1 points in the non-zero region.
+    _y = [0] + [1] * (w + 1)
+    if w < N - 2:
+        _y.extend([0] * (N - w - 2))
+
+    # Sanity check: length of _x, _y lists must be equal
+    if len(_y) > len(_x):
+        _y = _y[:len(_x)]
+
+    return (_x, _y, w)
 
 #@+node:tom.20211211170819.38: ** generateGaussian
 def generateGaussian(N=256, m=0.0, sigma=128): 

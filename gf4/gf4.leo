@@ -27,6 +27,7 @@
 <v t="tom.20211211181438.12"><vh>@file fits.py</vh></v>
 <v t="tom.20211211181438.2"><vh>@file fit_test.py</vh></v>
 <v t="tom.20220411202149.1"><vh>@file help.py</vh></v>
+<v t="tom.20220829232158.1"><vh>@file import_plugins.py</vh></v>
 <v t="tom.20211211171304.51"><vh>@file Linestyle.py</vh></v>
 <v t="tom.20211211171304.65"><vh>@file MakeWaveforms.py</vh></v>
 <v t="tom.20211211171913.2"><vh>@file Plot.py</vh></v>
@@ -37,6 +38,18 @@
 <v t="tom.20211211171913.51"><vh>@file Timehack.py</vh></v>
 <v t="tom.20211211171913.55"><vh>@file trend.py</vh></v>
 <v t="tom.20220506081351.1"><vh>@file versions.py</vh></v>
+<v t="tom.20220829181040.1"><vh>@path plugins</vh>
+<v t="tom.20220830215645.1"><vh>@clean README.txt</vh>
+<v t="tom.20220830223226.1"><vh>What A Plugin Should Import</vh></v>
+<v t="tom.20220830223435.1"><vh>What A Plugin Must Include</vh></v>
+<v t="tom.20220830224004.1"><vh>How To Specify Which Plugins To Use</vh></v>
+</v>
+<v t="tom.20220830112255.1"><vh>@clean use_plugins.txt</vh></v>
+<v t="tom.20220830184545.1"><vh>@file require_datasets.py</vh></v>
+<v t="tom.20220829181057.1"><vh>@file test_plugin.py</vh></v>
+<v t="tom.20220830135417.1"><vh>@file double_x.py</vh></v>
+<v t="tom.20220831132228.1"><vh>@file convolve1.py</vh></v>
+</v>
 </v>
 <v t="tom.20220506082557.1"><vh>Tests</vh>
 <v t="tom.20211207165011.1"><vh>Smoother and Tests</vh>
@@ -109,6 +122,89 @@ permissions) - see https://riptutorial.com/tkinter/example/3206/installation-or-
 
     yum install tkinter
 
+</t>
+<t tx="tom.20220829181040.1"></t>
+<t tx="tom.20220830112255.1"># The list of plugins to import. Omit the ".py" extension.
+test_plugin
+double_x
+convolve1</t>
+<t tx="tom.20220830215645.1">GF4 has a plugin mechanism that can load plugin files located in the "plugins"
+directory.  This README provides some basic information for developers of plugins.
+
+WHAT A PLUGIN PROVIDES
+-----------------------
+Each plugin can supply a single command together with a matching command
+button for the button window.
+
+@others
+
+
+</t>
+<t tx="tom.20220830223226.1">WHAT A PLUGIN SHOULD IMPORT
+---------------------------
+In addition to whatever modules the plugin may need for its operation, if it
+will work with datasets that are managed by the PlotManager, it should import
+helper attributes, usually MAIN and BUFFER, which identify the key stack
+positions. Typically:
+
+from AbstractPlotMgr import MAIN, BUFFER
+
+If you want to make sure there is a dataset in the MAIN or MAIN+BUFFER positions,
+then import them from the module "require_dataset" in the plugins directory:
+
+from .require_datasets import needs_main
+# and possibly:
+from .require_datasets import needs_main_buffer
+
+These functions perform the same jobs as the PlotManager decorators
+@REQUIRE_MAIN and @REQUIRE_MAIN_BUFF.  Other useful declarations may be found
+in the "AbstractPlotMgr" module.
+
+</t>
+<t tx="tom.20220830223435.1">WHAT A PLUGIN MUST INCLUDE
+---------------------------
+Each plugin must provide a tuple named "BUTTON_DEF".  The tuple must contain
+three elements: Button label, the command name, and an explanatory help text.
+The help text will appear in the top information band when the mouse hovers
+over the button.  Example:
+
+#                Label       Cmd name          Help text
+BUTTON_DEF  = ('Double X', 'double-x', 'Double y values of the X dataset')
+
+Each plugin must also provide a function that will perform its operation.
+This function must be named "proc" and take no parameters. The function is not
+expected to return anything.  For example:
+
+# plotmgr will have been injected into the module by the time this is called
+def proc():
+    if not needs_main(plotmgr):  # see below
+        return
+    _ds = plotmgr.stack[MAIN]
+    _ds.scale(2)
+    plotmgr.plot()
+
+The "plotmgr" attribute represents the active PlotManager instance. Do not try
+to import it; it will be automatically injected into the module's attributes
+when the command is created.
+
+Optionally the plugin may define
+
+OVERRIDE = True
+
+If this attribute exists in the module and has the value True, no button will be
+added.  The command will still be registered, and if that name alreade exists
+in the command dictionary, the previous assignment will be replace by the new one.
+This provides a way to override an existing command (though the label and help
+message of the button will not be chagned).
+
+</t>
+<t tx="tom.20220830224004.1">HOW TO SPECIFY WHICH PLUGINS TO USE
+-----------------------------------
+By default, GF4 will load all plugins (i.e., python files) in the "plugins"
+directory.  You can override this by including a file named "use_plugins.txt".
+The file should contain the desired plugins by file name, one to a line.
+Do *not* include the ".py" file extension.  Blank lines and lines that
+start with a "#" or ";" character will be ignored.
 </t>
 </tnodes>
 </leo_file>

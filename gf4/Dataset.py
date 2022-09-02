@@ -798,6 +798,12 @@ class Dataset:
 
         There can be boundary effects, since there may be areas where
         the two data sets don't overlap properly.
+        
+        This operation is expected to be used to compare a convolved
+        result with the original dataset.  Convolutions are generally
+        shifted to the right, and an attempt is made to correct for this
+        shift.  An attempt is also made to normalize the convolution to
+        the input dataset.  This may not be successful.
 
         ARGUMENT
         ds -- the other Dataset to use in the convolution.
@@ -810,12 +816,44 @@ class Dataset:
            or len(self.ydata) == 0 or  len(ds.ydata) == 0):
             return False
 
-        self.ydata = np.convolve(self.ydata, ds.ydata, mode='same')
-        if len(self.xdata) != len(self.ydata):
-            if len(self.xdata) == len(ds.xdata):
-                self.xdata = ds.xdata[:]
-            else:
-                self.xdata = list(range(len(self.ydata)))
+        # Final result should be shifted left.
+        # To find the size of the shift create a delta function and convolve with 
+        # ourself. Then find the peak of the convolution and use it to calculate 
+        # the shift.
+        OFFSET = 10
+        delta = [0] * len(ds.ydata)  # Delta "function"
+        delta[10] = 1
+        probe = self.ydata[:]
+        convolved = np.convolve(probe, delta, mode = 'full')
+        # The desired shift is found by looking for the maximum of the convolution
+        max_ = max(convolved)
+        for shift, y in enumerate(convolved):
+            if y == max_:
+                break
+        shift = shift - OFFSET
+        scale_factor = 1. / max_
+
+        # Pad the other dataset's data so that we can scan ourselves completely
+        # across the other
+        self_len = len(self.ydata)
+        other_len = len(ds.ydata)
+        full_len = other_len + 2 * self_len
+        other = ds.copy()
+        other.pad_truncate(full_len)
+
+        self.ydata = np.convolve(self.ydata, other.ydata, mode='full')
+        self.ydata = [y * scale_factor for y in self.ydata]
+
+        # Fix up new length of the xdata - extend the x list as needed
+        # Find the spacing between points
+        origin = other.xdata[0]
+        incr = other.xdata[1] - origin
+        self.xdata = [origin - shift + i * incr for i, _ in enumerate(self.ydata)]
+
+        # Because of the left shift, data will extend left of the origin.  Correct
+        # for this.
+        self.xdata = self.xdata[shift:]
+        self.ydata = self.ydata[shift:]
 
         return True
 
@@ -849,12 +887,18 @@ class Dataset:
             if not self.ydata or not ds.ydata:
                 return False
 
-        self.ydata = np.correlate(self.ydata, ds.ydata, mode='same')
+        N0 = len(self.xdata)
+        self.ydata = np.correlate(self.ydata, ds.ydata, mode='full')
         if len(self.xdata) != len(self.ydata):
             if len(self.xdata) == len(ds.xdata):
                 self.xdata = ds.xdata[:]
             else:
                 self.xdata = list(range(len(self.ydata)))
+
+        # Full overlap ends up with too many points to the right
+        # so trim to the original number.
+        self.ydata = self.ydata[:N0]
+        self.xdata = self.xdata[:N0]
 
         return True
 
@@ -879,15 +923,15 @@ class Dataset:
         has some points,, False otherwise.
 
         '''
-        
         if a <= 0.0: return False
         if self.isNumpyArray(self.ydata):
             if not self.ydata.any():
                 return False
         else:
             if not self.ydata:
+
                 return False
-        
+        a = float(a)
         #aa = a / (1.0 + a)
         aa = math.exp(-1.0 / a)
         b = 1.0 - aa
@@ -924,7 +968,6 @@ class Dataset:
         has some points, False otherwise.
 
         '''
-
         if a < limit: return False
         if self.isNumpyArray(self.ydata):
             if not self.ydata.any():
@@ -933,6 +976,7 @@ class Dataset:
             if not self.ydata:
                 return False
 
+        a = float(a)
         aa = math.exp(-1.0/a)
         lasty = 0
         lastyo = 0

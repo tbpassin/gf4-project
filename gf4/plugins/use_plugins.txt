@@ -1,0 +1,4 @@
+# The list of plugins to import. Omit the ".py" extension.
+test_plugin
+double_x
+convolve1

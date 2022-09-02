@@ -1,7 +1,15 @@
 #@+leo-ver=5-thin
 #@+node:tom.20211211170819.6: * @file buttondefs.py
 # pylint: disable = consider-using-f-string
+#@@language python
+#@@tabwidth -4
+
+
 #@+others
+#@+node:tom.20220829183038.1: ** imports
+from import_plugins import import_all_plugins
+plugin_modules = import_all_plugins()
+
 #@+node:tom.20211211170819.7: ** Declarations (buttondefs.py)
 # encoding: utf-8
 '''Button definitions for GF4.  Format:
@@ -158,7 +166,20 @@ TREND_BUTTONS = (
     ('Mann-Kendall', 'mann_kendall', 'Compute Mann-Kendall Trend'),
     ('Windowed Dev', 'sliding_var', 'Standard Deviations for a LOWESS Fit'),
 )
+#@+node:tom.20220829181647.1: ** Plugins
+
+PLUGIN_BUTTONS = []
+for m in plugin_modules:
+    # If we are overriding an existing command, don't create a plugin button
+    if getattr(m, 'OVERRIDE', False):
+        continue
+    try:
+        PLUGIN_BUTTONS.append((getattr(m, 'BUTTON_DEF')))
+    except ValueError:
+        print(f'Bad plugin button definition in {m}')
+
 #@-others
-#@@language python
-#@@tabwidth -4
+if __name__ == '__main__':
+    for m in plugin_modules:
+        print(getattr(m, 'BUTTON_DEF'))
 #@-leo

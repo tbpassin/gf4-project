@@ -31,7 +31,7 @@ from buttondefs import (SPACER, CURVE_FIT_BUTTONS, STATS_BUTTONS,
                         GENERATOR_BUTTONS, PLOT_BUTTONS, LOAD_BUTTONS,
                         STACK_BUTTONS, CURVE_BUTTONS, MATH_BUTTONS,
                         DATA_PROCESSING_BUTTONS, WINDOW_BUTTONS, 
-                        SMOOTHER_FIT_BUTTONS, TREND_BUTTONS)
+                        SMOOTHER_FIT_BUTTONS, TREND_BUTTONS, PLUGIN_BUTTONS)
 #@+node:tom.20211211170819.10: ** Declarations
 COLS = 6
 BUTTONWIDTH = 9
@@ -124,13 +124,16 @@ def configure_button_list(parent, button_list, plotmgr):
     global NEWFONT
     for b in button_list:
         if b is SPACER:
-            #Tk.Frame(parent, height=2, relief='sunken',  bg='black').pack(fill=Tk.BOTH)
             ttk.Separator(parent, style='gf.TSeparator').pack(fill=Tk.BOTH)
         else:
-            text, cmd, fulltext = b
-            _b = Tk.Button(parent, text=text, relief='raised', width=BUTTONWIDTH, bg=BUTTON_BG,
-                    font=NEWFONT, padx=8, 
-                    command=lambda x=cmd: default_command(x, plotmgr))
+            try:
+                text, cmd, fulltext = b
+            except ValueError:
+                print(f'Bad button definition: {b}')
+                continue 
+            _b = Tk.Button(parent, text=text, relief='raised', width=BUTTONWIDTH, 
+                           bg=BUTTON_BG, font=NEWFONT, padx=8, 
+                           command=lambda x=cmd: default_command(x, plotmgr))
             _b.pack(fill=Tk.X)
             _b.bind('<Button-1>', click)
             _b.bind('<Enter>', on_enter)
@@ -215,7 +218,10 @@ def create_buttons_pack(host, plotmgr):
                         + 5)
 
     host_width = BUTTONWIDTH*(COLS)*sz + len('Data Processing')*sz + 6*COLS
-    host_height = max(host_height, plotmgr.root.winfo_height())
+    if plotmgr:
+        host_height = max(host_height, plotmgr.root.winfo_height())
+    else:
+        host_height = 250
     host.geometry('%sx%s' % (host_width, host_height))
     #@-<< Set window  geometry >>
     #@+<< Create Button Containers >>
@@ -232,6 +238,7 @@ def create_buttons_pack(host, plotmgr):
 
     configure_horizontal_button_list(host, GENERATOR_BUTTONS, plotmgr)
     configure_macro_buttons(host, plotmgr)
+
     #@-<< Create Button Containers >>
 
     # Create Button Groups
@@ -279,6 +286,9 @@ def create_buttons_pack(host, plotmgr):
     but_frame_stats.pack(fill=Tk.BOTH)
     configure_button_list(but_frame_stats, STATS_BUTTONS, plotmgr)
 
+    but_frame_plugins = Tk.LabelFrame(but_frame_curve, text='Plugins', bd=4, bg='lightcyan')
+    but_frame_plugins.pack(fill=Tk.BOTH)
+    configure_button_list(but_frame_plugins, PLUGIN_BUTTONS, plotmgr)
 #@+node:tom.20211211170819.21: ** cmdwindow
 def cmdwindow(plotmgr=None):
     _geom = ''

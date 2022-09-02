@@ -19,6 +19,7 @@
 <v t="tom.20220509230545.1"><vh>Leo-Editor, Or Those Strange Comment Lines</vh></v>
 </v>
 <v t="tom.20220820141745.1"><vh>@clean ../requirements.txt</vh></v>
+<v t="tom.20220901223400.1"><vh>@clean ../recent_changes.md</vh></v>
 <v t="tom.20220507132007.4"><vh>@path doc</vh>
 <v t="tom.20220507132007.5"><vh>@button Build HTML</vh></v>
 <v t="tom.20220507180306.1"><vh>GF4 User's Guide</vh>
@@ -267,6 +268,7 @@ to compare several data sets, or several ways of processing the same data.
 <t tx="tom.20220507132007.2">@language md
 @tabwidth -4
 @others
+
 </t>
 <t tx="tom.20220507132007.20">Curve plotting options can be changed for plotting/overplotting data in the **X** 
 and **Y** stack positions.  The data in **T** cannot be changed.  In practice,
@@ -804,6 +806,25 @@ are read, GF4 notices that there is already data in the **X** stack position, an
 does not plot the new data.  This allows the user to keep reading data files and
 overplotting them - possibly in different colors - without destroying an existing
 graph.  This can be a very useful capability.
+</t>
+<t tx="tom.20220901223400.1">@language md
+@tabwidth -4
+
+### New plugin Capability
+#### Devel branch, 9/1/2022, v 1.2
+Added a plugin feature. A plugin defines a new command button and a new
+function to implement the command.  An existing command can optionally be
+overridden with a new function without adding a new button.
+
+### Read Comma Separated Files
+#### Devel branch, 8/19/2022, v 1.1b4
+We can now read comma-separated files.  This is a fairly naive implementation:
+columns can be separated by comma characters.  There is no flexibility; either
+all columns are separated by tabs, or by commas.
+
+For CSV data, GF4 will try to get column names from the first non-numeric line
+immediately before the first line that contains only numerical columns.
+
 </t>
 </tnodes>
 </leo_file>

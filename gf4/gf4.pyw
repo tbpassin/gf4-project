@@ -1445,21 +1445,6 @@ class PlotManager(AbstractPlotManager):
         else:
             self.announce('tau  <= %s or no data' % _LIMIT)
             self.flashit()
-    #@+node:tom.20211207165051.94: *4* convolveWithBuffer
-    @REQUIRE_MAIN
-    def convolveWithBuffer(self):
-        self.stack[MAIN].convolve(self.stack[BUFFER])
-
-        lab = self.stack[MAIN].figurelabel or ''
-        lab1 = self.stack[BUFFER].figurelabel or ''
-        if lab:
-            self.stack[MAIN].figurelabel = 'Convolution of %s' % (lab)
-            if lab1:
-                self.stack[MAIN].figurelabel += ' with %s' % (lab1)
-        else:
-            self.stack[MAIN].figurelabel = 'Convolution'
-
-        self.plot()
     #@+node:tom.20211207165051.95: *4* correlateWithBuffer
     @REQUIRE_MAIN
     def correlateWithBuffer(self):
@@ -1473,6 +1458,25 @@ class PlotManager(AbstractPlotManager):
                 self.stack[MAIN].figurelabel += ' with %s' % (lab1)
         else:
             self.stack[MAIN].figurelabel = 'Correlation'
+
+        self.plot()
+    #@+node:tom.20211207165051.94: *4* convolveWithBuffer
+    @REQUIRE_MAIN
+    def convolveWithBuffer(self):
+        lab = self.stack[MAIN].figurelabel or ''
+        lab1 = self.stack[BUFFER].figurelabel or ''
+
+        d1 = self.stack[MAIN]
+        d2 = self.stack[BUFFER]
+
+        d1.convolve(d2)
+
+        if lab:
+            self.stack[MAIN].figurelabel = 'Convolution of %s' % (lab)
+            if lab1:
+                self.stack[MAIN].figurelabel += ' with %s' % (lab1)
+        else:
+            self.stack[MAIN].figurelabel = 'Convolution'
 
         self.plot()
     #@+node:tom.20211207165051.96: *4* autocorrelate
@@ -1961,7 +1965,7 @@ class PlotManager(AbstractPlotManager):
         self.plot()
     #@+node:tom.20211207214046.1: *3* Statistics
     #@+node:tom.20211207165051.107: *4* spearman
-    @REQUIRE_MAIN
+    @REQUIRE_MAIN_BUFF
     def spearman(self):
         '''Calculate the Spearman rank correlation coefficient of
         data sequences in MAIN and BUFFER.  The data remains unchanged.'''
@@ -1969,8 +1973,8 @@ class PlotManager(AbstractPlotManager):
         _y = self.stack[MAIN].ydata
         _x = self.stack[BUFFER].ydata
 
-        if _x == _y:
-            self.announce("Both data sets are the same")
+        if not (len(_x) and len(_y)):
+            self.announce('One or both data sets are empty')
             self.flashit()
             return
 
@@ -1981,14 +1985,19 @@ class PlotManager(AbstractPlotManager):
             self.flashit()
             return
 
+        are_equal = all([x == y for x, y in zip(_x, _y)])
+        if are_equal:
+            self.announce("Both data sets are the same")
+            self.flashit()
+            return
+
         r, p = spearmanr(_y, _x)
 
         self.announce('Spearman Rank Correlation Coefficient='
-                      '%0.3f, p = %0.3f'
-                      % (r, p))
+                      '%0.3g, p = %0.3g' % (r, p))
 
     #@+node:tom.20211207165051.108: *4* pearson
-    @REQUIRE_MAIN
+    @REQUIRE_MAIN_BUFF
     def pearson(self):
         '''Calculate the Spearman rank correlation coefficient of
         data sequences in MAIN and BUFFER.  The data remains unchanged.'''
@@ -2009,7 +2018,7 @@ class PlotManager(AbstractPlotManager):
             self.announce("Failed: data lengths don't match")
             self.flashit()
         else:
-            self.announce("Pearson's Correlation Coefficient=%0.3f" % (r))
+            self.announce("Pearson's Correlation Coefficient=%0.3g" % (r))
 
     #@+node:tom.20211207165051.116: *4* cdf
     @REQUIRE_MAIN
