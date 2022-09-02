@@ -10,6 +10,7 @@ from .require_datasets import needs_main_buffer
 
 BUTTON_DEF  = ('Convolve (raw)', 'convolve-experimental', ' An experimental Convolve X with Y datasets')
 OVERRIDE = False
+plotmgr = None
 
 def proc():
     if not needs_main_buffer(plotmgr):
