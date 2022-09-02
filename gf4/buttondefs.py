@@ -170,6 +170,9 @@ TREND_BUTTONS = (
 
 PLUGIN_BUTTONS = []
 for m in plugin_modules:
+    # If we are overriding an existing command, don't create a plugin button
+    if getattr(m, 'OVERRIDE', False):
+        continue
     try:
         PLUGIN_BUTTONS.append((getattr(m, 'BUTTON_DEF')))
     except ValueError:

@@ -48,6 +48,7 @@
 <v t="tom.20220830184545.1"><vh>@file require_datasets.py</vh></v>
 <v t="tom.20220829181057.1"><vh>@file test_plugin.py</vh></v>
 <v t="tom.20220830135417.1"><vh>@file double_x.py</vh></v>
+<v t="tom.20220831132228.1"><vh>@file convolve1.py</vh></v>
 </v>
 </v>
 <v t="tom.20220506082557.1"><vh>Tests</vh>
@@ -126,7 +127,7 @@ permissions) - see https://riptutorial.com/tkinter/example/3206/installation-or-
 <t tx="tom.20220830112255.1"># The list of plugins to import. Omit the ".py" extension.
 test_plugin
 double_x
-</t>
+convolve1</t>
 <t tx="tom.20220830215645.1">GF4 has a plugin mechanism that can load plugin files located in the "plugins"
 directory.  This README provides some basic information for developers of plugins.
 
@@ -185,6 +186,16 @@ def proc():
 The "plotmgr" attribute represents the active PlotManager instance. Do not try
 to import it; it will be automatically injected into the module's attributes
 when the command is created.
+
+Optionally the plugin may define
+
+OVERRIDE = True
+
+If this attribute exists in the module and has the value True, no button will be
+added.  The command will still be registered, and if that name alreade exists
+in the command dictionary, the previous assignment will be replace by the new one.
+This provides a way to override an existing command (though the label and help
+message of the button will not be chagned).
 
 </t>
 <t tx="tom.20220830224004.1">HOW TO SPECIFY WHICH PLUGINS TO USE

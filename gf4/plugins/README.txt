@@ -52,6 +52,16 @@ The "plotmgr" attribute represents the active PlotManager instance. Do not try
 to import it; it will be automatically injected into the module's attributes
 when the command is created.
 
+Optionally the plugin may define
+
+OVERRIDE = True
+
+If this attribute exists in the module and has the value True, no button will be
+added.  The command will still be registered, and if that name alreade exists
+in the command dictionary, the previous assignment will be replace by the new one.
+This provides a way to override an existing command (though the label and help
+message of the button will not be chagned).
+
 HOW TO SPECIFY WHICH PLUGINS TO USE
 -----------------------------------
 By default, GF4 will load all plugins (i.e., python files) in the "plugins"
