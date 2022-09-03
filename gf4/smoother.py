@@ -1,5 +1,7 @@
 #@+leo-ver=5-thin
 #@+node:tom.20211211171913.12: * @file smoother.py
+#@@language python
+#@@tabwidth -4
 #@+others
 #@+node:tom.20211211171913.13: ** Imports
 """Functions to smooth and fit x,y data."""
@@ -15,9 +17,17 @@ from csaps import csaps
 from randnum import gaussian_vals
 #import matplotlib.pyplot as plt
 
-
 MaxSmoothZone = 100
 
+#@+others
+#@-others
+
+
+if __name__ == '__main__':
+
+    from testing import smoother_tests
+    for t in smoother_tests.Tests:
+        t()
 #@+node:tom.20211211171913.14: ** sqr
 def sqr(x):
     return x**2
@@ -534,7 +544,8 @@ def lowessAdaptive(xdata, ydata, weight=1.0,
     N = len(xdata)
 
     for s in (s1 for s1 in spans if s1 <= N):
-        xi, yi, rms, upperlimit, lowerlimit = lowess2(xdata, ydata, s, True)
+        #xi, yi, rms, upperlimit, lowerlimit = lowess2(xdata, ydata, s, True)
+        xi, yi, rms, upperlimit, lowerlimit = lowess2(xdata, ydata, s, False)
         var = sum([float((_y - _yfit)**2)/(N-1) for _y, _yfit in zip(ydata, yi)])
         mse.append(var)
 
@@ -1330,14 +1341,5 @@ def moving_median(xdata, ydata, w = 7):
 
     return xdata[offset: -offset], results
 
-
-if __name__ == '__main__':
-
-    from testing import smoother_tests
-
-    for t in smoother_tests.Tests:
-        t()
 #@-others
-#@@language python
-#@@tabwidth -4
 #@-leo

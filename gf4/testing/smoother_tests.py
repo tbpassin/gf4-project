@@ -216,12 +216,12 @@ def test_lowess_adaptive_ac(func=None):
     plt.plot(x, true_y, 'black', linewidth=2)
     plt.plot(x, y, 'co', mfc='white')
     plt.plot(xi, yi, 'black', linewidth=1)
-    plt.title('LOWESS Autocorrelation Adaptive - smoothing parameter = %s, rms error = %0.3f'
-        % (span, rms))
+    # plt.title('LOWESS Autocorrelation Adaptive - smoothing parameter = %s, rms error = %0.3f'
+        # % (span, rms))
     plt.plot(xi, upperbound, 'red')
     plt.plot(xi, lowerbound, 'red')
 
-    plt.title('LOWESS Autocorrelation Adaptive  span %s, autocorr %0.3f, rms %0.3f'
+    plt.title('LOWESS Autocorrelation Adaptive - best span %s, autocorr %0.3f, rms %0.3f'
         % (span, ac, rms))
 
     figure = gcf()
@@ -377,7 +377,7 @@ def test_adaptive_lowess(w):
     plt.plot(x, true_y, 'black', linewidth=2)
     plt.plot(x, y, 'co', mfc='white')
     plt.plot(xf, yf, 'black', linewidth=1)
-    plt.title('LOWESS Autocorrelation Adaptive - smoothing span = %s, rms error = %0.3f'
+    plt.title('LOWESS Adaptive - best smoothing span = %s, rms error = %0.3f'
         % (span, mse**0.5))
     plt.plot(xf, upperbound, 'red')
     plt.plot(xf, lowerbound, 'red')
@@ -675,7 +675,7 @@ Tests = (#lstsqr,
          #lowess1_autocorr,
          #lowess2_mse,
          #lowess_smooth_quad,
-         #lambda w=.5: test_adaptive_lowess(w),
+         lambda w=1: test_adaptive_lowess(w),
          test_lowess_adaptive_ac,
          #slope_var,
          #test_thiel,
