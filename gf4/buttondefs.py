@@ -170,17 +170,21 @@ TREND_BUTTONS = (
 PLUGIN_BUTTONS = []
 for m in plugin_modules:
     # If we are overriding an existing command, don't create a plugin button
-    if getattr(m, 'OVERRIDE', False):
-        OWNER_GROUP = m.__dict__.get('OWNER_GROUP', '')
-        if OWNER_GROUP:
-            newbtn = getattr(m, 'BUTTON_DEF')
-            exec(f'{OWNER_GROUP} = list({OWNER_GROUP});{OWNER_GROUP}.append({newbtn})')
+    newbtn = getattr(m, 'BUTTON_DEF', '')
+    if not newbtn:
+        print(f'==== Warning: {m.__name__} is missing its BUTTON_DEF')
         continue
 
-    try:
-        PLUGIN_BUTTONS.append((getattr(m, 'BUTTON_DEF')))
-    except ValueError:
-        print(f'Bad plugin button definition in {m}')
+    if getattr(m, 'OVERRIDE', False):
+        # If plugin wants its button added to an existing group
+        OWNER_GROUP = getattr(m, 'OWNER_GROUP', '')
+        if OWNER_GROUP:
+            exec(f'{OWNER_GROUP} = list({OWNER_GROUP});{OWNER_GROUP}.append({newbtn})')
+            continue
+        else:
+            print(f'{m.__name__} is missing optional OWNER_GROUP')
+
+    PLUGIN_BUTTONS.append(newbtn)
 
 #@-others
 if __name__ == '__main__':
