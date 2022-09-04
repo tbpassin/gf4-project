@@ -174,7 +174,6 @@ for m in plugin_modules:
         OWNER_GROUP = m.__dict__.get('OWNER_GROUP', '')
         if OWNER_GROUP:
             newbtn = getattr(m, 'BUTTON_DEF')
-            #exec(f'{OWNER_GROUP} = list({OWNER_GROUP});{OWNER_GROUP}.append({newbtn})', globals(), locals())
             exec(f'{OWNER_GROUP} = list({OWNER_GROUP});{OWNER_GROUP}.append({newbtn})')
         continue
 
