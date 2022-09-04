@@ -124,8 +124,8 @@ DATA_PROCESSING_BUTTONS = (
     ('Autocorr', 'autocor', 'Autocorrelation of X Data'),
     ('Low Pass', 'lopass', 'Low Pass Filter of X Data.  Time Constant is fraction of x axis'),
     ('Hi Pass', 'hipass','High Pass Filter of X Data.  Time Constant is fraction of x axis'),
-    ('Moving Median', 'move-median', 'Moving Median of X Data')
-)
+    ('Moving Median', 'move-median', 'Moving Median of X Data'),
+    )
 
 WINDOW_BUTTONS = (
     ('Half Cosine', 'halfcoswin', 'Window Data With Half-Cosine Window'),
@@ -167,12 +167,17 @@ TREND_BUTTONS = (
     ('Windowed Dev', 'sliding_var', 'Standard Deviations for a LOWESS Fit'),
 )
 #@+node:tom.20220829181647.1: ** Plugins
-
 PLUGIN_BUTTONS = []
 for m in plugin_modules:
     # If we are overriding an existing command, don't create a plugin button
     if getattr(m, 'OVERRIDE', False):
+        OWNER_GROUP = m.__dict__.get('OWNER_GROUP', '')
+        if OWNER_GROUP:
+            newbtn = getattr(m, 'BUTTON_DEF')
+            #exec(f'{OWNER_GROUP} = list({OWNER_GROUP});{OWNER_GROUP}.append({newbtn})', globals(), locals())
+            exec(f'{OWNER_GROUP} = list({OWNER_GROUP});{OWNER_GROUP}.append({newbtn})')
         continue
+
     try:
         PLUGIN_BUTTONS.append((getattr(m, 'BUTTON_DEF')))
     except ValueError:

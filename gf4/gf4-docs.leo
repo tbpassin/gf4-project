@@ -85,6 +85,7 @@
 <v t="tom.20220902114333.1"><vh>Defining a Command Button</vh></v>
 <v t="tom.20220902114404.1"><vh>The Implementing Function</vh></v>
 <v t="tom.20220902115843.1"><vh>Over-riding An Existing Command</vh></v>
+<v t="tom.20220904145245.1"><vh>Adding a Button To an Existing Group</vh></v>
 <v t="tom.20220902121203.1"><vh>Controlling Which Plugins Get Loaded</vh></v>
 </v>
 </v>
@@ -818,6 +819,10 @@ graph.  This can be a very useful capability.
 <t tx="tom.20220901223400.1">@language md
 @tabwidth -4
 
+### Plugins command buttons
+#### #### Devel branch, 9/1/2022, v 1.2
+Plugins can add their command button to an existing button group.
+
 ### New plugin Capability
 #### Devel branch, 9/1/2022, v 1.2
 Added a plugin feature. A plugin defines a new command button and a new
@@ -914,5 +919,16 @@ and display.
 *plugins* directory.  Each plugin's name must be on a separate line, without
 the ".py" extension.  Blank lines and lines that start with either ";" or "#"
 are ignored.</t>
+<t tx="tom.20220904145245.1">A plugin can have its command button added to an existing button group instead
+of the *Plugins* group.  To do this, look up the name of the group in 
+*buttondefs.py*. Assign that name to the attribute *OWNER_GROUP*, and set
+*OVERRIDE* to *True*.  Example:
+
+.. code:: python
+
+    OVERRIDE = True
+    OWNER_GROUP = 'DATA_PROCESSING_BUTTONS'
+
+</t>
 </tnodes>
 </leo_file>
