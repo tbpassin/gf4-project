@@ -1,4 +1,8 @@
 
+### Plugins command buttons
+#### #### Devel branch, 9/4/2022, v 1.2
+Plugins can add their command button to an existing button group.
+
 ### New plugin Capability
 #### Devel branch, 9/1/2022, v 1.2
 Added a plugin feature. A plugin defines a new command button and a new

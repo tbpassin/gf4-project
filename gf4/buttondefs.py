@@ -124,8 +124,8 @@ DATA_PROCESSING_BUTTONS = (
     ('Autocorr', 'autocor', 'Autocorrelation of X Data'),
     ('Low Pass', 'lopass', 'Low Pass Filter of X Data.  Time Constant is fraction of x axis'),
     ('Hi Pass', 'hipass','High Pass Filter of X Data.  Time Constant is fraction of x axis'),
-    ('Moving Median', 'move-median', 'Moving Median of X Data')
-)
+    ('Moving Median', 'move-median', 'Moving Median of X Data'),
+    )
 
 WINDOW_BUTTONS = (
     ('Half Cosine', 'halfcoswin', 'Window Data With Half-Cosine Window'),
@@ -167,16 +167,24 @@ TREND_BUTTONS = (
     ('Windowed Dev', 'sliding_var', 'Standard Deviations for a LOWESS Fit'),
 )
 #@+node:tom.20220829181647.1: ** Plugins
-
 PLUGIN_BUTTONS = []
 for m in plugin_modules:
     # If we are overriding an existing command, don't create a plugin button
-    if getattr(m, 'OVERRIDE', False):
+    newbtn = getattr(m, 'BUTTON_DEF', '')
+    if not newbtn:
+        print(f'==== Warning: {m.__name__} is missing its BUTTON_DEF')
         continue
-    try:
-        PLUGIN_BUTTONS.append((getattr(m, 'BUTTON_DEF')))
-    except ValueError:
-        print(f'Bad plugin button definition in {m}')
+
+    if getattr(m, 'OVERRIDE', False):
+        # If plugin wants its button added to an existing group
+        OWNER_GROUP = getattr(m, 'OWNER_GROUP', '')
+        if OWNER_GROUP:
+            exec(f'{OWNER_GROUP} = list({OWNER_GROUP});{OWNER_GROUP}.append({newbtn})')
+            continue
+        else:
+            print(f'{m.__name__} is missing optional OWNER_GROUP')
+
+    PLUGIN_BUTTONS.append(newbtn)
 
 #@-others
 if __name__ == '__main__':

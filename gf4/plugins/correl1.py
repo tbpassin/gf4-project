@@ -1,5 +1,5 @@
 #@+leo-ver=5-thin
-#@+node:tom.20220831132228.1: * @file convolve1.py
+#@+node:tom.20220903150123.1: * @file correl1.py
 """Convolve X with Y datasets.  
 X contains the result.  Y is unchanged.
 """
@@ -8,7 +8,7 @@ import numpy as np
 from AbstractPlotMgr import MAIN, BUFFER
 from .require_datasets import needs_main_buffer
 
-BUTTON_DEF  = ('Convolve (raw)', 'convolve-experimental', ' An experimental Convolve X with Y datasets')
+BUTTON_DEF  = ('Correlate (1)', 'correl-experimental', ' An experimental Correlation of X with Y datasets')
 OVERRIDE = False
 plotmgr = None
 
@@ -28,36 +28,34 @@ def proc():
         d1 = plotmgr.stack[BUFFER]
         d2 = plotmgr.stack[MAIN]
 
-    probe_x = d1.xdata[:]
-    probe_len = len(probe_x)
-    orig_data_len = len(d2.xdata)
-
-    convolved = np.convolve(d1.ydata, d2.ydata, mode = 'full')
+    correlated = np.correlate(d1.ydata, d2.ydata, mode = 'full')
+    dm = plotmgr.stack[MAIN]
+    dm.ydata = correlated
 
     #@+others
-    #@+node:tom.20220831172914.1: ** Adjust Length
-    dm = plotmgr.stack[MAIN]
-
+    #@+node:tom.20220903150123.2: ** Adjust Length
     # Trim away extra points added at start and end to get full overlap
-    # Half the original length of the shorter dataset will have been added at each end.
-    trim = int(probe_len / 2)
-    convolved = convolved[trim:]
-    convolved = convolved[:orig_data_len]
-    dm.ydata = convolved
+    # The original length of the shorter datasset will have been added at each end.
+    old_x = d1.xdata
+    old_len = len(old_x)
+    new_len = len(correlated)
+    correlated = correlated[old_len:]
+    correlated = correlated[:-old_len]
+
 
     # Make new MAIN x data the same length as the new y data
-    delta = d2.xdata[1] - d2.xdata[0]
-    start = d2.xdata[0]
-    dm.xdata = [start + i * delta for i in range(orig_data_len)]
-    #@+node:tom.20220831173009.1: ** Create Title
+    delta = old_x[1] - old_x[0]
+    dm.xdata = [old_x[0] + i * delta for i in range(new_len)]
+
+    #@+node:tom.20220903150123.3: ** Create Title
     if lab:
-        dm.figurelabel = f'[exp]Convolution of {lab}'
+        dm.figurelabel = f'[exp]Correlation of {lab}'
         if lab1:
             dm.figurelabel += f' with {lab1}'
     else:
-        dm.figurelabel = '[exp]Convolution'
+        dm.figurelabel = '[exp]Correlation'
 
-    dm.figurelabel = dm.figurelabel[:110] + '...'
+    dm.figurelabel = dm.figurelabel[:40] + '...'
     #@-others
 
     plotmgr.plot()

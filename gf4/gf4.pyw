@@ -1071,7 +1071,7 @@ class PlotManager(AbstractPlotManager):
         self.stack[MAIN].ydata = [abs(y) for y in self.stack[MAIN].ydata]
         lab = self.stack[MAIN].figurelabel or ''
         lab += ' Rectified'
-        self.stack[MAIN].figurelabel += lab
+        self.stack[MAIN].figurelabel = lab
         self.plot()
     #@+node:tom.20211207165051.84: *4* half_rectify
     @REQUIRE_MAIN
@@ -1079,7 +1079,7 @@ class PlotManager(AbstractPlotManager):
         self.stack[MAIN].ydata = [max(y, 0.) for y in self.stack[MAIN].ydata]
         lab = self.stack[MAIN].figurelabel or ''
         lab += ' Half Wave Rectified'
-        self.stack[MAIN].figurelabel += lab
+        self.stack[MAIN].figurelabel = lab
         self.plot()
     #@+node:tom.20211207165051.85: *4* clip
     @REQUIRE_MAIN

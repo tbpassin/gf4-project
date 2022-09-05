@@ -142,7 +142,6 @@ class Dataset:
         #_hasTwoCols = False
         _numcols = 0
         _firstline = True
-        e = None
         retval = ''
         #@-<< init >>
         #@+<< detect_csv >>
@@ -315,7 +314,8 @@ class Dataset:
                 # At this point, we know which data columns are being used, so we
                 # use the corresponding csv headers
                 self.xaxislabel = headers[col1]
-                self.yaxislabel = headers[col2]
+                if len(headers) > col2:
+                    self.yaxislabel = headers[col2]
 
             if error_count > 0:
                 self.figurelabel = f'Skipped {error_count} rows because of data errors'

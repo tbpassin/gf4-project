@@ -23,4 +23,5 @@ Table of Contents
     curvefitting
     windowing
     macros
+    plugins
 

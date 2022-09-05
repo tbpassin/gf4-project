@@ -4,7 +4,11 @@ directory.  This README provides some basic information for developers of plugin
 WHAT A PLUGIN PROVIDES
 -----------------------
 Each plugin can supply a single command together with a matching command
-button for the button window.
+button for the button window.  By default, the command button will be placed
+into a "Plugins" group in the command window.
+
+A plugin can be made to override an existing command.  Optionally, a plugin
+can place its command button into any existing button group.
 
 WHAT A PLUGIN SHOULD IMPORT
 ---------------------------
@@ -61,6 +65,13 @@ added.  The command will still be registered, and if that name alreade exists
 in the command dictionary, the previous assignment will be replace by the new one.
 This provides a way to override an existing command (though the label and help
 message of the button will not be chagned).
+
+To have the plugin's button added to an existing button group instead of the
+Plugins group, use its name from buttondefs.py, assign that name to the
+attribute OWNER_GROUP, and set OVERRIDE to True.  Example:
+
+OVERRIDE = True
+OWNER_GROUP = 'DATA_PROCESSING_BUTTONS'
 
 HOW TO SPECIFY WHICH PLUGINS TO USE
 -----------------------------------
