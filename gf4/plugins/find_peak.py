@@ -36,10 +36,6 @@ def proc():
     increasing = _x[1] > _x[0]
     #@+<< check inbounds >>
     #@+node:tom.20220904112303.1: ** << check inbounds >>
-    # See if coord is and exact value in the list
-    # if (increasing and (dia.result < _x[0] or dia.result > _x[-1])) \
-        # or (not increasing and (dia.result > _x[0] or dia.result < _x[-1])):
-
     if dia.result < min(_x) or dia.result > max(_x):
         plotmgr.announce(f'{dia.result} is out of the range')
         plotmgr.flashit()
