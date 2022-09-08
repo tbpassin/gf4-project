@@ -31,7 +31,7 @@ def plot(self, stackposition=MAIN, clearFirst=True):
     else:
         _linestyles = self.errorbar_linestyles
 
-    if not _dat:
+    if not (_dat.xdata and any(_dat.xdata)):
         self.announce('No data to plot')
         self.flashit()
         return
