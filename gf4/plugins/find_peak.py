@@ -10,17 +10,19 @@ from entry import GetSingleFloat
 
 SPAN = 10
 BUTTON_DEF  = ('Find Peak', 'find-peak', 'Find the peak near the given x-axis location')
+# Put our command button into the "Data Processing" goup
 OVERRIDE = True
 OWNER_GROUP = 'DATA_PROCESSING_BUTTONS'
-plotmgr = None
+
+plotmgr = None  # Suppress pyflake complaints
 
 def proc():
     if not needs_main(plotmgr):
         return
 
     _ds = plotmgr.stack[MAIN]
-    _x = _ds.xdata
-    _y = _ds.ydata
+    _x = list(_ds.xdata)
+    _y = list(_ds.ydata)  # Might be a numpy nd array.
 
     _id = 'peakfinder'
     lastparm = plotmgr.parmsaver.get(_id, 0.0)
@@ -66,16 +68,23 @@ def proc():
 
     #@-<< find starting point >>
 
-    start = given - SPAN
-    end = given + SPAN
+    start = max(given - SPAN, 0)
+    end = min(given + SPAN, len(_x))
     segment = _y[start:end]
-    peak = max(segment)
-    peak_index = _y.index(peak)
-    # Might have max at end of segment - if so, it's not a peak
-    if (_y[peak_index - 1] > peak) or (_y[peak_index + 1] > peak):
-        plotmgr.announce(f'No peak found in ({_x[start]}, {_x[end]})')
+    if not segment:
+        plotmgr.announce(f'Computed improper bounds: ){start:0.4f}, {end:0.4f}')
+        plotmgr.flashit()
         return
 
+    peak = max(segment)
+    peak_index = _y.index(peak)
+    x_peak = _x[peak_index]
+    # Might have max at end of segment - if so, it's not a peak
+    if (_y[peak_index - 1] > peak) or (_y[peak_index + 1] > peak):
+        plotmgr.announce(f'No peak found in ({_x[start]:0.4f}, {_x[end]:0.4f})')
+        return
+
+    plotmgr.timehack(x_peak)
     plotmgr.announce(
-        f'Peak: {peak:0.4f} at {_x[peak_index]} in ({_x[start]}, {_x[end]})')
+        f'Peak: {peak:0.4f} at {x_peak:0.4f} in ({_x[start]:0.4f}, {_x[end]:0.4f})')
 #@-leo
