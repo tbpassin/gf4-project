@@ -240,8 +240,6 @@ class PlotManager(AbstractPlotManager):
 
         canvas.mpl_connect('button_press_event', self.edit_label)
 
-        self.toolbar.update()
-
         _ann = TextFade(root, height=1, font='size 12',
                         width=100, bd=0, pady=5, bg='LightBlue')
         _ann.insert(1.0, '')
