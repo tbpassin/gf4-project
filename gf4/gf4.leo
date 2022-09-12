@@ -52,6 +52,8 @@
 <v t="tom.20220903150123.1"><vh>@file correl1.py</vh></v>
 <v t="tom.20220903134519.1"><vh>@file autocorrel1.py</vh></v>
 <v t="tom.20220904105233.1"><vh>@file find_peak.py</vh></v>
+<v t="tom.20220905122752.1"><vh>@file find_peak1.py</vh></v>
+<v t="tom.20220909175119.1"><vh>@file readout.py</vh></v>
 </v>
 </v>
 <v t="tom.20220506082557.1"><vh>Tests</vh>
@@ -133,7 +135,10 @@ double_x
 convolve1
 #autocorrel1
 #correl1
-find_peak</t>
+find_peak
+find_peak1
+readout
+</t>
 <t tx="tom.20220830215645.1">GF4 has a plugin mechanism that can load plugin files located in the "plugins"
 directory.  This README provides some basic information for developers of plugins.
 

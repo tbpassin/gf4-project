@@ -174,7 +174,7 @@ def lowess1_autocorr(func=None):
         print ('{}\t{:.3f}'.format(smooth[s], r))
 
     param.sort()
-    _, sbest = param[0]
+    rmin, sbest = param[0]
 
     print ( 'Best')
     print ( 'Span\tAutocorr.')
@@ -671,9 +671,9 @@ Tests = (#lstsqr,
          #cspline_fit,
          #spline_smooth,
          #lowess_smooth,
-         #lowess2_smooth,
+         # lowess2_smooth,
          #lowess1_autocorr,
-         #lowess2_mse,
+         # lowess2_mse,
          #lowess_smooth_quad,
          lambda w=1: test_adaptive_lowess(w),
          test_lowess_adaptive_ac,

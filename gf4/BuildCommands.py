@@ -14,9 +14,12 @@ def buildPluginCommands(cmd_dict, plotmgr):
     README.txt in the "plugins" directory.
     """
     for m in plugin_modules:
+        if hasattr(m, 'BUTTON_DEF'):
+            _, cmd, _ = m.BUTTON_DEF
+        else:
+            continue
         try:
             m.plotmgr = plotmgr
-            _, cmd, _ = m.BUTTON_DEF
             cmd_dict[cmd] = m.proc
         except ValueError:
             print(f'Bad plugin command definition in {m.__name__}')

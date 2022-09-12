@@ -820,7 +820,7 @@ graph.  This can be a very useful capability.
 @tabwidth -4
 
 ### Plugins command buttons
-#### #### Devel branch, 9/1/2022, v 1.2
+#### #### Devel branch, 9/4/2022, v 1.2
 Plugins can add their command button to an existing button group.
 
 ### New plugin Capability

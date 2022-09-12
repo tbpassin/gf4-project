@@ -689,7 +689,7 @@ class Dataset:
          False if no data, True otherwise.
         '''
 
-        if not self.xdata:
+        if not any(self.xdata):
             return False
 
         endstep = 0.01  # height of window at right edge
@@ -721,7 +721,7 @@ class Dataset:
          False if no data, True otherwise.
         '''
 
-        if not self.xdata:
+        if not any(self.xdata):
             return False
 
         endstep = 0.01  # height of window at left and right edges.
@@ -747,7 +747,7 @@ class Dataset:
          False if no data, True otherwise.
         '''
 
-        if not self.xdata:
+        if not any(self.xdata):
             return False
 
         # Argument = pi/2 at right hand end of data
@@ -773,7 +773,7 @@ class Dataset:
          False if no data, True otherwise.
         '''
 
-        if not self.xdata:
+        if not any(self.xdata):
             return False
 
         # Argument ranges from -pi/2 to pi/2 

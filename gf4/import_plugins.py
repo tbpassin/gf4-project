@@ -55,7 +55,8 @@ def import_all_plugins():
         try:
             mod = importlib.import_module(f'plugins.{f}')
             modules.append(mod)
-        except ImportError:
+        except ImportError as e:
+            print(f'{f} plugin: {e}')
             continue
     return modules
 #@-others

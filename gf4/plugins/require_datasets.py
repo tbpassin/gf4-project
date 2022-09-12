@@ -26,4 +26,7 @@ def needs_main_buffer(plotmgr):
         plotmgr.flashit()
         return False
     return True
+
+has_main = needs_main
+has_main_buffer = needs_main_buffer
 #@-leo

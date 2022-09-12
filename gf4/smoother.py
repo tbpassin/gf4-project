@@ -114,9 +114,10 @@ class WtStats:
 
         # Half-width is nSigma sigma, so sigma = half-width / nSigma
         SmoothSigma = 1.0 * _smoothzone/(2 * nSigma)
+        denom = 1./(2 * sqr(SmoothSigma))
         for i in range(numwts):
-            self.weights.append(math.exp(-1.0*sqr(i - icenter)/(2*sqr(SmoothSigma))))
-            self.Swt = self.Swt + self.weights[i]
+            self.weights.append(math.exp(-1.0 * sqr(i - icenter) * denom))
+            self.Swt += self.weights[i]
     #    print('\n'.join([f'{w:.3f}' for w in self.weights]))
 
     #@+node:tom.20211211171913.20: *3* WtStats.omitOne

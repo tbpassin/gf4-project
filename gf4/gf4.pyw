@@ -220,6 +220,7 @@ class PlotManager(AbstractPlotManager):
 
         canvas = FigureCanvasTkAgg(f, master=root)
         self.toolbar = NavigationToolbar2Tk(canvas, root)
+        self.toolbar.update()
         canvas.get_tk_widget().pack(side=Tk.TOP, fill=Tk.BOTH, expand=1)
         self.toolbar.pack()
 
@@ -238,8 +239,6 @@ class PlotManager(AbstractPlotManager):
         self.setWindowTitle(title)
 
         canvas.mpl_connect('button_press_event', self.edit_label)
-
-        self.toolbar.update()
 
         _ann = TextFade(root, height=1, font='size 12',
                         width=100, bd=0, pady=5, bg='LightBlue')
@@ -819,7 +818,7 @@ class PlotManager(AbstractPlotManager):
         '''
 
         _ds = self.stack[MAIN]
-        if _ds is None or not _ds.xdata:
+        if _ds is None or not any(_ds.xdata):
             self.announce("No data to work with")
             self.flashit()
             return
