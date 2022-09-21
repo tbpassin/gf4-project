@@ -762,9 +762,11 @@ have never been implemented because they would complicate the user interface.
 <t tx="tom.20220820141745.1">csaps
 matplotlib
 numpy
+pillow &gt;= 9.1.0
 pwlf
 pyperclip
 scipy
+tk
 </t>
 <t tx="tom.20220820182510.1">
 .. csv-table:: Waveform Generator Parameters
