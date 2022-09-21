@@ -1,6 +1,7 @@
 csaps
 matplotlib
 numpy
+pillow >= 9.1.0
 pwlf
 pyperclip
 scipy
