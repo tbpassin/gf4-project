@@ -1,6 +1,10 @@
 
+### Icons for desktop launchers
+#### Devel branch. 10/3/2022, v1.2
+A new _icons_ directory contains icons for Linux and Windows desktop launchers.
+
 ### Plugins command buttons
-#### #### Devel branch, 9/4/2022, v 1.2
+#### Devel branch, 9/4/2022, v 1.2
 Plugins can add their command button to an existing button group.
 
 ### New plugin Capability
