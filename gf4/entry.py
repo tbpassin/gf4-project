@@ -19,7 +19,7 @@ try:
 except:
     from tkinter import messagebox as tkMessageBox
 
-#from math import *
+from math import pi, e as m_e
 
 
 #@+node:tom.20211211171304.4: ** class Dialog(Tk.Toplevel)
