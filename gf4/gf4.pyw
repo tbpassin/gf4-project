@@ -180,7 +180,7 @@ class PlotManager(AbstractPlotManager):
         self.set_init_pos()
     #@+node:tom.20221006234409.1: *3* set_init_pos
     def set_init_pos(self):
-        """Position main window.
+        """Set initial position of main window.
         
         A position near left of screen leaves room for button window 
         to be located without overlapping main window on most screens.
