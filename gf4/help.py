@@ -6,12 +6,12 @@
 import webbrowser
 from versions import APPVERSION, getGitInfo
 
-version, (branch, changeset) = APPVERSION, getGitInfo()
-
 try:
     import Tkinter as Tk
-except:
+except ImportError:
     import tkinter as Tk
+
+version, (branch, changeset) = APPVERSION, getGitInfo()
 #@+node:tom.20220506224955.1: ** Declarations
 BRANCH_STR = f'; Branch: {branch}' if branch else ""
 GIT_STR = f'; Changeset; {changeset}' if changeset else ""

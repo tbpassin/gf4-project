@@ -206,7 +206,7 @@ class Dataset:
             if is_special_comment:
                 _line = line.lstrip(comment)
                 _line = _line.lstrip()
-                if _line[0] == comment:
+                if not _line or _line[0] == comment:
                     continue
                 try:
                     key, val = _line.split(':', 1)

@@ -99,18 +99,18 @@ MATH_BUTTONS = (
 
 CURVE_FIT_BUTTONS = (
     ('Cubic Spline\nInterpolation', 'cubicspln', 'Interpolate Between Points with Cubic Spline'),
-    ('Lst Sqr Lin', 'lstsqrlin', 'Fit Points with Linear Least Squares'),
-    ('Lst Sqr Quad', 'lstsqrquad', 'Fit Points with Quadratic Using Least Squares'),
+    ('Lst Sqr Lin', 'lstsqrlin', 'Fit Points with Linear Least Squares (2 s.e. error bands)'),
+    ('Lst Sqr Quad', 'lstsqrquad', 'Fit Points with Quadratic Using Least Squares (2 s.e. error bands'),
     ('Thiel-Sen', 'thiel_sen', 'Fit Line Robustly Using Thiel-Sen Method (median slopes)'),
     ('Piecewise', 'piecewise', 'Piecewise Linear Least Squares Fit'),
 )
 
 SMOOTHER_FIT_BUTTONS = (
-    ('LOWESS Lin', 'lowess', 'Smooth Data with Linear LOWESS Fit'),
+    ('LOWESS Lin', 'lowess', 'Smooth Data with Linear LOWESS Fit (2 s.e. error bands)'),
     #  ('LOW Quad', 'lowessquad', 'Smooth Data with 2nd Order LOWESS Fit'),
-    ('LOW Adapt', 'lowessadapt', 'Smooth Data Adaptively with LOWESS: Find best span for a specified smoothness'),
+    ('LOW Adapt', 'lowessadapt', 'Smooth Data Adaptively with LOWESS: Find best span for a specified smoothness (2 s.e. error bands)'),
     ('LOW Correl', 'lowesscorrel', 
-        'Minimize Lag-1 Autocorrelation of Residuals: remove highest frequencies'),
+        'Minimize Lag-1 Autocorrelation of Residuals: remove highest frequencies (2 s.e. error bands)'),
     SPACER, SPACER,
     ('Poisson', 'poisson', 'Smooth Data Using Poisson Smooth: Assumes Data Are Poisson-distributed Counts'),
     SPACER, SPACER,
