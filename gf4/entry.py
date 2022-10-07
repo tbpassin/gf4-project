@@ -2,6 +2,7 @@
 #@+node:tom.20211211171304.2: * @file entry.py
 #@@language python
 #@@tabwidth -4
+# pylint: disable = consider-using-f-string
 #@+others
 #@+node:tom.20211211171304.3: ** Imports
 '''Various data input dialogs, based on Fred Lundt's examples at
@@ -20,7 +21,7 @@ try:
 except:
     from tkinter import messagebox as tkMessageBox
 
-from math import pi, e as m_e
+from math import pi, e as m_e  # pylint: disable = unused-import
 import functools
 
 #@+node:tom.20221005234429.1: ** val_error decorator
@@ -363,7 +364,7 @@ class GetTwoNumbers(TwoLineInput):
         if not isinstance(first, int):
             first= float(first)
         second = eval(self.e2.get())  # pylint: disable = eval-used
-        if type(second) != type(first):
+        if type(second) != type(first):  # pylint: disable = unidiomatic-typecheck
             self.isint = False
             first = float(first)
             second = float(second)
@@ -535,5 +536,5 @@ if __name__ == '__main__':
 
     Tk.mainloop()
 #@-others
-# pylint: disable = consider-using-f-string
+
 #@-leo
