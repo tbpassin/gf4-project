@@ -177,6 +177,21 @@ class PlotManager(AbstractPlotManager):
         self.buildCommands()
         self.setMenus()
 
+        self.set_init_pos()
+    #@+node:tom.20221006234409.1: *3* set_init_pos
+    def set_init_pos(self):
+        """Position main window.
+        
+        A position near left of screen leaves room for button window 
+        to be located without overlapping main window on most screens.
+        A position not too far above the screen bottom leaves room above
+        the window for the stack readout window.
+        """
+        self.root.update()  # Required to get the actual window height.
+        sw = self.root.winfo_screenheight()
+        hw = self.root.winfo_height()
+        y = sw - hw - 200
+        self.root.geometry(f'+50+{y}')
     #@+node:tom.20211207165051.22: *3* setMenus
     def setMenus(self):
         mainMenu = createMenus.setMenus(self)
