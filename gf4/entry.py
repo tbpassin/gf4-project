@@ -1,6 +1,7 @@
 #@+leo-ver=5-thin
 #@+node:tom.20211211171304.2: * @file entry.py
-# pylint: disable = consider-using-f-string
+#@@language python
+#@@tabwidth -4
 #@+others
 #@+node:tom.20211211171304.3: ** Imports
 '''Various data input dialogs, based on Fred Lundt's examples at
@@ -20,7 +21,21 @@ except:
     from tkinter import messagebox as tkMessageBox
 
 from math import pi, e as m_e
+import functools
 
+#@+node:tom.20221005234429.1: ** val_error decorator
+def val_error (except_type, msg1, msg2):
+    def wrapper(f):
+        @functools.wraps(f)
+        def inner(*args, **kwargs):
+            try:
+                return f(*args, **kwargs)
+            except except_type as e:
+                emsg = f'{e}'.split('(<string')[0]
+                tkMessageBox.showwarning(f'{msg1}', f'{emsg}: {msg2}')
+                return False
+        return inner
+    return wrapper
 
 #@+node:tom.20211211171304.4: ** class Dialog(Tk.Toplevel)
 # pylint: disable = too-many-ancestors
@@ -121,7 +136,7 @@ class Dialog(Tk.Toplevel):
     # command hooks
     #@+node:tom.20211211171304.10: *3* Dialog.validate
     def validate(self):
-        return 1 # override
+        return 1 # override this in concrete classes
 
     #@+node:tom.20211211171304.11: *3* Dialog.apply
     def apply(self):
@@ -198,29 +213,13 @@ class GetSingleInt(Dialog):
         return self.e1 # initial focus
 
     #@+node:tom.20211211171304.21: *3* GetSingleInt(Dialog).validate
+    @val_error(Exception, 'Error ...', "Try again")
+    @val_error(ValueError, "Bad input","Illegal value, try again")
+    @val_error(SyntaxError, "Syntax Error", "Fix syntax")
     def validate(self):
-        try:
-            first= int(eval(self.e1.get()))  # pylint: disable = eval-used
-            self.result = first
-            return True
-        except ValueError:
-            tkMessageBox.showwarning(
-                "Bad input",
-                "Illegal value, try again"
-            )
-            return False
-        except SyntaxError:
-            tkMessageBox.showwarning(
-                "Syntax Error",
-                "Fix syntax"
-            )
-            return False
-        except Exception as e:
-            tkMessageBox.showwarning(
-                'Error',
-                "Try again ...%s" % e
-            )
-            return False
+        first= int(eval(self.e1.get()))  # pylint: disable = eval-used
+        self.result = first
+        return True
 
     #@-others
 #@+node:tom.20211211171304.22: ** class GetSingleFloat(GetSingleInt)
@@ -231,30 +230,13 @@ class GetSingleFloat(GetSingleInt):
         GetSingleInt.__init__(self, parent, title, label, float(initval))  
 
     #@+node:tom.20211211171304.24: *3* GetSingleFloat(GetSingleInt).validate
+    @val_error(Exception, 'Error ...', "Try again")
+    @val_error(ValueError, "Bad input","Illegal value, try again")
+    @val_error(SyntaxError, "Syntax Error", "Fix syntax")
     def validate(self):
-        try:
-            first= float(eval(self.e1.get()))  # pylint: disable = eval-used
-            self.result = first
-            return True
-        except ValueError:
-            tkMessageBox.showwarning(
-                "Bad input",
-                "Illegal value, try again"
-            )
-            return False
-        except SyntaxError:
-            tkMessageBox.showwarning(
-                "Syntax Error",
-                "Fix syntax"
-            )
-            return False
-        except Exception as e:
-            tkMessageBox.showwarning(
-                'Error',
-                "Try again ...%s" % e
-            )
-            return False
-
+        first= float(eval(self.e1.get()))  # pylint: disable = eval-used
+        self.result = first
+        return True
     #@-others
 #@+node:tom.20211211171304.25: ** class GetTwoFloats(TwoLineInput)
 class GetTwoFloats(TwoLineInput):
@@ -286,52 +268,15 @@ class GetTwoFloats(TwoLineInput):
         return self.e1 # initial focus
 
     #@+node:tom.20211211171304.28: *3* GetTwoFloats(TwoLineInput).validate
+    @val_error(Exception, 'Error ...', "Try again")
+    @val_error(ValueError, "Bad input","Illegal value, try again")
+    @val_error(SyntaxError, "Syntax Error", "Fix syntax")
     def validate(self):
         self.result = None
-        try:
-            first= float(eval(self.e1.get()))  # pylint: disable = eval-used
-        except ValueError:
-            tkMessageBox.showwarning(
-                "Bad input in first parameter",
-                "Illegal value, try again"
-            )
-            return False
-        except SyntaxError:
-            tkMessageBox.showwarning(
-                "Syntax Error in first parameter",
-                "Fix syntax"
-            )
-            return False
-        except Exception as e:
-            tkMessageBox.showwarning(
-                'Error in first parameter',
-                "Try again ...%s" % e
-            )
-            return False
-
-        try:
-            second = float(eval(self.e2.get()))  # pylint: disable = eval-used
-            self.result = first, second
-            return True
-        except ValueError:
-            tkMessageBox.showwarning(
-                "Bad input in second parameter",
-                "Illegal value, try again"
-            )
-            return False
-        except SyntaxError:
-            tkMessageBox.showwarning(
-                "Syntax Error in second parameter",
-                "Fix syntax"
-            )
-            return False
-        except Exception as e:
-            tkMessageBox.showwarning(
-                'Error in second parameter',
-                "Try again ...%s" % e
-            )
-            return False
-        
+        first= float(eval(self.e1.get()))  # pylint: disable = eval-used
+        second = float(eval(self.e2.get()))  # pylint: disable = eval-used
+        self.result = first, second
+        return True
     #@-others
 #@+node:tom.20211211171304.29: ** class GetTwoInts(TwoLineInput)
 class GetTwoInts(TwoLineInput):
@@ -363,52 +308,15 @@ class GetTwoInts(TwoLineInput):
         return self.e1 # initial focus
 
     #@+node:tom.20211211171304.32: *3* GetTwoInts(TwoLineInput).validate
+    @val_error(Exception, 'Error ...', "Try again")
+    @val_error(ValueError, "Bad input","Illegal value, try again")
+    @val_error(SyntaxError, "Syntax Error", "Fix syntax")
     def validate(self):
         self.result = None
-        try:
-            first= int(eval(self.e1.get()))  # pylint: disable = eval-used
-        except ValueError:
-            tkMessageBox.showwarning(
-                "Bad input in first parameter",
-                "Illegal value, try again"
-            )
-            return False
-        except SyntaxError:
-            tkMessageBox.showwarning(
-                "Syntax Error in first parameter",
-                "Fix syntax"
-            )
-            return False
-        except Exception as e:
-            tkMessageBox.showwarning(
-                'Error in first parameter',
-                "Try again ...%s" % e
-            )
-            return False
-
-        try:
-            second = int(eval(self.e2.get()))  # pylint: disable = eval-used
-            self.result = first, second
-            return True
-        except ValueError:
-            tkMessageBox.showwarning(
-                "Bad input in second parameter",
-                "Illegal value, try again"
-            )
-            return False
-        except SyntaxError:
-            tkMessageBox.showwarning(
-                "Syntax Error in second parameter",
-                "Fix syntax"
-            )
-            return False
-        except Exception as e:
-            tkMessageBox.showwarning(
-                'Error in second parameter',
-                "Try again ...%s" % e
-            )
-            return False
-
+        first= int(eval(self.e1.get()))  # pylint: disable = eval-used
+        second = int(eval(self.e2.get()))  # pylint: disable = eval-used
+        self.result = first, second
+        return True
     #@-others
 #@+node:tom.20211211171304.33: ** class GetTwoNumbers(TwoLineInput)
 class GetTwoNumbers(TwoLineInput):
@@ -446,61 +354,22 @@ class GetTwoNumbers(TwoLineInput):
         return self.e1 # initial focus
 
     #@+node:tom.20211211171304.36: *3* GetTwoNumbers(TwoLineInput).validate
+    @val_error(Exception, 'Error ...', "Try again")
+    @val_error(ValueError, "Bad input","Illegal value, try again")
+    @val_error(SyntaxError, "Syntax Error", "Fix syntax")
     def validate(self):
         self.result = None
-        try:
-            first = eval(self.e1.get())  # pylint: disable = eval-used
-            if not isinstance(first, int):
-                first= float(first)
-        except ValueError:
-            tkMessageBox.showwarning(
-                "Bad input in first parameter",
-                "Illegal value, try again"
-            )
-            return False
-        except SyntaxError:
-            tkMessageBox.showwarning(
-                "Syntax Error in first parameter",
-                "Fix syntax"
-            )
-            return False
-        except Exception as  e:
-            tkMessageBox.showwarning(
-                'Error in first parameter',
-                "Try again ...%s" % e
-            )
-            return False
+        first = eval(self.e1.get())  # pylint: disable = eval-used
+        if not isinstance(first, int):
+            first= float(first)
+        second = eval(self.e2.get())  # pylint: disable = eval-used
+        if type(second) != type(first):
+            self.isint = False
+            first = float(first)
+            second = float(second)
 
-        try:
-            second = eval(self.e2.get())  # pylint: disable = eval-used
-            if type(second) == type(first):
-                self.isint = False
-                first = float(first)
-                second = float(second)
-
-            self.result = first, second
-            return True
-
-        except ValueError:
-            tkMessageBox.showwarning(
-                "Bad input in second parameter",
-                "Illegal value, try again"
-            )
-            return False
-        except SyntaxError:
-            tkMessageBox.showwarning(
-                "Syntax Error in second parameter",
-                "Fix syntax"
-            )
-            return False
-        except Exception as e:
-            tkMessageBox.showwarning(
-                'Error in second parameter',
-                "Try again ...%s" % e
-            )
-            return False
-
-    # ============================================================================
+        self.result = first, second
+        return True
     #@-others
 #@+node:tom.20211211171304.37: ** class TextFade(Tk.Text)
 class TextFade(Tk.Text):
@@ -666,6 +535,5 @@ if __name__ == '__main__':
 
     Tk.mainloop()
 #@-others
-#@@language python
-#@@tabwidth -4
+# pylint: disable = consider-using-f-string
 #@-leo
