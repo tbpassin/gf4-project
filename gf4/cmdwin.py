@@ -6,6 +6,8 @@
 #@+others
 #@+node:tom.20211211223207.1: ** Imports
 from __future__ import print_function
+from sys import platform
+from math import ceil
 
 try:
     import Tkinter as Tk
@@ -192,6 +194,17 @@ def configure_macro_buttons(parent, plotmgr):
     but_clear.bind('<Leave>', on_leave)
     but_clear.fulltext = 'Clear Macro'
 
+#@+node:tom.20221007145433.1: ** adjust_font_size(font, ascender_height)
+def adjust_font_size(font, ascender_height):
+    """Adjust TK font size to make the ascender height as specified.
+    
+    Returns an integer."""
+    metrics = font.metrics()
+    params = font.actual()
+    ascender = metrics['ascent']
+    size = params['size']
+
+    return ceil((1. * ascender_height / ascender) * size)
 #@+node:tom.20211211170819.20: ** create_buttons_pack
 def create_buttons_pack(host, plotmgr):
     # pylint: disable = too-many-locals
@@ -202,13 +215,35 @@ def create_buttons_pack(host, plotmgr):
     #@+node:tom.20220402001046.1: *3* << Make new Tk font >>
     phantom = Tk.Button(text='phantom')
     _font =  tkFont.nametofont(phantom['font'])
-    # sz_def = _font['size']
-    # sz = int(.9*sz_def)
-    sz = 8
-    NEWFONT = tkFont.Font()
-    NEWFONT.config(**_font.config())
-    NEWFONT.config(size=sz, weight='bold')
-    phantom = None
+    sz = _font['size']
+    if platform.startswith('win'):
+        ascender = 10.6
+    else:
+        ascender = 9
+
+    # Find a preferred font, if installed
+    available_fonts = tkFont.families()
+    ffamily = ''
+    for f in ("Segoe UI", "Open Sans", "Corbel"):
+        if f in available_fonts:
+            ffamily = f
+            break
+
+    if ffamily:
+        # Create Tk font for this family
+        NEWFONT = tkFont.Font(
+                            family = ffamily, name = 'cmdButtonFont',
+                            size = int(sz), weight = 'bold')
+
+        sz = adjust_font_size(NEWFONT, ascender)
+        NEWFONT.config(size = sz)
+        # _font will be the font of the group labels and the help text
+        _font.config(**NEWFONT.config())
+    else:
+        NEWFONT = tkFont.nametofont(_font.name)
+        sz = adjust_font_size(NEWFONT, ascender)
+        NEWFONT.config(size = sz, weight = 'bold')
+
     #@-<< Make new Tk font >>
     #@+<< Set window  geometry >>
     #@+node:tom.20220402001212.1: *3* << Set window  geometry >>
@@ -309,30 +344,25 @@ def cmdwindow(plotmgr=None):
     # Set initial window position in screen
     #win.geometry('+1250+100')
     if _geom:
-        #902x670+182+182
+        # Example geometry syntax: '902x670+182+182'
         root_dims, root_xoffset, root_yoffset = _geom.split('+')
         root_width, root_height = root_dims.split('x')
         xoffset = int(root_xoffset) + int(root_width) + 5
         yoffset = int(root_yoffset)
-        #print(root_height)
-        #win.geometry(f'600x{root_height}')
-        win.geometry('+%s+%s' %(xoffset, yoffset))
+        w_width = win.winfo_width() + 25
+        w_height = win.winfo_height()
+        if w_height < int(root_height):
+            w_height = int(root_height)
+        else:
+            w_height = int(root_height) + 40
+
+        #win.geometry('+%s+%s' %(xoffset, yoffset))  # Can just set offsets
+        win.geometry(f'{w_width}x{w_height}+{xoffset}+{yoffset}')
     else:
         win.geometry('600x700')
 
 if __name__ == '__main__':
     cmdwindow(None)
-
-#    not_dunder = lambda b: b[:2] != '__'
-
-#    for b in dir(buttondefs):
-#        if not_dunder(b) and b != 'SPACER':
-#            #print b
-#            for x in buttondefs.__dict__.get(b, None):
-#                if x is not SPACER:
-#                    pass #print '   ', '%s: %s' % (x[1], x[2])
-#            #print 
-
     Tk.mainloop()
 #@-others
 #@@language python

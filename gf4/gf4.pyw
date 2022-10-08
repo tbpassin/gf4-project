@@ -188,9 +188,9 @@ class PlotManager(AbstractPlotManager):
         the window for the stack readout window.
         """
         self.root.update()  # Required to get the actual window height.
-        sw = self.root.winfo_screenheight()
+        hs = self.root.winfo_screenheight()
         hw = self.root.winfo_height()
-        y = sw - hw - 150
+        y = hs - hw - 150
         self.root.geometry(f'+50+{y}')
     #@+node:tom.20211207165051.22: *3* setMenus
     def setMenus(self):
