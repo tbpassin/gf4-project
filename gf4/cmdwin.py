@@ -134,7 +134,7 @@ def configure_button_list(parent, button_list, plotmgr):
                 print(f'Bad button definition: {b}')
                 continue 
             _b = Tk.Button(parent, text=text, relief='raised', width=BUTTONWIDTH, 
-                           bg=BUTTON_BG, font=NEWFONT, padx=8, 
+                           bg=BUTTON_BG, font=NEWFONT, padx=8,
                            command=lambda x=cmd: default_command(x, plotmgr))
             _b.pack(fill=Tk.X)
             _b.bind('<Button-1>', click)
@@ -246,20 +246,6 @@ def create_buttons_pack(host, plotmgr):
 
     phantom = None
     #@-<< Make new Tk font >>
-    #@+<< Set window  geometry >>
-    #@+node:tom.20220402001212.1: *3* << Set window  geometry >>
-    host_height = sz*3*(len(SMOOTHER_FIT_BUTTONS)
-                        + len(CURVE_FIT_BUTTONS)
-                        + len(STATS_BUTTONS)
-                        + 5)
-
-    host_width = BUTTONWIDTH*(COLS)*sz + len('Data Processing')*sz + 6*COLS
-    if plotmgr:
-        host_height = max(host_height, plotmgr.root.winfo_height())
-    else:
-        host_height = 250
-    host.geometry('%sx%s' % (host_width, host_height))
-    #@-<< Set window  geometry >>
     #@+<< Create Button Containers >>
     #@+node:tom.20220402001714.1: *3* << Create Button Containers >>
     entryframe = Tk.Frame(host, height=20, bd=3, relief='groove', bg='lightblue')
