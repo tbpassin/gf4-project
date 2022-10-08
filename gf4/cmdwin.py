@@ -263,54 +263,32 @@ def create_buttons_pack(host, plotmgr):
 
     #@-<< Create Button Containers >>
 
+    def create_button_group(frame, text, button_group, pack = 'side'):
+        but_frame = Tk.LabelFrame(frame, text = text, bd=3, bg='lightgrey')
+        if pack == 'side':
+            but_frame.pack(side=Tk.LEFT, fill=Tk.BOTH)
+        else:
+            but_frame.pack(fill=Tk.BOTH)
+        configure_button_list(but_frame, button_group, plotmgr)
+        return but_frame
+
     # Create Button Groups
-    but_frame_1 = Tk.LabelFrame(cmd_frame, text='Plot', bd=3, bg='lightgrey')
-    but_frame_1.pack(side=Tk.LEFT, fill=Tk.BOTH)
-    configure_button_list(but_frame_1, PLOT_BUTTONS, plotmgr)
+    but_frame_plot = create_button_group(cmd_frame, 'Plot', PLOT_BUTTONS)
+    create_button_group(but_frame_plot, 'Load/Save', LOAD_BUTTONS, 'fill')
 
-    but_frame_load = Tk.LabelFrame(but_frame_1, text='Load/Save', bd=3, bg='lightgrey')
-    but_frame_load.pack(fill=Tk.BOTH)
-    configure_button_list(but_frame_load, LOAD_BUTTONS, plotmgr)
+    create_button_group(cmd_frame, 'Stack', STACK_BUTTONS)
+    but_frame_curve = create_button_group(cmd_frame, 'Curve', CURVE_BUTTONS)
+    create_button_group(cmd_frame, 'Math', MATH_BUTTONS)
 
-    but_frame_2 = Tk.LabelFrame(cmd_frame,text='Stack', bd=3, bg='lightgrey')
-    but_frame_2.pack(side=Tk.LEFT, fill=Tk.BOTH)
-    configure_button_list(but_frame_2, STACK_BUTTONS, plotmgr)
+    but_frame_dp = create_button_group(cmd_frame, 'Data Processing', DATA_PROCESSING_BUTTONS)
+    create_button_group(but_frame_dp, 'Windowing', WINDOW_BUTTONS, 'fill')
+    create_button_group(but_frame_dp, 'Trend', TREND_BUTTONS, 'fill')
 
-    but_frame_curve = Tk.LabelFrame(cmd_frame, text='Curve', bd=3, bg='lightgrey')
-    but_frame_curve.pack(side=Tk.LEFT, fill=Tk.BOTH)
-    configure_button_list(but_frame_curve, CURVE_BUTTONS, plotmgr)
+    but_frame_fit = create_button_group(cmd_frame, 'Fit', CURVE_FIT_BUTTONS)
+    create_button_group(but_frame_fit, 'Smooth', SMOOTHER_FIT_BUTTONS, 'fill')
+    create_button_group(but_frame_fit, 'Statistics', STATS_BUTTONS, 'fill')
 
-    but_frame_math = Tk.LabelFrame(cmd_frame, text='Math', bd=3, bg='lightgrey')
-    but_frame_math.pack(side=Tk.LEFT, fill=Tk.BOTH)
-    configure_button_list(but_frame_math, MATH_BUTTONS, plotmgr)
-
-    but_frame_dp = Tk.LabelFrame(cmd_frame, text='Data Processing', bd=3, bg='lightgrey')
-    but_frame_dp.pack(side=Tk.LEFT, fill=Tk.BOTH)
-    configure_button_list(but_frame_dp, DATA_PROCESSING_BUTTONS, plotmgr)
-
-    but_frame_win = Tk.LabelFrame(but_frame_dp, text='Windowing', bd=3, bg='lightgrey')
-    but_frame_win.pack(fill=Tk.BOTH)
-    configure_button_list(but_frame_win, WINDOW_BUTTONS, plotmgr)
-
-    but_frame_trend = Tk.LabelFrame(but_frame_dp, text='Trend', bd=3, bg='lightgrey')
-    but_frame_trend.pack(fill=Tk.BOTH)
-    configure_button_list(but_frame_trend, TREND_BUTTONS, plotmgr)
-
-    but_frame_fit = Tk.LabelFrame(cmd_frame, text='Fit', bd=3,  bg='lightgrey')
-    but_frame_fit.pack(side=Tk.LEFT, fill=Tk.BOTH)
-    configure_button_list(but_frame_fit, CURVE_FIT_BUTTONS, plotmgr)
-
-    but_frame_smooth = Tk.LabelFrame(but_frame_fit, text='Smooth', bd=3, bg='lightgrey')
-    but_frame_smooth.pack(fill=Tk.BOTH)
-    configure_button_list(but_frame_smooth, SMOOTHER_FIT_BUTTONS, plotmgr)
-
-    but_frame_stats = Tk.LabelFrame(but_frame_fit, text='Statistics', bd=3, bg='lightgrey')
-    but_frame_stats.pack(fill=Tk.BOTH)
-    configure_button_list(but_frame_stats, STATS_BUTTONS, plotmgr)
-
-    but_frame_plugins = Tk.LabelFrame(but_frame_curve, text='Plugins', bd=4, bg='lightcyan')
-    but_frame_plugins.pack(fill=Tk.BOTH)
-    configure_button_list(but_frame_plugins, PLUGIN_BUTTONS, plotmgr)
+    create_button_group(but_frame_curve, 'Plugins', PLUGIN_BUTTONS, 'fill')
 #@+node:tom.20211211170819.21: ** cmdwindow
 def cmdwindow(plotmgr=None):
     _geom = ''
