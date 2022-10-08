@@ -244,6 +244,7 @@ def create_buttons_pack(host, plotmgr):
         sz = adjust_font_size(NEWFONT, ascender)
         NEWFONT.config(size = sz, weight = 'bold')
 
+    phantom = None
     #@-<< Make new Tk font >>
     #@+<< Set window  geometry >>
     #@+node:tom.20220402001212.1: *3* << Set window  geometry >>
