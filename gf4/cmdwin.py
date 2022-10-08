@@ -219,7 +219,7 @@ def create_buttons_pack(host, plotmgr):
     if platform.startswith('win'):
         ascender = 10.6
     else:
-        ascender = 9
+        ascender = 9.6
 
     # Find a preferred font, if installed
     available_fonts = tkFont.families()
