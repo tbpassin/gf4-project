@@ -7,6 +7,7 @@ from __future__ import print_function
 
 import os.path
 import sys
+from pathlib import PurePath
 
 import tkinter as Tk
 import tkinter.font as tkFont
@@ -54,6 +55,10 @@ ENCODING = 'utf-8'
 # Special data import keyword
 ENDDATASET = 'ENDDATASET'
 
+HOMEPATH = os.path.dirname(__file__)
+ICONFILE = 'linechart1.png'
+# Unusual but legal syntax for PurePath
+ICONPATH = PurePath(HOMEPATH) / 'icons' / ICONFILE
 #@+node:tom.20211207165051.4: ** class PlotManager(AbstractPlotManager)
 class PlotManager(AbstractPlotManager):
 
@@ -2419,6 +2424,11 @@ if __name__ == '__main__':
 
     plotmgr = PlotManager()
     plotmgr.root.update_idletasks()
+
+    # Thanks to:
+    # https://stackoverflow.com/questions/33137829/how-to-replace-the-icon-in-a-tkinter-app
+    photo = Tk.PhotoImage(file = ICONPATH)
+    plotmgr.root.wm_iconphoto(False, photo)
 
     fname = ''
 
