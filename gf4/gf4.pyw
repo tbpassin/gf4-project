@@ -5,7 +5,6 @@
 #@+node:tom.20211207165051.3: ** Imports
 from __future__ import print_function
 
-import os.path
 import sys
 from pathlib import PurePath
 
@@ -55,7 +54,7 @@ ENCODING = 'utf-8'
 # Special data import keyword
 ENDDATASET = 'ENDDATASET'
 
-HOMEPATH = os.path.dirname(__file__)
+HOMEPATH = PurePath(__file__).parent
 ICONFILE = 'linechart1.png'
 # Unusual but legal syntax for PurePath
 ICONPATH = PurePath(HOMEPATH) / 'icons' / ICONFILE
@@ -743,7 +742,7 @@ class PlotManager(AbstractPlotManager):
         data = f.read()
         f.close()
 
-        self.initpath = os.path.dirname(fname)
+        self.initpath = PurePath(fname).parent
         self.current_path = fname
 
         blocks = data.split(ENDDATASET)
@@ -758,7 +757,7 @@ class PlotManager(AbstractPlotManager):
                 continue
 
             lines = block.split('\n')
-            _data = Dataset(None, None, os.path.basename(fname))
+            _data = Dataset(None, None, PurePath(fname).name)
             _data.orig_filename = fname
             err = _data.setAsciiData(lines, root = self.root)
             if err:
@@ -794,7 +793,7 @@ class PlotManager(AbstractPlotManager):
         with open(fname, encoding = ENCODING) as f:
             data = f.read()
 
-        self.initpath = os.path.dirname(fname)
+        self.initpath = PurePath(fname).parent
 
         blocks = data.split(ENDDATASET)
         numblocks = len(blocks)
