@@ -8,7 +8,7 @@
 from __future__ import print_function
 from sys import platform
 from math import ceil
-from pathlib import PurePath
+
 try:
     import Tkinter as Tk
 except:
@@ -50,10 +50,6 @@ is_recording = False
 macro = ''
 NEWFONT = None
 
-HOMEPATH = PurePath(__file__).parent
-ICONFILE = 'linechart1.png'
-# Unusual but legal syntax for PurePath
-ICONPATH = PurePath(HOMEPATH) / 'icons' / ICONFILE
 #@+node:tom.20211211170819.11: ** click
 def click(event): 
     global is_recording, macro
