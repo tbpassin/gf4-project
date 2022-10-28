@@ -44,6 +44,7 @@ from editDialog import editDialog
 from trend import mann_kendall, YESNO
 
 from cmdwin import cmdwindow
+from utility import ICONPATH, setIcon
 
 matplotlib.use('TkAgg')
 
@@ -2423,11 +2424,7 @@ if __name__ == '__main__':
 
     plotmgr = PlotManager()
     plotmgr.root.update_idletasks()
-
-    # Thanks to:
-    # https://stackoverflow.com/questions/33137829/how-to-replace-the-icon-in-a-tkinter-app
-    photo = Tk.PhotoImage(file = ICONPATH)
-    plotmgr.root.wm_iconphoto(False, photo)
+    setIcon(plotmgr.root, ICONPATH)
 
     fname = ''
 

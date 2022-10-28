@@ -1,9 +1,7 @@
 # The list of plugins to import. Omit the ".py" extension.
-test_plugin
-double_x
 convolve1
 #autocorrel1
-#correl1
+correl1
 find_peak
 find_peak1
 readout

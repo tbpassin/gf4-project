@@ -6,6 +6,7 @@
 import tkinter as Tk
 
 from AbstractPlotMgr import MAIN, BUFFER, STACKDEPTH
+from utility import ICONPATH, setIcon
 
 TOP = STACKDEPTH - 1
 MONO = ('Courier', 10, 'normal')
@@ -28,6 +29,8 @@ class Stackwin(Tk.Toplevel):
             self.transient(plotmgr.root)
             _geom = plotmgr.root.geometry()
         self.protocol("WM_DELETE_WINDOW", self.cancel)
+
+        setIcon(self, ICONPATH)
 
         self.stopped = False
         self.last_stack_str = ''

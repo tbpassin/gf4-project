@@ -8,7 +8,7 @@
 from __future__ import print_function
 from sys import platform
 from math import ceil
-
+from pathlib import PurePath
 try:
     import Tkinter as Tk
 except:
@@ -34,6 +34,7 @@ from buttondefs import (SPACER, CURVE_FIT_BUTTONS, STATS_BUTTONS,
                         STACK_BUTTONS, CURVE_BUTTONS, MATH_BUTTONS,
                         DATA_PROCESSING_BUTTONS, WINDOW_BUTTONS, 
                         SMOOTHER_FIT_BUTTONS, TREND_BUTTONS, PLUGIN_BUTTONS)
+from utility import ICONPATH, setIcon
 #@+node:tom.20211211170819.10: ** Declarations
 COLS = 6
 BUTTONWIDTH = 9
@@ -48,6 +49,11 @@ entry = None
 is_recording = False
 macro = ''
 NEWFONT = None
+
+HOMEPATH = PurePath(__file__).parent
+ICONFILE = 'linechart1.png'
+# Unusual but legal syntax for PurePath
+ICONPATH = PurePath(HOMEPATH) / 'icons' / ICONFILE
 #@+node:tom.20211211170819.11: ** click
 def click(event): 
     global is_recording, macro
@@ -207,7 +213,6 @@ def adjust_font_size(font, ascender_height):
     return ceil((1. * ascender_height / ascender) * size)
 #@+node:tom.20211211170819.20: ** create_buttons_pack
 def create_buttons_pack(host, plotmgr):
-    # pylint: disable = too-many-locals
     # Custom font for smaller button font size
     global entry, NEWFONT
 
@@ -300,6 +305,7 @@ def cmdwindow(plotmgr=None):
         win = Tk.Tk()
 
     win.title("GF4 Commands")
+    setIcon(win, ICONPATH)
 
     create_buttons_pack(win, plotmgr)
     win.update_idletasks()
