@@ -101,7 +101,7 @@ class Stackwin(Tk.Toplevel):
         y_label = self.plotmgr.stack[BUFFER].figurelabel or ''
         t_label = self.plotmgr.stack[TOP].figurelabel or ''
 
-        stack_str = (f'T ==> | {t_label}\n'
+        stack_str = (f'{T_INTRO} {t_label}\n'
                    + f'{Y_INTRO} {y_label}\n'
                    + f'{X_INTRO} {x_label}')
 
