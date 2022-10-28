@@ -180,7 +180,6 @@ for m in plugin_modules:
         OWNER_GROUP = getattr(m, 'OWNER_GROUP', '')
         if OWNER_GROUP:
             exec(f'{OWNER_GROUP} = list({OWNER_GROUP});{OWNER_GROUP}.append({newbtn})')
-            continue
         else:
             print(f'{m.__name__} is missing optional OWNER_GROUP')
 
