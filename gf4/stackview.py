@@ -116,6 +116,7 @@ class Stackwin(Tk.Toplevel):
                 tb['state'] = 'disabled'
                 self.last_stack_str = stack_str
 
+                # Set font to monospaced for "INTRO" part of lines so the "|"s line up
                 for i, phrase in enumerate((X_INTRO, Y_INTRO, T_INTRO)):
                     left = tb.search(phrase, "1.0")
                     l, idx_1 = left.split('.')
