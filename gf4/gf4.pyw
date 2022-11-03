@@ -765,6 +765,7 @@ class PlotManager(AbstractPlotManager):
                 self.announce(f'No data in block {n}')
                 self.flashit()
                 self.announce(f'No data in block {n}')
+                print(len(lines), 'lines')
                 return
 
             if n <= BUFFER:
@@ -1341,7 +1342,7 @@ class PlotManager(AbstractPlotManager):
 
         # return _m, suby
     #@+node:tom.20211207165051.113: *4* make_phasespace
-    @REQUIRE_MAIN_BUFF
+    @REQUIRE_MAIN
     def make_phasespace(self):
         '''Replace the X axis data of the MAIN ds by replacing the x axis
            data with the ydata shifted left by one step.  That is,
@@ -1349,19 +1350,30 @@ class PlotManager(AbstractPlotManager):
            Plot the new data set.
         '''
 
+        _id = 'phasespace'
+        lastparm = self.parmsaver.get(_id, 1)
+        dia = GetSingleInt(self.root,
+                             'Shift X Data', 'Points To Shift',
+                             lastparm)
+        if dia.result is None: return
+        N = dia.result
+        self.parmsaver[_id] = N
+
         _ds = self.stack[MAIN]
         _y = _ds.ydata
 
-        _temp = []
-        _num = len(_ds)
-        for i in range(1, _num):
-            _temp.append(_y[i - 1])
-
-        _ds.xdata = _temp
-        _ds.ydata = _ds.ydata[1:]
-        _ds.figurelabel = 'Phase Space for %s' % (_ds.figurelabel)
-        _ds.xaxislabel = 'Y(t1)'
-        _ds.yaxislabel = 'Y(t+1)'
+        _ds.shift(N)
+        # Remove points zeroed by the shift
+        if N >= 0:
+            _ds.xdata = _y[N:]
+            _ds.ydata = _ds.ydata[N:]
+        else:
+            _ds.xdata = _y[:N]
+            _ds.ydata = _ds.ydata[:N]
+        lag = f'+ {N}' if N >= 0 else f'- {-N}'
+        _ds.figurelabel = f'"Phase Space" for {_ds.figurelabel} (Lag {lag})'
+        _ds.xaxislabel = 'Y(t)'
+        _ds.yaxislabel = f'Y(t {lag})'
         self.plot()
     #@+node:tom.20211207165051.114: *4* YvsX
     @REQUIRE_MAIN
@@ -1394,7 +1406,8 @@ class PlotManager(AbstractPlotManager):
         _X.xaxislabel = _X.yaxislabel
         _X.yaxislabel = _Y.yaxislabel
 
-        self.sortX()
+        #self.sortX()
+        self.plot()
     #@+node:tom.20220806224143.1: *4* zero
     @REQUIRE_MAIN
     def zero(self):
