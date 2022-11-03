@@ -20,11 +20,12 @@ positions. Typically:
 from AbstractPlotMgr import MAIN, BUFFER
 
 If you want to make sure there is a dataset in the MAIN or MAIN+BUFFER positions,
-then import them from the module "require_dataset" in the plugins directory:
+then import these functions from the module "require_dataset" in the plugins
+directory:
 
-from .require_datasets import needs_main
-# and possibly:
-from .require_datasets import needs_main_buffer
+from .require_datasets import has_main
+# or possibly:
+from .require_datasets import has_main_buffer
 
 These functions perform the same jobs as the PlotManager decorators
 @REQUIRE_MAIN and @REQUIRE_MAIN_BUFF.  Other useful declarations may be found
@@ -46,9 +47,9 @@ expected to return anything.  For example:
 
 # plotmgr will have been injected into the module by the time this is called
 def proc():
-    if not needs_main(plotmgr):  # see below
+    if not has_main(plotmgr):  # Do nothing if no data
         return
-    _ds = plotmgr.stack[MAIN]
+    _ds = plotmgr.stack[MAIN]  # The "X" Dataset
     _ds.scale(2)
     plotmgr.plot()
 
@@ -60,11 +61,9 @@ Optionally the plugin may define
 
 OVERRIDE = True
 
-If this attribute exists in the module and has the value True, no button will be
-added.  The command will still be registered, and if that name alreade exists
-in the command dictionary, the previous assignment will be replace by the new one.
-This provides a way to override an existing command (though the label and help
-message of the button will not be chagned).
+If this attribute exists in the module and has the value True, if that command
+name already exists in the command dictionary, the previous assignment will be
+replaced by the new one. This provides a way to override an existing command.
 
 To have the plugin's button added to an existing button group instead of the
 Plugins group, use its name from buttondefs.py, assign that name to the
