@@ -67,7 +67,7 @@ CURVE_BUTTONS = (
     ('Trim', 'trim', 'Delete Points From Left Or Right of Data (negative ==> left)'),
     ('Transpose', 'transpose', 'Transpose x and y axes'),
     ('SortX', 'sortx', 'Sort on x Axis'),
-    ('PhaseSpc', 'phase', 'Create Phase Space Plot: y(t+1) vs y(t)'),
+    ('PhaseSpc', 'phase', 'Create Phase Space Plot: y(t+N) vs y(t)'),
     ( 'Y vs X', 'YvsX', 'Plot y data of Y vs y data of X'),
     SPACER, SPACER,
     ('NumPts', 'numpts', 'Change/Set Number of Points When Generating Waveforms'),
@@ -142,7 +142,7 @@ STATS_BUTTONS = (
     ('Histogram', 'hist', 'Calculate Histogram of X Data'),
     SPACER, SPACER,
     ('Mean, STD', 'meanstd', 'Display Mean, Sample Standard Deviation, Lag-1 autocorrelation, and Area of X Data'),
-    ('Corr Coeff', 'corrcoeff', "Calculate Correlation Coefficient Between X and Y"),
+    # ('Corr Coeff', 'corrcoeff', "Calculate Correlation Coefficient Between X and Y"),
     ('Spearman', 'spearman', 'Calculate the Spearman Rank Correlation Coefficient between X and Y'),
     ('Pearson', 'pearson', "Calculate the Pearson's Correlation Coefficient r between X and Y"),
     SPACER, SPACER,
@@ -182,8 +182,8 @@ for m in plugin_modules:
             exec(f'{OWNER_GROUP} = list({OWNER_GROUP});{OWNER_GROUP}.append({newbtn})')
         else:
             print(f'{m.__name__} is missing optional OWNER_GROUP')
-
-    PLUGIN_BUTTONS.append(newbtn)
+    else:
+        PLUGIN_BUTTONS.append(newbtn)
 
 #@-others
 if __name__ == '__main__':
