@@ -6,6 +6,7 @@
 import tkinter as Tk
 
 from AbstractPlotMgr import MAIN, BUFFER, STACKDEPTH
+from utility import ICONPATH, setIcon
 
 TOP = STACKDEPTH - 1
 MONO = ('Courier', 10, 'normal')
@@ -28,6 +29,8 @@ class Stackwin(Tk.Toplevel):
             self.transient(plotmgr.root)
             _geom = plotmgr.root.geometry()
         self.protocol("WM_DELETE_WINDOW", self.cancel)
+
+        setIcon(self, ICONPATH)
 
         self.stopped = False
         self.last_stack_str = ''
@@ -98,7 +101,7 @@ class Stackwin(Tk.Toplevel):
         y_label = self.plotmgr.stack[BUFFER].figurelabel or ''
         t_label = self.plotmgr.stack[TOP].figurelabel or ''
 
-        stack_str = (f'T ==> | {t_label}\n'
+        stack_str = (f'{T_INTRO} {t_label}\n'
                    + f'{Y_INTRO} {y_label}\n'
                    + f'{X_INTRO} {x_label}')
 
@@ -113,6 +116,7 @@ class Stackwin(Tk.Toplevel):
                 tb['state'] = 'disabled'
                 self.last_stack_str = stack_str
 
+                # Set font to monospaced for "INTRO" part of lines so the "|"s line up
                 for i, phrase in enumerate((X_INTRO, Y_INTRO, T_INTRO)):
                     left = tb.search(phrase, "1.0")
                     l, idx_1 = left.split('.')

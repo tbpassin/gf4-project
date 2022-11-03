@@ -5,8 +5,8 @@
 #@+node:tom.20211207165051.3: ** Imports
 from __future__ import print_function
 
-import os.path
 import sys
+from pathlib import PurePath
 
 import tkinter as Tk
 import tkinter.font as tkFont
@@ -44,6 +44,7 @@ from editDialog import editDialog
 from trend import mann_kendall, YESNO
 
 from cmdwin import cmdwindow
+from utility import ICONPATH, setIcon
 
 matplotlib.use('TkAgg')
 
@@ -54,6 +55,10 @@ ENCODING = 'utf-8'
 # Special data import keyword
 ENDDATASET = 'ENDDATASET'
 
+HOMEPATH = PurePath(__file__).parent
+ICONFILE = 'linechart1.png'
+# Unusual but legal syntax for PurePath
+ICONPATH = PurePath(HOMEPATH) / 'icons' / ICONFILE
 #@+node:tom.20211207165051.4: ** class PlotManager(AbstractPlotManager)
 class PlotManager(AbstractPlotManager):
 
@@ -177,6 +182,21 @@ class PlotManager(AbstractPlotManager):
         self.buildCommands()
         self.setMenus()
 
+        self.set_init_pos()
+    #@+node:tom.20221006234409.1: *3* set_init_pos
+    def set_init_pos(self):
+        """Set initial position of main window.
+        
+        A position near left of screen leaves room for button window 
+        to be located without overlapping main window on most screens.
+        A position not too far above the screen bottom leaves room above
+        the window for the stack readout window.
+        """
+        self.root.update()  # Required to get the actual window height.
+        hs = self.root.winfo_screenheight()
+        hw = self.root.winfo_height()
+        y = hs - hw - 150
+        self.root.geometry(f'+50+{y}')
     #@+node:tom.20211207165051.22: *3* setMenus
     def setMenus(self):
         mainMenu = createMenus.setMenus(self)
@@ -723,7 +743,7 @@ class PlotManager(AbstractPlotManager):
         data = f.read()
         f.close()
 
-        self.initpath = os.path.dirname(fname)
+        self.initpath = PurePath(fname).parent
         self.current_path = fname
 
         blocks = data.split(ENDDATASET)
@@ -738,13 +758,14 @@ class PlotManager(AbstractPlotManager):
                 continue
 
             lines = block.split('\n')
-            _data = Dataset(None, None, os.path.basename(fname))
+            _data = Dataset(None, None, PurePath(fname).name)
             _data.orig_filename = fname
             err = _data.setAsciiData(lines, root = self.root)
             if err:
                 self.announce(f'No data in block {n}')
                 self.flashit()
                 self.announce(f'No data in block {n}')
+                print(len(lines), 'lines')
                 return
 
             if n <= BUFFER:
@@ -774,7 +795,7 @@ class PlotManager(AbstractPlotManager):
         with open(fname, encoding = ENCODING) as f:
             data = f.read()
 
-        self.initpath = os.path.dirname(fname)
+        self.initpath = PurePath(fname).parent
 
         blocks = data.split(ENDDATASET)
         numblocks = len(blocks)
@@ -1321,7 +1342,7 @@ class PlotManager(AbstractPlotManager):
 
         # return _m, suby
     #@+node:tom.20211207165051.113: *4* make_phasespace
-    @REQUIRE_MAIN_BUFF
+    @REQUIRE_MAIN
     def make_phasespace(self):
         '''Replace the X axis data of the MAIN ds by replacing the x axis
            data with the ydata shifted left by one step.  That is,
@@ -1329,19 +1350,30 @@ class PlotManager(AbstractPlotManager):
            Plot the new data set.
         '''
 
+        _id = 'phasespace'
+        lastparm = self.parmsaver.get(_id, 1)
+        dia = GetSingleInt(self.root,
+                             'Shift X Data', 'Points To Shift',
+                             lastparm)
+        if dia.result is None: return
+        N = dia.result
+        self.parmsaver[_id] = N
+
         _ds = self.stack[MAIN]
         _y = _ds.ydata
 
-        _temp = []
-        _num = len(_ds)
-        for i in range(1, _num):
-            _temp.append(_y[i - 1])
-
-        _ds.xdata = _temp
-        _ds.ydata = _ds.ydata[1:]
-        _ds.figurelabel = 'Phase Space for %s' % (_ds.figurelabel)
-        _ds.xaxislabel = 'Y(t1)'
-        _ds.yaxislabel = 'Y(t+1)'
+        _ds.shift(N)
+        # Remove points zeroed by the shift
+        if N >= 0:
+            _ds.xdata = _y[N:]
+            _ds.ydata = _ds.ydata[N:]
+        else:
+            _ds.xdata = _y[:N]
+            _ds.ydata = _ds.ydata[:N]
+        lag = f'+ {N}' if N >= 0 else f'- {-N}'
+        _ds.figurelabel = f'"Phase Space" for {_ds.figurelabel} (Lag {lag})'
+        _ds.xaxislabel = 'Y(t)'
+        _ds.yaxislabel = f'Y(t {lag})'
         self.plot()
     #@+node:tom.20211207165051.114: *4* YvsX
     @REQUIRE_MAIN
@@ -1374,7 +1406,8 @@ class PlotManager(AbstractPlotManager):
         _X.xaxislabel = _X.yaxislabel
         _X.yaxislabel = _Y.yaxislabel
 
-        self.sortX()
+        #self.sortX()
+        self.plot()
     #@+node:tom.20220806224143.1: *4* zero
     @REQUIRE_MAIN
     def zero(self):
@@ -2404,6 +2437,7 @@ if __name__ == '__main__':
 
     plotmgr = PlotManager()
     plotmgr.root.update_idletasks()
+    setIcon(plotmgr.root, ICONPATH)
 
     fname = ''
 

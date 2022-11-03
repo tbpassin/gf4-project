@@ -6,6 +6,8 @@
 #@+others
 #@+node:tom.20211211223207.1: ** Imports
 from __future__ import print_function
+from sys import platform
+from math import ceil
 
 try:
     import Tkinter as Tk
@@ -32,6 +34,7 @@ from buttondefs import (SPACER, CURVE_FIT_BUTTONS, STATS_BUTTONS,
                         STACK_BUTTONS, CURVE_BUTTONS, MATH_BUTTONS,
                         DATA_PROCESSING_BUTTONS, WINDOW_BUTTONS, 
                         SMOOTHER_FIT_BUTTONS, TREND_BUTTONS, PLUGIN_BUTTONS)
+from utility import ICONPATH, setIcon
 #@+node:tom.20211211170819.10: ** Declarations
 COLS = 6
 BUTTONWIDTH = 9
@@ -46,6 +49,7 @@ entry = None
 is_recording = False
 macro = ''
 NEWFONT = None
+
 #@+node:tom.20211211170819.11: ** click
 def click(event): 
     global is_recording, macro
@@ -132,7 +136,7 @@ def configure_button_list(parent, button_list, plotmgr):
                 print(f'Bad button definition: {b}')
                 continue 
             _b = Tk.Button(parent, text=text, relief='raised', width=BUTTONWIDTH, 
-                           bg=BUTTON_BG, font=NEWFONT, padx=8, 
+                           bg=BUTTON_BG, font=NEWFONT, padx=8,
                            command=lambda x=cmd: default_command(x, plotmgr))
             _b.pack(fill=Tk.X)
             _b.bind('<Button-1>', click)
@@ -192,9 +196,19 @@ def configure_macro_buttons(parent, plotmgr):
     but_clear.bind('<Leave>', on_leave)
     but_clear.fulltext = 'Clear Macro'
 
+#@+node:tom.20221007145433.1: ** adjust_font_size(font, ascender_height)
+def adjust_font_size(font, ascender_height):
+    """Adjust TK font size to make the ascender height as specified.
+    
+    Returns an integer."""
+    metrics = font.metrics()
+    params = font.actual()
+    ascender = metrics['ascent']
+    size = params['size']
+
+    return ceil((1. * ascender_height / ascender) * size)
 #@+node:tom.20211211170819.20: ** create_buttons_pack
 def create_buttons_pack(host, plotmgr):
-    # pylint: disable = too-many-locals
     # Custom font for smaller button font size
     global entry, NEWFONT
 
@@ -202,28 +216,37 @@ def create_buttons_pack(host, plotmgr):
     #@+node:tom.20220402001046.1: *3* << Make new Tk font >>
     phantom = Tk.Button(text='phantom')
     _font =  tkFont.nametofont(phantom['font'])
-    # sz_def = _font['size']
-    # sz = int(.9*sz_def)
-    sz = 8
-    NEWFONT = tkFont.Font()
-    NEWFONT.config(**_font.config())
-    NEWFONT.config(size=sz, weight='bold')
+    sz = _font['size']
+    if platform.startswith('win'):
+        ascender = 10.6
+    else:
+        ascender = 9.6
+
+    # Find a preferred font, if installed
+    available_fonts = tkFont.families()
+    ffamily = ''
+    for f in ("Segoe UI", "Open Sans", "Corbel"):
+        if f in available_fonts:
+            ffamily = f
+            break
+
+    if ffamily:
+        # Create Tk font for this family
+        NEWFONT = tkFont.Font(
+                            family = ffamily, name = 'cmdButtonFont',
+                            size = int(sz), weight = 'bold')
+
+        sz = adjust_font_size(NEWFONT, ascender)
+        NEWFONT.config(size = sz)
+        # _font will be the font of the group labels and the help text
+        _font.config(**NEWFONT.config())
+    else:
+        NEWFONT = tkFont.nametofont(_font.name)
+        sz = adjust_font_size(NEWFONT, ascender)
+        NEWFONT.config(size = sz, weight = 'bold')
+
     phantom = None
     #@-<< Make new Tk font >>
-    #@+<< Set window  geometry >>
-    #@+node:tom.20220402001212.1: *3* << Set window  geometry >>
-    host_height = sz*3*(len(SMOOTHER_FIT_BUTTONS)
-                        + len(CURVE_FIT_BUTTONS)
-                        + len(STATS_BUTTONS)
-                        + 5)
-
-    host_width = BUTTONWIDTH*(COLS)*sz + len('Data Processing')*sz + 6*COLS
-    if plotmgr:
-        host_height = max(host_height, plotmgr.root.winfo_height())
-    else:
-        host_height = 250
-    host.geometry('%sx%s' % (host_width, host_height))
-    #@-<< Set window  geometry >>
     #@+<< Create Button Containers >>
     #@+node:tom.20220402001714.1: *3* << Create Button Containers >>
     entryframe = Tk.Frame(host, height=20, bd=3, relief='groove', bg='lightblue')
@@ -241,54 +264,32 @@ def create_buttons_pack(host, plotmgr):
 
     #@-<< Create Button Containers >>
 
+    def create_button_group(frame, text, button_group, pack = 'side'):
+        but_frame = Tk.LabelFrame(frame, text = text, bd=3, bg='lightgrey')
+        if pack == 'side':
+            but_frame.pack(side=Tk.LEFT, fill=Tk.BOTH)
+        else:
+            but_frame.pack(fill=Tk.BOTH)
+        configure_button_list(but_frame, button_group, plotmgr)
+        return but_frame
+
     # Create Button Groups
-    but_frame_1 = Tk.LabelFrame(cmd_frame, text='Plot', bd=3, bg='lightgrey')
-    but_frame_1.pack(side=Tk.LEFT, fill=Tk.BOTH)
-    configure_button_list(but_frame_1, PLOT_BUTTONS, plotmgr)
+    but_frame_plot = create_button_group(cmd_frame, 'Plot', PLOT_BUTTONS)
+    create_button_group(but_frame_plot, 'Load/Save', LOAD_BUTTONS, 'fill')
 
-    but_frame_load = Tk.LabelFrame(but_frame_1, text='Load/Save', bd=3, bg='lightgrey')
-    but_frame_load.pack(fill=Tk.BOTH)
-    configure_button_list(but_frame_load, LOAD_BUTTONS, plotmgr)
+    create_button_group(cmd_frame, 'Stack', STACK_BUTTONS)
+    but_frame_curve = create_button_group(cmd_frame, 'Curve', CURVE_BUTTONS)
+    create_button_group(cmd_frame, 'Math', MATH_BUTTONS)
 
-    but_frame_2 = Tk.LabelFrame(cmd_frame,text='Stack', bd=3, bg='lightgrey')
-    but_frame_2.pack(side=Tk.LEFT, fill=Tk.BOTH)
-    configure_button_list(but_frame_2, STACK_BUTTONS, plotmgr)
+    but_frame_dp = create_button_group(cmd_frame, 'Data Processing', DATA_PROCESSING_BUTTONS)
+    create_button_group(but_frame_dp, 'Windowing', WINDOW_BUTTONS, 'fill')
+    create_button_group(but_frame_dp, 'Trend', TREND_BUTTONS, 'fill')
 
-    but_frame_curve = Tk.LabelFrame(cmd_frame, text='Curve', bd=3, bg='lightgrey')
-    but_frame_curve.pack(side=Tk.LEFT, fill=Tk.BOTH)
-    configure_button_list(but_frame_curve, CURVE_BUTTONS, plotmgr)
+    but_frame_fit = create_button_group(cmd_frame, 'Fit', CURVE_FIT_BUTTONS)
+    create_button_group(but_frame_fit, 'Smooth', SMOOTHER_FIT_BUTTONS, 'fill')
+    create_button_group(but_frame_fit, 'Statistics', STATS_BUTTONS, 'fill')
 
-    but_frame_math = Tk.LabelFrame(cmd_frame, text='Math', bd=3, bg='lightgrey')
-    but_frame_math.pack(side=Tk.LEFT, fill=Tk.BOTH)
-    configure_button_list(but_frame_math, MATH_BUTTONS, plotmgr)
-
-    but_frame_dp = Tk.LabelFrame(cmd_frame, text='Data Processing', bd=3, bg='lightgrey')
-    but_frame_dp.pack(side=Tk.LEFT, fill=Tk.BOTH)
-    configure_button_list(but_frame_dp, DATA_PROCESSING_BUTTONS, plotmgr)
-
-    but_frame_win = Tk.LabelFrame(but_frame_dp, text='Windowing', bd=3, bg='lightgrey')
-    but_frame_win.pack(fill=Tk.BOTH)
-    configure_button_list(but_frame_win, WINDOW_BUTTONS, plotmgr)
-
-    but_frame_trend = Tk.LabelFrame(but_frame_dp, text='Trend', bd=3, bg='lightgrey')
-    but_frame_trend.pack(fill=Tk.BOTH)
-    configure_button_list(but_frame_trend, TREND_BUTTONS, plotmgr)
-
-    but_frame_fit = Tk.LabelFrame(cmd_frame, text='Fit', bd=3,  bg='lightgrey')
-    but_frame_fit.pack(side=Tk.LEFT, fill=Tk.BOTH)
-    configure_button_list(but_frame_fit, CURVE_FIT_BUTTONS, plotmgr)
-
-    but_frame_smooth = Tk.LabelFrame(but_frame_fit, text='Smooth', bd=3, bg='lightgrey')
-    but_frame_smooth.pack(fill=Tk.BOTH)
-    configure_button_list(but_frame_smooth, SMOOTHER_FIT_BUTTONS, plotmgr)
-
-    but_frame_stats = Tk.LabelFrame(but_frame_fit, text='Statistics', bd=3, bg='lightgrey')
-    but_frame_stats.pack(fill=Tk.BOTH)
-    configure_button_list(but_frame_stats, STATS_BUTTONS, plotmgr)
-
-    but_frame_plugins = Tk.LabelFrame(but_frame_curve, text='Plugins', bd=4, bg='lightcyan')
-    but_frame_plugins.pack(fill=Tk.BOTH)
-    configure_button_list(but_frame_plugins, PLUGIN_BUTTONS, plotmgr)
+    create_button_group(but_frame_curve, 'Plugins', PLUGIN_BUTTONS, 'fill')
 #@+node:tom.20211211170819.21: ** cmdwindow
 def cmdwindow(plotmgr=None):
     _geom = ''
@@ -300,6 +301,7 @@ def cmdwindow(plotmgr=None):
         win = Tk.Tk()
 
     win.title("GF4 Commands")
+    setIcon(win, ICONPATH)
 
     create_buttons_pack(win, plotmgr)
     win.update_idletasks()
@@ -309,30 +311,25 @@ def cmdwindow(plotmgr=None):
     # Set initial window position in screen
     #win.geometry('+1250+100')
     if _geom:
-        #902x670+182+182
+        # Example geometry syntax: '902x670+182+182'
         root_dims, root_xoffset, root_yoffset = _geom.split('+')
         root_width, root_height = root_dims.split('x')
         xoffset = int(root_xoffset) + int(root_width) + 5
         yoffset = int(root_yoffset)
-        #print(root_height)
-        #win.geometry(f'600x{root_height}')
-        win.geometry('+%s+%s' %(xoffset, yoffset))
+        w_width = win.winfo_width() + 25
+        w_height = win.winfo_height()
+        if w_height < int(root_height):
+            w_height = int(root_height)
+        else:
+            w_height = int(root_height) + 40
+
+        #win.geometry('+%s+%s' %(xoffset, yoffset))  # Can just set offsets
+        win.geometry(f'{w_width}x{w_height}+{xoffset}+{yoffset}')
     else:
         win.geometry('600x700')
 
 if __name__ == '__main__':
     cmdwindow(None)
-
-#    not_dunder = lambda b: b[:2] != '__'
-
-#    for b in dir(buttondefs):
-#        if not_dunder(b) and b != 'SPACER':
-#            #print b
-#            for x in buttondefs.__dict__.get(b, None):
-#                if x is not SPACER:
-#                    pass #print '   ', '%s: %s' % (x[1], x[2])
-#            #print 
-
     Tk.mainloop()
 #@-others
 #@@language python

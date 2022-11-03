@@ -6,7 +6,7 @@
 import sys
 import os.path
 
-APPVERSION = '1.3 b1'
+APPVERSION = '1.3 b2'
 ENCODING = 'utf-8'
 
 def getGitInfo():
