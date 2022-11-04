@@ -146,7 +146,8 @@ STATS_BUTTONS = (
     ('Spearman', 'spearman', 'Calculate the Spearman Rank Correlation Coefficient between X and Y'),
     ('Pearson', 'pearson', "Calculate the Pearson's Correlation Coefficient r between X and Y"),
     SPACER, SPACER,
-)
+    ('Partial\nAutocorr', 'partial-autocorr',
+               'Partial autocorrelation of the X dataset (assumes stationary data)'))
 
 GENERATOR_BUTTONS = (
     ('Sine', 'sine', 'Generate Sine Wave.  Period is in multiples of x-axis length'),

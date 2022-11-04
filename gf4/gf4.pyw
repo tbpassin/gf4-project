@@ -19,6 +19,7 @@ from matplotlib.figure import Figure
 
 from numpy import ndarray
 from scipy.stats import spearmanr
+from statsmodels.tsa.stattools import pacf
 
 #from randnum import *
 from AbstractPlotMgr import AbstractPlotManager
@@ -1521,6 +1522,29 @@ class PlotManager(AbstractPlotManager):
             self.stack[MAIN].figurelabel = 'Autocorrelation of %s' % (lab)
         else:
             self.stack[MAIN].figurelabel = 'Autocorrelation'
+
+        self.plot()
+    #@+node:tom.20221104001727.1: *4* partial_autocorrel
+    @REQUIRE_MAIN
+    def partial_autocorr(self):
+        _ds = self.stack[MAIN]
+        partial_ac, conf_bands = pacf(_ds.ydata, alpha = .05, method = 'ywm')
+
+        new_x = [n for n in range(len(partial_ac))]
+        _ds.ydata = partial_ac
+        _ds.xdata = new_x
+
+        # Error bands
+        low, hi = list(zip(*conf_bands))
+        upper = Dataset(new_x, hi)
+        lower = Dataset(new_x, low)
+        _ds.errorBands = [upper, lower]
+
+        lab = _ds.figurelabel.strip() or ''
+        lab = 'Partial Autocorrelation of ' + lab
+        _ds.figurelabel = lab
+        _ds.xaxislabel = 'Lag'
+        _ds.yaxislabel = 'Autocorrelation'
 
         self.plot()
     #@+node:tom.20211207165051.99: *4* moving_median
