@@ -4,7 +4,7 @@
 
 ### "Phasespace" plot
 #### Devel branch, 11/2/202 v1.3 b1
-Lag can be specified (previously: only lag-1). 
+Lag can be specified (previously: only lag = 1). 
 
 ### Startup Window Location, Size, Icons
 #### Devel branch
