@@ -1,4 +1,23 @@
 
+### New "partial autocorrelation" command
+#### Devel branch v1.3b2
+
+### "Phasespace" plot
+#### Devel branch, 11/2/202 v1.3 b1
+Lag can be specified (previously: only lag-1). 
+
+### Startup Window Location, Size, Icons
+#### Devel branch
+
+10/7/2022, v1.3 b1:
+
+- Tweak initial vertical position of main window: 
+- Improve command window fonts and window height, especially on Linux.
+
+10/26/2008 v1.3 b1
+
+-Show program icon in main window.
+
 ### Icons for desktop launchers
 #### Devel branch. 10/3/2022, v1.2
 A new _icons_ directory contains icons for Linux and Windows desktop launchers.
