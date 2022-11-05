@@ -31,7 +31,14 @@ PLOT_BUTTONS = (
     SPACER, SPACER,
     ('Error Bands', 'overploterr', 'Overplot X Error Bands if any'),
     ('Timehack', 'timehack', 'Vertical Marker At Specified X Position'),
-    SPACER, SPACER,
+    # SPACER, SPACER,
+    # ('Linear', 'linear', 'Linear Plot'),
+    # ('Semilog Y', 'semilogy', 'Semilog Plot on Y Axis'),
+    # ('Semilog X', 'semilogx', 'Semilog Plot on X Axis'),
+    # ('Loglog', 'loglog', 'Log-log Plot'),
+)
+
+AXES_BUTTONS = (
     ('Linear', 'linear', 'Linear Plot'),
     ('Semilog Y', 'semilogy', 'Semilog Plot on Y Axis'),
     ('Semilog X', 'semilogx', 'Semilog Plot on X Axis'),

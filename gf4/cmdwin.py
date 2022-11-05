@@ -33,7 +33,8 @@ from buttondefs import (SPACER, CURVE_FIT_BUTTONS, STATS_BUTTONS,
                         GENERATOR_BUTTONS, PLOT_BUTTONS, LOAD_BUTTONS,
                         STACK_BUTTONS, CURVE_BUTTONS, MATH_BUTTONS,
                         DATA_PROCESSING_BUTTONS, WINDOW_BUTTONS, 
-                        SMOOTHER_FIT_BUTTONS, TREND_BUTTONS, PLUGIN_BUTTONS)
+                        SMOOTHER_FIT_BUTTONS, TREND_BUTTONS, PLUGIN_BUTTONS,
+                        AXES_BUTTONS)
 from utility import ICONPATH, setIcon
 #@+node:tom.20211211170819.10: ** Declarations
 COLS = 6
@@ -275,7 +276,9 @@ def create_buttons_pack(host, plotmgr):
 
     # Create Button Groups
     but_frame_plot = create_button_group(cmd_frame, 'Plot', PLOT_BUTTONS)
+    create_button_group(but_frame_plot, 'Axes', AXES_BUTTONS, 'fill')
     create_button_group(but_frame_plot, 'Load/Save', LOAD_BUTTONS, 'fill')
+
 
     create_button_group(cmd_frame, 'Stack', STACK_BUTTONS)
     but_frame_curve = create_button_group(cmd_frame, 'Curve', CURVE_BUTTONS)
