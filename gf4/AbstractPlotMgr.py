@@ -39,7 +39,7 @@ class AbstractPlotManager:
         self.gridcolor=DEFAULTGRIDCOLOR
         self.stackdepth = STACKDEPTH
         # List of Dataset objects:
-        self.stack = [None] * self.stackdepth
+        self.stack = [Dataset() for i in range(STACKDEPTH)]
         # Storage for one Dataset:
         self.storage = None
         # Default number of points for generated curves (integer):
