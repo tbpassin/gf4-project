@@ -31,11 +31,6 @@ PLOT_BUTTONS = (
     SPACER, SPACER,
     ('Error Bands', 'overploterr', 'Overplot X Error Bands if any'),
     ('Timehack', 'timehack', 'Vertical Marker At Specified X Position'),
-    # SPACER, SPACER,
-    # ('Linear', 'linear', 'Linear Plot'),
-    # ('Semilog Y', 'semilogy', 'Semilog Plot on Y Axis'),
-    # ('Semilog X', 'semilogx', 'Semilog Plot on X Axis'),
-    # ('Loglog', 'loglog', 'Log-log Plot'),
 )
 
 AXES_BUTTONS = (
@@ -190,6 +185,7 @@ for m in plugin_modules:
             exec(f'{OWNER_GROUP} = list({OWNER_GROUP});{OWNER_GROUP}.append({newbtn})')
         else:
             print(f'{m.__name__} is missing optional OWNER_GROUP')
+            PLUGIN_BUTTONS.append(newbtn)
     else:
         PLUGIN_BUTTONS.append(newbtn)
 
