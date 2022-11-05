@@ -237,7 +237,9 @@ class PlotManager(AbstractPlotManager):
         root.bind('<Alt-F4>', self.quit)
 
         f = Figure(figsize=(9, 6), dpi=100, facecolor=LIGHTGRAY)
-        ax = None  # f.add_subplot(111, axisbg='0.3')
+        ax = None
+        ax = f.gca()
+        ax.set_facecolor(self.bgcolor)
 
         canvas = FigureCanvasTkAgg(f, master=root)
         self.toolbar = NavigationToolbar2Tk(canvas, root)

@@ -43,10 +43,7 @@ def plot(self, stackposition=MAIN, clearFirst=True):
     #@+<< get axes >>
     #@+node:tom.20220115175642.1: *3* << get axes >>
     if not self.axes:
-        try:  # Python 2.7
-            ax = f.add_subplot(111, axisbg=self.bgcolor)
-        except:  # Python 3.7
-            ax = f.add_subplot(111, facecolor=self.bgcolor)
+        ax = f.gca()
         self.axes = ax
     else:
         ax = self.axes
