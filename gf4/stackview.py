@@ -97,9 +97,10 @@ class Stackwin(Tk.Toplevel):
         tb = self.text_box
 
         stack_str = ''
-        x_label = self.plotmgr.stack[MAIN].figurelabel or ''
-        y_label = self.plotmgr.stack[BUFFER].figurelabel or ''
-        t_label = self.plotmgr.stack[TOP].figurelabel or ''
+        stack = self.plotmgr.stack
+        x_label = stack[MAIN] and stack[MAIN].figurelabel or ''
+        y_label = stack[BUFFER] and stack[BUFFER].figurelabel or ''
+        t_label = stack[TOP] and stack[TOP].figurelabel or ''
 
         stack_str = (f'{T_INTRO} {t_label}\n'
                    + f'{Y_INTRO} {y_label}\n'
