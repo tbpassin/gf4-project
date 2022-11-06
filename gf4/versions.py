@@ -16,12 +16,12 @@ def getGitInfo():
     try:
         cmd = ['git', 'log']
         gitlog = run(cmd, cwd=rootdir, capture_output = True)
-        log = gitlog.stdout.decode('utf-8')[:30]
+        log = gitlog.stdout.decode(ENCODING)[:30]
         version = log.split()[1][:9]
 
         cmd = 'git symbolic-ref --short HEAD'.split()
         git_result = run(cmd, cwd=rootdir, capture_output = True)
-        branch = git_result.stdout.decode('utf-8').strip()
+        branch = git_result.stdout.decode(ENCODING).strip()
     except Exception:
         # Most likely because git isn't available
         pass
