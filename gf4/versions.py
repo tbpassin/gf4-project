@@ -3,7 +3,6 @@
 #@@language python
 """Return the git branch and changeset id as a tuple."""
 
-# import sys
 import os.path
 from subprocess import run
 
