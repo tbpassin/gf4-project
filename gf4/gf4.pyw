@@ -754,7 +754,9 @@ class PlotManager(AbstractPlotManager):
         if numblocks < 1:
             self.announce('No data found')
             return
+
         first_time = self.stack[MAIN].xdata is None
+
         for n in range(min(len(blocks), STACKDEPTH)):
             block = blocks[n]
             if not block.split():
@@ -883,6 +885,8 @@ class PlotManager(AbstractPlotManager):
             self.announce('No data found')
             return
 
+        first_time = self.stack[MAIN].xdata is None
+
         for n in range(min(len(blocks), STACKDEPTH)):
             block = blocks[n]
             lines = block.split('\n')
@@ -893,12 +897,10 @@ class PlotManager(AbstractPlotManager):
                 self.flashit()
                 self.announce('%s' % err)
             else:
-                if n <= BUFFER:
+                if n < STACKDEPTH:
                     self.set_data(_data, n)
-                elif n == BUFFER + 1:
-                    self.set_data(_data, STACKDEPTH - 1)
 
-        if not self.axes:
+        if first_time:
             self.plot()
     #@+node:tom.20211207213410.1: *3* Curve Operations
     #@+node:tom.20211207165051.68: *4* setNumPoints
