@@ -773,10 +773,10 @@ class PlotManager(AbstractPlotManager):
                 print(len(lines), 'lines')
                 return
 
-            if n <= BUFFER:
+            if n < STACKDEPTH:
                 self.set_data(_data, n)
-            elif n == BUFFER + 1:
-                self.set_data(_data, STACKDEPTH - 1)
+            else:
+                break
 
         if first_time:
             self.plot()
@@ -820,10 +820,10 @@ class PlotManager(AbstractPlotManager):
                 self.announce('%s' % err)
                 return
 
-            if n <= BUFFER:
+            if n < STACKDEPTH:
                 self.set_data(_data, n)
-            elif n == BUFFER + 1:
-                self.set_data(_data, STACKDEPTH - 1)
+            else:
+                break
 
         if not self.axes:
             self.plot()
@@ -899,6 +899,8 @@ class PlotManager(AbstractPlotManager):
             else:
                 if n < STACKDEPTH:
                     self.set_data(_data, n)
+                else:
+                    break
 
         if first_time:
             self.plot()
