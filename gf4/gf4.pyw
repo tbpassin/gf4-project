@@ -808,6 +808,8 @@ class PlotManager(AbstractPlotManager):
             self.announce('No data found')
             return
 
+        first_time = self.stack[MAIN].xdata is None
+
         for n in range(min(len(blocks), STACKDEPTH)):
             block = blocks[n]
             lines = block.split('\n')
@@ -825,7 +827,7 @@ class PlotManager(AbstractPlotManager):
             else:
                 break
 
-        if not self.axes:
+        if first_time:
             self.plot()
         else:
             if overplot: self.overplot()
