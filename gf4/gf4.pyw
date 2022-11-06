@@ -754,7 +754,7 @@ class PlotManager(AbstractPlotManager):
         if numblocks < 1:
             self.announce('No data found')
             return
-
+        first_time = self.stack[MAIN].xdata is None
         for n in range(min(len(blocks), STACKDEPTH)):
             block = blocks[n]
             if not block.split():
@@ -776,7 +776,7 @@ class PlotManager(AbstractPlotManager):
             elif n == BUFFER + 1:
                 self.set_data(_data, STACKDEPTH - 1)
 
-        if not self.axes:
+        if first_time:
             self.plot()
 
     #@+node:tom.20211207165051.63: *4* load_plot_data
