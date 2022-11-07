@@ -1560,6 +1560,7 @@ class PlotManager(AbstractPlotManager):
         _ds.yaxislabel = 'Autocorrelation Coefficient'
 
         self.plot()
+        self.overplot_errorbands()
     #@+node:tom.20211207165051.99: *4* moving_median
     @REQUIRE_MAIN
     def moving_median(self):
