@@ -1544,6 +1544,11 @@ class PlotManager(AbstractPlotManager):
 
         # Error bands
         low, hi = list(zip(*conf_bands))
+
+        # Make "error bands" to be centered on axis, as is conventional
+        low = [lo - y for lo, y in zip(low,partial_ac)]
+        hi = [hi - y for hi, y in zip(hi, partial_ac)]
+
         upper = Dataset(new_x, hi)
         lower = Dataset(new_x, low)
         _ds.errorBands = [upper, lower]
@@ -1552,7 +1557,7 @@ class PlotManager(AbstractPlotManager):
         lab = 'Partial Autocorrelation of ' + lab
         _ds.figurelabel = lab
         _ds.xaxislabel = 'Lag'
-        _ds.yaxislabel = 'Autocorrelation'
+        _ds.yaxislabel = 'Autocorrelation Coefficient'
 
         self.plot()
     #@+node:tom.20211207165051.99: *4* moving_median
