@@ -4,16 +4,25 @@
 #@+node:tom.20211211170819.24: ** Color Definitions
 """Color definitions for gf4."""
 
-NEARBLACK = '0.2'; BLACK = 'black'; LIGHTGRAY = '0.95'; WHITE = 'white'
-CYAN = 'cyan'; GRAY = 'gray'; MEDGRAY='0.6'; LIGHTBLUE = 'lightblue'
-DEFAULTGRIDCOLOR = 'lightgrey'; CORNFLOWERBLUE = 'CornFlowerBlue'
+BLACK = 'black';
+CORNFLOWERBLUE = 'CornFlowerBlue'
+CYAN = 'cyan';
 DEEPSKYBLUE = 'deepskyblue'
+DEFAULTGRIDCOLOR = 'lightgrey';
+GRAY = 'gray';
+LIGHTBLUE = 'lightblue'
+MEDIUMLIGHTGRAY = '0.9'
+LIGHTGRAY = '0.95';
+MEDGRAY='0.6';
+NEARBLACK = '0.2';
+WHITE = 'white'
 
-# Grid color to use for various background colors
-ColorBgPairs = {
+# Grid colors to use for various background colors
+ColorBgPairs = {  # background: grid
     CORNFLOWERBLUE:  (0.529,  0.376,  0.376),
     DEEPSKYBLUE: (0.529,  0.376,  0.376),
     LIGHTBLUE: MEDGRAY,
+    MEDGRAY: MEDIUMLIGHTGRAY,
     BLACK: LIGHTGRAY,
     WHITE: DEFAULTGRIDCOLOR
 }

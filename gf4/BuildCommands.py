@@ -137,6 +137,7 @@ def buildCommands(self):
        'spearman': self.spearman,
        'pearson': self.pearson,
        'sliding_var': self.sliding_var,
+       'partial-autocorr': self.partial_autocorr,
 
        'mann_kendall': self.trend_mann_kendall,
        'piecewise': self.fit_piecewise,

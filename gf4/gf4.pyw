@@ -19,6 +19,7 @@ from matplotlib.figure import Figure
 
 from numpy import ndarray
 from scipy.stats import spearmanr
+from statsmodels.tsa.stattools import pacf
 
 #from randnum import *
 from AbstractPlotMgr import AbstractPlotManager
@@ -236,7 +237,9 @@ class PlotManager(AbstractPlotManager):
         root.bind('<Alt-F4>', self.quit)
 
         f = Figure(figsize=(9, 6), dpi=100, facecolor=LIGHTGRAY)
-        ax = None  # f.add_subplot(111, axisbg='0.3')
+        ax = None
+        ax = f.gca()
+        ax.set_facecolor(self.bgcolor)
 
         canvas = FigureCanvasTkAgg(f, master=root)
         self.toolbar = NavigationToolbar2Tk(canvas, root)
@@ -752,6 +755,8 @@ class PlotManager(AbstractPlotManager):
             self.announce('No data found')
             return
 
+        first_time = self.stack[MAIN].xdata is None
+
         for n in range(min(len(blocks), STACKDEPTH)):
             block = blocks[n]
             if not block.split():
@@ -768,12 +773,12 @@ class PlotManager(AbstractPlotManager):
                 print(len(lines), 'lines')
                 return
 
-            if n <= BUFFER:
+            if n < STACKDEPTH:
                 self.set_data(_data, n)
-            elif n == BUFFER + 1:
-                self.set_data(_data, STACKDEPTH - 1)
+            else:
+                break
 
-        if not self.axes:
+        if first_time:
             self.plot()
 
     #@+node:tom.20211207165051.63: *4* load_plot_data
@@ -803,6 +808,8 @@ class PlotManager(AbstractPlotManager):
             self.announce('No data found')
             return
 
+        first_time = self.stack[MAIN].xdata is None
+
         for n in range(min(len(blocks), STACKDEPTH)):
             block = blocks[n]
             lines = block.split('\n')
@@ -815,12 +822,12 @@ class PlotManager(AbstractPlotManager):
                 self.announce('%s' % err)
                 return
 
-            if n <= BUFFER:
+            if n < STACKDEPTH:
                 self.set_data(_data, n)
-            elif n == BUFFER + 1:
-                self.set_data(_data, STACKDEPTH - 1)
+            else:
+                break
 
-        if not self.axes:
+        if first_time:
             self.plot()
         else:
             if overplot: self.overplot()
@@ -880,6 +887,8 @@ class PlotManager(AbstractPlotManager):
             self.announce('No data found')
             return
 
+        first_time = self.stack[MAIN].xdata is None
+
         for n in range(min(len(blocks), STACKDEPTH)):
             block = blocks[n]
             lines = block.split('\n')
@@ -890,12 +899,12 @@ class PlotManager(AbstractPlotManager):
                 self.flashit()
                 self.announce('%s' % err)
             else:
-                if n <= BUFFER:
+                if n < STACKDEPTH:
                     self.set_data(_data, n)
-                elif n == BUFFER + 1:
-                    self.set_data(_data, STACKDEPTH - 1)
+                else:
+                    break
 
-        if not self.axes:
+        if first_time:
             self.plot()
     #@+node:tom.20211207213410.1: *3* Curve Operations
     #@+node:tom.20211207165051.68: *4* setNumPoints
@@ -1523,6 +1532,35 @@ class PlotManager(AbstractPlotManager):
             self.stack[MAIN].figurelabel = 'Autocorrelation'
 
         self.plot()
+    #@+node:tom.20221104001727.1: *4* partial_autocorrel
+    @REQUIRE_MAIN
+    def partial_autocorr(self):
+        _ds = self.stack[MAIN]
+        partial_ac, conf_bands = pacf(_ds.ydata, alpha = .05, method = 'ywm')
+
+        new_x = [n for n in range(len(partial_ac))]
+        _ds.ydata = partial_ac
+        _ds.xdata = new_x
+
+        # Error bands
+        low, hi = list(zip(*conf_bands))
+
+        # Make "error bands" to be centered on axis, as is conventional
+        low = [lo - y for lo, y in zip(low,partial_ac)]
+        hi = [hi - y for hi, y in zip(hi, partial_ac)]
+
+        upper = Dataset(new_x, hi)
+        lower = Dataset(new_x, low)
+        _ds.errorBands = [upper, lower]
+
+        lab = _ds.figurelabel.strip() or ''
+        lab = 'Partial Autocorrelation of ' + lab
+        _ds.figurelabel = lab
+        _ds.xaxislabel = 'Lag'
+        _ds.yaxislabel = 'Autocorrelation Coefficient'
+
+        self.plot()
+        self.overplot_errorbands()
     #@+node:tom.20211207165051.99: *4* moving_median
     @REQUIRE_MAIN
     def moving_median(self):

@@ -284,3 +284,14 @@ one of the menus expanded:
 
 .. [2] As mentioned in :ref:`The Waveform Stack`, the **Y** position is also called the *Buffer*, and the **X** position may be called *Main*.
 
+Help For Commands
++++++++++++++++++
+
+For the commands that have buttons in the Command Window, hovering the mouse over
+the button causes a brief summary to display in the band at the top of the
+Command window.  Right-clicking on a button displays a more detailed
+explanation in the system browser.
+
+If an extended help message does not exist for the button, this will be
+announced in the announcement band at the bottom of the main window.
+

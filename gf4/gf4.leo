@@ -27,6 +27,7 @@
 <v t="tom.20211211181438.12"><vh>@file fits.py</vh></v>
 <v t="tom.20211211181438.2"><vh>@file fit_test.py</vh></v>
 <v t="tom.20220411202149.1"><vh>@file help.py</vh></v>
+<v t="tom.20221107232208.1"><vh>@file help_cmds.py</vh></v>
 <v t="tom.20220829232158.1"><vh>@file import_plugins.py</vh></v>
 <v t="tom.20211211171304.51"><vh>@file Linestyle.py</vh></v>
 <v t="tom.20211211171304.65"><vh>@file MakeWaveforms.py</vh></v>
@@ -37,8 +38,10 @@
 <v t="tom.20211211171913.40"><vh>@file stats.py</vh></v>
 <v t="tom.20211211171913.51"><vh>@file Timehack.py</vh></v>
 <v t="tom.20211211171913.55"><vh>@file trend.py</vh></v>
+<v t="tom.20221027233021.1"><vh>@file utility.py</vh></v>
 <v t="tom.20220506081351.1"><vh>@file versions.py</vh></v>
 <v t="tom.20220829181040.1"><vh>@path plugins</vh>
+<v t="tom.20221105083713.1"><vh>Infrastructure</vh>
 <v t="tom.20220830215645.1"><vh>@clean README.txt</vh>
 <v t="tom.20220830223226.1"><vh>What A Plugin Should Import</vh></v>
 <v t="tom.20220830223435.1"><vh>What A Plugin Must Include</vh></v>
@@ -46,14 +49,20 @@
 </v>
 <v t="tom.20220830112255.1"><vh>@clean use_plugins.txt</vh></v>
 <v t="tom.20220830184545.1"><vh>@file require_datasets.py</vh></v>
+</v>
 <v t="tom.20220829181057.1"><vh>@file test_plugin.py</vh></v>
 <v t="tom.20220830135417.1"><vh>@file double_x.py</vh></v>
+<v t="tom.20221106223828.1"><vh>@file calculator.py</vh></v>
 <v t="tom.20220831132228.1"><vh>@file convolve1.py</vh></v>
 <v t="tom.20220903150123.1"><vh>@file correl1.py</vh></v>
-<v t="tom.20220903134519.1"><vh>@file autocorrel1.py</vh></v>
+<v t="tom.20221101105447.1"><vh>@file autocorrel1.py</vh></v>
 <v t="tom.20220904105233.1"><vh>@file find_peak.py</vh></v>
 <v t="tom.20220905122752.1"><vh>@file find_peak1.py</vh></v>
 <v t="tom.20220909175119.1"><vh>@file readout.py</vh></v>
+<v t="tom.20221104193114.1"><vh>@file take_snapshot.py</vh></v>
+<v t="tom.20221104194114.1"><vh>@file restore_snapshot.py</vh></v>
+<v t="tom.20221105131948.1"><vh>@file undo-save.py</vh></v>
+<v t="tom.20221105143807.1"><vh>@file undo.py</vh></v>
 </v>
 </v>
 <v t="tom.20220506082557.1"><vh>Tests</vh>
@@ -130,14 +139,17 @@ permissions) - see https://riptutorial.com/tkinter/example/3206/installation-or-
 </t>
 <t tx="tom.20220829181040.1"></t>
 <t tx="tom.20220830112255.1"># The list of plugins to import. Omit the ".py" extension.
-test_plugin
-double_x
 convolve1
-#autocorrel1
-#correl1
+autocorrel1
+correl1
 find_peak
-find_peak1
+#find_peak1
 readout
+calculator
+take_snapshot
+restore_snapshot
+undo-save
+undo
 </t>
 <t tx="tom.20220830215645.1">GF4 has a plugin mechanism that can load plugin files located in the "plugins"
 directory.  This README provides some basic information for developers of plugins.
@@ -165,11 +177,12 @@ positions. Typically:
 from AbstractPlotMgr import MAIN, BUFFER
 
 If you want to make sure there is a dataset in the MAIN or MAIN+BUFFER positions,
-then import them from the module "require_dataset" in the plugins directory:
+then import these functions from the module "require_dataset" in the plugins
+directory:
 
-from .require_datasets import needs_main
-# and possibly:
-from .require_datasets import needs_main_buffer
+from .require_datasets import has_main
+# or possibly:
+from .require_datasets import has_main_buffer
 
 These functions perform the same jobs as the PlotManager decorators
 @REQUIRE_MAIN and @REQUIRE_MAIN_BUFF.  Other useful declarations may be found
@@ -192,9 +205,9 @@ expected to return anything.  For example:
 
 # plotmgr will have been injected into the module by the time this is called
 def proc():
-    if not needs_main(plotmgr):  # see below
+    if not has_main(plotmgr):  # Do nothing if no data
         return
-    _ds = plotmgr.stack[MAIN]
+    _ds = plotmgr.stack[MAIN]  # The "X" Dataset
     _ds.scale(2)
     plotmgr.plot()
 
@@ -206,11 +219,9 @@ Optionally the plugin may define
 
 OVERRIDE = True
 
-If this attribute exists in the module and has the value True, no button will be
-added.  The command will still be registered, and if that name alreade exists
-in the command dictionary, the previous assignment will be replace by the new one.
-This provides a way to override an existing command (though the label and help
-message of the button will not be chagned).
+If this attribute exists in the module and has the value True, if that command
+name already exists in the command dictionary, the previous assignment will be
+replaced by the new one. This provides a way to override an existing command.
 
 To have the plugin's button added to an existing button group instead of the
 Plugins group, use its name from buttondefs.py, assign that name to the
@@ -228,5 +239,6 @@ The file should contain the desired plugins by file name, one to a line.
 Do *not* include the ".py" file extension.  Blank lines and lines that
 start with a "#" or ";" character will be ignored.
 </t>
+<t tx="tom.20221105083713.1"></t>
 </tnodes>
 </leo_file>

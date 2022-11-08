@@ -3,28 +3,25 @@
 #@@language python
 """Return the git branch and changeset id as a tuple."""
 
-import sys
 import os.path
+from subprocess import run
 
-APPVERSION = '1.3 b2'
+APPVERSION = '1.3 b3'
 ENCODING = 'utf-8'
 
 def getGitInfo():
     branch = version = ''
     rootdir = os.path.dirname(os.path.dirname(__file__))
-    gitbase = os.path.join(rootdir, '.git')
 
     try:
-        head = os.path.join(gitbase, 'HEAD')
-        with open(head, encoding = ENCODING) as f:
-            ref, br = f.readline().split()
-            branch = br.split('/')[-1]
-        if ref == 'ref:':
-            if sys.platform.startswith('win'):
-                br = br.replace('/', '\\')
-            refspath = os.path.join(gitbase, br)
-            with open(refspath, encoding = ENCODING) as f:
-                version = f.readline().strip()
+        cmd = ['git', 'log']
+        gitlog = run(cmd, cwd=rootdir, capture_output = True)
+        log = gitlog.stdout.decode(ENCODING)[:30]
+        version = log.split()[1][:9]
+
+        cmd = 'git symbolic-ref --short HEAD'.split()
+        git_result = run(cmd, cwd=rootdir, capture_output = True)
+        branch = git_result.stdout.decode(ENCODING).strip()
     except Exception:
         # Most likely because git isn't available
         pass
