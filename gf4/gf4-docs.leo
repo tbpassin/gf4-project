@@ -58,6 +58,7 @@
 <v t="tom.20220821142540.1"><vh>Default Plotting Settings</vh></v>
 <v t="tom.20220507132007.20"><vh>Changing Colors, Symbols, and Line Styles</vh></v>
 </v>
+<v t="tom.20221108033233.1"><vh>Help For Commands</vh></v>
 </v>
 <v t="tom.20220507185750.1"><vh>@rst waveforms</vh>
 <v t="tom.20220507190615.1"><vh>Generating And Operating on Waveforms</vh>
@@ -760,6 +761,7 @@ ease and consistency are given priority.  Many potentially interesting features
 have never been implemented because they would complicate the user interface.
 </t>
 <t tx="tom.20220820141745.1">csaps
+docutils
 matplotlib
 numpy
 pillow &gt;= 9.1.0
@@ -821,8 +823,38 @@ graph.  This can be a very useful capability.
 <t tx="tom.20220901223400.1">@language md
 @tabwidth -4
 
+### New Help facility for GF4 commands
+#### Devel branch v1.3b3 11/8/2022
+
+Extended help for the command buttons is available by right-clicking on
+the buttons in the Commands window.  At this time only a few commands
+have help text; over time more of them will be written.
+
+### New "partial autocorrelation" command
+#### Devel branch v1.3b2
+
+### "Phasespace" plot
+#### Devel branch, 11/2/2022 v1.3 b1
+Lag can be specified (previously: only lag = 1). 
+
+### Startup Window Location, Size, Icons
+#### Devel branch
+
+10/7/2022, v1.3 b1:
+
+- Tweak initial vertical position of main window: 
+- Improve command window fonts and window height, especially on Linux.
+
+10/26/2008 v1.3 b1
+
+-Show program icon in main window.
+
+### Icons for desktop launchers
+#### Devel branch. 10/3/2022, v1.2
+A new _icons_ directory contains icons for Linux and Windows desktop launchers.
+
 ### Plugins command buttons
-#### #### Devel branch, 9/4/2022, v 1.2
+#### Devel branch, 9/4/2022, v 1.2
 Plugins can add their command button to an existing button group.
 
 ### New plugin Capability
@@ -932,5 +964,12 @@ of the *Plugins* group.  To do this, look up the name of the group in
     OWNER_GROUP = 'DATA_PROCESSING_BUTTONS'
 
 </t>
+<t tx="tom.20221108033233.1">For the commands that have buttons in the Command Window, hovering the mouse over
+the button causes a brief summary to display in the band at the top of the
+Command window.  Right-clicking on a button displays a more detailed
+explanation in the system browser.
+
+If an extended help message does not exist for the button, this will be
+announced in the announcement band at the bottom of the main window.</t>
 </tnodes>
 </leo_file>

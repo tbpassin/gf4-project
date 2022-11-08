@@ -1,9 +1,16 @@
 
+### New Help facility for GF4 commands
+#### Devel branch v1.3b3 11/8/2022
+
+Extended help for the command buttons is available by right-clicking on
+the buttons in the Commands window.  At this time only a few commands
+have help text; over time more of them will be written.
+
 ### New "partial autocorrelation" command
 #### Devel branch v1.3b2
 
 ### "Phasespace" plot
-#### Devel branch, 11/2/202 v1.3 b1
+#### Devel branch, 11/2/2022 v1.3 b1
 Lag can be specified (previously: only lag = 1). 
 
 ### Startup Window Location, Size, Icons

@@ -10,9 +10,9 @@ HELPTEXT = {
 autocor
 =======
 
-Operates on: [MAIN]
+Operates on: [X]
 
-Calculate the autocorrelation of the dataset in [MAIN].  The result is normalized
+Calculate the autocorrelation of the dataset in [X].  The result is normalized
 to 1.0, and is centered on 0 on the horizontal axis.  The horizontal axis
 represents the lags.
 
@@ -38,7 +38,7 @@ This command uses the NumPy function `correlate` with full overlap.  See
 
 dedup
 ======
-Operates on: [MAIN]
+Operates on: [X]
 
 If a point is followed immediately by one or more points with the same value,
 remove all but the first.
@@ -49,7 +49,7 @@ remove all but the first.
 
 fft
 ===
-Operates on: [MAIN]
+Operates on: [X]
 
 Perform a (discrete) Fast Fourier Transform (FFT) on [MAIN].  Dataset length does not
 need to be a power of two.  This is a real FFT: only the magnitude of the
@@ -68,7 +68,7 @@ This command uses the RFFT function from the NumPy package. See
 
 pad
 ====
-Change the number of points in [MAIN].
+Change the number of points in [X].
 
 If the target length is larger, pad the dataset with zeros.  If the target 
 length is shorter, truncate the dataset by removing points from the right.
