@@ -8,16 +8,13 @@
 from __future__ import print_function
 from sys import platform
 from math import ceil
+import webbrowser
+from tempfile import NamedTemporaryFile
 
 try:
     import Tkinter as Tk
 except:
     import tkinter as Tk
-
-# try:
-    # from Tkinter import Toplevel
-# except:
-    # from tkinter import Toplevel
 
 try:
     import tkFont
@@ -29,6 +26,24 @@ try:
 except:
     from tkinter import ttk
 
+got_docutils = False
+try:
+    import docutils
+    import docutils.core
+    got_docutils = True
+except ImportError:
+    docutils = None
+if got_docutils:
+    try:
+        from docutils.core import publish_string
+        from docutils.utils import SystemMessage
+    except ImportError:
+        got_docutils = False
+    except SyntaxError:
+        got_docutils = False
+if not got_docutils:
+    print('*** no docutils - cannot display help for commands')
+
 from buttondefs import (SPACER, CURVE_FIT_BUTTONS, STATS_BUTTONS,
                         GENERATOR_BUTTONS, PLOT_BUTTONS, LOAD_BUTTONS,
                         STACK_BUTTONS, CURVE_BUTTONS, MATH_BUTTONS,
@@ -36,6 +51,7 @@ from buttondefs import (SPACER, CURVE_FIT_BUTTONS, STATS_BUTTONS,
                         SMOOTHER_FIT_BUTTONS, TREND_BUTTONS, PLUGIN_BUTTONS,
                         AXES_BUTTONS)
 from utility import ICONPATH, setIcon
+from help_cmds import HELPTEXT
 #@+node:tom.20211211170819.10: ** Declarations
 COLS = 6
 BUTTONWIDTH = 9
@@ -43,6 +59,7 @@ BUTTON_BG = 'white'
 BUTTON_HORIZ_BG = 'lightcyan'
 BUTTON_RECORD_COLOR = 'RosyBrown3'
 
+ENCODING = 'utf-8'
 MACRO_TEXT = 'Record'
 MACRO_FULLTEXT = 'Record Macro'
 
@@ -51,6 +68,58 @@ is_recording = False
 macro = ''
 NEWFONT = None
 
+RST_ERROR_BODY_STYLE = ('color:#606060;'
+                        'background: aliceblue;'
+                        'padding-left:1em;'
+                        'padding-right:1em;'
+                        'border:thin solid gray;'
+                        'border-radius:.4em;')
+
+RST_ERROR_MSG_STYLE = ('color:red;'
+                       'background:white;'
+                       'padding-left:1em;'
+                       'padding-right:1em;'
+                       'border:thin solid gray;'
+                       'border-radius:.4em;')
+
+#@+others
+#@+node:tom.20221108022001.1: *3* Docutils Params
+MATHJAX_URL = 'https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js'
+RST_NO_WARNINGS = 5
+
+docutil_args = {'output_encoding': 'utf-8',
+                'report_level': RST_NO_WARNINGS,
+                'math_output': 'mathjax ' + MATHJAX_URL}
+#@-others
+#@+node:tom.20221108023317.1: ** html_from_rst
+def html_from_rst(rst, got_docutils, plotmgr = None):
+    """Convert ReStructured Text to HTML.
+    
+    ARGUMENT
+    rst -- the string of ReStructured Text to be converted.
+    
+    RETURNS
+    An encoded HTML bytestring.
+    """
+
+    if not got_docutils:
+        if plotmgr:
+            plotmgr.announce('No docutils - cannot show help for commands')
+            plotmgr.flashit()
+        else:
+            print(b'==== No docutils - cannot show help for commands')
+        return b''
+
+    try:
+        html = publish_string(rst, writer_name='html', settings_overrides=docutil_args)
+    except SystemMessage as sm:
+        msg = sm.args[0]
+        if 'SEVERE' in msg or 'FATAL' in msg:
+            output = f'<pre style="{RST_ERROR_MSG_STYLE}">RST error: {msg}\n</pre><b><b>'
+            output += f'<pre style="{RST_ERROR_BODY_STYLE}">{html}</pre>'
+        html = output.encode(ENCODING)
+
+    return html
 #@+node:tom.20211211170819.11: ** click
 def click(event): 
     global is_recording, macro
@@ -100,6 +169,28 @@ def on_leave(event):
         if not is_recording:
             w.configure(bg=BUTTON_BG)
 
+#@+node:tom.20221107220544.1: ** on_rclick
+def on_rclick(event, cmd, plotmgr = None):
+    """Display help text for cmd in system browser."""
+    w = event.widget
+    w.flash()
+
+    if not plotmgr:  # We are running stand-alone for testing
+        print(cmd)
+        return
+    else:
+        help = HELPTEXT.get(cmd, '')
+        if not help:
+            plotmgr.announce(f'No help for {cmd}')
+            plotmgr.fadeit()
+            return
+
+    html = html_from_rst(help, got_docutils, plotmgr)
+    if html:
+        with NamedTemporaryFile(suffix = '.html', delete = False) as f:
+            f.write(html)
+            webbrowser.open(f.name)
+
 #@+node:tom.20211211170819.14: ** default_command
 def default_command(cmd, plotmgr=None):
     global is_recording, macro
@@ -143,6 +234,7 @@ def configure_button_list(parent, button_list, plotmgr):
             _b.bind('<Button-1>', click)
             _b.bind('<Enter>', on_enter)
             _b.bind('<Leave>', on_leave)
+            _b.bind('<Button-3>', lambda x, cmd = cmd: on_rclick(x, cmd, plotmgr))
             _b.fulltext = fulltext
             _b.cmd = cmd
 

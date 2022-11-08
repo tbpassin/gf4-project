@@ -1,4 +1,5 @@
 csaps
+docutils
 matplotlib
 numpy
 pillow >= 9.1.0
