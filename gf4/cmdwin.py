@@ -28,19 +28,11 @@ except ImportError:
 
 got_docutils = False
 try:
-    import docutils
-    import docutils.core
+    from docutils.core import publish_string
+    from docutils.utils import SystemMessage
     got_docutils = True
 except ImportError:
-    docutils = None
-if got_docutils:
-    try:
-        from docutils.core import publish_string
-        from docutils.utils import SystemMessage
-    except ImportError:
-        got_docutils = False
-    except SyntaxError:
-        got_docutils = False
+    pass
 if not got_docutils:
     print('*** no docutils - cannot display help for commands')
     print('*** Run "python3 -m pip install docutils"')
@@ -257,11 +249,12 @@ def configure_horizontal_button_list(parent, button_list, plotmgr):
                 font=NEWFONT, 
                 command=lambda x=cmd: default_command(x, plotmgr))
         but.pack(side='left')
+        but.cmd = cmd
         but.bind('<Button-1>', click)
         but.bind('<Enter>', on_enter)
         but.bind('<Leave>', on_leave)
+        but.bind('<Button-3>', lambda x: on_rclick(x, plotmgr))
         but.fulltext = fulltext
-        but.cmd = cmd
 
         cols += 1
 
@@ -279,21 +272,18 @@ def configure_macro_buttons(parent, plotmgr):
     but_record.bind('<Button-1>', click)
     but_record.bind('<Enter>', on_enter)
     but_record.bind('<Leave>', on_leave)
+    but_record.bind('<Button-3>', lambda x: on_rclick(x, plotmgr))
     but_record.fulltext = MACRO_FULLTEXT
+    but_record.cmd = 'record-macro'
 
     but_play = Tk.Button(_frame, text='Play', width=BUTTONWIDTH+1, 
                 command=lambda x=plotmgr:play_macro(x), bg=BUTTON_BG, font=NEWFONT)
     but_play.pack(side='left')
     but_play.bind('<Enter>', on_enter)
     but_play.bind('<Leave>', on_leave)
+    but_play.bind('<Button-3>', lambda x: on_rclick(x, plotmgr))
     but_play.fulltext = 'Play Back Macro'
-
-    but_clear = Tk.Button(_frame, text='Clear', width=BUTTONWIDTH+1, 
-                    command=clear_macro, bg=BUTTON_BG, font=NEWFONT)
-    but_clear.pack(side='left')
-    but_clear.bind('<Enter>', on_enter)
-    but_clear.bind('<Leave>', on_leave)
-    but_clear.fulltext = 'Clear Macro'
+    but_play.cmd = 'play-macro'
 
 #@+node:tom.20221007145433.1: ** adjust_font_size(font, ascender_height)
 def adjust_font_size(font, ascender_height):
