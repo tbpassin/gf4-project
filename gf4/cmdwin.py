@@ -13,17 +13,17 @@ from tempfile import NamedTemporaryFile
 
 try:
     import Tkinter as Tk
-except:
+except ImportError:
     import tkinter as Tk
 
 try:
     import tkFont
-except:
+except ImportError:
     import tkinter.font as tkFont
 
 try:
     import ttk
-except:
+except ImportError:
     from tkinter import ttk
 
 got_docutils = False
@@ -43,6 +43,7 @@ if got_docutils:
         got_docutils = False
 if not got_docutils:
     print('*** no docutils - cannot display help for commands')
+    print('*** Run "python3 -m pip install docutils"')
 
 from buttondefs import (SPACER, CURVE_FIT_BUTTONS, STATS_BUTTONS,
                         GENERATOR_BUTTONS, PLOT_BUTTONS, LOAD_BUTTONS,
@@ -120,14 +121,18 @@ def html_from_rst(rst, got_docutils, plotmgr = None):
         html = output.encode(ENCODING)
 
     return html
-#@+node:tom.20211211170819.11: ** click
-def click(event): 
-    global is_recording, macro
-    w = event.widget
+#@+node:tom.20221108094726.1: ** flash_button
+def flash_button(w):
+    """Flash a button more visibly than the Tk default flash()."""
     bg = w.cget('bg')
     w.config(relief='sunken', bg='cyan')
     w.flash()
     w.config(relief='raised', bg=bg)
+#@+node:tom.20211211170819.11: ** click
+def click(event): 
+    global is_recording, macro
+    w = event.widget
+    flash_button(w)
     if w.cget('text') == MACRO_TEXT:
         if is_recording:
             is_recording = False
@@ -170,10 +175,11 @@ def on_leave(event):
             w.configure(bg=BUTTON_BG)
 
 #@+node:tom.20221107220544.1: ** on_rclick
-def on_rclick(event, cmd, plotmgr = None):
+def on_rclick(event, plotmgr = None):
     """Display help text for cmd in system browser."""
     w = event.widget
-    w.flash()
+    cmd = w.cmd
+    flash_button(w)
 
     if not plotmgr:  # We are running stand-alone for testing
         print(cmd)
@@ -231,12 +237,12 @@ def configure_button_list(parent, button_list, plotmgr):
                            bg=BUTTON_BG, font=NEWFONT, padx=8,
                            command=lambda x=cmd: default_command(x, plotmgr))
             _b.pack(fill=Tk.X)
+            _b.cmd = cmd
             _b.bind('<Button-1>', click)
             _b.bind('<Enter>', on_enter)
             _b.bind('<Leave>', on_leave)
-            _b.bind('<Button-3>', lambda x, cmd = cmd: on_rclick(x, cmd, plotmgr))
+            _b.bind('<Button-3>', lambda x: on_rclick(x, plotmgr))
             _b.fulltext = fulltext
-            _b.cmd = cmd
 
 #@+node:tom.20211211170819.18: ** configure_horizontal_button_list
 def configure_horizontal_button_list(parent, button_list, plotmgr):
