@@ -175,13 +175,13 @@ def on_rclick(event, plotmgr = None):
 
     if not plotmgr:  # We are running stand-alone for testing
         print(cmd)
-        return
-    else:
-        help = HELPTEXT.get(cmd, '')
-        if not help:
+
+    help = HELPTEXT.get(cmd, '')
+    if not help:
+        if plotmgr:
             plotmgr.announce(f'No help for {cmd}')
             plotmgr.fadeit()
-            return
+        return
 
     html = html_from_rst(help, got_docutils, plotmgr)
     if html:
