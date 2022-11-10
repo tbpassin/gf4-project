@@ -56,6 +56,8 @@ def buildCommands(self):
        'save2clip': self.copy_data_to_clipboard,
        'stox': self.store1,
        'rclx': self.recall1,
+       'take-snapshot': self.take_snapshot,
+       'get-snapshot': self.restore_snapshot,
 
        'linear': self.setLinLin,
        'semilogy': self.setSemilogY,
