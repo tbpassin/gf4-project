@@ -859,10 +859,15 @@ class Dataset:
 
     #@+node:tom.20211211170820.36: *3* Dataset.correlate
     def correlate(self, ds):
-        '''Correlate the Y data with the Ydata of the Dataset passed in.
-        Replace the Y data with the convolution values.  The length
-        of the result is the longer of the two data sets.  Replace the 
-        X data with the X data of the longer of the two data sets.     
+        '''Correlate thedataset's data with the data of the Dataset passed in.
+        Replace the [X] data with the convolution values.
+        
+        If ds is self, this is an autocorrelation.  The values will
+        be normalized to 1.0.  The x axis will be renumbered so that
+        the peak is a lag = 0.
+        
+        Otherwise, The length of the result is the longer of the two data sets.
+        Replace the [X] data with the [X] data of the longer of the two data sets.
         Return False if neither of the data sets has data.
 
         Note that this operation is the signal processing kind of
@@ -877,28 +882,35 @@ class Dataset:
         False if either of the Datasets has no points, True otherwise.
         '''
 
-        if self.isNumpyArray(self.ydata):
-            if not any(self.ydata):
-                return False
-        elif self.isNumpyArray(ds.ydata):
-            if not any(ds.ydata):
-                return False
+        if not (any(self.ydata) or any(ds.ydata)):
+            return False
+
+        if self is ds:
+            # Autocorrelation - normalize and shift
+            x, y = self.xdata, self.ydata
+
+            # Shift x axis
+            end = x[-1]
+            x = [z - end for z in x]
+            correlated = np.correlate(y, y, mode = 'full')
+            norm = 1./max(correlated)
+            self.ydata = [y_ * norm for y_ in correlated]
+            start = x[0]
+            delta = (float(x[-1] - x[0])) / (len(x) - 1)
+            self.xdata = [start + i * delta for i in range(len(self.ydata))]
         else:
-            if not self.ydata or not ds.ydata:
-                return False
+            N0 = len(self.xdata)
+            self.ydata = np.correlate(self.ydata, ds.ydata, mode='full')
+            if len(self.xdata) != len(self.ydata):
+                if len(self.xdata) == len(ds.xdata):
+                    self.xdata = ds.xdata[:]
+                else:
+                    self.xdata = list(range(len(self.ydata)))
 
-        N0 = len(self.xdata)
-        self.ydata = np.correlate(self.ydata, ds.ydata, mode='full')
-        if len(self.xdata) != len(self.ydata):
-            if len(self.xdata) == len(ds.xdata):
-                self.xdata = ds.xdata[:]
-            else:
-                self.xdata = list(range(len(self.ydata)))
-
-        # Full overlap ends up with too many points to the right
-        # so trim to the original number.
-        self.ydata = self.ydata[:N0]
-        self.xdata = self.xdata[:N0]
+            # Full overlap ends up with too many points to the right
+            # so trim to the original number.
+            self.ydata = self.ydata[:N0]
+            self.xdata = self.xdata[:N0]
 
         return True
 
