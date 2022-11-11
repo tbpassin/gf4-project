@@ -13,36 +13,29 @@ from tempfile import NamedTemporaryFile
 
 try:
     import Tkinter as Tk
-except:
+except ImportError:
     import tkinter as Tk
 
 try:
     import tkFont
-except:
+except ImportError:
     import tkinter.font as tkFont
 
 try:
     import ttk
-except:
+except ImportError:
     from tkinter import ttk
 
 got_docutils = False
 try:
-    import docutils
-    import docutils.core
+    from docutils.core import publish_string
+    from docutils.utils import SystemMessage
     got_docutils = True
 except ImportError:
-    docutils = None
-if got_docutils:
-    try:
-        from docutils.core import publish_string
-        from docutils.utils import SystemMessage
-    except ImportError:
-        got_docutils = False
-    except SyntaxError:
-        got_docutils = False
+    pass
 if not got_docutils:
     print('*** no docutils - cannot display help for commands')
+    print('*** Run "python3 -m pip install docutils"')
 
 from buttondefs import (SPACER, CURVE_FIT_BUTTONS, STATS_BUTTONS,
                         GENERATOR_BUTTONS, PLOT_BUTTONS, LOAD_BUTTONS,
@@ -120,14 +113,18 @@ def html_from_rst(rst, got_docutils, plotmgr = None):
         html = output.encode(ENCODING)
 
     return html
-#@+node:tom.20211211170819.11: ** click
-def click(event): 
-    global is_recording, macro
-    w = event.widget
+#@+node:tom.20221108094726.1: ** flash_button
+def flash_button(w):
+    """Flash a button more visibly than the Tk default flash()."""
     bg = w.cget('bg')
     w.config(relief='sunken', bg='cyan')
     w.flash()
     w.config(relief='raised', bg=bg)
+#@+node:tom.20211211170819.11: ** click
+def click(event): 
+    global is_recording, macro
+    w = event.widget
+    flash_button(w)
     if w.cget('text') == MACRO_TEXT:
         if is_recording:
             is_recording = False
@@ -170,20 +167,21 @@ def on_leave(event):
             w.configure(bg=BUTTON_BG)
 
 #@+node:tom.20221107220544.1: ** on_rclick
-def on_rclick(event, cmd, plotmgr = None):
+def on_rclick(event, plotmgr = None):
     """Display help text for cmd in system browser."""
     w = event.widget
-    w.flash()
+    cmd = w.cmd
+    flash_button(w)
 
     if not plotmgr:  # We are running stand-alone for testing
         print(cmd)
-        return
-    else:
-        help = HELPTEXT.get(cmd, '')
-        if not help:
+
+    help = HELPTEXT.get(cmd, '')
+    if not help:
+        if plotmgr:
             plotmgr.announce(f'No help for {cmd}')
             plotmgr.fadeit()
-            return
+        return
 
     html = html_from_rst(help, got_docutils, plotmgr)
     if html:
@@ -231,12 +229,12 @@ def configure_button_list(parent, button_list, plotmgr):
                            bg=BUTTON_BG, font=NEWFONT, padx=8,
                            command=lambda x=cmd: default_command(x, plotmgr))
             _b.pack(fill=Tk.X)
+            _b.cmd = cmd
             _b.bind('<Button-1>', click)
             _b.bind('<Enter>', on_enter)
             _b.bind('<Leave>', on_leave)
-            _b.bind('<Button-3>', lambda x, cmd = cmd: on_rclick(x, cmd, plotmgr))
+            _b.bind('<Button-3>', lambda x: on_rclick(x, plotmgr))
             _b.fulltext = fulltext
-            _b.cmd = cmd
 
 #@+node:tom.20211211170819.18: ** configure_horizontal_button_list
 def configure_horizontal_button_list(parent, button_list, plotmgr):
@@ -251,11 +249,12 @@ def configure_horizontal_button_list(parent, button_list, plotmgr):
                 font=NEWFONT, 
                 command=lambda x=cmd: default_command(x, plotmgr))
         but.pack(side='left')
+        but.cmd = cmd
         but.bind('<Button-1>', click)
         but.bind('<Enter>', on_enter)
         but.bind('<Leave>', on_leave)
+        but.bind('<Button-3>', lambda x: on_rclick(x, plotmgr))
         but.fulltext = fulltext
-        but.cmd = cmd
 
         cols += 1
 
@@ -273,21 +272,18 @@ def configure_macro_buttons(parent, plotmgr):
     but_record.bind('<Button-1>', click)
     but_record.bind('<Enter>', on_enter)
     but_record.bind('<Leave>', on_leave)
+    but_record.bind('<Button-3>', lambda x: on_rclick(x, plotmgr))
     but_record.fulltext = MACRO_FULLTEXT
+    but_record.cmd = 'record-macro'
 
     but_play = Tk.Button(_frame, text='Play', width=BUTTONWIDTH+1, 
                 command=lambda x=plotmgr:play_macro(x), bg=BUTTON_BG, font=NEWFONT)
     but_play.pack(side='left')
     but_play.bind('<Enter>', on_enter)
     but_play.bind('<Leave>', on_leave)
+    but_play.bind('<Button-3>', lambda x: on_rclick(x, plotmgr))
     but_play.fulltext = 'Play Back Macro'
-
-    but_clear = Tk.Button(_frame, text='Clear', width=BUTTONWIDTH+1, 
-                    command=clear_macro, bg=BUTTON_BG, font=NEWFONT)
-    but_clear.pack(side='left')
-    but_clear.bind('<Enter>', on_enter)
-    but_clear.bind('<Leave>', on_leave)
-    but_clear.fulltext = 'Clear Macro'
+    but_play.cmd = 'play-macro'
 
 #@+node:tom.20221007145433.1: ** adjust_font_size(font, ascender_height)
 def adjust_font_size(font, ascender_height):

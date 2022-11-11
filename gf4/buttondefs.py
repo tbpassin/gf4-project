@@ -31,6 +31,8 @@ PLOT_BUTTONS = (
     SPACER, SPACER,
     ('Error Bands', 'overploterr', 'Overplot X Error Bands if any'),
     ('Timehack', 'timehack', 'Vertical Marker At Specified X Position'),
+    ('Snapshot', 'take-snapshot', 'Save state of the plot and stack'),
+    ('Restore\nSnapshot', 'get-snapshot', 'Restore saved state of the plot and stack'),
 )
 
 AXES_BUTTONS = (

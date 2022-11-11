@@ -178,6 +178,7 @@ class PlotManager(AbstractPlotManager):
         self.buffer_symbol_shape = Tk.StringVar()
         self.graph_bg_color = Tk.StringVar()
 
+        self.snapshot = None
         self.initpath = '.'  # for File Dialog directory
         self.current_path = ''
         self.buildCommands()
@@ -2428,6 +2429,26 @@ class PlotManager(AbstractPlotManager):
                         # another comment
                         loglog
                         ''')
+
+    #@+node:tom.20221110160822.1: *4* take_snapshot
+    def take_snapshot(self):
+        fig = self.figure
+        bitmap = fig.canvas.copy_from_bbox(fig.bbox)
+        self.snapshot = bitmap, plotmgr.stack[:]
+
+        plotmgr.announce('Saved snapshot')
+        plotmgr.fadeit()
+    #@+node:tom.20221110160842.1: *4* restore_snapshot
+    def restore_snapshot(self):
+        bitmap, stack = self.snapshot
+        fig = self.figure
+        canvas = fig.canvas
+        canvas.restore_region(bitmap)
+        canvas.blit(fig.bbox)
+        self.stack = stack
+
+        self.announce('Saved snapshot')
+        self.fadeit()
 
     #@+node:tom.20211207165051.134: *4* interpret
     def interpret(self, command=''):
