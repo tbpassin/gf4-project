@@ -183,8 +183,9 @@ def makeGaussianNoise(self):
 
 #@+node:tom.20211211171304.77: ** pdfGaussian
 def pdfGaussian(self):
+    """Generate a Gaussian dataset."""
     _id = str(self.pdfGaussian)
-    lastm, lasts = self.parmsaver.get(_id, (0.0, 2.0))
+    lastm, lasts = self.parmsaver.get(_id, (0.0, 1.0))
 
     dia = GetTwoFloats(self.root, 'Parameters', 'Mean',
                        'Sigma', lastm, lasts)
@@ -204,7 +205,7 @@ def pdfGaussian(self):
 #@+node:tom.20211211171304.78: ** cdfGaussian
 def cdfGaussian(self):
     _id = str(self.cdfGaussian)
-    lastm, lasts = self.parmsaver.get(_id, (0.0, 2.0))
+    lastm, lasts = self.parmsaver.get(_id, (0.0, 1.0))
 
     dia = GetTwoFloats(self.root, 'Parameters', 'Mean',
                        'Sigma', lastm, lasts)

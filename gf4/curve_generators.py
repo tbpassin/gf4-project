@@ -162,6 +162,8 @@ def generateGaussian(N=256, m=0.0, sigma=128):
     '''Compute a Gaussian probability curve.  Return a tuple of two arrays
     (xdata, ydata).
     
+    The range of the x-axis vaues will be +- 6 sigma around the mean.
+    
     ARGUMENTS
     N -- number of points.  If not odd, the curve won't be exactly symmetrical
          around the mean.
@@ -172,14 +174,12 @@ def generateGaussian(N=256, m=0.0, sigma=128):
     a tuple of lists (xdata, ydata)
     '''
 
-    _half = N / 2
-    lower = -_half + m
-    upper = _half + m
-    if N % 2 == 1:
-        upper += 1
+    SPAN = 6.
+    lower = -SPAN * sigma + m
+    upper = SPAN * sigma + m
+    step = 2 * SPAN * sigma / N
 
-    _range = np.arange(lower, upper, 1)
-    #_sig = _half / sigma
+    _range = np.arange(lower, upper, step)
     _gauss = norm.pdf(_range, m, sigma)
 
     _ydata = _gauss.tolist()
@@ -192,7 +192,7 @@ def generateGaussianCdf(N=256, m=0.0, sigma=128):
     '''Compute a Gaussian probability curve.  Return a tuple of two arrays
     (xdata, ydata).
 
-    The span is limited to +- 5 sigma so that the probability values
+    The span is limited to +- 6 sigma so that the probability values
     are reasonably close together.
 
    ARGUMENTS
@@ -205,9 +205,10 @@ def generateGaussianCdf(N=256, m=0.0, sigma=128):
     a tuple of lists (xdata, ydata)
     '''
 
-    lower = -5. * sigma + m
-    upper = 5. * sigma + m
-    step = 10. * sigma / N
+    SPAN = 6.
+    lower = -SPAN * sigma + m
+    upper = SPAN * sigma + m
+    step = 2 * SPAN * sigma / N
 
     _range = np.arange(lower, upper, step)
     _gauss = norm.cdf(_range, m, sigma)
