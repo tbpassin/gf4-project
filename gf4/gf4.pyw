@@ -2096,7 +2096,10 @@ class PlotManager(AbstractPlotManager):
     def cdf(self):
         _ds = self.stack[MAIN]
         ydata = _ds.ydata
+        mean, std = stats.meanstd(ydata)
+
         newx, newy, upperbounds, lowerbounds = stats.cdf(ydata)
+
         _ds.xdata = newx
         _ds.ydata = newy
         _lab = 'CDF'
@@ -2119,6 +2122,8 @@ class PlotManager(AbstractPlotManager):
         _ds.errorBands.append(lower)
 
         self.plot()
+        self.announce('mean: %0.3f,sigma: %0.3f'
+                      % (mean, std))
 
     #@+node:tom.20211207165051.118: *4* fitCdfWithNormal
     @REQUIRE_MAIN
@@ -2133,6 +2138,9 @@ class PlotManager(AbstractPlotManager):
         else:
             _lab = 'Fitted CDF'
         _ds.figurelabel = _lab
+        _ds.yaxislabel = 'P'
+        _ds.xaxislabel = 'Value'
+
         self.plot()
         self.announce('mean: %0.3f,sigma: %0.3f'
                       % (mean, sigma))
