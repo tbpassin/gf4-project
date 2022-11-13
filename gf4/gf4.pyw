@@ -7,6 +7,7 @@ from __future__ import print_function
 
 import sys
 from pathlib import PurePath
+from copy import deepcopy
 
 import tkinter as Tk
 import tkinter.font as tkFont
@@ -2451,7 +2452,7 @@ class PlotManager(AbstractPlotManager):
     def take_snapshot(self):
         fig = self.figure
         bitmap = fig.canvas.copy_from_bbox(fig.bbox)
-        self.snapshot = bitmap, plotmgr.stack[:]
+        self.snapshot = bitmap, deepcopy(plotmgr.stack)
 
         plotmgr.announce('Saved snapshot')
         plotmgr.fadeit()
@@ -2462,7 +2463,7 @@ class PlotManager(AbstractPlotManager):
         canvas = fig.canvas
         canvas.restore_region(bitmap)
         canvas.blit(fig.bbox)
-        self.stack = stack
+        self.stack = deepcopy(stack)
 
         self.announce('Restored snapshot')
         self.fadeit()
