@@ -2125,7 +2125,7 @@ class PlotManager(AbstractPlotManager):
     def fitCdfWithNormal(self):
         _ds = self.stack[MAIN]
         _newx, _newy, mean, sigma = \
-            stats.fitNormalToCdf(_ds.xdata, _ds.ydata, self.num)
+            stats.fitNormalToCdf(_ds)
         _ds.xdata = _newx
         _ds.ydata = _newy
         if _ds.figurelabel:
@@ -2139,11 +2139,20 @@ class PlotManager(AbstractPlotManager):
     #@+node:tom.20211207165051.119: *4* fitCdfNormalAdaptive
     @REQUIRE_MAIN
     def fitCdfNormalAdaptive(self):
+        """Adaptively fit a normal distribution to a CDF in [MAIN].
+
+        Will probably fail if the data in [MAIN] is not a CDF already.
+        """
         _ds = self.stack[MAIN]
         values = _ds.xdata
         probs = _ds.ydata
         _newx, _newy, mean, sigma, correl = \
             stats.fitNormalToCdfAdaptive(values, probs, 0.001)
+        if not _newx:
+            self.announce("Cannot fit this data - the starting data may not be a CDF")
+            self.flashit()
+            return
+
         _ds.xdata = _newx
         _ds.ydata = _newy
 
@@ -2447,7 +2456,7 @@ class PlotManager(AbstractPlotManager):
         canvas.blit(fig.bbox)
         self.stack = stack
 
-        self.announce('Saved snapshot')
+        self.announce('Restored snapshot')
         self.fadeit()
 
     #@+node:tom.20211207165051.134: *4* interpret
