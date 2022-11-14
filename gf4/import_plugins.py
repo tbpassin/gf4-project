@@ -48,15 +48,17 @@ def import_all_plugins():
             if root == plugin_dir:
                 break
         for f in files:
-            f = os.path.splitext(f)[0]
-            plugins_import_list.append(f)
+            f, ext = os.path.splitext(f)
+            if ext == '.py':
+                plugins_import_list.append(f)
 
     for f in plugins_import_list:
         try:
             mod = importlib.import_module(f'plugins.{f}')
-            modules.append(mod)
+            if hasattr(mod, 'BUTTON_DEF'):
+                modules.append(mod)
         except ImportError as e:
-            print(f'{f} plugin: {e}')
+            print(f'{__name__}: {f} plugin: {e}')
             continue
     return modules
 #@-others
