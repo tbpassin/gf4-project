@@ -37,6 +37,14 @@ if use_plugins_import_list:
         plugins_import_list = [p for p in lines if p[0] not in '#;']
 #@+node:tom.20220830113113.1: ** import_all_plugins
 def import_all_plugins():
+    """Import modules from the plugins directory and return a list of them.
+
+    If there is a file USE_PLUGINS, only import the ones listed there.
+    Otherwise import all ".py" files.
+    
+    RETURNS
+    a list of successfully imported modules.
+    """
     global plugins_import_list
     modules = []
     if not has_plugin_dir:
