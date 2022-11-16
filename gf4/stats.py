@@ -13,6 +13,7 @@ from scipy.stats import norm, t as t_test
 from scipy.stats import spearmanr
 import numpy as np
 
+from curve_generators import generateGaussianCdf
 from smoother import correlationCoeff
 
 #@+node:tom.20211211171913.42: ** cdf
@@ -178,14 +179,12 @@ def meanstd(ydata):
     return (mean, std)
 
 #@+node:tom.20211211171913.45: ** fitNormalToCdf
-def fitNormalToCdf(values, probs, N=100):
-    '''Fit a normal distribution to a CDF by matching its mean and std dev,
-    then computing the normal CDF. A CDF curve has the data values
-    in the x axis, and their probabilities in the y axis.  The CDF must
-    have been created from data with no duplicate values.
+def fitNormalToCdf(dataset):
+    '''Given a sequence of x, y values, compute a normal CDF.
 
-    Return a normal CDF with N points running from
-    m-4*sigma to m+4*sigma.
+    The CDF will be the CDF of a normal distribution with mean,
+    standard deviation to match the data values.  The result
+    will have the same number of points as the input data.
 
     Return a tuple of lists (xdata, ydata, mean, stddev).
 
@@ -198,19 +197,11 @@ def fitNormalToCdf(values, probs, N=100):
     a tuple (values, probs) of the normal CDF values.
     '''
 
-    m, sigma = meanstd(values)
+    m, sigma = meanstd(dataset.ydata)
+    n = len(dataset.xdata)
+    vals, probs = generateGaussianCdf(n, m, sigma)
 
-    lower = m - 4 * sigma
-    upper = m + 4 * sigma
-
-    stepsize = 1.0 * (upper - lower) / N
-    _range = np.arange(lower, upper, stepsize)
-    _gauss = norm.cdf(_range, m, sigma)
-
-    _ydata = _gauss.tolist()
-    _xdata = _range.tolist()
-
-    return _xdata, _ydata, m, sigma
+    return vals, probs, m, sigma
 
 #@+node:tom.20211211171913.46: ** calcNormalForCdf
 def calcNormalForCdf(values, mean=0.0, sigma=1.0):
@@ -229,9 +220,10 @@ def calcNormalForCdf(values, mean=0.0, sigma=1.0):
     '''
 
     # Scale values to t = (x - mean)/sigma*sqrt(2)
-    mean = 1.0 * mean
-    sigma = 1.0 * sigma
-    scaled_values = [(v - mean) / (sigma * 2**0.5) for v in values]
+    mean = float(mean)
+    sigma = float(sigma)
+    factor = 1. / (sigma * 2**0.5)
+    scaled_values = [(v - mean) * factor for v in values]
     probs = scipy.special.erf(scaled_values)  # pylint: disable = no-member
 
     # erf() returns results in the range of (-1,1)
@@ -245,7 +237,7 @@ def fitNormalToCdfAdaptive(values, probs, tolerance=.01):
     '''Given a CDF curve, fit a normal distribution to it by an
     adaptive process.  Return the final calculated probabilities, and
     the final mean standard deviation, and correlation coefficient between
-    data and fitted curve..
+    data and fitted curve.
 
     ARGUMENTS
     values -- a sequence of the CDF x-data points.
@@ -255,12 +247,21 @@ def fitNormalToCdfAdaptive(values, probs, tolerance=.01):
 
     RETURNS
     a tuple (xdata, ydata, ms, sigma, correl)
+    
+        where
+        xdata -- a sequence of values
+        ydata -- a sequence of matching CDF probability values
+        ms -- the fitted mean
+        sigma -- the fitted standard deviation
+        correl -- the correlation coefficient
 
     '''
     # pylint: disable = too-many-locals
 
     m, sigma = meanstd(values)
 
+    #@+others
+    #@+node:tom.20221112230453.1: *3* sqrerror
     # Calculate mean square error
     def sqrerror(values, probs, mean, sigma):
         '''Given a list of values and cdf probabilities, and a target
@@ -288,7 +289,7 @@ def fitNormalToCdfAdaptive(values, probs, tolerance=.01):
         merr = merr / numvals
         var = Sxx / numvals
         return var
-
+    #@+node:tom.20221112230609.1: *3* sqr_abs_error
     # Calculate mean absolute error
     def sqr_abs_error(values, probs, mean, sigma):
         '''Given a list of values and cdf probabilities, and a target
@@ -314,25 +315,14 @@ def fitNormalToCdfAdaptive(values, probs, tolerance=.01):
         merr = merr / numvals
         var = merr**2
         return var
+    #@-others
 
     # Set initial iteration values
-    ms = m - 3*sigma
+    ms = m - 3. * sigma  # Initial guess at the mean (deliberately low)
     delta = 0.9 * sigma
     delta_limit = 0.5 * tolerance * sigma
 
     mse = sqr_abs_error(values, probs, ms, sigma)
-    #print 'Iteration 0: mse=%0.2f, m=%0.2f' % (mse, ms)
-
-    # Criteria for leaving the iteration
-    # Sanity checks:
-    #   delta > delta min ... so we don't get stuck with a zero delta
-    #   |ms - m| < 5 sigma ... in case we start to diverge
-    #
-    # Convergence
-    #    rmse/sigma < tolerance  ... we've reached the goal
-    #    delta/sigma <= 2 * tolerance ... and we've been converging
-    #
-    # done = (not sanity) or converged
 
     done = False
     #count = 1
@@ -340,17 +330,13 @@ def fitNormalToCdfAdaptive(values, probs, tolerance=.01):
     sane = True
     converged = False
     overshot = False
-    #last_m = m
 
+    # Increment trial mean until we get the error within tolerance
     while not done:
-        #print 'Iteration', count
-        #last_sign = (ms <= last_m) # True for negative
         last_mse = new_mse
-        #last_m = ms
 
         if overshot:
             delta = - delta / 2
-            #print '   Overshot, changing delta/sigma to %0.3f' % (delta/sigma)
         ms += delta
 
         new_mse = sqrerror(values, probs, ms, sigma)
@@ -364,13 +350,6 @@ def fitNormalToCdfAdaptive(values, probs, tolerance=.01):
 
         done = ((abs(delta/sigma) > 2 * tolerance) and (converged and overshot)) \
                     or not sane
-#        print '   rms: %0.3f, ms: %0.3f, m: %0.3f, delta: %0.3f, tol %0.3f' %\
-#                (new_mse**0.5, ms, m, delta, tolerance * sigma)
-#        print '   Delta in limits? %s' % delta_in_limits
-#        print '   Sane? %s' % sane
-#        print '   Converged? %s' % converged
-#        print '   Done? %s' % done
-#        count += 1
 
     if converged:
         pass  #print 'Final mean: %0.3f' % ms
@@ -378,13 +357,11 @@ def fitNormalToCdfAdaptive(values, probs, tolerance=.01):
         #print 'Iterations are diverging too much'
         return [], [], m, sigma, 0
 
-    # Set return values
+    # Calculate final normal CDF
     _probs = calcNormalForCdf(values, ms, sigma)
     _correl = correlationCoeff(probs, _probs)
-    _xdata = values
-    _ydata = _probs
 
-    return _xdata, _ydata, ms, sigma, _correl
+    return values, _probs, ms, sigma, _correl
 
 #@+node:tom.20211211171913.48: ** spearman
 def spearman(x,y):
