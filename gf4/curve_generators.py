@@ -160,7 +160,7 @@ def generateRectangle(N = 256, w = 256):
 #@+node:tom.20211211170819.38: ** generateGaussian
 def generateGaussian(N=256, m=0.0, sigma=128): 
     '''Compute a Gaussian probability curve.  Return a tuple of two arrays
-    (xdata, ydata). Points will have a spacing of 1 on the x-axis.
+    (xdata, ydata).
     
     The range of the x-axis values will be +- 6 sigma around the mean.
     
