@@ -162,8 +162,8 @@ def generateGaussian(N=256, m=0.0, sigma=128):
     '''Compute a Gaussian probability curve.  Return a tuple of two arrays
     (xdata, ydata).
     
-    The range of the x-axis values will be +- 6 sigma around the mean.
-    
+    The curve will be centered at zero.  The point spacing will be 1.
+        
     ARGUMENTS
     N -- number of points.  If not odd, the peak of the curve will fall
          half-way between two of the points
@@ -174,12 +174,11 @@ def generateGaussian(N=256, m=0.0, sigma=128):
     a tuple of lists (xdata, ydata)
     '''
 
-    SPAN = 6.
-    lower = -SPAN * sigma + m
-    upper = SPAN * sigma + m
-    step = (2 * SPAN) * sigma / (N - 1)
+    lower = -N / 2
+    upper = N / 2
+    step = 1
 
-    _range = np.arange(lower, upper + step, step)
+    _range = np.arange(lower, upper, step)
     _gauss = norm.pdf(_range, m, sigma)
 
     _ydata = _gauss.tolist()
