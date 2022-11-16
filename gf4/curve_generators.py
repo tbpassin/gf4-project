@@ -162,7 +162,7 @@ def generateGaussian(N=256, m=0.0, sigma=128):
     '''Compute a Gaussian probability curve.  Return a tuple of two arrays
     (xdata, ydata).
     
-    The curve will be centered at zero.  The point spacing will be 1.
+    The curve will be centered at m.  The point spacing will be 1.
         
     ARGUMENTS
     N -- number of points.  If not odd, the peak of the curve will fall
