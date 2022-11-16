@@ -2,7 +2,7 @@
 - Better normalization of Correlate, Convolve.
 
 - New Plugins:
-    - local polynomial regression.
+    - local polynomial regression (requires "localreg" package).
     - read out y value given x
     - simple calculator
 
