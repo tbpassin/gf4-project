@@ -1,3 +1,15 @@
+### Release 1.3   11-16-2022
+- Better normalization of Correlate, Convolve.
+
+- New Plugins:
+    - local polynomial regression.
+    - read out y value given x
+    - simple calculator
+
+- Improvements to Gaussian PDF, CDF waveform generators.
+
+- Improved fitting normal CDF.
+
 ### Devel branch 1.3b3
 - Save/Restore plot bitmap, stack state.
 

@@ -1,6 +1,8 @@
 #@+leo-ver=5-thin
 #@+node:tom.20211211170819.30: * @file curve_generators.py
 # pylint: disable = consider-using-f-string
+#@@language python
+#@@tabwidth -4
 #@+others
 #@+node:tom.20211211170819.31: ** Imports
 from __future__ import print_function
@@ -159,10 +161,12 @@ def generateRectangle(N = 256, w = 256):
 def generateGaussian(N=256, m=0.0, sigma=128): 
     '''Compute a Gaussian probability curve.  Return a tuple of two arrays
     (xdata, ydata).
-
+    
+    The curve will be centered at m.  The point spacing will be 1.
+        
     ARGUMENTS
-    N -- number of points.  If not odd, the curve won't be exactly symmetrical
-         around the mean.
+    N -- number of points.  If not odd, the peak of the curve will fall
+         half-way between two of the points
     m -- mean of the distribution.
     sigma -- the standard deviation value of the distribution.
 
@@ -170,14 +174,11 @@ def generateGaussian(N=256, m=0.0, sigma=128):
     a tuple of lists (xdata, ydata)
     '''
 
-    _half = N / 2
-    lower = -_half + m
-    upper = _half + m
-    if N % 2 == 1:
-        upper += 1
+    lower = -N / 2
+    upper = N / 2
+    step = 1
 
-    _range = np.arange(lower, upper, 1)
-    #_sig = _half / sigma
+    _range = np.arange(lower, upper, step)
     _gauss = norm.pdf(_range, m, sigma)
 
     _ydata = _gauss.tolist()
@@ -190,7 +191,10 @@ def generateGaussianCdf(N=256, m=0.0, sigma=128):
     '''Compute a Gaussian probability curve.  Return a tuple of two arrays
     (xdata, ydata).
 
-    ARGUMENTS
+    The span is limited to +- 6 sigma so that the probability values
+    are reasonably close together.
+
+   ARGUMENTS
     N -- number of points.  If not odd, the curve won't be exactly symmetrical
          around the mean.
     m -- mean of the distribution.
@@ -200,20 +204,38 @@ def generateGaussianCdf(N=256, m=0.0, sigma=128):
     a tuple of lists (xdata, ydata)
     '''
 
-    _half = N / 2
-    lower = -_half + m
-    upper = _half + m
-    if N % 2 == 1:
-        upper += 1
+    SPAN = 6.
+    lower = -SPAN * sigma + m
+    upper = SPAN * sigma + m
+    step = 2 * SPAN * sigma / N
 
-    _range = np.arange(lower, upper, 1)
-    #_sig = _half / sigma
+    _range = np.arange(lower, upper, step)
     _gauss = norm.cdf(_range, m, sigma)
 
     _ydata = _gauss.tolist()
     _xdata =_range.tolist()
 
     return _xdata,_ydata
+
+#@+node:tom.20211211170819.37: ** generateRamp
+def generateRamp(N=256):
+    '''Compute a linear ramp with evenly spaced points. Maximum
+    amplitude is 1.0. Return a tuple of two arrays (xdata, ydata).
+
+    ARGUMENT
+    N -- number of points to return.
+
+    RETURNS
+    a tuple (xdata, ydata)
+    '''
+
+    _ydelta = 1.0 / (N - 1)
+    _y0 = 0.0
+    _x = list(range(N))
+    _y = [_y0 + _ydelta * i for i in range(N)]
+
+    return (_x, _y)
+#@-others
 
 if __name__ == '__main__':
     import matplotlib.pyplot as plt
@@ -240,33 +262,12 @@ if __name__ == '__main__':
 
     def runtests(testlist):
         for t in testlist:
-            print ('Testing %s' % t.func_name)
+            print ('Testing %s' % t.__name__)
             t()
             print()
 
     Tests = (testGaussCdf,)
     runtests(Tests)
-    
 
-#@+node:tom.20211211170819.37: ** generateRamp
-def generateRamp(N=256):
-    '''Compute a linear ramp with evenly spaced points. Maximum
-    amplitude is 1.0. Return a tuple of two arrays (xdata, ydata).
 
-    ARGUMENT
-    N -- number of points to return.
-
-    RETURNS
-    a tuple (xdata, ydata)
-    '''
-
-    _ydelta = 1.0 / (N - 1)
-    _y0 = 0.0
-    _x = list(range(N))
-    _y = [_y0 + _ydelta * i for i in range(N)]
-
-    return (_x, _y)
-#@-others
-#@@language python
-#@@tabwidth -4
 #@-leo

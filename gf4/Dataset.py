@@ -790,11 +790,12 @@ class Dataset:
 
     #@+node:tom.20211211170820.35: *3* Dataset.convolve
     def convolve(self, ds):
-        '''Convolve the Y data with the Ydata of the Dataset passed in.
-        Replace the Y data with the convolution values.  The length
+        '''Convolve self's y data with the y data of the Dataset ds.
+
+        Replace self's data with the convolution values.  The length
         of the result is the longer of the two data sets.  Replace the 
-        X data with the X data of the longer of the two data sets.     
-        Return False if neither of the data sets has data.
+        x data with the x data of the longer of the two data sets.     
+        Return False if ds has no data.
 
         There can be boundary effects, since there may be areas where
         the two data sets don't overlap properly.
@@ -812,68 +813,34 @@ class Dataset:
         False if either of the Datasets has no points, True otherwise.
         '''
 
-        if (self.ydata is None or ds.ydata is None
-           or len(self.ydata) == 0 or  len(ds.ydata) == 0):
+        if not (any(self.ydata) or any(ds.ydata)):
             return False
 
-        # Final result should be shifted left.
-        # To find the size of the shift create a delta function and convolve with 
-        # ourself. Then find the peak of the convolution and use it to calculate 
-        # the shift.
-        OFFSET = 10
-        delta = [0] * len(ds.ydata)  # Delta "function"
-        delta[10] = 1
-        probe = self.ydata[:]
-        convolved = np.convolve(probe, delta, mode = 'full')
-        # The desired shift is found by looking for the maximum of the convolution
-        max_ = max(convolved)
-        for shift, y in enumerate(convolved):
-            if y == max_:
-                break
-        shift = shift - OFFSET
-        scale_factor = 1. / max_
+        # Convolve shorter with longer - re-order if necessary
+        self_shorter = len(self.xdata) <= len(ds.xdata)
+        if self_shorter:
+            d1 = self
+            d2 = ds
+        else:
+            d1 = ds
+            d2 = d1
 
-        # Pad the other dataset's data so that we can scan ourselves completely
-        # across the other
-        self_len = len(self.ydata)
-        other_len = len(ds.ydata)
-        full_len = other_len + 2 * self_len
-        other = ds.copy()
-        other.pad_truncate(full_len)
+        convolved = np.convolve(d1.ydata, d2.ydata, mode = 'full')
 
-        self.ydata = np.convolve(self.ydata, other.ydata, mode='full')
-        self.ydata = [y * scale_factor for y in self.ydata]
-
-        # Fix up new length of the xdata - extend the x list as needed
-        # Find the spacing between points
-        origin = other.xdata[0]
-        incr = other.xdata[1] - origin
-        self.xdata = [origin - shift + i * incr for i, _ in enumerate(self.ydata)]
-
-        # Because of the left shift, data will extend left of the origin.  Correct
-        # for this.
-        self.xdata = self.xdata[shift:]
-        self.ydata = self.ydata[shift:]
+        self.ydata = convolved
+        delta = (float(d2.xdata[-1] - d2.xdata[0])) / (len(d2.xdata) - 1)
+        start = d2.xdata[0]
+        self.xdata = [start + i * delta for i in range(len(self.ydata))]
 
         return True
 
     #@+node:tom.20211211170820.36: *3* Dataset.correlate
     def correlate(self, ds):
-        '''Correlate thedataset's data with the data of the Dataset passed in.
-        Replace the [X] data with the convolution values.
-        
-        If ds is self, this is an autocorrelation.  The values will
-        be normalized to 1.0.  The x axis will be renumbered so that
-        the peak is a lag = 0.
-        
-        Otherwise, The length of the result is the longer of the two data sets.
-        Replace the [X] data with the [X] data of the longer of the two data sets.
-        Return False if neither of the data sets has data.
+        '''Correlate self with ds.
 
-        Note that this operation is the signal processing kind of
-        correlation, not a statistical type.  There can be boundary 
-        effects, since there may be areas where the two data sets 
-        don't overlap properly.
+        self contains the result. ds is unchanged. The result is normalized 
+        so that the autocorrelation of each of the datasets would have a 
+        maximum value of 1.0.
 
         ARGUMENT
         ds -- the other Dataset to use in the correlation.
@@ -885,32 +852,28 @@ class Dataset:
         if not (any(self.ydata) or any(ds.ydata)):
             return False
 
-        if self is ds:
-            # Autocorrelation - normalize and shift
-            x, y = self.xdata, self.ydata
-
-            # Shift x axis
-            end = x[-1]
-            x = [z - end for z in x]
-            correlated = np.correlate(y, y, mode = 'full')
-            norm = 1./max(correlated)
-            self.ydata = [y_ * norm for y_ in correlated]
-            start = x[0]
-            delta = (float(x[-1] - x[0])) / (len(x) - 1)
-            self.xdata = [start + i * delta for i in range(len(self.ydata))]
+        # Correlate shorter with longer
+        self_shorter = len(self.xdata) <= len(ds.xdata)
+        if self_shorter:
+            d1 = self
+            d2 = ds
         else:
-            N0 = len(self.xdata)
-            self.ydata = np.correlate(self.ydata, ds.ydata, mode='full')
-            if len(self.xdata) != len(self.ydata):
-                if len(self.xdata) == len(ds.xdata):
-                    self.xdata = ds.xdata[:]
-                else:
-                    self.xdata = list(range(len(self.ydata)))
+            d1 = ds
+            d2 = d1
 
-            # Full overlap ends up with too many points to the right
-            # so trim to the original number.
-            self.ydata = self.ydata[:N0]
-            self.xdata = self.xdata[:N0]
+        # Calculate normalization factors
+        d1sqr = [z**2 for z in d1.ydata]
+        d2sqr = [z**2 for z in d2.ydata]
+        norm1, norm2  = sum(d1sqr), sum(d2sqr)
+        norm = 1./(norm1 * norm2)**0.5
+
+        correlated = np.correlate(d1.ydata, d2.ydata, mode = 'full')
+        correlated = [z * norm for z in correlated]
+        self.ydata = correlated
+
+        delta = (float(d2.xdata[-1] - d2.xdata[0])) / (len(d2.xdata) - 1)
+        start = d2.xdata[0]
+        self.xdata = [start + i * delta for i in range(len(self.ydata))]
 
         return True
 

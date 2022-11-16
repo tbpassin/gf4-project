@@ -11,8 +11,10 @@ try:
 except ImportError:
     import tkinter as Tk
 
-version, (branch, changeset) = APPVERSION, getGitInfo()
+from utility import ICONPATH, setIcon
 #@+node:tom.20220506224955.1: ** Declarations
+version, (branch, changeset) = APPVERSION, getGitInfo()
+
 BRANCH_STR = f'; Branch: {branch}' if branch else ""
 GIT_STR = f'; Changeset; {changeset}' if changeset else ""
 #@+node:tom.20220505131030.1: ** helpmsg
@@ -172,6 +174,7 @@ def msg_window(text, plotmgr=None):
         win = Tk.Tk()
 
     win.title("About GF4")
+    setIcon(win, ICONPATH)
 
     win.grid_columnconfigure(0, weight=1)
     win.grid_rowconfigure(0, weight=1)

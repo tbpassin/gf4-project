@@ -1,10 +1,15 @@
 #@+leo-ver=5-thin
 #@+node:tom.20221107232208.1: * @file help_cmds.py
-"""Contains explanatory text about commands in the Command Window."""
+"""Contains explanatory text about commands having buttons in the Command Window.
+
+The text is assumed to be written in RestructuredText, and that it will
+be converted by docutils before being displayed.
+"""
 
 HELPTEXT = {
 #@+others
-#@+node:tom.20221108025620.1: ** autocor
+#@+node:tom.20221115112809.1: ** Data Processing
+#@+node:tom.20221108025620.1: *3* autocor
 'autocor': '''
 
 autocor
@@ -35,7 +40,27 @@ For a more detailed discussion of the autocorrelation, see `Autocorrelation <htt
 
 ''',
 
-#@+node:tom.20221107232937.1: ** dedup
+#@+node:tom.20221108001524.1: *3* fft
+'fft': '''
+
+fft
+===
+Operates on: [X]
+
+Perform a (discrete) Fast Fourier Transform (FFT) on [MAIN].  Dataset length does not
+need to be a power of two.  This is a real FFT: only the magnitude of the
+transform is computed.
+
+Points are assumed to be equally spaced on the horizontal axis.
+
+This command uses the RFFT function from the NumPy package. See 
+`numpy.fft.rfft <https://numpy.org/doc/stable/reference/generated/numpy.fft.rfft.html>`_
+
+.. Note:: There are several conventions for normalizing an FFT.  This command uses the normalization provided by the NumPy function.
+
+''',
+#@+node:tom.20221115112905.1: ** Curve
+#@+node:tom.20221107232937.1: *3* dedup
 'dedup':'''
 
 dedup
@@ -46,7 +71,21 @@ If a point is followed immediately by one or more points with the same value,
 remove all but the first.
 
 ''',
-#@+node:tom.20221108194935.1: ** diff
+#@+node:tom.20221108000124.1: *3* pad
+'pad':'''
+
+pad
+====
+Change the number of points in [X].
+
+If the target length is larger, pad the dataset with zeros.  If the target 
+length is shorter, truncate the dataset by removing points from the right.
+
+.. Note:: This is different from the *Trim* command, which removes points from either the start or the end of the dataset.
+
+''',
+#@+node:tom.20221115112952.1: ** Math
+#@+node:tom.20221108194935.1: *3* diff
 'diff': r'''
 
 diff
@@ -64,7 +103,7 @@ The result has one less point than the original dataset because there is no poin
 :math:`y_{N+1}` where N is the index of the last point in the dataset.
 
 ''',
-#@+node:tom.20221108201916.1: ** diff2
+#@+node:tom.20221108201916.1: *3* diff2
 'diff2': r'''
 
 diff2
@@ -88,38 +127,6 @@ changes from one point to the next are important. If not, central differencing
 would usually be the better choice.  Also, one-sided differencing produces
 values that are offset by half a step for their index number, while central
 differencing has no such offset.
-''',
-#@+node:tom.20221108001524.1: ** fft
-'fft': '''
-
-fft
-===
-Operates on: [X]
-
-Perform a (discrete) Fast Fourier Transform (FFT) on [MAIN].  Dataset length does not
-need to be a power of two.  This is a real FFT: only the magnitude of the
-transform is computed.
-
-Points are assumed to be equally spaced on the horizontal axis.
-
-This command uses the RFFT function from the NumPy package. See 
-`numpy.fft.rfft <https://numpy.org/doc/stable/reference/generated/numpy.fft.rfft.html>`_
-
-.. Note:: There are several conventions for normalizing an FFT.  This command uses the normalization provided by the NumPy function.
-
-''',
-#@+node:tom.20221108000124.1: ** pad
-'pad':'''
-
-pad
-====
-Change the number of points in [X].
-
-If the target length is larger, pad the dataset with zeros.  If the target 
-length is shorter, truncate the dataset by removing points from the right.
-
-.. Note:: This is different from the *Trim* command, which removes points from either the start or the end of the dataset.
-
 ''',
 #@+node:tom.20221108165543.1: ** play-macro
 'play-macro': '''

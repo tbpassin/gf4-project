@@ -7,6 +7,7 @@ from __future__ import print_function
 
 import sys
 from pathlib import PurePath
+from copy import deepcopy
 
 import tkinter as Tk
 import tkinter.font as tkFont
@@ -2096,7 +2097,10 @@ class PlotManager(AbstractPlotManager):
     def cdf(self):
         _ds = self.stack[MAIN]
         ydata = _ds.ydata
+        mean, std = stats.meanstd(ydata)
+
         newx, newy, upperbounds, lowerbounds = stats.cdf(ydata)
+
         _ds.xdata = newx
         _ds.ydata = newy
         _lab = 'CDF'
@@ -2119,13 +2123,15 @@ class PlotManager(AbstractPlotManager):
         _ds.errorBands.append(lower)
 
         self.plot()
+        self.announce('mean: %0.3f,sigma: %0.3f'
+                      % (mean, std))
 
     #@+node:tom.20211207165051.118: *4* fitCdfWithNormal
     @REQUIRE_MAIN
     def fitCdfWithNormal(self):
         _ds = self.stack[MAIN]
         _newx, _newy, mean, sigma = \
-            stats.fitNormalToCdf(_ds.xdata, _ds.ydata, self.num)
+            stats.fitNormalToCdf(_ds)
         _ds.xdata = _newx
         _ds.ydata = _newy
         if _ds.figurelabel:
@@ -2133,17 +2139,29 @@ class PlotManager(AbstractPlotManager):
         else:
             _lab = 'Fitted CDF'
         _ds.figurelabel = _lab
+        _ds.yaxislabel = 'P'
+        _ds.xaxislabel = 'Value'
+
         self.plot()
         self.announce('mean: %0.3f,sigma: %0.3f'
                       % (mean, sigma))
     #@+node:tom.20211207165051.119: *4* fitCdfNormalAdaptive
     @REQUIRE_MAIN
     def fitCdfNormalAdaptive(self):
+        """Adaptively fit a normal distribution to a CDF in [MAIN].
+
+        Will probably fail if the data in [MAIN] is not a CDF already.
+        """
         _ds = self.stack[MAIN]
         values = _ds.xdata
         probs = _ds.ydata
         _newx, _newy, mean, sigma, correl = \
             stats.fitNormalToCdfAdaptive(values, probs, 0.001)
+        if not _newx:
+            self.announce("Cannot fit this data - the starting data may not be a CDF")
+            self.flashit()
+            return
+
         _ds.xdata = _newx
         _ds.ydata = _newy
 
@@ -2434,7 +2452,7 @@ class PlotManager(AbstractPlotManager):
     def take_snapshot(self):
         fig = self.figure
         bitmap = fig.canvas.copy_from_bbox(fig.bbox)
-        self.snapshot = bitmap, plotmgr.stack[:]
+        self.snapshot = bitmap, deepcopy(plotmgr.stack)
 
         plotmgr.announce('Saved snapshot')
         plotmgr.fadeit()
@@ -2445,9 +2463,9 @@ class PlotManager(AbstractPlotManager):
         canvas = fig.canvas
         canvas.restore_region(bitmap)
         canvas.blit(fig.bbox)
-        self.stack = stack
+        self.stack = deepcopy(stack)
 
-        self.announce('Saved snapshot')
+        self.announce('Restored snapshot')
         self.fadeit()
 
     #@+node:tom.20211207165051.134: *4* interpret

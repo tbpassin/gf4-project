@@ -140,10 +140,10 @@ WINDOW_BUTTONS = (
 )
 
 STATS_BUTTONS = (
-    ('CDF', 'cdf', 'Calculate CDF of X data'),
-    ('Fit CDF', 'fitcdf', 'Calculate Normal CDF that Fits X Data'),
-    ('CDF Adapt', 'fitcdfadapt', 'Fit a CDF in X to a Normal CDF, Adaptively'),
-    ('Histogram', 'hist', 'Calculate Histogram of X Data'),
+    ('CDF', 'cdf', 'Calculate CDF of [X] data'),
+    ('Normal CDF', 'fitcdf', 'Fit a Normal CDF to [X] Data'),
+    #('CDF Adapt', 'fitcdfadapt', 'Fit a CDF in [X] with a Normal CDF, Adaptively'),
+    ('Histogram', 'hist', 'Calculate Histogram of [X] Data'),
     SPACER, SPACER,
     ('Mean, STD', 'meanstd', 'Display Mean, Sample Standard Deviation, Lag-1 autocorrelation, and Area of X Data'),
     # ('Corr Coeff', 'corrcoeff', "Calculate Correlation Coefficient Between X and Y"),
