@@ -1,7 +1,4 @@
 # The list of plugins to import. Omit the ".py" extension.
-convolve1
-#autocorrel1
-correl1
-find_peak
-find_peak1
 readout
+calculator
+local_poly_fit
