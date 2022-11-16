@@ -160,13 +160,13 @@ def generateRectangle(N = 256, w = 256):
 #@+node:tom.20211211170819.38: ** generateGaussian
 def generateGaussian(N=256, m=0.0, sigma=128): 
     '''Compute a Gaussian probability curve.  Return a tuple of two arrays
-    (xdata, ydata).
+    (xdata, ydata). Points will have a spacing of 1 on the x-axis.
     
-    The range of the x-axis vaues will be +- 6 sigma around the mean.
+    The range of the x-axis values will be +- 6 sigma around the mean.
     
     ARGUMENTS
-    N -- number of points.  If not odd, the curve won't be exactly symmetrical
-         around the mean.
+    N -- number of points.  If not odd, the peak of the curve will fall
+         half-way between two of the points
     m -- mean of the distribution.
     sigma -- the standard deviation value of the distribution.
 
@@ -177,9 +177,9 @@ def generateGaussian(N=256, m=0.0, sigma=128):
     SPAN = 6.
     lower = -SPAN * sigma + m
     upper = SPAN * sigma + m
-    step = 2 * SPAN * sigma / N
+    step = (2 * SPAN) * sigma / (N - 1)
 
-    _range = np.arange(lower, upper, step)
+    _range = np.arange(lower, upper + step, step)
     _gauss = norm.pdf(_range, m, sigma)
 
     _ydata = _gauss.tolist()
