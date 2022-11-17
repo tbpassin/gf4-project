@@ -1458,6 +1458,7 @@ class PlotManager(AbstractPlotManager):
                 lab = 'Low Pass Filter'
             self.stack[MAIN].figurelabel = lab
 
+            self.stack[MAIN].clearErrorBands()
             self.plot()
         else:
             self.announce('tau  <= 0.0 or no data')
@@ -1482,6 +1483,7 @@ class PlotManager(AbstractPlotManager):
                 lab = 'High Pass Filter'
             self.stack[MAIN].figurelabel = lab
 
+            self.stack[MAIN].clearErrorBands()
             self.plot()
         else:
             self.announce('tau  <= %s or no data' % _LIMIT)
@@ -1489,48 +1491,56 @@ class PlotManager(AbstractPlotManager):
     #@+node:tom.20211207165051.95: *4* correlateWithBuffer
     @REQUIRE_MAIN
     def correlateWithBuffer(self):
-        self.stack[MAIN].correlate(self.stack[BUFFER])
+        dm = self.stack[MAIN]
+        ds.correlate(self.stack[BUFFER])
 
-        lab = self.stack[MAIN].figurelabel or ''
+        lab = ds.figurelabel or ''
         lab1 = self.stack[BUFFER].figurelabel or ''
         if lab:
-            self.stack[MAIN].figurelabel = 'Correlation of %s' % (lab)
+            ds.figurelabel = 'Correlation of %s' % (lab)
             if lab1:
-                self.stack[MAIN].figurelabel += ' with %s' % (lab1)
+                ds.figurelabel += ' with %s' % (lab1)
         else:
-            self.stack[MAIN].figurelabel = 'Correlation'
+            ds.figurelabel = 'Correlation'
+
+        ds.clearErrorBands()
 
         self.plot()
     #@+node:tom.20211207165051.94: *4* convolveWithBuffer
     @REQUIRE_MAIN
     def convolveWithBuffer(self):
-        lab = self.stack[MAIN].figurelabel or ''
+        dm = self.stack[MAIN]
+        lab = dm.figurelabel or ''
         lab1 = self.stack[BUFFER].figurelabel or ''
 
-        d1 = self.stack[MAIN]
+        d1 = dm
         d2 = self.stack[BUFFER]
 
         d1.convolve(d2)
 
         if lab:
-            self.stack[MAIN].figurelabel = 'Convolution of %s' % (lab)
+            dm.figurelabel = 'Convolution of %s' % (lab)
             if lab1:
-                self.stack[MAIN].figurelabel += ' with %s' % (lab1)
+                dm.figurelabel += ' with %s' % (lab1)
         else:
-            self.stack[MAIN].figurelabel = 'Convolution'
+            dm.figurelabel = 'Convolution'
+
+        dm.clearErrorBands()
 
         self.plot()
     #@+node:tom.20211207165051.96: *4* autocorrelate
     @REQUIRE_MAIN
     def autocorrelate(self):
-        self.stack[MAIN].correlate(self.stack[MAIN])
+        ds = self.stack[MAIN]
+        ds.correlate(ds)
 
-        lab = self.stack[MAIN].figurelabel or ''
+        lab = ds.figurelabel or ''
         if lab:
-            self.stack[MAIN].figurelabel = 'Autocorrelation of %s' % (lab)
+            ds.figurelabel = 'Autocorrelation of %s' % (lab)
         else:
-            self.stack[MAIN].figurelabel = 'Autocorrelation'
+            ds.figurelabel = 'Autocorrelation'
 
+        ds.clearErrorBands()
         self.plot()
     #@+node:tom.20221104001727.1: *4* partial_autocorrel
     @REQUIRE_MAIN
