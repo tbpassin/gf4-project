@@ -841,6 +841,8 @@ class Dataset:
         self contains the result. ds is unchanged. The result is normalized 
         so that the autocorrelation of each of the datasets would have a 
         maximum value of 1.0.
+        
+        If this is an sutocorrelation, center so that the peak occurs at x = 0.
 
         ARGUMENT
         ds -- the other Dataset to use in the correlation.
@@ -852,6 +854,9 @@ class Dataset:
         if not (any(self.ydata) or any(ds.ydata)):
             return False
 
+        # Detect if this is an autocorrelation
+        is_auto = ds == self
+
         # Correlate shorter with longer
         self_shorter = len(self.xdata) <= len(ds.xdata)
         if self_shorter:
@@ -860,6 +865,12 @@ class Dataset:
         else:
             d1 = ds
             d2 = d1
+
+        if is_auto:
+            x = self.xdata
+            # Shift x axis to center on zero
+            end = x[-1]
+            x = [z - end for z in x]
 
         # Calculate normalization factors
         d1sqr = [z**2 for z in d1.ydata]
@@ -872,7 +883,7 @@ class Dataset:
         self.ydata = correlated
 
         delta = (float(d2.xdata[-1] - d2.xdata[0])) / (len(d2.xdata) - 1)
-        start = d2.xdata[0]
+        start = x[0] if is_auto else d2.xdata[0]
         self.xdata = [start + i * delta for i in range(len(self.ydata))]
 
         return True
