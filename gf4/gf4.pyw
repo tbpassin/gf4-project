@@ -1223,6 +1223,9 @@ class PlotManager(AbstractPlotManager):
             self.flashit()
             return
 
+        for ds in _m.errorBands:
+            ds.clearErrorBands()
+
         lab = self.stack[MAIN].figurelabel or ''
         lab1 = self.stack[BUFFER].figurelabel or ''
         if lab and lab1:
@@ -1246,12 +1249,16 @@ class PlotManager(AbstractPlotManager):
             self.flashit()
             return
 
+
         mainlab = self.stack[MAIN].figurelabel or ''
         bufflab = self.stack[BUFFER].figurelabel or ''
         if mainlab and bufflab:
             self.stack[MAIN].figurelabel = '%s / %s' % (bufflab, mainlab)
         else:
             self.stack[MAIN].figurelabel = 'Quotient'
+
+        for ds in self.stack[MAIN].errorBands:
+            ds.clearErrorBands()
 
         self.plot()
         if self.stack[MAIN].xdata != self.stack[BUFFER].xdata:
@@ -1294,8 +1301,10 @@ class PlotManager(AbstractPlotManager):
         result = []
         for n, _ in enumerate(_my):
             result.append(_my[n] + _by[n])
-
         _m.ydata = result
+
+        for ds in _m.errorBands:
+            ds.ydata = [y + x for x, y in zip(ds.ydata, _by)]
 
         lab = self.stack[MAIN].figurelabel or ''
         lab1 = self.stack[BUFFER].figurelabel or ''
@@ -1339,6 +1348,8 @@ class PlotManager(AbstractPlotManager):
             _by = _b.ydata
 
         _m.ydata = [y - x for x, y in zip(_my, _by)]
+        for ds in _m.errorBands:
+            ds.ydata = [y - x for x, y in zip(ds.ydata, _by)]
 
         lab = self.stack[MAIN].figurelabel or ''
         lab1 = self.stack[BUFFER].figurelabel or ''

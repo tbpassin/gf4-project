@@ -76,8 +76,11 @@ class Dataset:
         _max = max(self.ydata)
         if _max == 0.0: return
 
-        self.ydata = [1.0*y/_max for y in self.ydata]
+        norm = 1.0 / _max
+        self.ydata = [y * norm for y in self.ydata]
 
+        for ds in self.errorBands:
+            ds.ydata = [y * norm for y in ds.ydata]
     #@+node:tom.20211211170820.10: *3* Dataset.setAsciiData
     def setAsciiData(self, lines, filename='', root = None):
         """
