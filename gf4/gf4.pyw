@@ -1033,10 +1033,6 @@ class PlotManager(AbstractPlotManager):
         _ds = self.stack[MAIN]
         _ds.scale(dia.result)
 
-        if _ds.errorBands:
-            _ds.errorBands[0].scale(dia.result)
-            _ds.errorBands[1].scale(dia.result)
-
         self.plot()
     #@+node:tom.20211207165051.77: *4* add_constant
     @REQUIRE_MAIN
@@ -1052,10 +1048,6 @@ class PlotManager(AbstractPlotManager):
         self.parmsaver[_id] = dia.result
 
         _ds.addConstant(dia.result)
-
-        if _ds.errorBands:
-            _ds.errorBands[0].addConstant(dia.result)
-            _ds.errorBands[1].addConstant(dia.result)
 
         self.plot()
     #@+node:tom.20211207165051.78: *4* differentiate
@@ -1168,9 +1160,15 @@ class PlotManager(AbstractPlotManager):
         if N > 0:
             _ds.xdata = _ds.xdata[:-N]
             _ds.ydata = _ds.ydata[:-N]
+            for ds in _ds.errorBands:
+                ds.xdata = ds.xdata[:-N]
+                ds.ydata = ds.ydata[:-N]
         elif N < 0:
             _ds.xdata = _ds.xdata[-N:]
             _ds.ydata = _ds.ydata[-N:]
+            for ds in _ds.errorBands:
+                ds.xdata = ds.xdata[-N:]
+                ds.ydata = ds.ydata[-N:]
 
         lab = self.stack[MAIN].figurelabel or ''
         lab = '%s Trimmed by %s' % (lab, N)

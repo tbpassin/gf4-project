@@ -420,7 +420,10 @@ class Dataset:
         else:
             self.xdata = _x[0:num]
             self.ydata = _y[0:num]
-            
+
+        for ds in self.errorBands:
+            ds.pad_truncate(num)
+
     #@+node:tom.20211211170820.16: *3* Dataset.shift
     def shift(self, dist):
         '''Shift data along the X axis.  For a shift of 0 length, do nothing.
@@ -479,6 +482,8 @@ class Dataset:
         '''
 
         self.ydata = [c*y for y in self.ydata]
+        for ds in self.errorBands:
+            ds.scale(c)
 
     #@+node:tom.20211211170820.20: *3* Dataset.addConstant
     def addConstant(self, c):
@@ -493,7 +498,8 @@ class Dataset:
         '''
 
         self.ydata = [c + y for y in self.ydata]
-      
+        for ds in self.errorBands:
+            ds.addConstant(c)
     #@+node:tom.20211211170820.21: *3* Dataset.differentiate2
     def differentiate2(self):
         '''Differentiate the data, using central differencing (except at
