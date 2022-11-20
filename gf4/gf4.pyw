@@ -81,25 +81,21 @@ class PlotManager(AbstractPlotManager):
 
     #@+others
     #@+node:tom.20211207211642.1: *3* Decorators
-    #@+node:tom.20211207165051.5: *4* doErrorBands
-    def doErrorBands(method):
-        '''A decorator method to process error bands in the same way that
-        the y data is processed.  The original method call must return
-        the Dataset it is being applied to, and the method it applies.
-        '''
+    #@+node:tom.20221119152424.1: *4* CLEAR_ERROR_BANDS
+    def CLEAR_ERROR_BANDS(method):
+        """A decorator method to clear the ERRORBAND datasets of the MAIN
+        dataset after a operation using the dataset has been performed.
+        """
         # pylint: disable = no-self-argument
         # pylint: disable = not-callable
         def new_method(*args):
             # args[0] will be the calling instance (i.e., self)
             # Call original method
-            _ds, func = method(args[0])
-
-            if _ds and _ds.errorBands:
-                func(_ds.errorBands[0])
-                func(_ds.errorBands[1])
+            self = args[0]
+            method(*args)
+            self.stack[MAIN].clearErrorBands()
 
         return new_method
-
     #@+node:tom.20211207165051.6: *4* REQUIRE_MAIN
     def REQUIRE_MAIN(procedure):
         """A decorator method to check if there is data in the MAIN slot.
@@ -952,6 +948,7 @@ class PlotManager(AbstractPlotManager):
 
         self.parmsaver[_id] = (new_start, new_delta)
     #@+node:tom.20211207165051.70: *4* dedup
+    @CLEAR_ERROR_BANDS
     @REQUIRE_MAIN
     def dedup(self):
         self.stack[MAIN].dedup()
@@ -966,6 +963,7 @@ class PlotManager(AbstractPlotManager):
         self.plot()
 
     #@+node:tom.20211207165051.71: *4* pad_truncate
+    @CLEAR_ERROR_BANDS
     @REQUIRE_MAIN
     def pad_truncate(self):
         _ds = self.stack[MAIN]
@@ -1002,6 +1000,7 @@ class PlotManager(AbstractPlotManager):
         self.stack[MAIN].shift(dia.result)
         self.plot()
     #@+node:tom.20211207165051.74: *4* transpose
+    @CLEAR_ERROR_BANDS
     @REQUIRE_MAIN
     def transpose(self):
         if not self.stack[MAIN]:
@@ -1015,6 +1014,7 @@ class PlotManager(AbstractPlotManager):
 
         return _ds, Dataset.transpose
     #@+node:tom.20211207165051.75: *4* sortX
+    @CLEAR_ERROR_BANDS
     @REQUIRE_MAIN
     def sortX(self):
         self.stack[MAIN].sortX()
@@ -1051,60 +1051,80 @@ class PlotManager(AbstractPlotManager):
 
         self.plot()
     #@+node:tom.20211207165051.78: *4* differentiate
+    @CLEAR_ERROR_BANDS
     @REQUIRE_MAIN
     def differentiate(self):
-        self.stack[MAIN].differentiate()
-        self.stack[MAIN].figurelabel = ' Derivative of %s' % \
-            (self.stack[MAIN].figurelabel)
+        ds = self.stack[MAIN]
+        ds.differentiate()
+        ds.figurelabel = ' Derivative of %s' % \
+            (ds.figurelabel)
+
         self.plot()
     #@+node:tom.20211207165051.79: *4* differentiate2
+    @CLEAR_ERROR_BANDS
     @REQUIRE_MAIN
     def differentiate2(self):
-        self.stack[MAIN].differentiate2()
-        self.stack[MAIN].figurelabel = ' Derivative of %s' % \
-            (self.stack[MAIN].figurelabel)
+        ds = self.stack[MAIN]
+        ds.differentiate2()
+        ds.figurelabel = ' Derivative of %s' % \
+            (ds.figurelabel)
+
         self.plot()
     #@+node:tom.20211207165051.80: *4* integrate
+    @CLEAR_ERROR_BANDS
     @REQUIRE_MAIN
     def integrate(self):
-        self.stack[MAIN].integrate()
-        lab = self.stack[MAIN].figurelabel
+        ds = self.stack[MAIN]
+        ds.integrate()
+        lab = ds.figurelabel
         if lab:
-            self.stack[MAIN].figurelabel = ' Integral of %s' % (lab)
+            ds.figurelabel = ' Integral of %s' % (lab)
         self.plot()
     #@+node:tom.20211207165051.81: *4* absolute
+    @CLEAR_ERROR_BANDS
     @REQUIRE_MAIN
     def absolute(self):
-        self.stack[MAIN].absolute()
-        lab = self.stack[MAIN].figurelabel
+        ds = self.stack[MAIN]
+        ds.absolute()
+        lab = ds.figurelabel
         if lab:
-            self.stack[MAIN].figurelabel = ' Absolute Value of %s' % (lab)
+            ds.figurelabel = ' Absolute Value of %s' % (lab)
         self.plot()
     #@+node:tom.20211207165051.82: *4* square
+    @CLEAR_ERROR_BANDS
     @REQUIRE_MAIN
     def square(self):
-        self.stack[MAIN].square()
-        lab = self.stack[MAIN].figurelabel
+        ds = self.stack[MAIN]
+        ds.square()
+        lab = ds.figurelabel
         if lab:
-            self.stack[MAIN].figurelabel = ' Square of %s' % (lab)
+            self.ds.figurelabel = ' Square of %s' % (lab)
+
         self.plot()
     #@+node:tom.20211207165051.83: *4* rectify
+    @CLEAR_ERROR_BANDS
     @REQUIRE_MAIN
     def rectify(self):
-        self.stack[MAIN].ydata = [abs(y) for y in self.stack[MAIN].ydata]
-        lab = self.stack[MAIN].figurelabel or ''
+        ds = self.stack[MAIN]
+        ds.ydata = [abs(y) for y in ds.ydata]
+        lab = ds.figurelabel or ''
         lab += ' Rectified'
-        self.stack[MAIN].figurelabel = lab
+        ds.figurelabel = lab
+
         self.plot()
     #@+node:tom.20211207165051.84: *4* half_rectify
+    @CLEAR_ERROR_BANDS
     @REQUIRE_MAIN
     def half_rectify(self):
-        self.stack[MAIN].ydata = [max(y, 0.) for y in self.stack[MAIN].ydata]
-        lab = self.stack[MAIN].figurelabel or ''
+        ds = self.stack[MAIN]
+        ds.ydata = [max(y, 0.) for y in ds.ydata]
+        lab = ds.figurelabel or ''
         lab += ' Half Wave Rectified'
-        self.stack[MAIN].figurelabel = lab
+        ds.figurelabel = lab
+
         self.plot()
     #@+node:tom.20211207165051.85: *4* clip
+    @CLEAR_ERROR_BANDS
     @REQUIRE_MAIN
     def clip(self):
         _id = 'clip'
@@ -1116,17 +1136,20 @@ class PlotManager(AbstractPlotManager):
         self.parmsaver[_id] = abs(dia.result)
         clip = abs(dia.result)
         _y = []
-        for y in self.stack[MAIN].ydata:
+
+        ds = self.stack[MAIN]
+        for y in ds.ydata:
             if y >= 0:
                 _y.append(min(y, clip))
             else:
                 _y.append(-min(-y, clip))
-        self.stack[MAIN].ydata = _y
-        lab = self.stack[MAIN].figurelabel or ''
+        ds.ydata = _y
+        lab = ds.figurelabel or ''
         lab += ' Clipped'
-        self.stack[MAIN].figurelabel += lab
+        ds.figurelabel += lab
         self.plot()
     #@+node:tom.20211207165051.86: *4* decimate
+    @CLEAR_ERROR_BANDS
     @REQUIRE_MAIN
     def decimate(self):
         _id = 'decimate'
@@ -1139,12 +1162,12 @@ class PlotManager(AbstractPlotManager):
         self.parmsaver[_id] = delta
 
         _ds = self.stack[MAIN]
-        lab = self.stack[MAIN].figurelabel or ''
+        lab = _ds.figurelabel or ''
         lab = '%s Thinned To One in %s' % (lab, delta)
 
-        self.stack[MAIN] = _ds.thin(delta)
-        self.stack[MAIN].figurelabel = lab
-
+        # _ds = _ds.thin(delta)
+        _ds.thin(delta)
+        _ds.figurelabel = lab
         self.plot()
     #@+node:tom.20211207165051.87: *4* trim
     @REQUIRE_MAIN
@@ -1200,6 +1223,7 @@ class PlotManager(AbstractPlotManager):
             self.stack[MAIN].figurelabel = 'Log base 10 of %s' % (lab)
         self.plot()
     #@+node:tom.20211207165051.122: *4* normalize
+    @CLEAR_ERROR_BANDS
     @REQUIRE_MAIN
     def normalize(self):
         """ Normalize the X data to 1.0.  Replot.
@@ -1212,6 +1236,7 @@ class PlotManager(AbstractPlotManager):
 
         self.plot()
     #@+node:tom.20211207165051.90: *4* mulBuffer
+    @CLEAR_ERROR_BANDS
     @REQUIRE_MAIN_BUFF
     def mulBuffer(self):
         success = self.stack[MAIN].multiply(self.stack[BUFFER])
@@ -1223,9 +1248,6 @@ class PlotManager(AbstractPlotManager):
             self.flashit()
             return
 
-        for ds in _m.errorBands:
-            ds.clearErrorBands()
-
         lab = self.stack[MAIN].figurelabel or ''
         lab1 = self.stack[BUFFER].figurelabel or ''
         if lab and lab1:
@@ -1235,6 +1257,7 @@ class PlotManager(AbstractPlotManager):
 
         self.plot()
     #@+node:tom.20211207165051.91: *4* divBuffer
+    @CLEAR_ERROR_BANDS
     @REQUIRE_MAIN_BUFF
     def divBuffer(self):
         '''Divide BUFFER by MAIN, pointwise. Return result in MAIN,
@@ -1256,9 +1279,6 @@ class PlotManager(AbstractPlotManager):
             self.stack[MAIN].figurelabel = '%s / %s' % (bufflab, mainlab)
         else:
             self.stack[MAIN].figurelabel = 'Quotient'
-
-        for ds in self.stack[MAIN].errorBands:
-            ds.clearErrorBands()
 
         self.plot()
         if self.stack[MAIN].xdata != self.stack[BUFFER].xdata:
@@ -1362,6 +1382,7 @@ class PlotManager(AbstractPlotManager):
 
         # return _m, suby
     #@+node:tom.20211207165051.113: *4* make_phasespace
+    @CLEAR_ERROR_BANDS
     @REQUIRE_MAIN
     def make_phasespace(self):
         '''Replace the X axis data of the MAIN ds by replacing the x axis
@@ -1396,6 +1417,7 @@ class PlotManager(AbstractPlotManager):
         _ds.yaxislabel = f'Y(t {lag})'
         self.plot()
     #@+node:tom.20211207165051.114: *4* YvsX
+    @CLEAR_ERROR_BANDS
     @REQUIRE_MAIN
     def YvsX(self):
         '''Replace the x axis of the data in X with its y data.
@@ -1429,6 +1451,7 @@ class PlotManager(AbstractPlotManager):
         #self.sortX()
         self.plot()
     #@+node:tom.20220806224143.1: *4* zero
+    @CLEAR_ERROR_BANDS
     @REQUIRE_MAIN
     def zero(self):
         """Subtract the mean of the Y data of the MAIN Dataset. Replot"""
@@ -1451,6 +1474,7 @@ class PlotManager(AbstractPlotManager):
         self.stack[MAIN].yaxislabel = 'Relative Amplitude'
         self.plot()
     #@+node:tom.20211207165051.97: *4* lopass
+    @CLEAR_ERROR_BANDS
     @REQUIRE_MAIN
     def lopass(self):
         _id = 'lopass'
@@ -1475,6 +1499,7 @@ class PlotManager(AbstractPlotManager):
             self.announce('tau  <= 0.0 or no data')
             self.flashit()
     #@+node:tom.20211207165051.98: *4* hipass
+    @CLEAR_ERROR_BANDS
     @REQUIRE_MAIN
     def hipass(self):
         _id = 'hipass'
@@ -1500,6 +1525,7 @@ class PlotManager(AbstractPlotManager):
             self.announce('tau  <= %s or no data' % _LIMIT)
             self.flashit()
     #@+node:tom.20211207165051.95: *4* correlateWithBuffer
+    @CLEAR_ERROR_BANDS
     @REQUIRE_MAIN
     def correlateWithBuffer(self):
         dm = self.stack[MAIN]
@@ -1518,6 +1544,7 @@ class PlotManager(AbstractPlotManager):
 
         self.plot()
     #@+node:tom.20211207165051.94: *4* convolveWithBuffer
+    @CLEAR_ERROR_BANDS
     @REQUIRE_MAIN
     def convolveWithBuffer(self):
         dm = self.stack[MAIN]
@@ -1540,6 +1567,7 @@ class PlotManager(AbstractPlotManager):
 
         self.plot()
     #@+node:tom.20211207165051.96: *4* autocorrelate
+    @CLEAR_ERROR_BANDS
     @REQUIRE_MAIN
     def autocorrelate(self):
         ds = self.stack[MAIN]
@@ -1583,6 +1611,7 @@ class PlotManager(AbstractPlotManager):
         self.plot()
         self.overplot_errorbands()
     #@+node:tom.20211207165051.99: *4* moving_median
+    @CLEAR_ERROR_BANDS
     @REQUIRE_MAIN
     def moving_median(self):
         _id = 'moving_median'
@@ -1608,6 +1637,7 @@ class PlotManager(AbstractPlotManager):
         self.plot()
     #@+node:tom.20211207213827.1: *3* Fit
     #@+node:tom.20211207165051.100: *4* cubicSpline
+    @CLEAR_ERROR_BANDS
     @REQUIRE_MAIN
     def cubicSpline(self):
         _ds = self.stack[MAIN]
@@ -1616,6 +1646,7 @@ class PlotManager(AbstractPlotManager):
         _ds.xdata, _ds.ydata = smoother.cspline(_x, _y)
         self.plot()
     #@+node:tom.20211207165051.72: *4* fit_piecewise
+    @CLEAR_ERROR_BANDS
     @REQUIRE_MAIN
     def fit_piecewise(self):
         _ds = self.stack[MAIN]
@@ -1702,6 +1733,7 @@ class PlotManager(AbstractPlotManager):
         self.plot()
         self.announce('Mean=%0.3f, rms=%0.3f, r=%0.3f' % (mean, rms, r))
     #@+node:tom.20211207165051.112: *4* thiel
+    @CLEAR_ERROR_BANDS
     @REQUIRE_MAIN
     def thiel(self):
         _ds = self.stack[MAIN]
@@ -1983,6 +2015,7 @@ class PlotManager(AbstractPlotManager):
         else:
             self.announce('r=%0.3f' % r)
     #@+node:tom.20211207165051.106: *4* poissonSmooth
+    @CLEAR_ERROR_BANDS
     @REQUIRE_MAIN
     def poissonSmooth(self):
         _ds = self.stack[MAIN]
@@ -2146,6 +2179,7 @@ class PlotManager(AbstractPlotManager):
                       % (mean, std))
 
     #@+node:tom.20211207165051.118: *4* fitCdfWithNormal
+    @CLEAR_ERROR_BANDS
     @REQUIRE_MAIN
     def fitCdfWithNormal(self):
         _ds = self.stack[MAIN]
@@ -2165,6 +2199,7 @@ class PlotManager(AbstractPlotManager):
         self.announce('mean: %0.3f,sigma: %0.3f'
                       % (mean, sigma))
     #@+node:tom.20211207165051.119: *4* fitCdfNormalAdaptive
+    @CLEAR_ERROR_BANDS
     @REQUIRE_MAIN
     def fitCdfNormalAdaptive(self):
         """Adaptively fit a normal distribution to a CDF in [MAIN].
@@ -2194,6 +2229,7 @@ class PlotManager(AbstractPlotManager):
                       % (mean, sigma, correl))
 
     #@+node:tom.20211207165051.120: *4* histogram
+    @CLEAR_ERROR_BANDS
     @REQUIRE_MAIN
     def histogram(self):
         _id = 'histogram'
@@ -2326,6 +2362,7 @@ class PlotManager(AbstractPlotManager):
 
     #@+node:tom.20220402084339.1: *3* Misc
     #@+node:tom.20211207165051.109: *4* sliding_var
+    @CLEAR_ERROR_BANDS
     @REQUIRE_MAIN
     def sliding_var(self):
         '''Calculate the standard deviations in a window that slides across the
@@ -2366,6 +2403,7 @@ class PlotManager(AbstractPlotManager):
         self.plot()
 
     #@+node:tom.20211207165051.129: *4* var_ratio
+    @CLEAR_ERROR_BANDS
     @REQUIRE_MAIN
     def var_ratio(self):
         _id = 'var_ratio'
@@ -2384,6 +2422,7 @@ class PlotManager(AbstractPlotManager):
         self.plot()
 
     #@+node:tom.20211207165051.130: *4* y_vs_y
+    @CLEAR_ERROR_BANDS
     @REQUIRE_MAIN_BUFF
     def y_vs_y(self):
         '''Plot y values from BUFFER against y values from MAIN,
