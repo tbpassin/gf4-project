@@ -88,12 +88,16 @@ class WtStats:
     def __init__(self):
         self.weights = []
         self.smoothzone = 0
+        self.center = 0
         self.Swt = 0
 
+    def __str__(self):
+        return f'WtStats: len(weights): {len(self.weights)}, center: {self.center}, width: {self.smoothzone}'
     #@+node:tom.20211211171913.19: *3* WtStats.MakeGaussianWeights
     def MakeGaussianWeights(self, smoothwidth=4):
         '''Compute weights to use with smoother. These weights
-        form a gaussian curve normalized to 1.0.
+        form a truncated gaussian curve normalized to 1.0. If 
+        smoothwidth is even, increment by one to make it odd.
 
         ARGUMENT
         smoothwidth -- width of window in data points
@@ -104,13 +108,14 @@ class WtStats:
         '''
 
         _smoothzone = smoothwidth
-        if smoothwidth % 2 == 1:
+        if smoothwidth % 2 == 0:
             _smoothzone = smoothwidth + 1
         self.smoothzone = _smoothzone
-        numwts = _smoothzone + 1 # total number of weights
-        icenter = _smoothzone / 2 # index of center point
+        numwts = _smoothzone # total number of weights
+        icenter = int(_smoothzone / 2) # index of center point
         nSigma = 2.0
         self.Swt = 0
+        self.center = icenter
 
         # Half-width is nSigma sigma, so sigma = half-width / nSigma
         SmoothSigma = 1.0 * _smoothzone/(2 * nSigma)
@@ -118,7 +123,6 @@ class WtStats:
         for i in range(numwts):
             self.weights.append(math.exp(-1.0 * sqr(i - icenter) * denom))
             self.Swt += self.weights[i]
-    #    print('\n'.join([f'{w:.3f}' for w in self.weights]))
 
     #@+node:tom.20211211171913.20: *3* WtStats.omitOne
     def omitOne(self):
