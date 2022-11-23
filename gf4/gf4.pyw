@@ -1679,18 +1679,9 @@ class PlotManager(AbstractPlotManager):
         newy, mean, rms, r, upperbound, lowerbound = smoother.leastsqr(_x, _y)
         _ds.ydata = newy
 
-        lower = Dataset()
-        lower.ydata = lowerbound
-        lower.xdata = _x
-
-        upper = Dataset()
-        upper.ydata = upperbound
-        upper.xdata = _x
-
-        # Subgraphs get stored in the errorBands list
-        _ds.errorBands = []
-        _ds.errorBands.append(upper)
-        _ds.errorBands.append(lower)
+        lower = Dataset(_x, lowerbound)
+        upper = Dataset(_x, upperbound)
+        _ds.errorBands = [upper, lower]
 
         if _ds.figurelabel:
             _ds.figurelabel = 'Least Squares Fit to %s' % (_ds.figurelabel)
@@ -1711,18 +1702,9 @@ class PlotManager(AbstractPlotManager):
             smoother.leastsqr(_x, _y, 2)
         _ds.ydata = newy
 
-        lower = Dataset()
-        lower.ydata = lowerbound
-        lower.xdata = _x
-
-        upper = Dataset()
-        upper.ydata = upperbound
-        upper.xdata = _x
-
-        # Subgraphs get stored in the errorBands list
-        _ds.errorBands = []
-        _ds.errorBands.append(upper)
-        _ds.errorBands.append(lower)
+        lower = Dataset(_x, lowerbound)
+        upper = Dataset(_x, upperbound)
+        _ds.errorBands = [upper, lower]
 
         if _ds.figurelabel:
             _ds.figurelabel = 'Least Squares Quadratic Fit to %s' \
@@ -1789,6 +1771,48 @@ class PlotManager(AbstractPlotManager):
         self.plot(stackposition, False)
 
     #@+node:tom.20211207214009.1: *3* Smoothing
+    #@+node:tom.20211207165051.102: *4* lowess2Quad
+    @REQUIRE_MAIN
+    def lowess2Quad(self):
+        _ds = self.stack[MAIN]
+        if _ds.isNumpyArray(_ds.xdata):
+            _x = _ds.xdata.tolist()
+        else:
+            _x = _ds.xdata
+        if _ds.isNumpyArray(_ds.ydata):
+            _y = _ds.ydata.tolist()
+        else:
+            _y = _ds.ydata
+
+        _id = 'lowess2Quad'
+        lastparm = self.parmsaver.get(_id, 6)
+
+        dia = GetSingleInt(self.root, 'Smoothing Width', 'Enter Integer',
+                           lastparm)
+        if dia.result is None: return
+        self.parmsaver[_id] = dia.result
+
+        x, newy, rms, upperlimit, lowerlimit = smoother.lowess2Quad(_x, _y,
+                                                                    dia.result)
+        _ds.ydata = newy
+
+        lab = self.stack[MAIN].figurelabel or ''
+        if lab:
+            lab = 'LOWESS Quadratic Smooth of %s' % (lab)
+        else:
+            lab = 'LOWESS Quadratic Smooth'
+        self.stack[MAIN].figurelabel = lab
+
+        lower = Dataset(_x, lowerlimit)
+        upper = Dataset(_x, upperlimit)
+        _ds.errorBands = [upper, lower]
+
+        # correlation coefficient
+        r = smoother.correlationCoeff(_y, newy)
+
+        self.plot()
+
+        self.announce('RMS Deviation: %0.3f, r=%0.3f' % (rms, r))
     #@+node:tom.20211207165051.101: *4* lowess
     @REQUIRE_MAIN
     def lowess(self):
@@ -1823,18 +1847,9 @@ class PlotManager(AbstractPlotManager):
             lab = f'LOWESS Smooth ({dia.result})'
         self.stack[MAIN].figurelabel = lab
 
-        lower = Dataset()
-        lower.ydata = lowerlimit
-        lower.xdata = _x  # not a copy
-
-        upper = Dataset()
-        upper.ydata = upperlimit
-        upper.xdata = _x  # not a copy
-
-        # Subgraphs get stored in the errorBands list
-        _ds.errorBands = []
-        _ds.errorBands.append(upper)
-        _ds.errorBands.append(lower)
+        lower = Dataset(_x, lowerlimit)
+        upper = Dataset(_x, upperlimit)
+        _ds.errorBands = [upper, lower]
 
         # correlation coefficient
         r = smoother.correlationCoeff(_y, newy)
@@ -1844,57 +1859,6 @@ class PlotManager(AbstractPlotManager):
         n = float(len(_x))
         msg = f'RMS deviation = {rms:.3f}, r = {r:.3f}'
         self.announce(msg)
-    #@+node:tom.20211207165051.102: *4* lowess2Quad
-    @REQUIRE_MAIN
-    def lowess2Quad(self):
-        _ds = self.stack[MAIN]
-        if _ds.isNumpyArray(_ds.xdata):
-            _x = _ds.xdata.tolist()
-        else:
-            _x = _ds.xdata
-        if _ds.isNumpyArray(_ds.ydata):
-            _y = _ds.ydata.tolist()
-        else:
-            _y = _ds.ydata
-
-        _id = 'lowess2Quad'
-        lastparm = self.parmsaver.get(_id, 6)
-
-        dia = GetSingleInt(self.root, 'Smoothing Width', 'Enter Integer',
-                           lastparm)
-        if dia.result is None: return
-        self.parmsaver[_id] = dia.result
-
-        x, newy, rms, upperlimit, lowerlimit = smoother.lowess2Quad(_x, _y,
-                                                                    dia.result)
-        _ds.ydata = newy
-
-        lab = self.stack[MAIN].figurelabel or ''
-        if lab:
-            lab = 'LOWESS Quadratic Smooth of %s' % (lab)
-        else:
-            lab = 'LOWESS Quadratic Smooth'
-        self.stack[MAIN].figurelabel = lab
-
-        lower = Dataset()
-        lower.ydata = lowerlimit
-        lower.xdata = _x
-
-        upper = Dataset()
-        upper.ydata = upperlimit
-        upper.xdata = _x
-
-        # Subgraphs get stored in the errorBands list
-        _ds.errorBands = []
-        _ds.errorBands.append(upper)
-        _ds.errorBands.append(lower)
-
-        # correlation coefficient
-        r = smoother.correlationCoeff(_y, newy)
-
-        self.plot()
-
-        self.announce('RMS Deviation: %0.3f, r=%0.3f' % (rms, r))
     #@+node:tom.20211207165051.103: *4* lowess_adaptive
     @REQUIRE_MAIN
     def lowess_adaptive(self):
@@ -1927,18 +1891,9 @@ class PlotManager(AbstractPlotManager):
             lab = 'Adaptive LOWESS Smooth'
         self.stack[MAIN].figurelabel = lab
 
-        lower = Dataset()
-        lower.ydata = lowerlimit
-        lower.xdata = _x
-
-        upper = Dataset()
-        upper.ydata = upperlimit
-        upper.xdata = _x
-
-        # Subgraphs get stored in the errorBands list
-        _ds.errorBands = []
-        _ds.errorBands.append(upper)
-        _ds.errorBands.append(lower)
+        lower = Dataset(_x, lowerlimit)
+        upper = Dataset(_x, upperlimit)
+        _ds.errorBands = [upper, lower]
 
         # correlation coefficient
         r = smoother.correlationCoeff(_y, newy)
@@ -1970,18 +1925,9 @@ class PlotManager(AbstractPlotManager):
             lab = 'Adaptive LOWESS Autocorrelation Smooth'
         self.stack[MAIN].figurelabel = lab
 
-        lower = Dataset()
-        lower.ydata = lowerlimit
-        lower.xdata = _x
-
-        upper = Dataset()
-        upper.ydata = upperlimit
-        upper.xdata = _x
-
-        # Subgraphs get stored in the errorBands list
-        _ds.errorBands = []
-        _ds.errorBands.append(upper)
-        _ds.errorBands.append(lower)
+        lower = Dataset(_x, lowerlimit)
+        upper = Dataset(_x, upperlimit)
+        _ds.errorBands = [upper, lower]
 
         # correlation coefficient
         r = smoother.correlationCoeff(_y, newy)
@@ -2162,17 +2108,9 @@ class PlotManager(AbstractPlotManager):
         _ds.yaxislabel = 'P'
         _ds.xaxislabel = 'Value'
 
-        lower = Dataset()
-        lower.ydata = lowerbounds
-        lower.xdata = newx
-
-        upper = Dataset()
-        upper.ydata = upperbounds
-        upper.xdata = newx
-
-        _ds.errorBands = []
-        _ds.errorBands.append(upper)
-        _ds.errorBands.append(lower)
+        lower = Dataset(newx, lowerbounds)
+        upper = Dataset(newx, upperbounds)
+        _ds.errorBands = [upper, lower]
 
         self.plot()
         self.announce('mean: %0.3f,sigma: %0.3f'
