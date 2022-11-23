@@ -137,7 +137,7 @@ class WtStats:
 
 #@+node:tom.20211211171913.21: ** correlationCoeff
 def correlationCoeff(data, fitted):
-    '''Given a sequence of data and a sequence of fitted points (e.g.,
+    """Given a sequence of data and a sequence of fitted points (e.g.,
     from a least square fit), return the correlation coefficient.
 
     See http://ocw.usu.edu/Civil_and_Environmental_Engineering/Uncertainty_in_Engineering_Analysis/Regression_DataFitting_Part2.pdf
@@ -148,8 +148,9 @@ def correlationCoeff(data, fitted):
 
     Note that this formula is only correct when the mean of the fitted data
     equals the mean of the raw data.  This would be true if the fit were
-    by a least squares procedure.  Also, (2) has to be larger than 1, so the variations
-    in the data have to be larger than the variations from the fitted points.
+    by a least squares procedure.  Also, (2) has to be larger than 1, so the
+    variations in the data have to be larger than the variations from 
+    the fitted points.
 
     For correctly fitted data, this correlation coefficient generally (always?)
     equals Pearson's Correlation Coefficient, r.
@@ -160,37 +161,36 @@ def correlationCoeff(data, fitted):
 
     RETURNS
     the correlation coefficient, or -1 if r^2 would be negative.
-    '''
-
-    mean = 1.0*sum(data) / len(data)
-    fitted_mean = 1.0*sum(fitted) / len(fitted)
-
+    """
     def corr(x, xf):
+        """Return r^2, where r = correlation coefficient."""
         Sdf = 0.0 # Deviations from fitted points
         Sdm = 0.0 # Deviations from mean
         mean = 1.0*sum(x)/len(x)
         for y, yf in zip(x, xf):
-            Sdf += 1.0*(y - yf) **2
-            Sdm += 1.0*(y - mean) **2
-        return 1 - (Sdf / Sdm)
+            Sdf += 1.0 * (y - yf)**2
+            Sdm += 1.0 * (y - mean)**2
+        return 1.0 - (Sdf / Sdm)
 
-    r = corr(data, fitted)
-    if r >= 0:
-        return r**0.5
+    mean = 1.0*sum(data) / len(data)
+    fitted_mean = 1.0*sum(fitted) / len(fitted)
+    delta = mean - fitted_mean
+
+    rsqr = corr(data, fitted)
+    if rsqr >= 0:
+        return rsqr**0.5
 
     # Assume either the means are too far apart or the data have
     # more variation than the "fitted" - in case the "fitted"
     # data are not really fitted by just another random variable.
     # Shift data to match the means and try again.
-    if fitted_mean != mean:
-        delta = mean - fitted_mean
-        new_fitted = [x+delta for x in fitted]
-    r = corr(data, new_fitted)
+    # if fitted_mean != mean:  # Almost always true for floating point
+    new_fitted = [x+delta for x in fitted]
+    rsqr = corr(data, new_fitted)
 
-    if  r < 0:
+    if  rsqr < 0:
         return - 1
-
-    return r**0.5
+    return rsqr**0.5
 
 #@+node:tom.20211211171913.22: ** SmoothPointLowess
 def SmoothPointLowess(xdata, ydata, wt, i, cliplevel=2.0, causal=False):

@@ -63,6 +63,10 @@
 <v t="tom.20221104194114.1"><vh>@file restore_snapshot.py</vh></v>
 <v t="tom.20221105131948.1"><vh>@file undo-save.py</vh></v>
 <v t="tom.20221105143807.1"><vh>@file undo.py</vh></v>
+<v t="tom.20221112235319.1"><vh>@file norm_cdf.py</vh></v>
+<v t="tom.20221115225742.1"><vh>@file local_poly_fit.py</vh></v>
+<v t="tom.20221120044718.1"><vh>@file low_quad.py</vh></v>
+<v t="tom.20221121191416.1"><vh>@file poly_lowess.py</vh></v>
 </v>
 </v>
 <v t="tom.20220506082557.1"><vh>Tests</vh>
@@ -71,6 +75,9 @@
 <v t="tom.20211206195731.2"><vh>@file test_smooth.py</vh></v>
 <v t="tom.20211206205420.2"><vh>@file testing/smoother_tests.py</vh></v>
 </v>
+</v>
+<v t="tom.20221121171302.1"><vh>Experimental</vh>
+<v t="tom.20221121171312.1"><vh>@file experimental/lowess_poly.py</vh></v>
 </v>
 <v t="tom.20220816175920.1"><vh>Install Problems</vh>
 <v t="tom.20220816175933.1"><vh>Linux</vh>
@@ -139,17 +146,12 @@ permissions) - see https://riptutorial.com/tkinter/example/3206/installation-or-
 </t>
 <t tx="tom.20220829181040.1"></t>
 <t tx="tom.20220830112255.1"># The list of plugins to import. Omit the ".py" extension.
-convolve1
-autocorrel1
-correl1
 find_peak
-#find_peak1
 readout
 calculator
-take_snapshot
-restore_snapshot
-undo-save
-undo
+local_poly_fit
+low_quad
+poly_lowess
 </t>
 <t tx="tom.20220830215645.1">GF4 has a plugin mechanism that can load plugin files located in the "plugins"
 directory.  This README provides some basic information for developers of plugins.
@@ -240,5 +242,6 @@ Do *not* include the ".py" file extension.  Blank lines and lines that
 start with a "#" or ";" character will be ignored.
 </t>
 <t tx="tom.20221105083713.1"></t>
+<t tx="tom.20221121171302.1"></t>
 </tnodes>
 </leo_file>

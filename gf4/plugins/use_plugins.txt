@@ -1,4 +1,7 @@
 # The list of plugins to import. Omit the ".py" extension.
+find_peak
 readout
 calculator
 local_poly_fit
+low_quad
+poly_lowess

@@ -10,9 +10,12 @@ plotmgr = None
 
 # plotmgr will have been injected into the module by the time this is called
 def proc():
+    _id = 'calculator'
+    last = plotmgr.parmsaver.get(_id, 0)
     dia = GetSingleFloat(plotmgr.root, 'Evaluate (use "m_e" for "e" [ln base])',
-                         'Expressions', 0)
+                         'Expressions', last)
     if dia.result is None: return
 
+    plotmgr.parmsaver[_id] = dia.result
     plotmgr.announce(dia.result)
 #@-leo

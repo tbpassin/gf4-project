@@ -28,7 +28,7 @@ def proc():
     y0 = ds.ydata
     x0 = ds.xdata
     radius =  width / 2
-    lab = plotmgr.stack[MAIN].figurelabel.strip() or ''
+    lab = ds.figurelabel.strip() or ''
 
     y1 = localreg(asarray(x0), asarray(y0), degree=deg, kernel=rbf.tricube, radius = radius)
     ds.ydata = list(y1)
