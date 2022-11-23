@@ -1528,7 +1528,7 @@ class PlotManager(AbstractPlotManager):
     @CLEAR_ERROR_BANDS
     @REQUIRE_MAIN
     def correlateWithBuffer(self):
-        dm = self.stack[MAIN]
+        ds = self.stack[MAIN]
         ds.correlate(self.stack[BUFFER])
 
         lab = ds.figurelabel or ''
