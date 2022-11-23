@@ -407,7 +407,7 @@ def cmdwindow(plotmgr=None):
         root_width, root_height = root_dims.split('x')
         xoffset = int(root_xoffset) + int(root_width) + 5
         yoffset = int(root_yoffset)
-        w_width = win.winfo_width() + 25
+        w_width = win.winfo_width() + 50
         w_height = win.winfo_height()
         if w_height < int(root_height):
             w_height = int(root_height)
