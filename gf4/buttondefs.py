@@ -31,8 +31,6 @@ PLOT_BUTTONS = (
     SPACER, SPACER,
     ('Error Bands', 'overploterr', 'Overplot X Error Bands if any'),
     ('Timehack', 'timehack', 'Vertical Marker At Specified X Position'),
-    ('Snapshot', 'take-snapshot', 'Save state of the plot and stack'),
-    ('Restore\nSnapshot', 'get-snapshot', 'Restore saved state of the plot and stack'),
 )
 
 AXES_BUTTONS = (
@@ -46,7 +44,9 @@ LOAD_BUTTONS = (
     ('Load From\nDialog', 'loadclip', 'Load/Edit Data From Clipboard'),
     ('Copy To\nClipboard', 'save2clip', 'Save X Data To Clipboard'),
     ('Store 1', 'stox', 'Store X Dataset'),
-    ('Recall 1', 'rclx', 'Recall Stored Data Set to X')
+    ('Recall 1', 'rclx', 'Recall Stored Data Set to X'),
+    ('Snapshot', 'take-snapshot', 'Save state of the plot and stack'),
+    ('Restore\nSnapshot', 'get-snapshot', 'Restore saved state of the plot and stack'),
 )
 
 STACK_BUTTONS = (

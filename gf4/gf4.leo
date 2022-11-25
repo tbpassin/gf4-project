@@ -67,6 +67,7 @@
 <v t="tom.20221115225742.1"><vh>@file local_poly_fit.py</vh></v>
 <v t="tom.20221120044718.1"><vh>@file low_quad.py</vh></v>
 <v t="tom.20221121191416.1"><vh>@file poly_lowess.py</vh></v>
+<v t="tom.20221124112244.1"><vh>@file show_sigma.py</vh></v>
 </v>
 </v>
 <v t="tom.20220506082557.1"><vh>Tests</vh>
@@ -152,6 +153,7 @@ calculator
 local_poly_fit
 low_quad
 poly_lowess
+show_sigma
 </t>
 <t tx="tom.20220830215645.1">GF4 has a plugin mechanism that can load plugin files located in the "plugins"
 directory.  This README provides some basic information for developers of plugins.
