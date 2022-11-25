@@ -145,7 +145,7 @@ STATS_BUTTONS = (
     #('CDF Adapt', 'fitcdfadapt', 'Fit a CDF in [X] with a Normal CDF, Adaptively'),
     ('Histogram', 'hist', 'Calculate Histogram of [X] Data'),
     SPACER, SPACER,
-    ('Mean, STD', 'meanstd', 'Display Mean, Sample Standard Deviation, Lag-1 autocorrelation, and Area of X Data'),
+    ('Mean, STD', 'meanstd', 'Display Mean, Sample Standard Deviation Corrected For Autocorrelation, Lag-1 autocorrelation, and Area of X Data'),
     # ('Corr Coeff', 'corrcoeff', "Calculate Correlation Coefficient Between X and Y"),
     ('Spearman', 'spearman', 'Calculate the Spearman Rank Correlation Coefficient between X and Y'),
     ('Pearson', 'pearson', "Calculate the Pearson's Correlation Coefficient r between X and Y"),

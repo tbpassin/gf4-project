@@ -2069,7 +2069,7 @@ class PlotManager(AbstractPlotManager):
     #@+node:tom.20211207165051.108: *4* pearson
     @REQUIRE_MAIN_BUFF
     def pearson(self):
-        '''Calculate the Spearman rank correlation coefficient of
+        '''Calculate the Pearson correlation coefficient of
         data sequences in MAIN and BUFFER.  The data remains unchanged.'''
 
         _y = self.stack[MAIN].ydata
@@ -2221,12 +2221,8 @@ class PlotManager(AbstractPlotManager):
         _max_x_coord = self.stack[MAIN].xdata[_maxy_index]
 
         # Lag-1 autocorrelation
-        sum_resid = sum([y**2 for y in ydata])
-        sum_lag = 0
-        for i in range(1, len(ydata)):
-            sum_lag += ydata[i] * ydata[i - 1]
-
-        rho = sum_lag / sum_resid
+        shifted = ydata[1:]
+        rho = stats.pearson(shifted, ydata[:-1])
 
         _temp = self.stack[MAIN].copy()
         _temp.integrate()

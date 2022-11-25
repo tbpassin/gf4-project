@@ -159,8 +159,9 @@ def histogram(data, nbins=10):
 
 #@+node:tom.20211211171913.44: ** meanstd
 def meanstd(ydata):
-    '''Compute the sample standard deviation s and mean of a set of data.
-    Return a tuple (mean, s).
+    '''Return the sample standard deviation s and mean of a set of data.
+
+    s is corrected for lag-1 autocorrelation.
 
     ARGUMENT
     ydata -- a sequence of random values
@@ -175,6 +176,14 @@ def meanstd(ydata):
     mean = 1.0*sum(ydata)/N
     sumsqr = sum([a**2 for a in ydata])
     std = math.sqrt((sumsqr - N*mean**2) / (N - 1))
+
+    # Lag-1 autocorrelation
+    shifted = ydata[1:]
+    r = pearson(shifted, ydata[:-1])
+
+    # Correct sigma for lag-1 autocorrelation
+    std = std / (1. - r*r) ** 0.5
+
 
     return (mean, std)
 
@@ -641,7 +650,7 @@ if __name__ == '__main__':
 
     @self_printer
     def test_spearmanr():
-        '''Pearson correlation coefficient using Scipy library routine.'''
+        """Spearman correlation coefficient using Scipy library routine."""
         x = (106,86,100,101,99,103,97,113,112,110)
         y = (7,0,27,50,28,29,20,12,6,17)
         r, p = spearmanr(x, y)
@@ -651,6 +660,16 @@ if __name__ == '__main__':
         y = (1.5, 2.2, 5, 4.5, 6)
         r, p = spearmanr(x, y)
         print('2) r={:.3f}, p={:.3f}'.format(r,p))
+
+    @self_printer
+    def compare_spearman_spearmanr():
+        """Compare scipy Spearman correlation with indigenous version."""
+        x = (106,86,100,101,99,103,97,113,112,110)
+        y = (7,0,27,50,28,29,20,12,6,17)
+        rr, p = spearmanr(x, y)
+        r, _, _ = spearman(x, y)
+        print(f'spearmanr: {rr:0.3f}, spearman: {r:0.3f}')
+
 
     @self_printer
     def test_meanstd():
@@ -664,7 +683,8 @@ if __name__ == '__main__':
             plt.get_current_fig_manager().set_window_title(t.__name__)
             t()
 
-    Tests = (testCalcNorm,)#, testCorrelations, test_spearmanr)#, testSpearman
+    # Tests = (testCalcNorm,)#, testCorrelations, test_spearmanr)#, testSpearman
+    Tests = (compare_spearman_spearmanr, testCorrelations, test_spearmanr, testSpearman)
     runtests(Tests)
 #@-others
 #@-leo
