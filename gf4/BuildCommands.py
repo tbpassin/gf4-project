@@ -107,9 +107,9 @@ def buildCommands(self):
 
        'cubicspln': self.cubicSpline,
        'lstsqrlin': self.leastsqr,
-       'lstsqrquad': self.leastsqr_quad,
+       'lstsqrpoly': self.leastsqr_poly,
        'lowess': self.lowess,
-       'lowessquad': self.lowess2Quad,
+       #'lowess_poly': self.lowess_poly,
        'lowessadapt': self.lowess_adaptive,
        'lowesscorrel': self.lowess_adaptive_ac,
        'splinesmooth': self.spline_smooth,

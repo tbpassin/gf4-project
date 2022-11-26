@@ -1695,11 +1695,19 @@ class PlotManager(AbstractPlotManager):
     def leastsqr_quad(self):
         _ds = self.stack[MAIN]
 
+        _id = 'leastsqr_poly'
+        deg = plotmgr.parmsaver.get(_id, 1)
+        dia = GetSingleInt(plotmgr.root, 'Least Squares Polynomial Regression',
+                             'Degree', deg)
+        if dia.result is None: return
+        plotmgr.parmsaver[_id] = deg = dia.result
+
+
         _x = _ds.xdata
         _y = _ds.ydata
 
         newy, mean, rms, r, upperbound, lowerbound = \
-            smoother.leastsqr(_x, _y, 2)
+            smoother.leastsqr(_x, _y, deg)
         _ds.ydata = newy
 
         lower = Dataset(_x, lowerbound)
@@ -1707,10 +1715,9 @@ class PlotManager(AbstractPlotManager):
         _ds.errorBands = [upper, lower]
 
         if _ds.figurelabel:
-            _ds.figurelabel = 'Least Squares Quadratic Fit to %s' \
-                % (_ds.figurelabel)
+            _ds.figurelabel = f'Least Squares (deg {deg}) Polynomial Fit to {_ds.figurelabel}' 
         else:
-            _ds.figurelabel = 'Least Squares Quadratic Fit'
+            _ds.figurelabel = f'Least Squares (deg {deg}) Polynomial Fit'
 
         self.plot()
         self.announce('Mean=%0.3f, rms=%0.3f, r=%0.3f' % (mean, rms, r))
@@ -1851,8 +1858,8 @@ class PlotManager(AbstractPlotManager):
         upper = Dataset(_x, upperlimit)
         _ds.errorBands = [upper, lower]
 
-        # correlation coefficient
-        r = smoother.correlationCoeff(_y, newy)
+        # r = smoother.correlationCoeff(_y, newy)
+        r = stats.pearson(_y, newy)
 
         self.plot()
 
@@ -1895,8 +1902,8 @@ class PlotManager(AbstractPlotManager):
         upper = Dataset(_x, upperlimit)
         _ds.errorBands = [upper, lower]
 
-        # correlation coefficient
-        r = smoother.correlationCoeff(_y, newy)
+        # r = smoother.correlationCoeff(_y, newy)
+        r = stats.pearson(_y, newy)
 
         self.plot()
         msg = f'Span: {span}, RMS deviation = {rms:.3f}, r = {r:.3f}'
@@ -1930,10 +1937,11 @@ class PlotManager(AbstractPlotManager):
         _ds.errorBands = [upper, lower]
 
         # correlation coefficient
-        r = smoother.correlationCoeff(_y, newy)
+        # r = smoother.correlationCoeff(_y, newy)
+        r = stats.pearson(_y, newy)
 
         self.plot()
-        self.announce('Span: %s; ac = %0.3f; RMS deviation = %0.3f, '
+        self.announce('Span: %s; autocorr = %0.3f; RMS deviation = %0.3f, '
                       'r=%0.3f' % (span, ac, rms, r))
     #@+node:tom.20211207165051.105: *4* correlationCoeff
     @REQUIRE_MAIN
