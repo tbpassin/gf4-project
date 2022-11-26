@@ -15,8 +15,7 @@ import numpy as np
 from csaps import csaps
 
 from randnum import gaussian_vals
-#import matplotlib.pyplot as plt
-
+from stats import pearson
 MaxSmoothZone = 100
 
 #@+others
@@ -327,7 +326,7 @@ def lowess1(xdata, ydata, smoothzone=10, omitOne=False):
 
     For each point, neighboring points are used to calculate the fit,
     using a table of weights to weight the points.  The window includes
-    smoothzone points on either side of the given point.  The window width
+    smoothzone points centered on the given point.  The window width
     is adjusted when the given point gets too close to either end of the data.
 
     ARGUMENTS
@@ -359,15 +358,16 @@ def lowess1(xdata, ydata, smoothzone=10, omitOne=False):
         if is_flier:
             fliers.append((xdata[i], ydata[i]))
 
-    e = [smooths[i] - ydata[i] for i in range(len(ydata))] # residuals
-    num = 0.0
-    denom = 0.0
-    for i in e:
-        denom += sqr(i)
-    for i in range(1, len(ydata)):
-        num += e[i] * e[i - 1]
-    r = abs(num / denom)
+    # e = [smooths[i] - ydata[i] for i in range(len(ydata))] # residuals
+    # num = 0.0
+    # denom = 0.0
+    # for i in e:
+        # denom += sqr(i)
+    # for i in range(1, len(ydata)):
+        # num += e[i] * e[i - 1]
+    # r = abs(num / denom)
 
+    r = pearson(ydata[1:], ydata[:-1])
     return (xdata, smooths, r)
 
 #@+node:tom.20211211171913.25: ** deriv
@@ -631,10 +631,11 @@ def leastsqr(xdata, ydata, deg=1):
                 for _xi in xdata]
     se_all = [_v**0.5 for _v in var_all]
 
-    upper = [y + 2*se for y,se in zip(fitted_y, se_all)]
-    lower = [y - 2*se for y,se in zip(fitted_y, se_all)]
+    upper = [y + 2 * se for y, se in zip(fitted_y, se_all)]
+    lower = [y - 2 * se for y, se in zip(fitted_y, se_all)]
 
-    r = correlationCoeff(ydata, fitted_y)
+    # Autocorrelation
+    r = pearson(ydata, fitted_y)
 
     return (fitted_y, y_mean, se, r, upper, lower)
 
