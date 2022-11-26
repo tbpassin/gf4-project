@@ -1690,9 +1690,9 @@ class PlotManager(AbstractPlotManager):
 
         self.plot()
         self.announce('Mean=%0.3f, rms = %0.3f, r=%0.3f' % (mean, rms, r))
-    #@+node:tom.20211207165051.111: *4* leastsqr_quad
+    #@+node:tom.20211207165051.111: *4* leastsqr_poly
     @REQUIRE_MAIN
-    def leastsqr_quad(self):
+    def leastsqr_poly(self):
         _ds = self.stack[MAIN]
 
         _id = 'leastsqr_poly'
