@@ -1936,13 +1936,9 @@ class PlotManager(AbstractPlotManager):
         upper = Dataset(_x, upperlimit)
         _ds.errorBands = [upper, lower]
 
-        # correlation coefficient
-        # r = smoother.correlationCoeff(_y, newy)
-        r = stats.pearson(_y, newy)
-
         self.plot()
-        self.announce('Span: %s; autocorr = %0.3f; RMS deviation = %0.3f, '
-                      'r=%0.3f' % (span, ac, rms, r))
+        self.announce('Span: %s; residuals autocorr = %0.3f; RMS deviation = %0.3f' \
+                      % (span, ac, rms))
     #@+node:tom.20211207165051.105: *4* correlationCoeff
     @REQUIRE_MAIN
     def correlationCoeff(self):

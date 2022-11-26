@@ -15,7 +15,7 @@ import numpy as np
 from csaps import csaps
 
 from randnum import gaussian_vals
-from stats import pearson
+from stats import pearson, pearson_autocorr
 MaxSmoothZone = 100
 
 #@+others
@@ -320,9 +320,10 @@ def lowess(xdata, ydata, smoothzone=10, omitOne=False):
 def lowess1(xdata, ydata, smoothzone=10, omitOne=False):
     '''Smooth sequence of points using Cleveland's LOWESS algorithm.
     Return the smoothed points, and the autocorrelation of the residuals
-    (calculated according to p49 of
+    calculated using Pearson's formula.
+    [(calculated according to p49 of
 
-    "Nonparametric Simple Regression", J. Fox, Sage University, 2000.)
+    "Nonparametric Simple Regression", J. Fox, Sage University, 2000.)]
 
     For each point, neighboring points are used to calculate the fit,
     using a table of weights to weight the points.  The window includes
@@ -350,6 +351,8 @@ def lowess1(xdata, ydata, smoothzone=10, omitOne=False):
     if omitOne:
         wt.omitOne()
 
+    y_orig = ydata[:]
+
     fliers = []
     smooths = []
     for i, _ in enumerate(xdata):
@@ -358,16 +361,9 @@ def lowess1(xdata, ydata, smoothzone=10, omitOne=False):
         if is_flier:
             fliers.append((xdata[i], ydata[i]))
 
-    # e = [smooths[i] - ydata[i] for i in range(len(ydata))] # residuals
-    # num = 0.0
-    # denom = 0.0
-    # for i in e:
-        # denom += sqr(i)
-    # for i in range(1, len(ydata)):
-        # num += e[i] * e[i - 1]
-    # r = abs(num / denom)
-
-    r = pearson(ydata[1:], ydata[:-1])
+    # Residuals
+    resid = [y1 - y2 for y1, y2 in zip(smooths, y_orig)]
+    r = pearson_autocorr(resid)
     return (xdata, smooths, r)
 
 #@+node:tom.20211211171913.25: ** deriv
@@ -1035,7 +1031,7 @@ def lowessAdaptiveAC(xdata, ydata):
     '''Smooth sequence of points using Cleveland's LOWESS algorithm.
     Estimate the best span of points by making multiple LOWESS
     runs with different spans.  The fit criterion is the value of the
-    autocorrelation.   autocorrelation of the residuals is
+    autocorrelation of the residuals. autocorrelation of the residuals is
     calculated according to p49 of
 
     "Nonparametric Simple Regression", J. Fox, Sage University, 2000.
@@ -1060,10 +1056,10 @@ def lowessAdaptiveAC(xdata, ydata):
     #N = len(xdata)
 
     thresh = 0.05
-    eps = 0.001
+    eps = 0.005
     reps = 0
     rep_limit = 20
-    delta = 3 # step size
+    delta = 4 # step size
     #overshot = False
     converged = False
     too_many = False
@@ -1072,7 +1068,7 @@ def lowessAdaptiveAC(xdata, ydata):
 
     smallest_yet = None
 
-    width = 4
+    width = 3
     last_r = 0
 
     #print 'width\tdelta\tr\t\tlast r\tr - last_r'
