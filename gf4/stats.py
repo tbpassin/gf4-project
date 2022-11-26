@@ -14,7 +14,7 @@ from scipy.stats import spearmanr
 import numpy as np
 
 from curve_generators import generateGaussianCdf
-from smoother import correlationCoeff
+#from smoother import correlationCoeff
 
 #@+node:tom.20211211171913.42: ** cdf
 def cdf(ydata):
@@ -368,7 +368,7 @@ def fitNormalToCdfAdaptive(values, probs, tolerance=.01):
 
     # Calculate final normal CDF
     _probs = calcNormalForCdf(values, ms, sigma)
-    _correl = correlationCoeff(probs, _probs)
+    _correl = pearson(values[1:], values[:-1])
 
     return values, _probs, ms, sigma, _correl
 
@@ -383,7 +383,8 @@ def spearman(x,y):
     simplified formula
 
     R = 1 - 6 * (sum(di^2) /(n*(n^2-1))
-    where di = yi - xi and n = number of points in either sequence.
+    where di = yi - xi, yi, xi are the ranks for the points, and n = number 
+    of points in either sequence.
 
     [Standard error of R is 0.6326/sqrt(n-1)]
 
@@ -405,11 +406,11 @@ def spearman(x,y):
     correlation (actually, half the total width).
     '''
 
-    # Alter data to avoid ties and calculate ranks
 
     if len(x) != len(y):
         return None
 
+    # Alter data to avoid ties and calculate ranks
     def rank(data):
         '''Transform (pos, val) -> {pos:rank} for the data.
         '''
@@ -428,8 +429,8 @@ def spearman(x,y):
         newdata.sort()
 
         ranks = {}
-        for i, _ in enumerate(newdata):
-            val, pos = newdata[i]
+        for i, (_, pos) in enumerate(newdata):
+            #val, pos = newdata[i]
             ranks[pos] = i
 
         return ranks
@@ -440,22 +441,12 @@ def spearman(x,y):
     N = len(x)
     N2 = N**2
 
-    #R = 0.0
-    #for r in _x.keys():
-        #d = _x[r] - _y[r]
-        #R += d**2
+    sum_d2 = 0.
+    for i in range(len(_x)):
+        d = _y[i] - _x[i]
+        sum_d2 += d * d
 
-    #_sum = sum(map(lambda x,y: (x-y)**2, _x.values(), _y.values()))
-    _sum = sum([(x-y)**2 for x, y in zip(_x.values(), _y.values())])
-
-    R = 1.0 - _sum*6.0 / (N * (N2 - 1))
-
-#    #stderr = 0.6325 / (N - 1)**.5
-#    if R == 1.0:
-#        Z = 0.6325 / (N - 1)**.5
-#    else:
-#        F = 0.5 * math.log((1 + R)/(1 - R))
-#        Z = F * math.sqrt((N-3.)/1.06)
+    R = 1.0 - sum_d2 * 6.0 / (N * (N2 - 1))
 
     if R == 1.0:
         return R, 0., 0.
@@ -495,6 +486,25 @@ def pearson(x,y):
     r = xy / (x2*y2)**.5
 
     return r
+#@+node:tom.20221125220325.1: ** pearson_autocorr
+def pearson_autocorr(x):
+    """Return the lag-one autocorrelation of a data sequence.
+
+    The autocorrelation is the pearson correlation between the 
+    data sequence and itself shifted by one.
+    
+    Pearson's calculation requires the two datasets to be the same length.
+    When the dataset is shifted by one, it loses one datapoint, so
+    the unshifted dataset must be truncated by one.
+    
+    ARGUMENT
+    x -- a data sequence.
+    
+    RETURNS
+    the lag-1 autocorrelation.
+    """
+
+    return pearson(x[1:], x[:-1])
 #@+node:tom.20211212001620.1: ** __main__
 if __name__ == '__main__':
     import randnum
