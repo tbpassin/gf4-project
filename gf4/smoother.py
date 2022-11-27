@@ -767,7 +767,8 @@ def SmoothPointLowessQuad(xdata, ydata, wt, i, cliplevel=2.0, causal=False):
         return det, a, b ,c
 
     det, a,b,c = compute_dets(wt, xdata, ydata, window_left, window_right, _offset)
-    y0 = a*x**2 + b*x + c
+    # y0 = a*x**2 + b*x + c
+    y0 = x * (a * x + b) + c
     parms = a,b,c
 
     dabs = abs(det)
@@ -794,7 +795,8 @@ def SmoothPointLowessQuad(xdata, ydata, wt, i, cliplevel=2.0, causal=False):
         _newy = [_y + _r for _y, _r in zip(ydata, _rands)]
         det, a,b,c = compute_dets(wt, _xdata, _newy, window_left, window_right, _offset)
         _x_recen = _xdata[i]
-        y0_est = a*_x_recen**2 + b*_x_recen + c
+        # y0_est = a*_x_recen**2 + b*_x_recen + c
+        y0_est = _x_recen * (a*_x_recen + b) + c
 
         if abs(det) > dabs:
             y0 = y0_est
@@ -810,7 +812,8 @@ def SmoothPointLowessQuad(xdata, ydata, wt, i, cliplevel=2.0, causal=False):
         wj = wt.weights[weight_index]
         xj = xdata[j]
         yj = ydata[j]
-        yfit = A*xj**2 + B*xj + C
+        # yfit = A*xj**2 + B*xj + C
+        yfit = xj * (A * xj + B) + C
         Svar += wj*(yj-yfit)**2
         Swt += wj
         Sww += wj*wj
