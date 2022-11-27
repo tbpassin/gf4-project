@@ -235,13 +235,14 @@ def SmoothPointLowess(xdata, ydata, wt, i, cliplevel=2.0, causal=False):
     N = len(xdata)
     x = xdata[i]
 
-    half = sz / 2
-    window_left = int(max(i - half, 0))
-    window_right = int(min(1 + i + half, N))
+    half = sz // 2
+    window_left = max(i - half, 0)
+    window_right = min(1 + i + half, N)
     _offset = i - half
 
+    # This only works right because the weight function is symmetrical
     for j in range(window_left, window_right):
-        weight_index = int(j - _offset)
+        weight_index = j - _offset
         wj = wt.weights[weight_index]
         xtemp = xdata[j]
         ytemp = ydata[j]
@@ -424,9 +425,9 @@ def lowess2(xdata, ydata, smoothzone=10, omitOne=False):
 
     wt = WtStats()
     N = len(xdata)
-    if N % 2 == 1:
-        smoothzone = smoothzone + 1
     smoothzone = min(N - 1, smoothzone)
+    if smoothzone % 2 == 0:
+        smoothzone = smoothzone + 1
     wt.MakeGaussianWeights(smoothzone)
     if omitOne:
         wt.omitOne()
@@ -694,7 +695,7 @@ def SmoothPointLowessQuad(xdata, ydata, wt, i, cliplevel=2.0, causal=False):
     x = xdata[i]
     #yfocal = ydata[i]
 
-    half = int(sz / 2)
+    half = sz // 2
     window_left = max(i - half, 0)
     window_right = min(1 + i + half, N)
     _offset = i - half
@@ -719,6 +720,7 @@ def SmoothPointLowessQuad(xdata, ydata, wt, i, cliplevel=2.0, causal=False):
         _swyxx = [] # weighted sum of y*x^2
         _sww = [] # Sum of squared weights
 
+        # This only works right because the weight function is symmetrical
         for j in range(window_left, window_right):
             weight_index = j - offset
             wj = wt.weights[weight_index]
@@ -769,7 +771,7 @@ def SmoothPointLowessQuad(xdata, ydata, wt, i, cliplevel=2.0, causal=False):
     det, a,b,c = compute_dets(wt, xdata, ydata, window_left, window_right, _offset)
     # y0 = a*x**2 + b*x + c
     y0 = x * (a * x + b) + c
-    parms = a,b,c
+    parms = a, b, c
 
     dabs = abs(det)
     #ylim = max([abs(_y) for _y in ydata ])
@@ -796,7 +798,7 @@ def SmoothPointLowessQuad(xdata, ydata, wt, i, cliplevel=2.0, causal=False):
         det, a,b,c = compute_dets(wt, _xdata, _newy, window_left, window_right, _offset)
         _x_recen = _xdata[i]
         # y0_est = a*_x_recen**2 + b*_x_recen + c
-        y0_est = _x_recen * (a*_x_recen + b) + c
+        y0_est = _x_recen * (a * _x_recen + b) + c
 
         if abs(det) > dabs:
             y0 = y0_est
@@ -818,7 +820,7 @@ def SmoothPointLowessQuad(xdata, ydata, wt, i, cliplevel=2.0, causal=False):
         Swt += wj
         Sww += wj*wj
 
-    var = (Svar / Swt) *0.5*sz/(.5*sz - 1)
+    var = (Svar / Swt) * 0.5 * sz/(.5 * sz - 1)
 
     # Approximate standard error of the fitted point
     #se = ((var * Sww)**0.5) / Swt
@@ -827,105 +829,6 @@ def SmoothPointLowessQuad(xdata, ydata, wt, i, cliplevel=2.0, causal=False):
     is_flier = (abs(ydata[i] - y0) > cliplevel * math.sqrt(SqrDev))
 
     return (y0, var, se, is_flier)
-
-#@+node:tom.20211211171913.31: ** ySmoothPointLowessQuad
-def ySmoothPointLowessQuad(xdata, ydata, wt, i, cliplevel=2.0, causal=False):
-    '''Fit a point in a sequence using a local quadratic least squares fit.
-    Neighboring points contribute to the fit according to weights
-    assigned using a weight table.  Return the fitted point, its square
-    deviation, and whether or not if falls outside a clipping level.
-
-    This function implements the core fitting portion of the LOWESS
-    smoothing algorithm published by Cleveland.  The code is ported
-    and adapted from the original Turbopascal code written by
-    Thomas B. Passin for the GSTAT.EXE program.
-
-    ARGUMENTS
-    xdata, ydata -- lists of the x and y data.  Must be the same length.
-    wt -- a WtStats instance that has the weight table filled in.
-    i -- the index of the point (x,y) to be smoothed.
-    cliplevel -- threshold for designating points as fliers
-    causal -- If True, use only neighbors to left of specified point.  Otherwise,
-              use neighbors on both sides.
-
-    RETURNS
-    a tuple (s, d, se, is_flier), where s is the smoothed value of the point,
-    d is the variance at the point, se is the weighted standard deviaton of the
-    fitted point, and is_flier is a boolean that is True if
-    the point lies farther than cliplevel standard deviations
-    from the fitted point.
-    '''
-    # pylint: disable=too-many-locals
-    Swt = 0.0 # sum of weights
-    Swx = 0.0 # weighted sum of x
-    Swy = 0.0 # weighted sum of y
-    Swxy = 0.0 # weighted sum of xy
-    Swxx = 0.0 # weighted sum of xx
-    Swyy = 0.0 # weighted sum of yy
-    Swxxx = 0.0 # weighted sum of xxx
-    Swxxxx = 0.0 # weighted sum of x^4
-    Swyxx = 0.0 # weighted sum of y*x^2
-    Sww = 0.0 # Sum of squared weights
-
-    a = 0.0 # y = axx + bx + c for quadratic fit within the window
-    b = 0.0
-    c = 0.0
-    SqrDev = 0
-
-    sz = wt.smoothzone #Full width of smoothing window in data points
-
-    N = len(xdata)
-    x = xdata[i]
-
-    half = sz / 2
-    window_left = max(i - half, 0)
-    window_right = min(1 + i + half, N)
-    _offset = i - half
-
-    for j in range(window_left, window_right):
-        weight_index = j - _offset
-        wj = wt.weights[weight_index]
-        xtemp = xdata[j]
-        ytemp = ydata[j]
-        xsqr = xtemp**2
-        x3 = xtemp**3
-        x4 = xtemp**4
-        ysqr = ytemp**2
-        Swx = Swx +  wj*xtemp
-        Swy = Swy +  wj*ytemp
-        Swxy = Swxy +  wj* xtemp*ytemp
-        Swxx = Swxx + wj* xsqr
-        Swyy = Swyy + wj * ysqr
-        Swt = Swt + wj
-        Swxxx = Swxxx + wj * x3
-        Swxxxx = Swxxxx + wj * x4
-        Swyxx = Swyxx + wj * ytemp * xsqr
-        Sww = wj**2
-
-    det = determinant(Swxxxx, Swxxx, Swxx,
-                      Swxxx, Swxx, Swx,
-                      Swxx, Swx, Swt)
-
-    a = determinant(Swyxx, Swxxx, Swxx,
-                    Swxy, Swxx, Swx,
-                    Swy, Swx, Swt) / det
-
-    b = determinant(Swxxxx,Swyxx, Swxx,
-                    Swxxx, Swxy, Swx,
-                    Swxx, Swy, Swt) / det
-
-    c = determinant(Swxxxx, Swxxx, Swyxx,
-                    Swxxx, Swxx, Swxy,
-                    Swxx, Swx, Swy) / det
-
-    y = a*x**2 + b*x + c
-    var = (Swyy - 2.*y*Swy + Swt*y**2) / Swt
-    var = max(var, 0)
-
-    se = (var * Sww)**0.5/Swt
-
-    is_flier = (abs(ydata[i] - y) > cliplevel * math.sqrt(SqrDev))
-    return (y, var, se, is_flier)
 
 #@+node:tom.20211211171913.32: ** lowess2Quad
 def lowess2Quad(xdata, ydata, smoothzone=10, omitOne=False):
@@ -957,9 +860,9 @@ def lowess2Quad(xdata, ydata, smoothzone=10, omitOne=False):
 
     wt = WtStats()
     N = len(xdata)
-    if N % 2 == 1:
-        smoothzone = smoothzone + 1
     smoothzone = min(N - 1, smoothzone)
+    if smoothzone % 2 == 0:
+        smoothzone = smoothzone + 1
 
     wt.MakeGaussianWeights(smoothzone)
     if omitOne:
