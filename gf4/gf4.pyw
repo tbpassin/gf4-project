@@ -1815,11 +1815,15 @@ class PlotManager(AbstractPlotManager):
         _ds.errorBands = [upper, lower]
 
         # correlation coefficient
-        r = smoother.correlationCoeff(_y, newy)
+        r = stats.pearson(_y, newy)
+
+        # Autocorrelation of residuals
+        resid = [y2 - y1 for y2, y1 in zip(_y, newy)]
+        resid_ac = stats.pearson_autocorr(resid)
 
         self.plot()
 
-        self.announce('RMS Deviation: %0.3f, r=%0.3f' % (rms, r))
+        self.announce(f'Autocorr of residuals: {resid_ac:0.3f}, RMS Deviation: {rms:0.3f}, r:{r:0.3f}')
     #@+node:tom.20211207165051.101: *4* lowess
     @REQUIRE_MAIN
     def lowess(self):
@@ -1863,9 +1867,11 @@ class PlotManager(AbstractPlotManager):
 
         self.plot()
 
-        n = float(len(_x))
-        msg = f'RMS deviation = {rms:.3f}, r = {r:.3f}'
-        self.announce(msg)
+        # Autocorrelation of residuals
+        resid = [y2 - y1 for y2, y1 in zip(_y, newy)]
+        resid_ac = stats.pearson_autocorr(resid)
+
+        self.announce(f'Autocorr of residuals: {resid_ac:0.3f}, RMS Deviation: {rms:0.3f}, r:{r:0.3f}')
     #@+node:tom.20211207165051.103: *4* lowess_adaptive
     @REQUIRE_MAIN
     def lowess_adaptive(self):
