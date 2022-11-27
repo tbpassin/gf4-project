@@ -477,13 +477,17 @@ def pearson(x,y):
     ydev = [z - ym for z in y]
 
     # Cross products
-    xy = sum(map(lambda a,b: a*b, xdev, ydev))
+    xy = sum([a * b for a, b in zip(xdev, ydev)])
 
     # Sum Squares
-    x2 = sum(map(lambda a: a**2, xdev))
-    y2 = sum(map(lambda a: a**2, ydev))
+    x2 = sum([a * a for a in xdev])
+    y2 = sum([a * a for a in ydev])
 
-    r = xy / (x2*y2)**.5
+    try:
+        r = xy / (x2*y2)**.5
+    except Exception as e:
+        print(e)
+        r = float('NaN')
 
     return r
 #@+node:tom.20221125220325.1: ** pearson_autocorr
