@@ -2465,6 +2465,7 @@ class PlotManager(AbstractPlotManager):
         canvas = fig.canvas
         canvas.restore_region(bitmap)
         canvas.blit(fig.bbox)
+        canvas.flush_events()
         self.stack = deepcopy(stack)
 
         self.announce('Restored snapshot')
