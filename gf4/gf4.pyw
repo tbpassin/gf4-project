@@ -2518,6 +2518,7 @@ if __name__ == '__main__':
     plotmgr = PlotManager()
     plotmgr.root.update_idletasks()
     setIcon(plotmgr.root, ICONPATH)
+    cmdwindow(plotmgr)
 
     fname = ''
 
@@ -2533,7 +2534,6 @@ if __name__ == '__main__':
         except Exception as e:
             print (e)
 
-    cmdwindow(plotmgr)
     plotmgr.announce('Using: %s' % (sys.executable))
     plotmgr.fadeit()
 
