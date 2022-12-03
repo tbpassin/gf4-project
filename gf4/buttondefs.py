@@ -103,7 +103,7 @@ MATH_BUTTONS = (
 
 CURVE_FIT_BUTTONS = (
     ('Cubic Spline\nInterpolation', 'cubicspln', 'Interpolate Between Points with Cubic Spline'),
-    ('Lst Sqr Lin', 'lstsqrlin', 'Fit Points with Linear Least Squares (2 s.e. error bands)'),
+    # ('Lst Sqr Lin', 'lstsqrlin', 'Fit Points with Linear Least Squares (2 s.e. error bands)'),
     ('Lst Sqr Poly', 'lstsqrpoly', 'Fit Points with N-degree Polynomial Using Least Squares (2 s.e. error bands)'),
     ('Thiel-Sen', 'thiel_sen', 'Fit Line Robustly Using Thiel-Sen Method (median slopes)'),
     ('Piecewise', 'piecewise', 'Piecewise Linear Least Squares Fit'),
