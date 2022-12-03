@@ -1021,6 +1021,7 @@ class PlotManager(AbstractPlotManager):
         self.plot()
     #@+node:tom.20211207213522.1: *3* Curve Math
     #@+node:tom.20211207165051.76: *4* scale
+    @CLEAR_ERROR_BANDS
     @REQUIRE_MAIN
     def scale(self):
         _id = 'scale'
@@ -1098,7 +1099,7 @@ class PlotManager(AbstractPlotManager):
         ds.square()
         lab = ds.figurelabel
         if lab:
-            self.ds.figurelabel = ' Square of %s' % (lab)
+            ds.figurelabel = ' Square of %s' % (lab)
 
         self.plot()
     #@+node:tom.20211207165051.83: *4* rectify
@@ -1199,6 +1200,7 @@ class PlotManager(AbstractPlotManager):
 
         self.plot()
     #@+node:tom.20211207165051.88: *4* log
+    @CLEAR_ERROR_BANDS
     @REQUIRE_MAIN
     def log(self):
         success = self.stack[MAIN].log()
@@ -1211,6 +1213,7 @@ class PlotManager(AbstractPlotManager):
             self.stack[MAIN].figurelabel = 'Natural Log of %s' % (lab)
         self.plot()
     #@+node:tom.20211207165051.89: *4* log10
+    @CLEAR_ERROR_BANDS
     @REQUIRE_MAIN
     def log10(self):
         success = self.stack[MAIN].log10()
@@ -1464,6 +1467,7 @@ class PlotManager(AbstractPlotManager):
         self.plot()
     #@+node:tom.20211207213812.1: *3* Data Processing
     #@+node:tom.20211207165051.123: *4* fft
+    @CLEAR_ERROR_BANDS
     @REQUIRE_MAIN
     def fft(self):
         self.stack[MAIN].rfft()
@@ -1582,6 +1586,7 @@ class PlotManager(AbstractPlotManager):
         ds.clearErrorBands()
         self.plot()
     #@+node:tom.20221104001727.1: *4* partial_autocorrel
+    @CLEAR_ERROR_BANDS
     @REQUIRE_MAIN
     def partial_autocorr(self):
         _ds = self.stack[MAIN]
@@ -2018,6 +2023,7 @@ class PlotManager(AbstractPlotManager):
 
         self.announce('RMS Deviation: %0.3f, r=%0.3f' % (rms, r))
     #@+node:tom.20211207165051.115: *4* spline_smooth
+    @CLEAR_ERROR_BANDS
     @REQUIRE_MAIN
     def spline_smooth(self):
         _ds = self.stack[MAIN]
