@@ -15,8 +15,7 @@ import numpy as np
 from csaps import csaps
 
 from randnum import gaussian_vals
-#import matplotlib.pyplot as plt
-
+from stats import pearson, pearson_autocorr
 MaxSmoothZone = 100
 
 #@+others
@@ -88,12 +87,16 @@ class WtStats:
     def __init__(self):
         self.weights = []
         self.smoothzone = 0
+        self.center = 0
         self.Swt = 0
 
+    def __str__(self):
+        return f'WtStats: len(weights): {len(self.weights)}, center: {self.center}, width: {self.smoothzone}'
     #@+node:tom.20211211171913.19: *3* WtStats.MakeGaussianWeights
     def MakeGaussianWeights(self, smoothwidth=4):
         '''Compute weights to use with smoother. These weights
-        form a gaussian curve normalized to 1.0.
+        form a truncated gaussian curve normalized to 1.0. If 
+        smoothwidth is even, increment by one to make it odd.
 
         ARGUMENT
         smoothwidth -- width of window in data points
@@ -104,13 +107,14 @@ class WtStats:
         '''
 
         _smoothzone = smoothwidth
-        if smoothwidth % 2 == 1:
+        if smoothwidth % 2 == 0:
             _smoothzone = smoothwidth + 1
         self.smoothzone = _smoothzone
-        numwts = _smoothzone + 1 # total number of weights
-        icenter = _smoothzone / 2 # index of center point
+        numwts = _smoothzone # total number of weights
+        icenter = int(_smoothzone / 2) # index of center point
         nSigma = 2.0
         self.Swt = 0
+        self.center = icenter
 
         # Half-width is nSigma sigma, so sigma = half-width / nSigma
         SmoothSigma = 1.0 * _smoothzone/(2 * nSigma)
@@ -118,7 +122,6 @@ class WtStats:
         for i in range(numwts):
             self.weights.append(math.exp(-1.0 * sqr(i - icenter) * denom))
             self.Swt += self.weights[i]
-    #    print('\n'.join([f'{w:.3f}' for w in self.weights]))
 
     #@+node:tom.20211211171913.20: *3* WtStats.omitOne
     def omitOne(self):
@@ -133,7 +136,7 @@ class WtStats:
 
 #@+node:tom.20211211171913.21: ** correlationCoeff
 def correlationCoeff(data, fitted):
-    '''Given a sequence of data and a sequence of fitted points (e.g.,
+    """Given a sequence of data and a sequence of fitted points (e.g.,
     from a least square fit), return the correlation coefficient.
 
     See http://ocw.usu.edu/Civil_and_Environmental_Engineering/Uncertainty_in_Engineering_Analysis/Regression_DataFitting_Part2.pdf
@@ -144,8 +147,9 @@ def correlationCoeff(data, fitted):
 
     Note that this formula is only correct when the mean of the fitted data
     equals the mean of the raw data.  This would be true if the fit were
-    by a least squares procedure.  Also, (2) has to be larger than 1, so the variations
-    in the data have to be larger than the variations from the fitted points.
+    by a least squares procedure.  Also, (2) has to be larger than 1, so the
+    variations in the data have to be larger than the variations from 
+    the fitted points.
 
     For correctly fitted data, this correlation coefficient generally (always?)
     equals Pearson's Correlation Coefficient, r.
@@ -156,37 +160,36 @@ def correlationCoeff(data, fitted):
 
     RETURNS
     the correlation coefficient, or -1 if r^2 would be negative.
-    '''
-
-    mean = 1.0*sum(data) / len(data)
-    fitted_mean = 1.0*sum(fitted) / len(fitted)
-
+    """
     def corr(x, xf):
+        """Return r^2, where r = correlation coefficient."""
         Sdf = 0.0 # Deviations from fitted points
         Sdm = 0.0 # Deviations from mean
         mean = 1.0*sum(x)/len(x)
         for y, yf in zip(x, xf):
-            Sdf += 1.0*(y - yf) **2
-            Sdm += 1.0*(y - mean) **2
-        return 1 - (Sdf / Sdm)
+            Sdf += 1.0 * (y - yf)**2
+            Sdm += 1.0 * (y - mean)**2
+        return 1.0 - (Sdf / Sdm)
 
-    r = corr(data, fitted)
-    if r >= 0:
-        return r**0.5
+    mean = 1.0*sum(data) / len(data)
+    fitted_mean = 1.0*sum(fitted) / len(fitted)
+    delta = mean - fitted_mean
+
+    rsqr = corr(data, fitted)
+    if rsqr >= 0:
+        return rsqr**0.5
 
     # Assume either the means are too far apart or the data have
     # more variation than the "fitted" - in case the "fitted"
     # data are not really fitted by just another random variable.
     # Shift data to match the means and try again.
-    if fitted_mean != mean:
-        delta = mean - fitted_mean
-        new_fitted = [x+delta for x in fitted]
-    r = corr(data, new_fitted)
+    # if fitted_mean != mean:  # Almost always true for floating point
+    new_fitted = [x+delta for x in fitted]
+    rsqr = corr(data, new_fitted)
 
-    if  r < 0:
+    if  rsqr < 0:
         return - 1
-
-    return r**0.5
+    return rsqr**0.5
 
 #@+node:tom.20211211171913.22: ** SmoothPointLowess
 def SmoothPointLowess(xdata, ydata, wt, i, cliplevel=2.0, causal=False):
@@ -232,13 +235,14 @@ def SmoothPointLowess(xdata, ydata, wt, i, cliplevel=2.0, causal=False):
     N = len(xdata)
     x = xdata[i]
 
-    half = sz / 2
-    window_left = int(max(i - half, 0))
-    window_right = int(min(1 + i + half, N))
+    half = sz // 2
+    window_left = max(i - half, 0)
+    window_right = min(1 + i + half, N)
     _offset = i - half
 
+    # This only works right because the weight function is symmetrical
     for j in range(window_left, window_right):
-        weight_index = int(j - _offset)
+        weight_index = j - _offset
         wj = wt.weights[weight_index]
         xtemp = xdata[j]
         ytemp = ydata[j]
@@ -317,13 +321,14 @@ def lowess(xdata, ydata, smoothzone=10, omitOne=False):
 def lowess1(xdata, ydata, smoothzone=10, omitOne=False):
     '''Smooth sequence of points using Cleveland's LOWESS algorithm.
     Return the smoothed points, and the autocorrelation of the residuals
-    (calculated according to p49 of
+    calculated using Pearson's formula.
+    [(calculated according to p49 of
 
-    "Nonparametric Simple Regression", J. Fox, Sage University, 2000.)
+    "Nonparametric Simple Regression", J. Fox, Sage University, 2000.)]
 
     For each point, neighboring points are used to calculate the fit,
     using a table of weights to weight the points.  The window includes
-    smoothzone points on either side of the given point.  The window width
+    smoothzone points centered on the given point.  The window width
     is adjusted when the given point gets too close to either end of the data.
 
     ARGUMENTS
@@ -347,6 +352,8 @@ def lowess1(xdata, ydata, smoothzone=10, omitOne=False):
     if omitOne:
         wt.omitOne()
 
+    y_orig = ydata[:]
+
     fliers = []
     smooths = []
     for i, _ in enumerate(xdata):
@@ -355,15 +362,9 @@ def lowess1(xdata, ydata, smoothzone=10, omitOne=False):
         if is_flier:
             fliers.append((xdata[i], ydata[i]))
 
-    e = [smooths[i] - ydata[i] for i in range(len(ydata))] # residuals
-    num = 0.0
-    denom = 0.0
-    for i in e:
-        denom += sqr(i)
-    for i in range(1, len(ydata)):
-        num += e[i] * e[i - 1]
-    r = abs(num / denom)
-
+    # Residuals
+    resid = [y1 - y2 for y1, y2 in zip(smooths, y_orig)]
+    r = pearson_autocorr(resid)
     return (xdata, smooths, r)
 
 #@+node:tom.20211211171913.25: ** deriv
@@ -424,9 +425,9 @@ def lowess2(xdata, ydata, smoothzone=10, omitOne=False):
 
     wt = WtStats()
     N = len(xdata)
-    if N % 2 == 1:
-        smoothzone = smoothzone + 1
     smoothzone = min(N - 1, smoothzone)
+    if smoothzone % 2 == 0:
+        smoothzone = smoothzone + 1
     wt.MakeGaussianWeights(smoothzone)
     if omitOne:
         wt.omitOne()
@@ -627,10 +628,11 @@ def leastsqr(xdata, ydata, deg=1):
                 for _xi in xdata]
     se_all = [_v**0.5 for _v in var_all]
 
-    upper = [y + 2*se for y,se in zip(fitted_y, se_all)]
-    lower = [y - 2*se for y,se in zip(fitted_y, se_all)]
+    upper = [y + 2 * se for y, se in zip(fitted_y, se_all)]
+    lower = [y - 2 * se for y, se in zip(fitted_y, se_all)]
 
-    r = correlationCoeff(ydata, fitted_y)
+    # Autocorrelation
+    r = pearson(ydata, fitted_y)
 
     return (fitted_y, y_mean, se, r, upper, lower)
 
@@ -693,7 +695,7 @@ def SmoothPointLowessQuad(xdata, ydata, wt, i, cliplevel=2.0, causal=False):
     x = xdata[i]
     #yfocal = ydata[i]
 
-    half = int(sz / 2)
+    half = sz // 2
     window_left = max(i - half, 0)
     window_right = min(1 + i + half, N)
     _offset = i - half
@@ -718,6 +720,7 @@ def SmoothPointLowessQuad(xdata, ydata, wt, i, cliplevel=2.0, causal=False):
         _swyxx = [] # weighted sum of y*x^2
         _sww = [] # Sum of squared weights
 
+        # This only works right because the weight function is symmetrical
         for j in range(window_left, window_right):
             weight_index = j - offset
             wj = wt.weights[weight_index]
@@ -766,8 +769,9 @@ def SmoothPointLowessQuad(xdata, ydata, wt, i, cliplevel=2.0, causal=False):
         return det, a, b ,c
 
     det, a,b,c = compute_dets(wt, xdata, ydata, window_left, window_right, _offset)
-    y0 = a*x**2 + b*x + c
-    parms = a,b,c
+    # y0 = a*x**2 + b*x + c
+    y0 = x * (a * x + b) + c
+    parms = a, b, c
 
     dabs = abs(det)
     #ylim = max([abs(_y) for _y in ydata ])
@@ -793,7 +797,8 @@ def SmoothPointLowessQuad(xdata, ydata, wt, i, cliplevel=2.0, causal=False):
         _newy = [_y + _r for _y, _r in zip(ydata, _rands)]
         det, a,b,c = compute_dets(wt, _xdata, _newy, window_left, window_right, _offset)
         _x_recen = _xdata[i]
-        y0_est = a*_x_recen**2 + b*_x_recen + c
+        # y0_est = a*_x_recen**2 + b*_x_recen + c
+        y0_est = _x_recen * (a * _x_recen + b) + c
 
         if abs(det) > dabs:
             y0 = y0_est
@@ -809,12 +814,13 @@ def SmoothPointLowessQuad(xdata, ydata, wt, i, cliplevel=2.0, causal=False):
         wj = wt.weights[weight_index]
         xj = xdata[j]
         yj = ydata[j]
-        yfit = A*xj**2 + B*xj + C
+        # yfit = A*xj**2 + B*xj + C
+        yfit = xj * (A * xj + B) + C
         Svar += wj*(yj-yfit)**2
         Swt += wj
         Sww += wj*wj
 
-    var = (Svar / Swt) *0.5*sz/(.5*sz - 1)
+    var = (Svar / Swt) * 0.5 * sz/(.5 * sz - 1)
 
     # Approximate standard error of the fitted point
     #se = ((var * Sww)**0.5) / Swt
@@ -823,105 +829,6 @@ def SmoothPointLowessQuad(xdata, ydata, wt, i, cliplevel=2.0, causal=False):
     is_flier = (abs(ydata[i] - y0) > cliplevel * math.sqrt(SqrDev))
 
     return (y0, var, se, is_flier)
-
-#@+node:tom.20211211171913.31: ** ySmoothPointLowessQuad
-def ySmoothPointLowessQuad(xdata, ydata, wt, i, cliplevel=2.0, causal=False):
-    '''Fit a point in a sequence using a local quadratic least squares fit.
-    Neighboring points contribute to the fit according to weights
-    assigned using a weight table.  Return the fitted point, its square
-    deviation, and whether or not if falls outside a clipping level.
-
-    This function implements the core fitting portion of the LOWESS
-    smoothing algorithm published by Cleveland.  The code is ported
-    and adapted from the original Turbopascal code written by
-    Thomas B. Passin for the GSTAT.EXE program.
-
-    ARGUMENTS
-    xdata, ydata -- lists of the x and y data.  Must be the same length.
-    wt -- a WtStats instance that has the weight table filled in.
-    i -- the index of the point (x,y) to be smoothed.
-    cliplevel -- threshold for designating points as fliers
-    causal -- If True, use only neighbors to left of specified point.  Otherwise,
-              use neighbors on both sides.
-
-    RETURNS
-    a tuple (s, d, se, is_flier), where s is the smoothed value of the point,
-    d is the variance at the point, se is the weighted standard deviaton of the
-    fitted point, and is_flier is a boolean that is True if
-    the point lies farther than cliplevel standard deviations
-    from the fitted point.
-    '''
-    # pylint: disable=too-many-locals
-    Swt = 0.0 # sum of weights
-    Swx = 0.0 # weighted sum of x
-    Swy = 0.0 # weighted sum of y
-    Swxy = 0.0 # weighted sum of xy
-    Swxx = 0.0 # weighted sum of xx
-    Swyy = 0.0 # weighted sum of yy
-    Swxxx = 0.0 # weighted sum of xxx
-    Swxxxx = 0.0 # weighted sum of x^4
-    Swyxx = 0.0 # weighted sum of y*x^2
-    Sww = 0.0 # Sum of squared weights
-
-    a = 0.0 # y = axx + bx + c for quadratic fit within the window
-    b = 0.0
-    c = 0.0
-    SqrDev = 0
-
-    sz = wt.smoothzone #Full width of smoothing window in data points
-
-    N = len(xdata)
-    x = xdata[i]
-
-    half = sz / 2
-    window_left = max(i - half, 0)
-    window_right = min(1 + i + half, N)
-    _offset = i - half
-
-    for j in range(window_left, window_right):
-        weight_index = j - _offset
-        wj = wt.weights[weight_index]
-        xtemp = xdata[j]
-        ytemp = ydata[j]
-        xsqr = xtemp**2
-        x3 = xtemp**3
-        x4 = xtemp**4
-        ysqr = ytemp**2
-        Swx = Swx +  wj*xtemp
-        Swy = Swy +  wj*ytemp
-        Swxy = Swxy +  wj* xtemp*ytemp
-        Swxx = Swxx + wj* xsqr
-        Swyy = Swyy + wj * ysqr
-        Swt = Swt + wj
-        Swxxx = Swxxx + wj * x3
-        Swxxxx = Swxxxx + wj * x4
-        Swyxx = Swyxx + wj * ytemp * xsqr
-        Sww = wj**2
-
-    det = determinant(Swxxxx, Swxxx, Swxx,
-                      Swxxx, Swxx, Swx,
-                      Swxx, Swx, Swt)
-
-    a = determinant(Swyxx, Swxxx, Swxx,
-                    Swxy, Swxx, Swx,
-                    Swy, Swx, Swt) / det
-
-    b = determinant(Swxxxx,Swyxx, Swxx,
-                    Swxxx, Swxy, Swx,
-                    Swxx, Swy, Swt) / det
-
-    c = determinant(Swxxxx, Swxxx, Swyxx,
-                    Swxxx, Swxx, Swxy,
-                    Swxx, Swx, Swy) / det
-
-    y = a*x**2 + b*x + c
-    var = (Swyy - 2.*y*Swy + Swt*y**2) / Swt
-    var = max(var, 0)
-
-    se = (var * Sww)**0.5/Swt
-
-    is_flier = (abs(ydata[i] - y) > cliplevel * math.sqrt(SqrDev))
-    return (y, var, se, is_flier)
 
 #@+node:tom.20211211171913.32: ** lowess2Quad
 def lowess2Quad(xdata, ydata, smoothzone=10, omitOne=False):
@@ -953,9 +860,9 @@ def lowess2Quad(xdata, ydata, smoothzone=10, omitOne=False):
 
     wt = WtStats()
     N = len(xdata)
-    if N % 2 == 1:
-        smoothzone = smoothzone + 1
     smoothzone = min(N - 1, smoothzone)
+    if smoothzone % 2 == 0:
+        smoothzone = smoothzone + 1
 
     wt.MakeGaussianWeights(smoothzone)
     if omitOne:
@@ -1030,7 +937,7 @@ def lowessAdaptiveAC(xdata, ydata):
     '''Smooth sequence of points using Cleveland's LOWESS algorithm.
     Estimate the best span of points by making multiple LOWESS
     runs with different spans.  The fit criterion is the value of the
-    autocorrelation.   autocorrelation of the residuals is
+    autocorrelation of the residuals. autocorrelation of the residuals is
     calculated according to p49 of
 
     "Nonparametric Simple Regression", J. Fox, Sage University, 2000.
@@ -1055,10 +962,10 @@ def lowessAdaptiveAC(xdata, ydata):
     #N = len(xdata)
 
     thresh = 0.05
-    eps = 0.001
+    eps = 0.005
     reps = 0
     rep_limit = 20
-    delta = 3 # step size
+    delta = 4 # step size
     #overshot = False
     converged = False
     too_many = False
@@ -1067,7 +974,7 @@ def lowessAdaptiveAC(xdata, ydata):
 
     smallest_yet = None
 
-    width = 4
+    width = 3
     last_r = 0
 
     #print 'width\tdelta\tr\t\tlast r\tr - last_r'

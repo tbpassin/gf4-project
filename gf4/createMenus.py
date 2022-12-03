@@ -347,7 +347,7 @@ def setMenus(self):
     smoothSubmenu.add_command(label='Linear Least Squares Fit',
         command=self.leastsqr)
     smoothSubmenu.add_command(label='Least Square Quadratic Fit',
-        command=self.leastsqr_quad)
+        command=self.leastsqr_poly)
     smoothSubmenu.add_separator()
     smoothSubmenu.add_command(label='Lowess Linear', command=self.lowess,
                      underline=0)

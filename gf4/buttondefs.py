@@ -31,8 +31,6 @@ PLOT_BUTTONS = (
     SPACER, SPACER,
     ('Error Bands', 'overploterr', 'Overplot X Error Bands if any'),
     ('Timehack', 'timehack', 'Vertical Marker At Specified X Position'),
-    ('Snapshot', 'take-snapshot', 'Save state of the plot and stack'),
-    ('Restore\nSnapshot', 'get-snapshot', 'Restore saved state of the plot and stack'),
 )
 
 AXES_BUTTONS = (
@@ -46,7 +44,9 @@ LOAD_BUTTONS = (
     ('Load From\nDialog', 'loadclip', 'Load/Edit Data From Clipboard'),
     ('Copy To\nClipboard', 'save2clip', 'Save X Data To Clipboard'),
     ('Store 1', 'stox', 'Store X Dataset'),
-    ('Recall 1', 'rclx', 'Recall Stored Data Set to X')
+    ('Recall 1', 'rclx', 'Recall Stored Data Set to X'),
+    ('Snapshot', 'take-snapshot', 'Save state of the plot and stack'),
+    ('Restore\nSnapshot', 'get-snapshot', 'Restore saved state of the plot and stack'),
 )
 
 STACK_BUTTONS = (
@@ -103,16 +103,16 @@ MATH_BUTTONS = (
 
 CURVE_FIT_BUTTONS = (
     ('Cubic Spline\nInterpolation', 'cubicspln', 'Interpolate Between Points with Cubic Spline'),
-    ('Lst Sqr Lin', 'lstsqrlin', 'Fit Points with Linear Least Squares (2 s.e. error bands)'),
-    ('Lst Sqr Quad', 'lstsqrquad', 'Fit Points with Quadratic Using Least Squares (2 s.e. error bands'),
+    # ('Lst Sqr Lin', 'lstsqrlin', 'Fit Points with Linear Least Squares (2 s.e. error bands)'),
+    ('Lst Sqr Poly', 'lstsqrpoly', 'Fit Points with N-degree Polynomial Using Least Squares (2 s.e. error bands)'),
     ('Thiel-Sen', 'thiel_sen', 'Fit Line Robustly Using Thiel-Sen Method (median slopes)'),
     ('Piecewise', 'piecewise', 'Piecewise Linear Least Squares Fit'),
 )
 
 SMOOTHER_FIT_BUTTONS = (
     ('LOWESS Lin', 'lowess', 'Smooth Data with Linear LOWESS Fit (2 s.e. error bands)'),
-    #  ('LOW Quad', 'lowessquad', 'Smooth Data with 2nd Order LOWESS Fit'),
-    ('LOW Adapt', 'lowessadapt', 'Smooth Data Adaptively with LOWESS: Find best span for a specified smoothness (2 s.e. error bands)'),
+    #('LOWESS Poly', 'lowess_poly', 'Smooth Data with nth Order LOWESS Fit'),
+    ('LOWESS Adapt', 'lowessadapt', 'Smooth Data Adaptively with LOWESS: Find best span for a specified smoothness (2 s.e. error bands)'),
     ('LOW Correl', 'lowesscorrel', 
         'Minimize Lag-1 Autocorrelation of Residuals: remove highest frequencies (2 s.e. error bands)'),
     SPACER, SPACER,
@@ -145,12 +145,12 @@ STATS_BUTTONS = (
     #('CDF Adapt', 'fitcdfadapt', 'Fit a CDF in [X] with a Normal CDF, Adaptively'),
     ('Histogram', 'hist', 'Calculate Histogram of [X] Data'),
     SPACER, SPACER,
-    ('Mean, STD', 'meanstd', 'Display Mean, Sample Standard Deviation, Lag-1 autocorrelation, and Area of X Data'),
+    ('Mean, STD', 'meanstd', 'Display Mean, Sample Standard Deviation Corrected For Autocorrelation, Lag-1 autocorrelation, and Area of X Data'),
     # ('Corr Coeff', 'corrcoeff', "Calculate Correlation Coefficient Between X and Y"),
     ('Spearman', 'spearman', 'Calculate the Spearman Rank Correlation Coefficient between X and Y'),
     ('Pearson', 'pearson', "Calculate the Pearson's Correlation Coefficient r between X and Y"),
     SPACER, SPACER,
-    ('Partial\nAutocorr', 'partial-autocorr',
+    ('Partial Autocorr', 'partial-autocorr',
                'Partial autocorrelation of the X dataset (assumes stationary data)'))
 
 GENERATOR_BUTTONS = (
