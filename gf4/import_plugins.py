@@ -13,7 +13,7 @@
    Returns a list of the imported modules.
 """
 
-import os.path, os
+import os.path
 import importlib
 
 USE_PLUGINS = 'use_plugins.txt'  # List of plugins to import  (optional)
