@@ -2113,7 +2113,7 @@ class PlotManager(AbstractPlotManager):
     def cdf(self):
         _ds = self.stack[MAIN]
         ydata = _ds.ydata
-        mean, std = stats.meanstd(ydata)
+        mean, std, std_corr = stats.meanstd(ydata)
 
         newx, newy, upperbounds, lowerbounds = stats.cdf(ydata)
 
@@ -2131,8 +2131,8 @@ class PlotManager(AbstractPlotManager):
         _ds.errorBands = [upper, lower]
 
         self.plot()
-        self.announce('mean: %0.3f,sigma: %0.3f'
-                      % (mean, std))
+        self.announce((f'mean: {mean:0.3f}, sigma: {std:0.3f}, '
+                       f'lag-1 corrected sigma: {std_corr:0.3f}'))
 
     #@+node:tom.20211207165051.118: *4* fitCdfWithNormal
     @CLEAR_ERROR_BANDS
@@ -2223,7 +2223,7 @@ class PlotManager(AbstractPlotManager):
     @REQUIRE_MAIN
     def mean_std(self):
         ydata = self.stack[MAIN].ydata
-        mean, std = stats.meanstd(ydata)
+        mean, std, std_corr = stats.meanstd(ydata)
         _max = max(ydata)
         se = std / (len(ydata) - 1)**0.5
 
