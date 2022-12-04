@@ -27,6 +27,7 @@ except ImportError:
     from tkinter import ttk
 
 got_docutils = False
+# pylint: disable = wrong-import-position
 try:
     from docutils.core import publish_string
     from docutils.utils import SystemMessage
@@ -103,6 +104,7 @@ def html_from_rst(rst, got_docutils, plotmgr = None):
             print(b'==== No docutils - cannot show help for commands')
         return b''
 
+    html = ''
     try:
         html = publish_string(rst, writer_name='html', settings_overrides=docutil_args)
     except SystemMessage as sm:

@@ -206,7 +206,8 @@ def msg_window(text, plotmgr=None):
         yoffset = int(root_yoffset)
         #win.geometry(f'600x{root_height}')
         win.geometry('600x800')
-        win.geometry('+%s+%s' %(xoffset, yoffset))
+        # win.geometry('+%s+%s' %(xoffset, yoffset))
+        win.geometry(f'+{xoffset}+{yoffset}')
     else:
         win.geometry('600x800')
 

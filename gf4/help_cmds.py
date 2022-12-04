@@ -5,7 +5,7 @@
 The text is assumed to be written in RestructuredText, and that it will
 be converted by docutils before being displayed.
 """
-
+# pylint: disable = anomalous-backslash-in-string
 HELPTEXT = {
 #@+others
 #@+node:tom.20221115112809.1: ** Data Processing

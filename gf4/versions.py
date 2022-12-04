@@ -13,6 +13,7 @@ def getGitInfo():
     branch = version = ''
     rootdir = os.path.dirname(os.path.dirname(__file__))
 
+# pylint: disable = subprocess-run-check
     try:
         cmd = ['git', 'log']
         gitlog = run(cmd, cwd=rootdir, capture_output = True)
