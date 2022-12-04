@@ -78,7 +78,10 @@
 </v>
 </v>
 <v t="tom.20221121171302.1"><vh>Experimental</vh>
-<v t="tom.20221121171312.1"><vh>@file experimental/lowess_poly.py</vh></v>
+<v t="tom.20221128184455.1"><vh>@path experimental</vh>
+<v t="tom.20221121171312.1"><vh>@file lowess_poly.py</vh></v>
+<v t="tom.20221128184351.1"><vh>@file lowess_quad.py</vh></v>
+</v>
 </v>
 <v t="tom.20220816175920.1"><vh>Install Problems</vh>
 <v t="tom.20220816175933.1"><vh>Linux</vh>
@@ -151,9 +154,9 @@ find_peak
 readout
 calculator
 local_poly_fit
-low_quad
 poly_lowess
 show_sigma
+low_quad
 </t>
 <t tx="tom.20220830215645.1">GF4 has a plugin mechanism that can load plugin files located in the "plugins"
 directory.  This README provides some basic information for developers of plugins.
@@ -245,5 +248,6 @@ start with a "#" or ";" character will be ignored.
 </t>
 <t tx="tom.20221105083713.1"></t>
 <t tx="tom.20221121171302.1"></t>
+<t tx="tom.20221128184455.1"></t>
 </tnodes>
 </leo_file>
