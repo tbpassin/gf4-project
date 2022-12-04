@@ -1,3 +1,9 @@
+
+### Devel branch 1.4b3  12-3-2022
+- Some operations now set or clear error bands.
+
+- Least Squares Linear changed to fit with Nth degree polynomial.
+
 ### Release 1.3   11-16-2022
 - Better normalization of Correlate, Convolve.
 
