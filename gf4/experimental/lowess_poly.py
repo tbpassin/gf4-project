@@ -1,5 +1,5 @@
 #@+leo-ver=5-thin
-#@+node:tom.20221121171312.1: * @file experimental/lowess_poly.py
+#@+node:tom.20221121171312.1: * @file lowess_poly.py
 """Implementation of LOWESS with degree-n local fits using numpy poly fits.
 
 This function is adapted from SmoothPointLowessQuad() but changes the way
