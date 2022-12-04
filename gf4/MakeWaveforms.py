@@ -174,7 +174,7 @@ def makeGaussianNoise(self):
     _ds = Dataset()
     _ds.xdata = _x
     _ds.ydata = _y
-    _ds.figurelabel = 'Gaussian Noise m=%0.3f, s=%0.3f' % (m, sig)
+    _ds.figurelabel = f'Gaussian Noise m={m:0.3f}, s={sig:0.3f}'
     _ds.yaxislabel = 'Value'
     _ds.xaxislabel = 'n'
 
@@ -197,7 +197,7 @@ def pdfGaussian(self):
     _ds = Dataset()
     _ds.xdata = _xdata
     _ds.ydata = _ydata
-    _ds.figurelabel = 'Gaussian PDF m=%0.3f, s=%0.3f' % (m, sig)
+    _ds.figurelabel = f'Gaussian PDF m={m:0.3f}, s={sig:0.3f}'
 
     self.set_data(_ds, MAIN)
     self.plot()
@@ -217,7 +217,7 @@ def cdfGaussian(self):
     _ds = Dataset()
     _ds.xdata = _xdata
     _ds.ydata = _ydata
-    _ds.figurelabel = 'Gaussian CDF m=%0.3f, s=%0.3f' % (m, sig)
+    _ds.figurelabel = f'Gaussian CDF m={m:0.3f}, s={sig:0.3f}'
 
     self.set_data(_ds, MAIN)
     self.plot()

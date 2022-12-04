@@ -3,5 +3,6 @@ find_peak
 readout
 calculator
 local_poly_fit
-low_quad
 poly_lowess
+show_sigma
+low_quad
