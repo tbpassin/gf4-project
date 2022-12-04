@@ -35,7 +35,6 @@ from Linestyle import (Linestyle, LINETHIN, LINEMED)
 #from Linestyle import (CIRCLE, HEXAGON, DIAMOND, SQUARE, TRIANGLE,
 #                       SYM_NONE, LINE_NONE, LINE_SOLID, LINETHICK)
 import smoother
-lowess2_stddev = smoother.lowess2_stddev
 
 from fits import piecewiseLinear
 import stats
@@ -47,6 +46,8 @@ from trend import mann_kendall, YESNO
 
 from cmdwin import cmdwindow
 from utility import ICONPATH, setIcon
+
+lowess2_stddev = smoother.lowess2_stddev
 
 matplotlib.use('TkAgg')
 
@@ -1592,7 +1593,8 @@ class PlotManager(AbstractPlotManager):
         _ds = self.stack[MAIN]
         partial_ac, conf_bands = pacf(_ds.ydata, alpha = .05, method = 'ywm')
 
-        new_x = [n for n in range(len(partial_ac))]
+        # new_x = [n for n in range(len(partial_ac))]
+        new_x = list(range(len(partial_ac)))
         _ds.ydata = partial_ac
         _ds.xdata = new_x
 
@@ -2071,7 +2073,7 @@ class PlotManager(AbstractPlotManager):
             self.flashit()
             return
 
-        are_equal = all([x == y for x, y in zip(_x, _y)])
+        are_equal = all((x == y for x, y in zip(_x, _y)))
         if are_equal:
             self.announce("Both data sets are the same")
             self.flashit()
