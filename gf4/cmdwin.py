@@ -305,18 +305,24 @@ def create_buttons_pack(host, plotmgr):
 
     #@+<< Make new Tk font >>
     #@+node:tom.20220402001046.1: *3* << Make new Tk font >>
+    available_fonts = tkFont.families()
     phantom = Tk.Button(text='phantom')
     _font =  tkFont.nametofont(phantom['font'])
     sz = _font['size']
     if platform.startswith('win'):
         ascender = 10.6
     else:
-        ascender = 9.6
+        if 'Open Sans' in available_fonts or 'Noto Sans' \
+            in available_fonts:
+            ascender = 11
+        elif 'DejaVu Sans' in available_fonts:
+            ascender = 9
+        else:
+            ascender = 9.6
 
     # Find a preferred font, if installed
-    available_fonts = tkFont.families()
     ffamily = ''
-    for f in ("Segoe UI", "Open Sans", "Corbel"):
+    for f in ("Segoe UI", "Open Sans", "Noto Sans", "Corbel"):
         if f in available_fonts:
             ffamily = f
             break
@@ -335,7 +341,6 @@ def create_buttons_pack(host, plotmgr):
         NEWFONT = tkFont.nametofont(_font.name)
         sz = adjust_font_size(NEWFONT, ascender)
         NEWFONT.config(size = sz, weight = 'bold')
-
     phantom = None
     #@-<< Make new Tk font >>
     #@+<< Create Button Containers >>
