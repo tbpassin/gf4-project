@@ -48,7 +48,7 @@ from utility import ICONPATH, setIcon
 from help_cmds import HELPTEXT
 #@+node:tom.20211211170819.10: ** Declarations
 COLS = 6
-BUTTONWIDTH = 9
+BUTTONWIDTH = 11
 BUTTON_BG = 'white'
 BUTTON_HORIZ_BG = 'lightcyan'
 BUTTON_RECORD_COLOR = 'RosyBrown3'
