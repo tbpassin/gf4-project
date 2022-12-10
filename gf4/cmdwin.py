@@ -7,6 +7,8 @@
 #@+node:tom.20211211223207.1: ** Imports
 from __future__ import print_function
 from sys import platform
+from os.path import expandvars
+
 from math import ceil
 import webbrowser
 from tempfile import NamedTemporaryFile
@@ -78,6 +80,14 @@ RST_ERROR_MSG_STYLE = ('color:red;'
                        'border-radius:.4em;')
 
 #@+others
+#@+node:tom.20221210000710.1: *3* Temp Directory
+# Set temporary file directory to "Downloads".
+if platform.startswith('win'):
+    TEMPDIR = fr'{expandvars("%USERPROFILE%")}\Downloads'
+else:
+    TEMPDIR = f'/home/{expandvars("$USER")}/Downloads'
+
+
 #@+node:tom.20221108022001.1: *3* Docutils Params
 MATHJAX_URL = 'https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js'
 RST_NO_WARNINGS = 5
@@ -86,6 +96,7 @@ docutil_args = {'output_encoding': 'utf-8',
                 'report_level': RST_NO_WARNINGS,
                 'math_output': 'mathjax ' + MATHJAX_URL}
 #@-others
+    # if sys.platform.startswith('win'):
 #@+node:tom.20221108023317.1: ** html_from_rst
 def html_from_rst(rst, got_docutils, plotmgr = None):
     """Convert ReStructured Text to HTML.
@@ -188,7 +199,7 @@ def on_rclick(event, plotmgr = None):
 
     html = html_from_rst(help, got_docutils, plotmgr)
     if html:
-        with NamedTemporaryFile(suffix = '.html', delete = False) as f:
+        with NamedTemporaryFile(suffix = '.html', dir = TEMPDIR, delete = False) as f:
             f.write(html)
             webbrowser.open(f.name)
 
