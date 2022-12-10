@@ -56,6 +56,7 @@ BUTTON_RECORD_COLOR = 'RosyBrown3'
 ENCODING = 'utf-8'
 MACRO_TEXT = 'Record'
 MACRO_FULLTEXT = 'Record Macro'
+PADY = 2
 
 entry = None
 is_recording = False
@@ -227,9 +228,9 @@ def configure_button_list(parent, button_list, plotmgr):
             except ValueError:
                 print(f'Bad button definition: {b}')
                 continue 
-            _b = Tk.Button(parent, text=text, relief='raised', width=BUTTONWIDTH, 
-                           bg=BUTTON_BG, font=NEWFONT, padx=8,
-                           command=lambda x=cmd: default_command(x, plotmgr))
+            _b = Tk.Button(parent, text = text, relief = 'raised', width = BUTTONWIDTH,
+                           bg = BUTTON_BG, font = NEWFONT, padx = 8, pady = PADY,
+                           command = lambda x=cmd: default_command(x, plotmgr))
             _b.pack(fill=Tk.X)
             _b.cmd = cmd
             _b.bind('<Button-1>', click)
@@ -247,9 +248,9 @@ def configure_horizontal_button_list(parent, button_list, plotmgr):
             _frame = Tk.Frame(parent, bd=1, relief='groove')
             _frame.pack(fill=Tk.BOTH)
         text, cmd, fulltext = b
-        but = Tk.Button(_frame, text=text, width=BUTTONWIDTH+1, bg=BUTTON_HORIZ_BG,
-                font=NEWFONT, 
-                command=lambda x=cmd: default_command(x, plotmgr))
+        but = Tk.Button(_frame, text = text, width = BUTTONWIDTH + 1, bg = BUTTON_HORIZ_BG,
+                font = NEWFONT, pady = PADY,
+                command = lambda x=cmd: default_command(x, plotmgr))
         but.pack(side='left')
         but.cmd = cmd
         but.bind('<Button-1>', click)
@@ -268,8 +269,8 @@ def configure_macro_buttons(parent, plotmgr):
     _frame = Tk.LabelFrame(parent, text='Macro', bd=3, bg='lightgrey')
     _frame.pack(fill=Tk.BOTH)
 
-    but_record = Tk.Button(_frame, text=MACRO_TEXT, width=BUTTONWIDTH+1, 
-                    bg=BUTTON_BG, font=NEWFONT)
+    but_record = Tk.Button(_frame, text = MACRO_TEXT, width = BUTTONWIDTH+1,
+                    bg = BUTTON_BG, pady = PADY, font = NEWFONT)
     but_record.pack(side='left')
     but_record.bind('<Button-1>', click)
     but_record.bind('<Enter>', on_enter)
@@ -278,8 +279,8 @@ def configure_macro_buttons(parent, plotmgr):
     but_record.fulltext = MACRO_FULLTEXT
     but_record.cmd = 'record-macro'
 
-    but_play = Tk.Button(_frame, text='Play', width=BUTTONWIDTH+1, 
-                command=lambda x=plotmgr:play_macro(x), bg=BUTTON_BG, font=NEWFONT)
+    but_play = Tk.Button(_frame, text='Play', width = BUTTONWIDTH + 1, pady = PADY,
+                command=lambda x=plotmgr:play_macro(x), bg = BUTTON_BG, font = NEWFONT)
     but_play.pack(side='left')
     but_play.bind('<Enter>', on_enter)
     but_play.bind('<Leave>', on_leave)
