@@ -7,7 +7,7 @@
 #@+node:tom.20211211223207.1: ** Imports
 from __future__ import print_function
 from sys import platform
-from os.path import expandvars
+from os.path import normpath, expanduser
 
 from math import ceil
 import webbrowser
@@ -81,12 +81,8 @@ RST_ERROR_MSG_STYLE = ('color:red;'
 
 #@+others
 #@+node:tom.20221210000710.1: *3* Temp Directory
-# Set temporary file directory to "Downloads".
-if platform.startswith('win'):
-    TEMPDIR = fr'{expandvars("%USERPROFILE%")}\Downloads'
-else:
-    TEMPDIR = f'/home/{expandvars("$USER")}/Downloads'
-
+# Works for all platforms
+TEMPDIR = normpath(expanduser('~/Downloads'))
 
 #@+node:tom.20221108022001.1: *3* Docutils Params
 MATHJAX_URL = 'https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js'
@@ -199,9 +195,10 @@ def on_rclick(event, plotmgr = None):
 
     html = html_from_rst(help, got_docutils, plotmgr)
     if html:
-        with NamedTemporaryFile(suffix = '.html', dir = TEMPDIR, delete = False) as f:
+        with NamedTemporaryFile(suffix = '.html',
+                dir = TEMPDIR, delete = False) as f:
             f.write(html)
-            webbrowser.open(f.name)
+        webbrowser.open(f.name)
 
 #@+node:tom.20211211170819.14: ** default_command
 def default_command(cmd, plotmgr=None):
