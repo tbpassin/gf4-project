@@ -431,7 +431,8 @@ def cmdwindow(plotmgr=None):
         #win.geometry('+%s+%s' %(xoffset, yoffset))  # Can just set offsets
         win.geometry(f'{w_width}x{w_height}+{xoffset}+{yoffset}')
     else:
-        win.geometry('600x700')
+        pass
+        #win.geometry('700x700')
 
 if __name__ == '__main__':
     cmdwindow(None)
