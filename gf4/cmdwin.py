@@ -60,6 +60,10 @@ BUTTON_HORIZ_BG = 'lightcyan'
 BUTTON_RECORD_COLOR = 'RosyBrown3'
 
 ENCODING = 'utf-8'
+EXTENDED_HELP_TEXT = (
+    'Right click on button for extended help if button hover color is '
+   f'{BUTTON_HOVER_WITH_EXTENDED_HELP}')
+HELP_PANEL_BG = 'lightblue'
 MACRO_TEXT = 'Record'
 MACRO_FULLTEXT = 'Record Macro'
 PADY = 2
@@ -207,6 +211,10 @@ def on_rclick(event, plotmgr = None):
             f.write(html)
         webbrowser.open(f.name)
 
+#@+node:tom.20221212135221.1: ** on_click_help
+def on_click_help(event):
+    global entry
+    entry.configure(text = EXTENDED_HELP_TEXT)
 #@+node:tom.20211211170819.14: ** default_command
 def default_command(cmd, plotmgr=None):
     global is_recording, macro
@@ -359,22 +367,28 @@ def create_buttons_pack(host, plotmgr):
         NEWFONT.config(size = sz, weight = 'bold')
     phantom = None
     #@-<< Make new Tk font >>
-    #@+<< Create Button Containers >>
-    #@+node:tom.20220402001714.1: *3* << Create Button Containers >>
-    entryframe = Tk.Frame(host, height=20, bd=3, relief='groove', bg='lightblue')
+    #@+<< Create Control Containers >>
+    #@+node:tom.20220402001714.1: *3* << Create Control Containers >>
+    # Help panel at top
+    entryframe = Tk.Frame(host, height = 20, bd = 3, relief = 'groove', bg = HELP_PANEL_BG)
     entryframe.pack_propagate(0)
-    entryframe.pack(fill=Tk.X)
+    entryframe.pack(fill = Tk.X)
 
-    entry = Tk.Label(entryframe, bg='lightcyan')
-    entry.pack(fill=Tk.X)
+    help_button = Tk.Button(entryframe, text = '?')
+    help_button.pack(side = Tk.RIGHT)
+    help_button.bind('<Button-1>', on_click_help)
 
-    cmd_frame = Tk.Frame(host, bd=1, relief='sunken', bg='red')
-    cmd_frame.pack(fill=Tk.Y)
+    entry = Tk.Label(entryframe, padx = 5, bg = HELP_PANEL_BG,  anchor = Tk.CENTER)
+    entry.pack(side = Tk.LEFT, expand = True)
+
+    # Frame for all the command buttons
+    cmd_frame = Tk.Frame(host, bd = 1, relief = 'sunken', bg = 'red')
+    cmd_frame.pack(fill = Tk.Y)
 
     configure_horizontal_button_list(host, GENERATOR_BUTTONS, plotmgr)
     configure_macro_buttons(host, plotmgr)
 
-    #@-<< Create Button Containers >>
+    #@-<< Create Control Containers >>
 
     def create_button_group(frame, text, button_group, pack = 'side'):
         but_frame = Tk.LabelFrame(frame, text = text, bd=3, bg='lightgrey')
