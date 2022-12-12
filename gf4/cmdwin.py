@@ -365,12 +365,16 @@ def create_buttons_pack(host, plotmgr):
         NEWFONT = tkFont.nametofont(_font.name)
         sz = adjust_font_size(NEWFONT, ascender)
         NEWFONT.config(size = sz, weight = 'bold')
+
+    _font_linespace = _font.metrics()['linespace']
     phantom = None
     #@-<< Make new Tk font >>
     #@+<< Create Control Containers >>
     #@+node:tom.20220402001714.1: *3* << Create Control Containers >>
     # Help panel at top
-    entryframe = Tk.Frame(host, height = 20, bd = 3, relief = 'groove', bg = HELP_PANEL_BG)
+    lineheight = _font_linespace + 10
+    entryframe = Tk.Frame(host, height = lineheight, bd = 3,
+                          relief = 'groove', bg = HELP_PANEL_BG)
     entryframe.pack_propagate(0)
     entryframe.pack(fill = Tk.X)
 
