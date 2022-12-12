@@ -50,6 +50,8 @@ from utility import ICONPATH, setIcon
 from help_cmds import HELPTEXT
 #@+node:tom.20211211170819.10: ** Declarations
 COLS = 6
+BG_KEY = 'bg' if platform.lower().startswith('win') else 'activebackground'
+
 BUTTONWIDTH = 11
 BUTTON_BG = 'white'
 BUTTON_HOVER = 'yellow'
@@ -159,11 +161,11 @@ def on_enter(event):
         entry.configure(text=t)
         if w.cget('text') != MACRO_TEXT:
             if HELPTEXT.get(cmd, ''):
-                w.configure(bg = BUTTON_HOVER_WITH_EXTENDED_HELP)
+                w[BG_KEY] = BUTTON_HOVER_WITH_EXTENDED_HELP
             else:
-                w.configure(bg = BUTTON_HOVER)
+                w[BG_KEY] = BUTTON_HOVER
         elif not is_recording:
-            w.configure(bg='yellow')
+            w[BG_KEY] = BUTTON_HOVER
 
     except Exception:
         pass
@@ -177,10 +179,10 @@ def on_leave(event):
     _bg = w.old_bg
     entry.configure(text='')
     if w.cget('text') != MACRO_TEXT:
-        w.configure(bg=_bg)
+        w[BG_KEY] = _bg
     else:
         if not is_recording:
-            w.configure(bg=BUTTON_BG)
+            w[BG_KEY] = BUTTON_BG
 
 #@+node:tom.20221107220544.1: ** on_rclick
 def on_rclick(event, plotmgr = None):
