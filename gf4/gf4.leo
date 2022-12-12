@@ -70,6 +70,9 @@
 <v t="tom.20221124112244.1"><vh>@file show_sigma.py</vh></v>
 </v>
 </v>
+<v t="tom.20221211135219.1"><vh>Config File</vh>
+<v t="tom.20221211135236.1"><vh>@clean config/gf4.ini</vh></v>
+</v>
 <v t="tom.20220506082557.1"><vh>Tests</vh>
 <v t="tom.20211207165011.1"><vh>Smoother and Tests</vh>
 <v t="tom.20211211171913.12"></v>
@@ -249,5 +252,12 @@ start with a "#" or ";" character will be ignored.
 <t tx="tom.20221105083713.1"></t>
 <t tx="tom.20221121171302.1"></t>
 <t tx="tom.20221128184455.1"></t>
+<t tx="tom.20221211135219.1"></t>
+<t tx="tom.20221211135236.1">; GF4 configuration file
+[colors]
+; Overrode initial colors using MatPlotLib CSSS4 color names or #xxyyzz hex values.
+; main-line-color = red
+; buffer-line-color = gray
+</t>
 </tnodes>
 </leo_file>

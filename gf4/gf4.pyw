@@ -45,9 +45,10 @@ from editDialog import editDialog
 from trend import mann_kendall, YESNO
 
 from cmdwin import cmdwindow
-from utility import ICONPATH, setIcon
+from utility import ICONPATH, setIcon, config
 
 lowess2_stddev = smoother.lowess2_stddev
+mcolors = matplotlib.colors
 
 matplotlib.use('TkAgg')
 
@@ -57,11 +58,42 @@ COMMENTS = (';', '#')
 ENCODING = 'utf-8'
 # Special data import keyword
 ENDDATASET = 'ENDDATASET'
+#@+node:tom.20221211170940.1: ** get_valid_color()
+def get_valid_color(colors, key, default):
+    """Given an .ini file key for a color, return the color or a default.
+    
+    Valid color names are MatPlotLib CSS4 names, or a 7-character CSS-style
+    hex rgb color string (#xxyyzz).  If colors[key] does not exist or is
+    not a valid color, the default is returned.
+    
+    "mcolors" is the matplotlib.colors module, which must have been previously
+    imported by that name.
+    
+    ARGUMENTS
+    colors -- the "colors" section of the config parser of the .ini file.
+    key -- a string used in the GF4 .ini file, such as "main-line-color".
+    default -- a string representing a default color to  be used if the 
+               requested key is missing or has an invalid color.
 
-HOMEPATH = PurePath(__file__).parent
-ICONFILE = 'linechart1.png'
-# Unusual but legal syntax for PurePath
-ICONPATH = PurePath(HOMEPATH) / 'icons' / ICONFILE
+    RETURNS
+    The color for given key in the .ini file, or the default value.
+    """
+    global mcolors
+    color = colors.get(key, None)
+    if color:
+        bad_color_msg = f'Invalid .ini file color for {key}: {color}'
+        if color.startswith('#') and len(color) == 7:
+            try:
+                _ = int(color[1:], 16)
+            except ValueError:
+                print(bad_color_msg)
+                return default
+            return color
+        if color in mcolors.CSS4_COLORS:
+            return color
+        else:
+            print(bad_color_msg)
+    return default
 #@+node:tom.20211207165051.4: ** class PlotManager(AbstractPlotManager)
 class PlotManager(AbstractPlotManager):
 
@@ -153,11 +185,15 @@ class PlotManager(AbstractPlotManager):
         super().__init__(root)
         self.toolbar = None
 
+        #@+<< set linestyles >>
+        #@+node:tom.20221211131405.1: *4* << set linestyles >>
+        colors = config['colors'] or {}
+
         self.linestyles = [Linestyle() for i in range(self.stackdepth)]
-        self.linestyles[MAIN].linecolor = BLACK
+        self.linestyles[MAIN].linecolor = get_valid_color(colors, 'main-line-color', BLACK)
         self.linestyles[MAIN].sym_mec = BLACK
         self.linestyles[MAIN].linewidth = LINEMED
-        self.linestyles[BUFFER].linecolor = CYAN
+        self.linestyles[BUFFER].linecolor = get_valid_color(colors, 'buffer-line-color', CYAN)
         self.linestyles[BUFFER].sym_mec = BLACK
         self.linestyles[BUFFER].sym_mfc = CYAN
         self.linestyles[BUFFER].linewidth = LINEMED
@@ -165,7 +201,9 @@ class PlotManager(AbstractPlotManager):
         self.errorbar_linestyles = Linestyle()
         self.errorbar_linestyles.linecolor = GRAY
         self.errorbar_linestyles.linewidth = LINETHIN
-
+        #@-<< set linestyles >>
+        #@+<< set color vars >>
+        #@+node:tom.20221211131425.1: *4* << set color vars >>
         self.main_symbol_color = Tk.StringVar()
         self.buffer_symbol_color = Tk.StringVar()
         self.main_line_color = Tk.StringVar()
@@ -175,6 +213,7 @@ class PlotManager(AbstractPlotManager):
         self.main_symbol_shape = Tk.StringVar()
         self.buffer_symbol_shape = Tk.StringVar()
         self.graph_bg_color = Tk.StringVar()
+        #@-<< set color vars >>
 
         self.snapshot = None
         self.initpath = '.'  # for File Dialog directory
