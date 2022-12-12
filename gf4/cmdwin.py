@@ -37,7 +37,7 @@ try:
 except ImportError:
     pass
 if not got_docutils:
-    print('*** no docutils - cannot display help for commands')
+    print('*** no docutils - cannot display extended help for commands')
     print('*** Run "python3 -m pip install docutils"')
 
 from buttondefs import (SPACER, CURVE_FIT_BUTTONS, STATS_BUTTONS,
@@ -113,11 +113,12 @@ def html_from_rst(rst, got_docutils, plotmgr = None):
     """
 
     if not got_docutils:
+        msg = 'No docutils - cannot show extended help for commands'
         if plotmgr:
-            plotmgr.announce('No docutils - cannot show help for commands')
+            plotmgr.announce(msg)
             plotmgr.flashit()
         else:
-            print(b'==== No docutils - cannot show help for commands')
+            print('====', msg)
         return b''
 
     html = ''
@@ -214,7 +215,11 @@ def on_rclick(event, plotmgr = None):
 #@+node:tom.20221212135221.1: ** on_click_help
 def on_click_help(event):
     global entry
-    entry.configure(text = EXTENDED_HELP_TEXT)
+    if got_docutils:
+        msg = EXTENDED_HELP_TEXT
+    else:
+        msg = 'docutils is needed to display extended help on right click'
+    entry.configure(text = msg)
 #@+node:tom.20211211170819.14: ** default_command
 def default_command(cmd, plotmgr=None):
     global is_recording, macro
