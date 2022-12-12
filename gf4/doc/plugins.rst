@@ -47,7 +47,7 @@ of two:
     def proc():
         # Return without trying to do anything if there is no X dataset.
         # This could happen on startup.
-        if not needs_main(plotmgr):  # see below
+        if not has_main(plotmgr):  # see below
             return
         _ds = plotmgr.stack[MAIN]  # The dataset in the X position
         _ds.scale(2)
@@ -59,9 +59,9 @@ when the command is created.
 
 .. NOTE:: Leo users will notice that Leo complains about an ``undefined name 'plotmgr'`` before the *proc()* function.  This happens because the *plotmgr* object is injected into the module's later when the command is instantiated.  The message can be removed by adding a line ``plotmgr = None`` before *proc()* is defined.
 
-The function *needs_main()* performs the same job as the decorator *@REQUIRE_MAIN*
+The function *has_main()* performs the same job as the decorator *@REQUIRE_MAIN*
 that is used in the *PlotManager* class.  There is also a similar function
-*needs_main_buffer* corresponding to *@REQUIRE_MAIN_BUFF*.  Other common imports
+*has_main_buffer* corresponding to *@REQUIRE_MAIN_BUFF*.  Other common imports
 from the *AbstractPlotManager* class are *BUFFER* and *STACKDEPTH.*
 
 New command functions should use the same techniques for accessing the data and
@@ -85,6 +85,19 @@ If you use a command name different from any existing name but set ``OVERRIDE = 
 the command will be created without a matching button.  This leaves you with no
 way to access the new command.
 
+Adding a Button To an Existing Group
+************************************
+
+A plugin can have its command button added to an existing button group instead
+of the *Plugins* group.  To do this, look up the name of the group in 
+*buttondefs.py*. Assign that name to the attribute *OWNER_GROUP*, and set
+*OVERRIDE* to *True*.  Example:
+
+.. code:: python
+
+    OVERRIDE = True
+    OWNER_GROUP = 'DATA_PROCESSING_BUTTONS'
+
 Controlling Which Plugins Get Loaded
 ************************************
 
@@ -92,4 +105,7 @@ GF4 will load all plugins listed in the file *use_plugins.txt* located in the
 *plugins* directory.  Each plugin's name must be on a separate line, without
 the ".py" extension.  Blank lines and lines that start with either ";" or "#"
 are ignored.
+
+If the *use_plugins.txt* file is not present, then all .py files in the plugins
+directory will be loaded.
 

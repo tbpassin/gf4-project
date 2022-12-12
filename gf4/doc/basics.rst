@@ -17,7 +17,7 @@ is derived based on the first non-comment, non-blank line whose first field is a
 legal floating point number.
 
 Data fields must be numeric.  GF4 cannot make use of non-numeric data.  Data
-fields are converted to floating point numbers.
+fields are converted to floating point numbers.  Date fields are not understood nor displayed.  Date columns should be converted to serial numbers, such as months or years, beginning with the beginning epoch.  The conversion should be done outside of GF4.  Alternatively, a leading data column could be deleted.  Once GF4 has loaded the data, its horizontal axis can be changed to reflect the starting point and increment by  using the *NewX* command button.
 
 Here is an example data file::
 
@@ -170,10 +170,10 @@ Non-Stack Storage
 
 In addition to the stack, there are several other data storage locations:
 
-1. A single slot accessed by the "Store 1" and "Recall 1" buttons.
+1. A single slot accessed by the *Store 1** and *Recall 1* buttons.
 These store from and retrieve to the **X** position.
 
-2. The system clipboard, accessed by the "Copy To Clipboard" and "Load From Dialog"
+2. The system clipboard, accessed by the *Copy To Clipboard* and *Load From Dialog*
 buttons. The latter opens an editing window into which the clipboard can be
 copied.
 
@@ -260,13 +260,13 @@ graph.  This can be a very useful capability.
 Changing Colors, Symbols, and Line Styles
 *****************************************
 
-Curve plotting options can be changed for plotting/overplotting data in the **X** 
-and **Y** stack positions.  The data in **T** cannot be changed.  In practice,
-this is rarely a problem.  Technically there would be no problem in providing
-for changes in the **T** appearance, but up until now it has seemed not to be 
-worth the extra complexity for the user.  Changing these properties using menus
-is a little tedious, but adding buttons to the command window would be bad for
-its readability and usability.
+Curve plotting options can be changed for plotting/overplotting data in the
+**X** and **Y** stack positions. The line and color styles of the *T** position
+cannot be changed. In practice, this is rarely a problem. Technically there
+would be no problem in providing for changes in the **T** appearance, but up
+until now it has seemed not to be worth the extra complexity for the user.
+Changing these properties using menus is a little tedious, but adding buttons to
+the command window would be bad for its readability and usability.
 
 Figure BA-2 depicts the Plot menu items that can change the appearance of
 **X** and **Y** data:
@@ -293,5 +293,5 @@ Command window.  Right-clicking on a button displays a more detailed
 explanation in the system browser.
 
 If an extended help message does not exist for the button, this will be
-announced in the announcement band at the bottom of the main window.
+announced in the announcement bar at the bottom of the main window.
 

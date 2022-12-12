@@ -61,7 +61,7 @@ displayed so the user can choose the two desired columns. The number of columns
 is derived based on the first non-comment, non-blank line whose first field is a
 legal floating point number.</p>
 <p>Data fields must be numeric.  GF4 cannot make use of non-numeric data.  Data
-fields are converted to floating point numbers.</p>
+fields are converted to floating point numbers.  Date fields are not understood nor displayed.  Date columns should be converted to serial numbers, such as months or years, beginning with the beginning epoch.  The conversion should be done outside of GF4.  Alternatively, a leading data column could be deleted.  Once GF4 has loaded the data, its horizontal axis can be changed to reflect the starting point and increment by  using the <em>NewX</em> command button.</p>
 <p>Here is an example data file:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># A comment line</span>
 <span class="p">;</span> <span class="n">Another</span> <span class="n">comment</span> <span class="n">line</span><span class="o">.</span>  <span class="n">Also</span><span class="p">,</span> <span class="n">blank</span> <span class="n">lines</span> <span class="n">are</span> <span class="n">ignored</span><span class="o">.</span>
@@ -201,9 +201,9 @@ operations are carried out by clicking buttons in the auxiliary command window.<
 <section id="non-stack-storage">
 <h1>Non-Stack Storage<a class="headerlink" href="#non-stack-storage" title="Permalink to this headline">¶</a></h1>
 <p>In addition to the stack, there are several other data storage locations:</p>
-<p>1. A single slot accessed by the “Store 1” and “Recall 1” buttons.
+<p>1. A single slot accessed by the <em>Store 1*</em> and <em>Recall 1</em> buttons.
 These store from and retrieve to the <strong>X</strong> position.</p>
-<p>2. The system clipboard, accessed by the “Copy To Clipboard” and “Load From Dialog”
+<p>2. The system clipboard, accessed by the <em>Copy To Clipboard</em> and <em>Load From Dialog</em>
 buttons. The latter opens an editing window into which the clipboard can be
 copied.</p>
 <p>These buttons are marked in the image below:</p>
@@ -303,13 +303,13 @@ graph.  This can be a very useful capability.</p>
 </section>
 <section id="changing-colors-symbols-and-line-styles">
 <h2>Changing Colors, Symbols, and Line Styles<a class="headerlink" href="#changing-colors-symbols-and-line-styles" title="Permalink to this headline">¶</a></h2>
-<p>Curve plotting options can be changed for plotting/overplotting data in the <strong>X</strong>
-and <strong>Y</strong> stack positions.  The data in <strong>T</strong> cannot be changed.  In practice,
-this is rarely a problem.  Technically there would be no problem in providing
-for changes in the <strong>T</strong> appearance, but up until now it has seemed not to be
-worth the extra complexity for the user.  Changing these properties using menus
-is a little tedious, but adding buttons to the command window would be bad for
-its readability and usability.</p>
+<p>Curve plotting options can be changed for plotting/overplotting data in the
+<strong>X</strong> and <strong>Y</strong> stack positions. The line and color styles of the <em>T*</em> position
+cannot be changed. In practice, this is rarely a problem. Technically there
+would be no problem in providing for changes in the <strong>T</strong> appearance, but up
+until now it has seemed not to be worth the extra complexity for the user.
+Changing these properties using menus is a little tedious, but adding buttons to
+the command window would be bad for its readability and usability.</p>
 <p>Figure BA-2 depicts the Plot menu items that can change the appearance of
 <strong>X</strong> and <strong>Y</strong> data:</p>
 <figure class="align-default" id="id7">
@@ -340,7 +340,7 @@ the button causes a brief summary to display in the band at the top of the
 Command window.  Right-clicking on a button displays a more detailed
 explanation in the system browser.</p>
 <p>If an extended help message does not exist for the button, this will be
-announced in the announcement band at the bottom of the main window.</p>
+announced in the announcement bar at the bottom of the main window.</p>
 </section>
 
 
