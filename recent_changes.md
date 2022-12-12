@@ -1,6 +1,12 @@
 
-### Devel branch 1.4b3  12-3-2022
-- Some operations now set or clear error bands.
+### Devel branch 1.4b3  12-11-2022
+- Added the ability to read entries in a .ini file.  Initially, this will allow a user to override the startup line colors for [X], [Y] plots.
+
+- Temporary files for the extended help system are now written to the user's Downloads directory.  This works around the problem that on some Linux systems, Python's default location was not readable by the system browser.
+
+- Fonts and command window size adjusted for better appearance in Linux.
+
+- Some operations now set or clear error bands more sensibly.
 
 - Least Squares Linear changed to fit with Nth degree polynomial.
 
