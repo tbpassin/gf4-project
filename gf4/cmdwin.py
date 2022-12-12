@@ -52,6 +52,8 @@ from help_cmds import HELPTEXT
 COLS = 6
 BUTTONWIDTH = 11
 BUTTON_BG = 'white'
+BUTTON_HOVER = 'yellow'
+BUTTON_HOVER_WITH_EXTENDED_HELP = 'cyan'
 BUTTON_HORIZ_BG = 'lightcyan'
 BUTTON_RECORD_COLOR = 'RosyBrown3'
 
@@ -150,12 +152,16 @@ def on_enter(event):
     global is_recording
 
     w = event.widget
+    cmd = w.cmd
     try:
         t = w.fulltext
         w.old_bg = w.cget('bg')
         entry.configure(text=t)
         if w.cget('text') != MACRO_TEXT:
-            w.configure(bg='yellow')
+            if HELPTEXT.get(cmd, ''):
+                w.configure(bg = BUTTON_HOVER_WITH_EXTENDED_HELP)
+            else:
+                w.configure(bg = BUTTON_HOVER)
         elif not is_recording:
             w.configure(bg='yellow')
 
