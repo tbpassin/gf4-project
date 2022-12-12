@@ -130,10 +130,9 @@ def html_from_rst(rst, got_docutils, plotmgr = None):
 #@+node:tom.20221108094726.1: ** flash_button
 def flash_button(w):
     """Flash a button more visibly than the Tk default flash()."""
-    bg = w.cget('bg')
-    w.config(relief='sunken', bg='cyan')
+    w.config(relief='sunken')
     w.flash()
-    w.config(relief='raised', bg=bg)
+    w.config(relief='raised')
 #@+node:tom.20211211170819.11: ** click
 def click(event): 
     global is_recording, macro
