@@ -26,7 +26,7 @@ But they can be annoying when reading the code outside of Leo.  It is possible
 for Leo to write these files without sentinels.  Leo can load the files and 
 re-apply the overlay structure.  But the results will be less robust against
 significant restructuring, since Leo may not be able to match up old and new
-material as intended.  This could lead to a loss of some of the overlay structure.
+material as intended.  This could lead to a loss of some of the overlay structure (not the code itself).
 
 The creator of GF4 has elected to keep the sentinel lines in the files.  This
 decision could be revisited at some point.  In the meantime, files can be edited

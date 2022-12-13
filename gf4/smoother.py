@@ -719,6 +719,7 @@ def SmoothPointLowessQuad(xdata, ydata, wt, i, cliplevel=2.0, causal=False):
         _swxxxx = [] # weighted sum of x^4
         _swyxx = [] # weighted sum of y*x^2
         _sww = [] # Sum of squared weights
+        wt.weights = [np.float64(w) for w in wt.weights]
 
         # This only works right because the weight function is symmetrical
         for j in range(window_left, window_right):
@@ -744,7 +745,7 @@ def SmoothPointLowessQuad(xdata, ydata, wt, i, cliplevel=2.0, causal=False):
             Swy = math.fsum(_swy)
             Swxy = math.fsum(_swxy)
             Swxx = math.fsum(_swxx)
-            #Swyy = math.fsum(_swyy)
+            # Swyy = math.fsum(_swyy)
             Swt = math.fsum(_swt)
             Swxxx = math.fsum(_swxxx)
             Swxxxx = math.fsum(_swxxx)
@@ -1140,7 +1141,7 @@ def poissonSmooth(xdata, ydata, smoothzone=10):
         if y < 0:
             neg_values.append(y)
     if neg_values:
-        raise ValueError ('Negative values not allowed: %0.3f, ...' % neg_values[0])
+        raise ValueError (f'Negative values not allowed: {neg_values[0]:0.3f}, ...')
 
     N = len(xdata)
     if N % 2 == 1:

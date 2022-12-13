@@ -4,8 +4,10 @@
 
 The text is assumed to be written in RestructuredText, and that it will
 be converted by docutils before being displayed.
-"""
 
+Each entry is keyed by the command string used to dispatch it.
+"""
+# pylint: disable = anomalous-backslash-in-string
 HELPTEXT = {
 #@+others
 #@+node:tom.20221115112809.1: ** Data Processing
@@ -43,7 +45,7 @@ For a more detailed discussion of the autocorrelation, see `Autocorrelation <htt
 #@+node:tom.20221108001524.1: *3* fft
 'fft': '''
 
-fft
+FFT
 ===
 Operates on: [X]
 
@@ -88,7 +90,7 @@ length is shorter, truncate the dataset by removing points from the right.
 #@+node:tom.20221108194935.1: *3* diff
 'diff': r'''
 
-diff
+Diff
 =====
 
 Operates on: [X]
@@ -106,8 +108,8 @@ The result has one less point than the original dataset because there is no poin
 #@+node:tom.20221108201916.1: *3* diff2
 'diff2': r'''
 
-diff2
-======
+Central Diff
+============
 
 Operates on: [X]
 

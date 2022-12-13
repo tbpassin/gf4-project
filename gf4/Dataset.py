@@ -131,7 +131,9 @@ class Dataset:
         the exception if data can't be converted, else None
         #@-<< docstring >>
         """
+        # pylint: disable = too-many-locals
         # pylint: disable = too-many-branches
+        # pylint: disable = too-many-statements
         #@+<< init >>
         #@+node:tom.20220401205124.1: *4* << init >>
         self.orig_filename = filename

@@ -1,18 +1,20 @@
 #@+leo-ver=5-thin
-#@+node:tom.20221121171312.1: * @file lowess_poly.py
+#@+node:tom.20221127124842.1: * @file experimental/debug_lowess.py
 """Implementation of LOWESS with degree-n local fits using numpy poly fits.
 
 This function is adapted from SmoothPointLowessQuad() but changes the way
 the fit is computed.
 """
 from math import sqrt
-import numpy as np
 from smoother import WtStats
 
+def sqr(x):
+    return x * x
+
 #@+others
-#@+node:tom.20221122144251.1: ** smoothPointLocalPoly
-def smoothPointLocalPoly(xdata, ydata, wt, i, degree = 1, cliplevel=2.0, causal=False):
-    '''Fit a point in a sequence using a local quadratic least squares fit.
+#@+node:tom.20221127124842.2: ** SmoothPointLowess
+def smoothPointLowess(xdata, ydata, wt, i, cliplevel=2.0, causal=False):
+    '''Fit a point in a sequence using a local linear least squares fit.
     Neighboring points contribute to the fit according to weights
     assigned using a weight table.  Return the fitted point, its square
     deviation, and whether or not if falls outside a clipping level.
@@ -25,7 +27,6 @@ def smoothPointLocalPoly(xdata, ydata, wt, i, degree = 1, cliplevel=2.0, causal=
     ARGUMENTS
     xdata, ydata -- lists of the x and y data.  Must be the same length.
     wt -- a WtStats instance that has the weight table filled in.
-    degree -- degree of the polynomial fit
     i -- the index of the point (x,y) to be smoothed.
     cliplevel -- threshold for designating points as fliers
     causal -- If True, use only neighbors to left of specified point.  Otherwise,
@@ -33,82 +34,85 @@ def smoothPointLocalPoly(xdata, ydata, wt, i, degree = 1, cliplevel=2.0, causal=
 
     RETURNS
     a tuple (s, v, se, is_flier), where s is the smoothed value of the point,
-    v is the variance at the point, se is the weighted standard deviation of the
-    fitted point, and is_flier is a boolean that is True if
+    v is the variance at the point, se is the weighted standard error of the
+    mean, and is_flier is boolean that is True if
     the point lies farther than cliplevel standard deviations
     from the fitted point.
     '''
-    # Full width of smoothing window in data points. Always odd
+    # pylint: disable=too-many-locals
+    Swt = 0.0 # sum of weights
+    Swx = 0.0 # weighted sum of x
+    Swy = 0.0 # weighted sum of y
+    Swxy = 0.0 # weighted sum of xy
+    Swxx = 0.0 # weighted sum of xx
+    Swyy = 0.0 # weighted sum of yy
+    Sww = 0.0 # sum of squared weights
+    a = 0.0 # y = ax + b for linear fit within the window
+    b = 0.0
+    SqrDev = 0
+
     sz = wt.smoothzone
-    num = len(xdata)
-    center_wt_index = wt.center
-    # Use working x-axis sequentially indexed for the poly fit
-    x_prime = [i for i, z in enumerate(ydata)]
 
-    if i < center_wt_index:
-        width = center_wt_index + i + 1
-        wghts = wt.weights[center_wt_index - i:]
-        x_left = 0
-        x_right = width
-    elif i <= num - center_wt_index - 2:
-        x_left = i - center_wt_index
-        x_right = i + center_wt_index + 1
-        wghts = wt.weights
-    else:
-        width = (num - i) + center_wt_index# number of points in window
-        wghts = wt.weights[0:width]
-        x_left = num - width - 1
-        x_right = num - 1
-        # print(i, x_left, x_right, width, wghts)
+    N = len(xdata)
+    x = xdata[i]
 
-    span = (x_left, x_right)
-    x_ = x_prime[x_left: x_right]
-    y_ = ydata[x_left: x_right]
-    try:
-        polyfit = np.polynomial.polynomial.Polynomial.fit(x_, y_, degree, window = span, w = wghts)
-    except Exception as e:
-        print('====', e)
-        print('target:', i, 'sz:', sz, 'smoothzone:', wt.smoothzone, ', len(x):', len(x_), ', len(y):', len(y_), ', len(wts):', len(wghts), ', span:', span, x_left, x_right)
-        raise e
+    half = sz // 2
+    window_left = max(i - half, 0)
+    window_right = min(1 + i + half, N)
+    _offset = i - half
 
-    y0 = np.polynomial.polynomial.polyval(x_prime[i], polyfit.coef)
-    Svar = 0.
-    Swt = 0.
-    Sww = 0.
-    for j in range(x_left, x_right):
-        weight_index = j - x_left
-        # if i > num - center_wt_index - 3: print(i, j, weight_index)
+    # This only works right because the weight function is symmetrical
+    for j in range(window_left, window_right):
+        weight_index = j - _offset
         wj = wt.weights[weight_index]
-        xj = x_prime[j]
+        xtemp = xdata[j]
+        ytemp = ydata[j]
+        Swx = Swx +  wj*xtemp
+        Swy = Swy +  wj*ytemp
+        Swxy = Swxy +  wj* xtemp*ytemp
+        Swxx = Swxx + wj * xtemp**2
+        Swyy = Swyy + wj * ytemp**2
+        Swt = Swt + wj
+        Sww += wj**2
+
+    a = (Swt*Swxy - Swx*Swy)/(Swt*Swxx - sqr(Swx))
+    b = (Swy - a*Swx)/(Swt)
+
+    y0 = a*x + b
+
+    # Variance
+    Svar = 0.
+    for j in range(window_left, window_right):
+        weight_index = int(j - _offset)
+        wj = wt.weights[weight_index]
+        xj = xdata[j]
         yj = ydata[j]
-        yfit = np.polynomial.polynomial.polyval(xj, polyfit.coef)
+        yfit = a*xj + b
         Svar += wj*(yj-yfit)**2
-        Swt += wj
-        Sww += wj*wj
 
     var = (Svar / Swt) *0.5*sz/(.5*sz - 1)
 
     # Approximate standard error of the fitted point
-    #se = ((var * Sww)**0.5) / Swt
-    se = sqrt((Svar/Swt) / ((Swt**2 / Sww) - 1))
+    se = ((var * Sww)**0.5) / Swt
 
-    is_flier = (abs(ydata[i] - y0) > cliplevel * sqrt(var))
-
+    is_flier = (abs(ydata[i] - y0) > cliplevel * sqrt(SqrDev))
     return (y0, var, se, is_flier)
-
-#@+node:tom.20221121190901.1: ** localPolyLowess
-def localPolyLowess(xdata, ydata, smoothzone=11, degree = 1, omitOne=False):
-    '''Smooth sequence of points using Cleveland's LOWESS algorithm.
+#@+node:tom.20221127124842.3: ** localLowess
+def localLowess(xdata, ydata, smoothzone = 11, degree = 1, omitOne=False):
+    '''
+    #@+<< docstring >>
+    #@+node:tom.20221127124842.4: *3* << docstring >>
+    Smooth sequence of points using Cleveland's LOWESS algorithm.
     Return the smoothed points, and the mean square error of the residuals
     (calculated according to p36 of
 
     "Nonparametric Simple Regression", J. Fox, Sage University, 2000.)
 
     For each point, neighboring points are used to calculate the fit using
-    a quadratic weighted least squares fit, using a table of weights to
-    weight the points.  The window includes smoothzone points on either
-    side of the given point.  The window width is adjusted when the given
-    point gets too close to either end of the data.
+    a n-degree polynomial weighted least squares fit, using a table of 
+    weights to weight the points.  The window includes smoothzone points.
+    The window width is adjusted when the given point gets too close to either 
+    end of the data.
 
     ARGUMENTS
     xdata,ydata -- sequences containing the x and y data values.
@@ -116,17 +120,19 @@ def localPolyLowess(xdata, ydata, smoothzone=11, degree = 1, omitOne=False):
     omitOne -- For each point, omit that point when computing the fit.
                This can be used for cross-validation assessment.
                Implemented by setting the weight for the point to 0.
-               [Not implemented yet]
 
     RETURNS
     A tuple (x, yf, rms) where x is the original x series, yf is the fitted
         series, rms is the rms deviation from fitted points,
         and upperbound, lowerbound are the y values for y +- standard error.
+    #@-<< docstring >>
     '''
-
     wt = WtStats()
     N = len(xdata)
     smoothzone = min(N - 1, smoothzone)
+    # Must be odd
+    if smoothzone % 2 == 0:
+        smoothzone += 1
 
     wt.MakeGaussianWeights(smoothzone)
     if omitOne:
@@ -139,7 +145,7 @@ def localPolyLowess(xdata, ydata, smoothzone=11, degree = 1, omitOne=False):
     lowerlimit = []
     errorlimit = 2.0
     for i, _ in enumerate(xdata):
-        y, v, se, is_flier = smoothPointLocalPoly(xdata, ydata, wt, i, degree = degree)
+        y, v, se, is_flier = smoothPointLowess(xdata, ydata, wt, i)
         smooths.append(y)
         ses.append(se)
         upperlimit.append(y + errorlimit * se)

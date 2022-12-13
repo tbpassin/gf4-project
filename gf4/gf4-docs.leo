@@ -103,7 +103,7 @@ GF4 would make an excellent educational tool since it makes exploring the data s
 The effect of zero-padding and windowing a waveform before running an FFT is quite illuminating and easy to study.  Cumulative data, such as total covid case counts vs time, can be converted into daily rates by differentiating.  This leads to a very noisy dataset, and that can be smoothed with, for example, a LOWESS smoothing routine. The study of the shape of residuals after fitting a function is interesting and easy to do.
 
 No code need be written to perform any of these operations on datasets.</t>
-<t tx="tom.20220507132007.11">GF4 is not a rigorous tool for statistical calculations.  Although the mathematical operations are done as carefully as possible, usually using well-established scientific libraries such as numpy and scipy, various subtleties are not taken into account.  For example, error bars can be shown for a LOWESS smooth, but they do not take into account possible autocorrelation in the dataset.  FFTs, and correlations and convolutions between waveforms, are not normalized according to usual conventions.  This generally makes no practical difference to exploratory use, since it is the relative shapes and features that are normally of interest.  In addition, although processed data sets can be saved to files, and image files of the curves seen on the screen can be saved as well, error bars, regression coefficients, and the like cannot be output.
+<t tx="tom.20220507132007.11">GF4 is not a rigorous tool for statistical calculations.  Although the mathematical operations are done as carefully as possible, usually using well-established scientific libraries such as numpy and scipy, various subtleties are not taken into account.  For example, error bars can be shown for a LOWESS smooth, but they do not take into account possible autocorrelation in the dataset.  FFTs, and correlations and convolutions between waveforms, may not normalized according to usual conventions.  This generally makes no practical difference to exploratory use, since it is the relative shapes and features that are normally of interest.  In addition, although processed data sets can be saved to files, and image files of the curves seen on the screen can be saved as well, error bars, regression coefficients, and the like cannot be output.
 
 GF4 is best used for understanding the features of a 2D dataset, and working out how effective various kinds of processing will be.  Is it too noisy or too contaminated to get useful results? Does a linear least squares fit make sense? Does this kind of a correlation seem to be meaningful? Is a smoothing window of 50 too wide?  Will a cosine or a supergaussian window produce a cleaner FFT for this particular data?  Will zero-padding the dataset improve the resolution?  Is this increase really "exponential"?  What will be the effect of a D.C offset on the FFT?
 
@@ -205,7 +205,7 @@ is derived based on the first non-comment, non-blank line whose first field is a
 legal floating point number.
 
 Data fields must be numeric.  GF4 cannot make use of non-numeric data.  Data
-fields are converted to floating point numbers.
+fields are converted to floating point numbers.  Date fields are not understood nor displayed.  Date columns should be converted to serial numbers, such as months or years, beginning with the beginning epoch.  The conversion should be done outside of GF4.  Alternatively, a leading data column could be deleted.  Once GF4 has loaded the data, its horizontal axis can be changed to reflect the starting point and increment by  using the *NewX* command button.
 
 Here is an example data file::
 
@@ -280,13 +280,13 @@ to compare several data sets, or several ways of processing the same data.
 @others
 
 </t>
-<t tx="tom.20220507132007.20">Curve plotting options can be changed for plotting/overplotting data in the **X** 
-and **Y** stack positions.  The data in **T** cannot be changed.  In practice,
-this is rarely a problem.  Technically there would be no problem in providing
-for changes in the **T** appearance, but up until now it has seemed not to be 
-worth the extra complexity for the user.  Changing these properties using menus
-is a little tedious, but adding buttons to the command window would be bad for
-its readability and usability.
+<t tx="tom.20220507132007.20">Curve plotting options can be changed for plotting/overplotting data in the
+**X** and **Y** stack positions. The line and color styles of the *T** position
+cannot be changed. In practice, this is rarely a problem. Technically there
+would be no problem in providing for changes in the **T** appearance, but up
+until now it has seemed not to be worth the extra complexity for the user.
+Changing these properties using menus is a little tedious, but adding buttons to
+the command window would be bad for its readability and usability.
 
 Figure BA-2 depicts the Plot menu items that can change the appearance of
 **X** and **Y** data:
@@ -362,13 +362,12 @@ is shown, and the original contents of **X** are unchanged.
 There are three other operations between **X** and **Y** datasets that do not
 change the **X** dataset, because they result in a plain number -
 
-    - Corr Coeff (not widely useful, and may not succeed)
     - Pearson (Pearson's Correlation Coefficient)
     - Spearman (Spearman Rank Correlation Coefficient)
 
-These three display their results in a message band below the plotting pane.
+These display their results in a message bar below the plotting pane.
 The values can be highlighted with the mouse and copied to the clipboard with
-&lt;CTRL-C&gt;.
+*&lt;CTRL-C&gt;*.
 </t>
 <t tx="tom.20220507132007.25">We encountered two of GF4's waveform generators in the `Quick Start &lt;quickstart.html&gt;`_ section.
 There we used the ramp and Gaussian noise generators.  Figure WA-1 depicts the
@@ -534,9 +533,9 @@ Of note is the title of the graph.  It was generated automatically, capturing a 
 
     Figure IN-1. Screen Shot Of GF4 In Action.
 
-    The main plotting window is on the left, and the command window is on the right.
+    The main plotting window is on the left, and the command window is on the right. An optional window that shows the state of the waveform stack is at the upper right.
 </t>
-<t tx="tom.20220507132007.9">GF4 is a fifth generation implementation of the basic waveform calculator concept (the first generation - implemented on a 64K Z-80 CP/M machine - was not named).  The implementation language has changed from FORTH to Turbo Pascal to Delphi to the current Python.  Over this time the basic concept has not been changed, while the user interface has evolved and been refined, and more math operations added.</t>
+<t tx="tom.20220507132007.9">GF4 is a fifth generation implementation of the basic waveform calculator concept (the first generation - implemented on a 64K Z-80 CP/M machine - was not named).  The implementation language has changed from FORTH to Turbo Pascal to Delphi to the current Python.  Over this time the basic concept has not been changed, while the user interface has evolved, and more math operations added.</t>
 <t tx="tom.20220507135125.1">
 The stack can be "pushed", causing the existing
 elements to be moved one slot "higher"::
@@ -615,10 +614,10 @@ operations are carried out by clicking buttons in the auxiliary command window.
 .. image:: images/stack_ops.png</t>
 <t tx="tom.20220507143340.1">In addition to the stack, there are several other data storage locations:
 
-1. A single slot accessed by the "Store 1" and "Recall 1" buttons.
+1. A single slot accessed by the *Store 1** and *Recall 1* buttons.
 These store from and retrieve to the **X** position.
 
-2. The system clipboard, accessed by the "Copy To Clipboard" and "Load From Dialog"
+2. The system clipboard, accessed by the *Copy To Clipboard* and *Load From Dialog*
 buttons. The latter opens an editing window into which the clipboard can be
 copied.
 
@@ -673,7 +672,7 @@ But they can be annoying when reading the code outside of Leo.  It is possible
 for Leo to write these files without sentinels.  Leo can load the files and 
 re-apply the overlay structure.  But the results will be less robust against
 significant restructuring, since Leo may not be able to match up old and new
-material as intended.  This could lead to a loss of some of the overlay structure.
+material as intended.  This could lead to a loss of some of the overlay structure (not the code itself).
 
 The creator of GF4 has elected to keep the sentinel lines in the files.  This
 decision could be revisited at some point.  In the meantime, files can be edited
@@ -727,6 +726,8 @@ are (*pillow* has replaced the older *PIL* imaging library):
 run the file `gf4.pyw` with either python or pythonw.  Or you can supply the 
 entire path to gf4.pyw without changing to its directory. Make sure the python
 version is same as you used to install the libraries.
+
+If you put the path to a data file or files on the command line, GF4 will attempt to loaf them.
 </t>
 <t tx="tom.20220820114259.1">The visible graph can be saved as an image file, such as a .png file.  The
 standard MatPlotLib toolbar that GF4 displays near the bottom of the main window
@@ -823,8 +824,14 @@ graph.  This can be a very useful capability.
 <t tx="tom.20220901223400.1">@language md
 @tabwidth -4
 
-### Devel branch 1.4b3  12-3-2022
-- Some operations now set or clear error bands.
+### Devel branch 1.4b3  12-11-2022
+- Added the ability to read entries in a .ini file.  Initially, this will allow a user to override the startup line colors for [X], [Y] plots.
+
+- Temporary files for the extended help system are now written to the user's Downloads directory.  This works around the problem that on some Linux systems, Python's default location was not readable by the system browser.
+
+- Fonts and command window size adjusted for better appearance in Linux.
+
+- Some operations now set or clear error bands more sensibly.
 
 - Least Squares Linear changed to fit with Nth degree polynomial.
 
@@ -922,7 +929,7 @@ of two:
     def proc():
         # Return without trying to do anything if there is no X dataset.
         # This could happen on startup.
-        if not needs_main(plotmgr):  # see below
+        if not has_main(plotmgr):  # see below
             return
         _ds = plotmgr.stack[MAIN]  # The dataset in the X position
         _ds.scale(2)
@@ -934,9 +941,9 @@ when the command is created.
 
 .. NOTE:: Leo users will notice that Leo complains about an ``undefined name 'plotmgr'`` before the *proc()* function.  This happens because the *plotmgr* object is injected into the module's later when the command is instantiated.  The message can be removed by adding a line ``plotmgr = None`` before *proc()* is defined.
 
-The function *needs_main()* performs the same job as the decorator *@REQUIRE_MAIN*
+The function *has_main()* performs the same job as the decorator *@REQUIRE_MAIN*
 that is used in the *PlotManager* class.  There is also a similar function
-*needs_main_buffer* corresponding to *@REQUIRE_MAIN_BUFF*.  Other common imports
+*has_main_buffer* corresponding to *@REQUIRE_MAIN_BUFF*.  Other common imports
 from the *AbstractPlotManager* class are *BUFFER* and *STACKDEPTH.*
 
 New command functions should use the same techniques for accessing the data and
@@ -973,7 +980,10 @@ and display.
 <t tx="tom.20220902121203.1">GF4 will load all plugins listed in the file *use_plugins.txt* located in the
 *plugins* directory.  Each plugin's name must be on a separate line, without
 the ".py" extension.  Blank lines and lines that start with either ";" or "#"
-are ignored.</t>
+are ignored.
+
+If the *use_plugins.txt* file is not present, then all .py files in the plugins
+directory will be loaded.</t>
 <t tx="tom.20220904145245.1">A plugin can have its command button added to an existing button group instead
 of the *Plugins* group.  To do this, look up the name of the group in 
 *buttondefs.py*. Assign that name to the attribute *OWNER_GROUP*, and set
@@ -991,6 +1001,6 @@ Command window.  Right-clicking on a button displays a more detailed
 explanation in the system browser.
 
 If an extended help message does not exist for the button, this will be
-announced in the announcement band at the bottom of the main window.</t>
+announced in the announcement bar at the bottom of the main window.</t>
 </tnodes>
 </leo_file>

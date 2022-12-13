@@ -99,11 +99,10 @@ is shown, and the original contents of **X** are unchanged.
 There are three other operations between **X** and **Y** datasets that do not
 change the **X** dataset, because they result in a plain number -
 
-    - Corr Coeff (not widely useful, and may not succeed)
     - Pearson (Pearson's Correlation Coefficient)
     - Spearman (Spearman Rank Correlation Coefficient)
 
-These three display their results in a message band below the plotting pane.
+These display their results in a message bar below the plotting pane.
 The values can be highlighted with the mouse and copied to the clipboard with
-<CTRL-C>.
+*<CTRL-C>*.
 

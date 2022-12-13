@@ -159,15 +159,16 @@ def histogram(data, nbins=10):
 
 #@+node:tom.20211211171913.44: ** meanstd
 def meanstd(ydata):
-    '''Return the sample standard deviation s and mean of a set of data.
+    '''Return the sample mean, standard deviation s and corrected std dev..
 
-    s is corrected for lag-1 autocorrelation.
+    The corrected std ev is corrected for lag-1 autocorrelation.
 
     ARGUMENT
     ydata -- a sequence of random values
 
     RETURNS
-    a tuple (mean, stddev), or None if there are less than three points in the data
+    a tuple (mean, stddev, stddev_corrected), or None if there are 
+    less than three points in the data
     '''
 
     N = len(ydata)
@@ -182,10 +183,14 @@ def meanstd(ydata):
     r = pearson(shifted, ydata[:-1])
 
     # Correct sigma for lag-1 autocorrelation
-    std = std / (1. - r*r) ** 0.5
+    try:
+        std_ac = std / (1. - r*r) ** 0.5
+    except Exception as e:
+        print(e)
+        std_ac = float('NaN')
 
 
-    return (mean, std)
+    return (mean, std, std_ac)
 
 #@+node:tom.20211211171913.45: ** fitNormalToCdf
 def fitNormalToCdf(dataset):
@@ -206,7 +211,7 @@ def fitNormalToCdf(dataset):
     a tuple (values, probs) of the normal CDF values.
     '''
 
-    m, sigma = meanstd(dataset.ydata)
+    m, sigma, sigma_corr = meanstd(dataset.ydata)
     n = len(dataset.xdata)
     vals, probs = generateGaussianCdf(n, m, sigma)
 
@@ -267,7 +272,7 @@ def fitNormalToCdfAdaptive(values, probs, tolerance=.01):
     '''
     # pylint: disable = too-many-locals
 
-    m, sigma = meanstd(values)
+    m, sigma, sigma_corr = meanstd(values)
 
     #@+others
     #@+node:tom.20221112230453.1: *3* sqrerror
@@ -606,12 +611,12 @@ if __name__ == '__main__':
         means = []
         for i in range(size):
             index, counts = randnum.gaussian_vals(0, sample_sdev, sample_size)
-            m, s = meanstd(counts)
+            m, s, s_corr = meanstd(counts)
             vars.append(s**2)
 
         index1, varprob, _, _ = cdf(means)
 
-        m,s = meanstd(vars)
+        m,s, s_corr = meanstd(vars)
         print('sample size={}, sample standard deviation={:.3f}'.format (\
             sample_size, sample_sdev))
         print('variances: mean={:.3f}, sdev = {:.3f}'.format (m**.5, s**.5))
@@ -684,11 +689,10 @@ if __name__ == '__main__':
         r, _, _ = spearman(x, y)
         print(f'spearmanr: {rr:0.3f}, spearman: {r:0.3f}')
 
-
     @self_printer
     def test_meanstd():
         x = [1,2,3,4,5]
-        m, s = meanstd(x)
+        m, s, s_corr = meanstd(x)
         print('Mean\tstd')
         print('{:.3f}\t{:.3f}'.format(m, s))
 

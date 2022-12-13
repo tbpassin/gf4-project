@@ -89,3 +89,5 @@ run the file `gf4.pyw` with either python or pythonw.  Or you can supply the
 entire path to gf4.pyw without changing to its directory. Make sure the python
 version is same as you used to install the libraries.
 
+If you put the path to a data file or files on the command line, GF4 will attempt to loaf them.
+

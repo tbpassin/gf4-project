@@ -1,12 +1,14 @@
 #@+leo-ver=5-thin
 #@+node:tom.20211211170819.9: * @file cmdwin.py
-"""Auxilliary controller window for gf4."""
+"""Auxiliary controller window for gf4."""
 
 # pylint: disable = consider-using-f-string
 #@+others
 #@+node:tom.20211211223207.1: ** Imports
 from __future__ import print_function
 from sys import platform
+from os.path import normpath, expanduser
+
 from math import ceil
 import webbrowser
 from tempfile import NamedTemporaryFile
@@ -27,6 +29,7 @@ except ImportError:
     from tkinter import ttk
 
 got_docutils = False
+# pylint: disable = wrong-import-position
 try:
     from docutils.core import publish_string
     from docutils.utils import SystemMessage
@@ -34,7 +37,7 @@ try:
 except ImportError:
     pass
 if not got_docutils:
-    print('*** no docutils - cannot display help for commands')
+    print('*** no docutils - cannot display extended help for commands')
     print('*** Run "python3 -m pip install docutils"')
 
 from buttondefs import (SPACER, CURVE_FIT_BUTTONS, STATS_BUTTONS,
@@ -47,14 +50,23 @@ from utility import ICONPATH, setIcon
 from help_cmds import HELPTEXT
 #@+node:tom.20211211170819.10: ** Declarations
 COLS = 6
-BUTTONWIDTH = 9
+BG_KEY = 'bg' if platform.lower().startswith('win') else 'activebackground'
+
+BUTTONWIDTH = 11
 BUTTON_BG = 'white'
+BUTTON_HOVER = 'yellow'
+BUTTON_HOVER_WITH_EXTENDED_HELP = 'cyan'
 BUTTON_HORIZ_BG = 'lightcyan'
 BUTTON_RECORD_COLOR = 'RosyBrown3'
 
 ENCODING = 'utf-8'
+EXTENDED_HELP_TEXT = (
+    'Right click on button for extended help if button hover color is '
+   f'{BUTTON_HOVER_WITH_EXTENDED_HELP}')
+HELP_PANEL_BG = 'lightblue'
 MACRO_TEXT = 'Record'
 MACRO_FULLTEXT = 'Record Macro'
+PADY = 2
 
 entry = None
 is_recording = False
@@ -76,6 +88,10 @@ RST_ERROR_MSG_STYLE = ('color:red;'
                        'border-radius:.4em;')
 
 #@+others
+#@+node:tom.20221210000710.1: *3* Temp Directory
+# Works for all platforms
+TEMPDIR = normpath(expanduser('~/Downloads'))
+
 #@+node:tom.20221108022001.1: *3* Docutils Params
 MATHJAX_URL = 'https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js'
 RST_NO_WARNINGS = 5
@@ -84,6 +100,7 @@ docutil_args = {'output_encoding': 'utf-8',
                 'report_level': RST_NO_WARNINGS,
                 'math_output': 'mathjax ' + MATHJAX_URL}
 #@-others
+    # if sys.platform.startswith('win'):
 #@+node:tom.20221108023317.1: ** html_from_rst
 def html_from_rst(rst, got_docutils, plotmgr = None):
     """Convert ReStructured Text to HTML.
@@ -96,13 +113,15 @@ def html_from_rst(rst, got_docutils, plotmgr = None):
     """
 
     if not got_docutils:
+        msg = 'No docutils - cannot show extended help for commands'
         if plotmgr:
-            plotmgr.announce('No docutils - cannot show help for commands')
+            plotmgr.announce(msg)
             plotmgr.flashit()
         else:
-            print(b'==== No docutils - cannot show help for commands')
+            print('====', msg)
         return b''
 
+    html = ''
     try:
         html = publish_string(rst, writer_name='html', settings_overrides=docutil_args)
     except SystemMessage as sm:
@@ -116,10 +135,9 @@ def html_from_rst(rst, got_docutils, plotmgr = None):
 #@+node:tom.20221108094726.1: ** flash_button
 def flash_button(w):
     """Flash a button more visibly than the Tk default flash()."""
-    bg = w.cget('bg')
-    w.config(relief='sunken', bg='cyan')
+    w.config(relief='sunken')
     w.flash()
-    w.config(relief='raised', bg=bg)
+    w.config(relief='raised')
 #@+node:tom.20211211170819.11: ** click
 def click(event): 
     global is_recording, macro
@@ -140,14 +158,18 @@ def on_enter(event):
     global is_recording
 
     w = event.widget
+    cmd = w.cmd
     try:
         t = w.fulltext
         w.old_bg = w.cget('bg')
         entry.configure(text=t)
         if w.cget('text') != MACRO_TEXT:
-            w.configure(bg='yellow')
+            if HELPTEXT.get(cmd, ''):
+                w[BG_KEY] = BUTTON_HOVER_WITH_EXTENDED_HELP
+            else:
+                w[BG_KEY] = BUTTON_HOVER
         elif not is_recording:
-            w.configure(bg='yellow')
+            w[BG_KEY] = BUTTON_HOVER
 
     except Exception:
         pass
@@ -161,10 +183,10 @@ def on_leave(event):
     _bg = w.old_bg
     entry.configure(text='')
     if w.cget('text') != MACRO_TEXT:
-        w.configure(bg=_bg)
+        w[BG_KEY] = _bg
     else:
         if not is_recording:
-            w.configure(bg=BUTTON_BG)
+            w[BG_KEY] = BUTTON_BG
 
 #@+node:tom.20221107220544.1: ** on_rclick
 def on_rclick(event, plotmgr = None):
@@ -185,10 +207,19 @@ def on_rclick(event, plotmgr = None):
 
     html = html_from_rst(help, got_docutils, plotmgr)
     if html:
-        with NamedTemporaryFile(suffix = '.html', delete = False) as f:
+        with NamedTemporaryFile(suffix = '.html',
+                dir = TEMPDIR, delete = False) as f:
             f.write(html)
-            webbrowser.open(f.name)
+        webbrowser.open(f.name)
 
+#@+node:tom.20221212135221.1: ** on_click_help
+def on_click_help(event):
+    global entry
+    if got_docutils:
+        msg = EXTENDED_HELP_TEXT
+    else:
+        msg = 'docutils is needed to display extended help on right click'
+    entry.configure(text = msg)
 #@+node:tom.20211211170819.14: ** default_command
 def default_command(cmd, plotmgr=None):
     global is_recording, macro
@@ -225,9 +256,9 @@ def configure_button_list(parent, button_list, plotmgr):
             except ValueError:
                 print(f'Bad button definition: {b}')
                 continue 
-            _b = Tk.Button(parent, text=text, relief='raised', width=BUTTONWIDTH, 
-                           bg=BUTTON_BG, font=NEWFONT, padx=8,
-                           command=lambda x=cmd: default_command(x, plotmgr))
+            _b = Tk.Button(parent, text = text, relief = 'raised', width = BUTTONWIDTH,
+                           bg = BUTTON_BG, font = NEWFONT, padx = 8, pady = PADY,
+                           command = lambda x=cmd: default_command(x, plotmgr))
             _b.pack(fill=Tk.X)
             _b.cmd = cmd
             _b.bind('<Button-1>', click)
@@ -245,9 +276,9 @@ def configure_horizontal_button_list(parent, button_list, plotmgr):
             _frame = Tk.Frame(parent, bd=1, relief='groove')
             _frame.pack(fill=Tk.BOTH)
         text, cmd, fulltext = b
-        but = Tk.Button(_frame, text=text, width=BUTTONWIDTH+1, bg=BUTTON_HORIZ_BG,
-                font=NEWFONT, 
-                command=lambda x=cmd: default_command(x, plotmgr))
+        but = Tk.Button(_frame, text = text, width = BUTTONWIDTH + 1, bg = BUTTON_HORIZ_BG,
+                font = NEWFONT, pady = PADY,
+                command = lambda x=cmd: default_command(x, plotmgr))
         but.pack(side='left')
         but.cmd = cmd
         but.bind('<Button-1>', click)
@@ -266,8 +297,8 @@ def configure_macro_buttons(parent, plotmgr):
     _frame = Tk.LabelFrame(parent, text='Macro', bd=3, bg='lightgrey')
     _frame.pack(fill=Tk.BOTH)
 
-    but_record = Tk.Button(_frame, text=MACRO_TEXT, width=BUTTONWIDTH+1, 
-                    bg=BUTTON_BG, font=NEWFONT)
+    but_record = Tk.Button(_frame, text = MACRO_TEXT, width = BUTTONWIDTH+1,
+                    bg = BUTTON_BG, pady = PADY, font = NEWFONT)
     but_record.pack(side='left')
     but_record.bind('<Button-1>', click)
     but_record.bind('<Enter>', on_enter)
@@ -276,8 +307,8 @@ def configure_macro_buttons(parent, plotmgr):
     but_record.fulltext = MACRO_FULLTEXT
     but_record.cmd = 'record-macro'
 
-    but_play = Tk.Button(_frame, text='Play', width=BUTTONWIDTH+1, 
-                command=lambda x=plotmgr:play_macro(x), bg=BUTTON_BG, font=NEWFONT)
+    but_play = Tk.Button(_frame, text='Play', width = BUTTONWIDTH + 1, pady = PADY,
+                command=lambda x=plotmgr:play_macro(x), bg = BUTTON_BG, font = NEWFONT)
     but_play.pack(side='left')
     but_play.bind('<Enter>', on_enter)
     but_play.bind('<Leave>', on_leave)
@@ -303,18 +334,24 @@ def create_buttons_pack(host, plotmgr):
 
     #@+<< Make new Tk font >>
     #@+node:tom.20220402001046.1: *3* << Make new Tk font >>
+    available_fonts = tkFont.families()
     phantom = Tk.Button(text='phantom')
     _font =  tkFont.nametofont(phantom['font'])
     sz = _font['size']
     if platform.startswith('win'):
         ascender = 10.6
     else:
-        ascender = 9.6
+        if 'Open Sans' in available_fonts or 'Noto Sans' \
+            in available_fonts:
+            ascender = 11
+        elif 'DejaVu Sans' in available_fonts:
+            ascender = 9
+        else:
+            ascender = 9.6
 
     # Find a preferred font, if installed
-    available_fonts = tkFont.families()
     ffamily = ''
-    for f in ("Segoe UI", "Open Sans", "Corbel"):
+    for f in ("Segoe UI", "Open Sans", "Noto Sans", "Corbel"):
         if f in available_fonts:
             ffamily = f
             break
@@ -334,24 +371,33 @@ def create_buttons_pack(host, plotmgr):
         sz = adjust_font_size(NEWFONT, ascender)
         NEWFONT.config(size = sz, weight = 'bold')
 
+    _font_linespace = _font.metrics()['linespace']
     phantom = None
     #@-<< Make new Tk font >>
-    #@+<< Create Button Containers >>
-    #@+node:tom.20220402001714.1: *3* << Create Button Containers >>
-    entryframe = Tk.Frame(host, height=20, bd=3, relief='groove', bg='lightblue')
+    #@+<< Create Control Containers >>
+    #@+node:tom.20220402001714.1: *3* << Create Control Containers >>
+    # Help panel at top
+    lineheight = _font_linespace + 10
+    entryframe = Tk.Frame(host, height = lineheight, bd = 3,
+                          relief = 'groove', bg = HELP_PANEL_BG)
     entryframe.pack_propagate(0)
-    entryframe.pack(fill=Tk.X)
+    entryframe.pack(fill = Tk.X)
 
-    entry = Tk.Label(entryframe, bg='lightcyan')
-    entry.pack(fill=Tk.X)
+    help_button = Tk.Button(entryframe, text = '?')
+    help_button.pack(side = Tk.RIGHT)
+    help_button.bind('<Button-1>', on_click_help)
 
-    cmd_frame = Tk.Frame(host, bd=1, relief='sunken', bg='red')
-    cmd_frame.pack(fill=Tk.Y)
+    entry = Tk.Label(entryframe, padx = 5, bg = HELP_PANEL_BG,  anchor = Tk.CENTER)
+    entry.pack(side = Tk.LEFT, expand = True)
+
+    # Frame for all the command buttons
+    cmd_frame = Tk.Frame(host, bd = 1, relief = 'sunken', bg = 'red')
+    cmd_frame.pack(fill = Tk.Y)
 
     configure_horizontal_button_list(host, GENERATOR_BUTTONS, plotmgr)
     configure_macro_buttons(host, plotmgr)
 
-    #@-<< Create Button Containers >>
+    #@-<< Create Control Containers >>
 
     def create_button_group(frame, text, button_group, pack = 'side'):
         but_frame = Tk.LabelFrame(frame, text = text, bd=3, bg='lightgrey')
@@ -411,13 +457,12 @@ def cmdwindow(plotmgr=None):
         w_height = win.winfo_height()
         if w_height < int(root_height):
             w_height = int(root_height)
-        else:
-            w_height = int(root_height) + 40
 
         #win.geometry('+%s+%s' %(xoffset, yoffset))  # Can just set offsets
         win.geometry(f'{w_width}x{w_height}+{xoffset}+{yoffset}')
     else:
-        win.geometry('600x700')
+        pass
+        #win.geometry('700x700')
 
 if __name__ == '__main__':
     cmdwindow(None)

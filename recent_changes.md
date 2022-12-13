@@ -1,3 +1,23 @@
+
+### Devel branch 1.4b3  12-12-2022
+- Added a Help button (marked with a "?") that explains that a different hover
+color indicates that extended help is available.
+
+- Command button hover color is now different when a command has extended help
+(accessed by a right mouse click) so user can know which buttons to right click on.
+
+- Command button hover colors now work correctly in Linux as well as Windows.
+
+- Added the ability to read entries in a .ini file.  Initially, this will allow a user to override the startup line colors for [X], [Y] plots.
+
+- Temporary files for the extended help system are now written to the user's Downloads directory.  This works around the problem that on some Linux systems, Python's default location was not readable by the system browser.
+
+- Fonts and command window size adjusted for better appearance in Linux.
+
+- Some operations now set or clear error bands more sensibly.
+
+- Least Squares Linear changed to fit with Nth degree polynomial.
+
 ### Release 1.3   11-16-2022
 - Better normalization of Correlate, Convolve.
 
@@ -19,7 +39,7 @@ can now by saved and restored.
 - Autocorrelation function now centered on zero-lag, is normalized
 to 1.0.
 
-- New exended Help facility for GF4 commands
+- New extended Help facility for GF4 commands
 
     Extended help for the command buttons is available by right-clicking on the buttons in the Commands window.  At this time only a few commands have help text; over time more of them will be written.
 
