@@ -76,7 +76,7 @@ def gaussian_vals(mu=0.0, sigma=1.0, count=256):
 if __name__ == '__main__':
     def print_vals(vals):
         x,y  = vals
-        _vals = ['%s %0.3f' % (x[i], y[i]) for i in range(len(x))]
+        _vals = [f'{x[i]} {y[i]:0.3g}' for i in range(len(x))]
         print('\n'.join(_vals))
 
     print ('rand_vals')

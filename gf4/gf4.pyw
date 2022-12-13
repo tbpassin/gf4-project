@@ -91,8 +91,8 @@ def get_valid_color(colors, key, default):
             return color
         if color in mcolors.CSS4_COLORS:
             return color
-        else:
-            print(bad_color_msg)
+
+        print(bad_color_msg)
     return default
 #@+node:tom.20211207165051.4: ** class PlotManager(AbstractPlotManager)
 class PlotManager(AbstractPlotManager):

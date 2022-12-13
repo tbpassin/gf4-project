@@ -1,6 +1,6 @@
 #@+leo-ver=5-thin
 #@+node:tom.20211211170819.9: * @file cmdwin.py
-"""Auxilliary controller window for gf4."""
+"""Auxiliary controller window for gf4."""
 
 # pylint: disable = consider-using-f-string
 #@+others
