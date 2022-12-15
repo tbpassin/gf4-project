@@ -77,7 +77,7 @@ HOW TO SPECIFY WHICH PLUGINS TO USE
 By default, GF4 will load all plugins (i.e., python files) in the "plugins"
 directory.  You can override this by including a file named "use_plugins.txt".
 The file should contain the desired plugins by file name, one to a line.
-Do *not* include the ".py" file extension.  Blank lines and lines that
+The ".py" file extension may optionally be omitted.  Blank lines and lines that
 start with a "#" or ";" character will be ignored.
 
 

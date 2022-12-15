@@ -35,6 +35,7 @@ if use_plugins_import_list:
     with open(use_plugins_file, encoding = 'utf-8') as f:
         lines = [l.strip() for l in f.readlines() if l.strip()]
         plugins_import_list = [p for p in lines if p[0] not in '#;']
+        plugins_import_list = [p.replace('.py', '') for p in plugins_import_list]
 #@+node:tom.20220830113113.1: ** import_all_plugins
 def import_all_plugins():
     """Import modules from the plugins directory and return a list of them.
