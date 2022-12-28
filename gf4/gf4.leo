@@ -246,7 +246,7 @@ OWNER_GROUP = 'DATA_PROCESSING_BUTTONS'
 By default, GF4 will load all plugins (i.e., python files) in the "plugins"
 directory.  You can override this by including a file named "use_plugins.txt".
 The file should contain the desired plugins by file name, one to a line.
-Do *not* include the ".py" file extension.  Blank lines and lines that
+The ".py" file extension may optionally be omitted.  Blank lines and lines that
 start with a "#" or ";" character will be ignored.
 </t>
 <t tx="tom.20221105083713.1"></t>
@@ -255,7 +255,7 @@ start with a "#" or ";" character will be ignored.
 <t tx="tom.20221211135219.1"></t>
 <t tx="tom.20221211135236.1">; GF4 configuration file
 [colors]
-; Overrode initial colors using MatPlotLib CSSS4 color names or #xxyyzz hex values.
+; Override initial colors using MatPlotLib CSSS4 color names or #xxyyzz hex values.
 ; main-line-color = red
 ; buffer-line-color = gray
 </t>
