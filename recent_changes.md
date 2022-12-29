@@ -1,4 +1,13 @@
 
+### Release 1.4 12-29-2022
+- Plugin names in the file use_plugins.txt can now optionally include the ".py"
+extension.
+
+- Improvements to fonts and window sizes in Linux.
+
+- After restoring a snapshot, clicking in the plot area no longer reverts
+the displayed graph to the previous one.
+
 ### Devel branch 1.4b3  12-12-2022
 - Added a Help button (marked with a "?") that explains that a different hover
 color indicates that extended help is available.
