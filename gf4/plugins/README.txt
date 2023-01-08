@@ -10,6 +10,11 @@ into a "Plugins" group in the command window.
 A plugin can be made to override an existing command.  Optionally, a plugin
 can place its command button into any existing button group.
 
+A plugin can also add a section to the extended help facility.  Its button will
+show the hover color that indicates there is an extended help entry.  Right-
+clicking the plugin's button will display its extended help message in
+the system browser.
+
 WHAT A PLUGIN SHOULD IMPORT
 ---------------------------
 In addition to whatever modules the plugin may need for its operation, if it
@@ -72,6 +77,16 @@ attribute OWNER_GROUP, and set OVERRIDE to True.  Example:
 OVERRIDE = True
 OWNER_GROUP = 'DATA_PROCESSING_BUTTONS'
 
+To add an item to the extended help, a plugin must import HELP_TEXT:
+
+from help_cmds import HELPTEXT
+
+HELPTEXT is a dictionary keyed by the command name.  Add a dictionary entry as
+in this example:
+
+HELPTEXT['lst-sqr-extrap'] = """Extended Help string here.  Any formatting
+supported by RestructuredText can be used here.
+"""
 HOW TO SPECIFY WHICH PLUGINS TO USE
 -----------------------------------
 By default, GF4 will load all plugins (i.e., python files) in the "plugins"
