@@ -587,7 +587,7 @@ def leastsqr(xdata, ydata, deg=1):
 
     ARGUMENTS
     xdata,ydata -- sequences containing the x and y data values.
-    deg -- the degree of the fit (1 = linear, 2 = quadratic, etc): 2 max
+    deg -- the degree of the fit (1 = linear, 2 = quadratic, etc)
 
     RETURNS
     a tuple  (list of the fitted values, mean, s.e., r, upperbound, lowerbound).
@@ -631,7 +631,7 @@ def leastsqr(xdata, ydata, deg=1):
     upper = [y + 2 * se for y, se in zip(fitted_y, se_all)]
     lower = [y - 2 * se for y, se in zip(fitted_y, se_all)]
 
-    # Autocorrelation
+    # Correlation
     r = pearson(ydata, fitted_y)
 
     return (fitted_y, y_mean, se, r, upper, lower)
