@@ -4,7 +4,7 @@
 
 #@+others
 #@+node:tom.20211211171913.56: ** Imports and Declarations
-from __future__ import print_function
+
 
 import numpy as np
 import scipy.stats

@@ -5,7 +5,7 @@
 """Compute various statistical measures for 2D data."""
 #@+others
 #@+node:tom.20211211171913.41: ** Imports
-from __future__ import print_function
+
 
 import math
 import scipy.special

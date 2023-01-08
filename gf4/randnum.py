@@ -2,7 +2,7 @@
 #@+node:tom.20211211171913.6: * @file randnum.py
 #@+others
 #@+node:tom.20211211171913.7: ** Imports
-from __future__ import print_function
+
 
 from random import random as rand
 from random import uniform, gauss
