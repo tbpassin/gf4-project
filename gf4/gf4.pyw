@@ -3,7 +3,6 @@
 # pylint: disable = consider-using-f-string
 #@+others
 #@+node:tom.20211207165051.3: ** Imports
-from __future__ import print_function
 
 import sys
 from pathlib import PurePath
@@ -1803,15 +1802,18 @@ class PlotManager(AbstractPlotManager):
 
         _ds = self.stack[stackposition]
 
-        # Overplot error bands
         upper = _ds.errorBands[ERRBAND_HI]
         lower = _ds.errorBands[ERRBAND_LO]
+        num = len(upper.xdata)
 
         del self.stack[STACKDEPTH:]
         self.stack.append(upper)
         self.stack.append(lower)
 
-        self.axes.fill_between(self.stack[MAIN].xdata,
+        # In case main data is longer than errorband data, only
+        # fill requires that MAIN data have same length as error bands
+        main_xdata = self.stack[MAIN].xdata[:num]
+        self.axes.fill_between(main_xdata,
                 self.stack[STACKDEPTH + ERRBAND_HI].ydata,
                 self.stack[STACKDEPTH + ERRBAND_LO].ydata,
                 facecolor='lightgrey', alpha=0.1)

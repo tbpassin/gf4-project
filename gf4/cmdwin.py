@@ -5,7 +5,7 @@
 # pylint: disable = consider-using-f-string
 #@+others
 #@+node:tom.20211211223207.1: ** Imports
-from __future__ import print_function
+
 from sys import platform
 from os.path import normpath, expanduser
 

@@ -68,6 +68,7 @@
 <v t="tom.20221120044718.1"><vh>@file low_quad.py</vh></v>
 <v t="tom.20221121191416.1"><vh>@file poly_lowess.py</vh></v>
 <v t="tom.20221124112244.1"><vh>@file show_sigma.py</vh></v>
+<v t="tom.20230104000405.1"><vh>@file lst_sqr_extrap.py</vh></v>
 </v>
 </v>
 <v t="tom.20221211135219.1"><vh>Config File</vh>
@@ -160,7 +161,7 @@ local_poly_fit
 poly_lowess
 show_sigma
 low_quad
-</t>
+lst_sqr_extrap</t>
 <t tx="tom.20220830215645.1">GF4 has a plugin mechanism that can load plugin files located in the "plugins"
 directory.  This README provides some basic information for developers of plugins.
 
@@ -172,6 +173,11 @@ into a "Plugins" group in the command window.
 
 A plugin can be made to override an existing command.  Optionally, a plugin
 can place its command button into any existing button group.
+
+A plugin can also add a section to the extended help facility.  Its button will
+show the hover color that indicates there is an extended help entry.  Right-
+clicking the plugin's button will display its extended help message in
+the system browser.
 
 @others
 
@@ -240,7 +246,16 @@ attribute OWNER_GROUP, and set OVERRIDE to True.  Example:
 OVERRIDE = True
 OWNER_GROUP = 'DATA_PROCESSING_BUTTONS'
 
-</t>
+To add an item to the extended help, a plugin must import HELP_TEXT:
+
+from help_cmds import HELPTEXT
+
+HELPTEXT is a dictionary keyed by the command name.  Add a dictionary entry as
+in this example:
+
+HELPTEXT['lst-sqr-extrap'] = """Extended Help string here.  Any formatting
+supported by RestructuredText can be used here.
+"""</t>
 <t tx="tom.20220830224004.1">HOW TO SPECIFY WHICH PLUGINS TO USE
 -----------------------------------
 By default, GF4 will load all plugins (i.e., python files) in the "plugins"

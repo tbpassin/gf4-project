@@ -10,7 +10,7 @@
 http://effbot.org/tkinterbook/tkinter-dialog-windows.htm
 '''
 
-from __future__ import print_function
+
 
 try:
     import Tkinter as Tk

@@ -4,7 +4,7 @@
 #@+node:tom.20211211181438.13: ** Imports
 """Piecewise Linear and other curve fitting procedures."""
 
-from __future__ import print_function
+
 
 import pwlf
 

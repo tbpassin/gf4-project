@@ -3,7 +3,7 @@
 # pylint: disable = consider-using-f-string
 #@+others
 #@+node:tom.20211211170820.3: ** Imports
-from __future__ import print_function
+
 
 import sys
 import math

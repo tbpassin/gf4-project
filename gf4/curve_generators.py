@@ -5,7 +5,7 @@
 #@@tabwidth -4
 #@+others
 #@+node:tom.20211211170819.31: ** Imports
-from __future__ import print_function
+
 
 import math
 import numpy as np
