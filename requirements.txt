@@ -6,4 +6,5 @@ pillow >= 9.1.0
 pwlf
 pyperclip
 scipy
-tk
+statsmodels
+
