@@ -14,7 +14,7 @@ from scipy.stats import spearmanr
 import numpy as np
 
 from curve_generators import generateGaussianCdf
-#from smoother import correlationCoeff
+# from smoother import correlationCoeff
 
 #@+node:tom.20211211171913.42: ** cdf
 def cdf(ydata):
@@ -71,7 +71,7 @@ def cdf(ydata):
     prob = 0.0
     for val in _y:
         prob += delta
-        sigma = (prob*(1-prob)/N)**0.5
+        sigma = (prob * (1 - prob) / N) ** 0.5
         x.append(val)
         y.append(prob)
         upperbound.append(prob + sigma)
@@ -142,7 +142,7 @@ def histogram(data, nbins=10):
     _y = []
 
     for lower, count in (binned):
-        #lower, count = binned[n]
+        # lower, count = binned[n]
         _x.append(lower)
         _x.append(lower + binwidth)
         _ynorm = 1.0 * count * _norm
@@ -174,9 +174,9 @@ def meanstd(ydata):
     N = len(ydata)
     if N < 3: return None
 
-    mean = 1.0*sum(ydata)/N
-    sumsqr = sum([a**2 for a in ydata])
-    std = math.sqrt((sumsqr - N*mean**2) / (N - 1))
+    mean = 1.0 * sum(ydata) / N
+    sumsqr = sum([a ** 2 for a in ydata])
+    std = math.sqrt((sumsqr - N * mean ** 2) / (N - 1))
 
     # Lag-1 autocorrelation
     shifted = ydata[1:]
@@ -184,7 +184,7 @@ def meanstd(ydata):
 
     # Correct sigma for lag-1 autocorrelation
     try:
-        std_ac = std / (1. - r*r) ** 0.5
+        std_ac = std / (1. - r * r) ** 0.5
     except Exception as e:
         print(e)
         std_ac = float('NaN')
@@ -236,13 +236,13 @@ def calcNormalForCdf(values, mean=0.0, sigma=1.0):
     # Scale values to t = (x - mean)/sigma*sqrt(2)
     mean = float(mean)
     sigma = float(sigma)
-    factor = 1. / (sigma * 2**0.5)
+    factor = 1. / (sigma * 2 ** 0.5)
     scaled_values = [(v - mean) * factor for v in values]
     probs = scipy.special.erf(scaled_values)  # pylint: disable = no-member
 
     # erf() returns results in the range of (-1,1)
     # Rescale results back to the desired probability range (0,1)
-    probs = [0.5 + 0.5*p for p in probs]
+    probs = [0.5 + 0.5 * p for p in probs]
 
     return probs
 
@@ -299,7 +299,7 @@ def fitNormalToCdfAdaptive(values, probs, tolerance=.01):
             data_prob = probs[i]
             err = normalprobs[i] - data_prob
             merr += err
-            Sxx += (err**2) * data_prob
+            Sxx += (err ** 2) * data_prob
         merr = merr / numvals
         var = Sxx / numvals
         return var
@@ -327,7 +327,7 @@ def fitNormalToCdfAdaptive(values, probs, tolerance=.01):
             err = abs(normalprobs[i] - data_prob)
             merr += err
         merr = merr / numvals
-        var = merr**2
+        var = merr ** 2
         return var
     #@-others
 
@@ -339,7 +339,7 @@ def fitNormalToCdfAdaptive(values, probs, tolerance=.01):
     mse = sqr_abs_error(values, probs, ms, sigma)
 
     done = False
-    #count = 1
+    # count = 1
     new_mse = mse
     sane = True
     converged = False
@@ -350,7 +350,7 @@ def fitNormalToCdfAdaptive(values, probs, tolerance=.01):
         last_mse = new_mse
 
         if overshot:
-            delta = - delta / 2
+            delta = -delta / 2
         ms += delta
 
         new_mse = sqrerror(values, probs, ms, sigma)
@@ -359,16 +359,18 @@ def fitNormalToCdfAdaptive(values, probs, tolerance=.01):
 
         delta_in_limits = (abs(delta) > delta_limit)
         sane = delta_in_limits and abs(ms - m) < 5 * sigma
-        error_in_tolerance = (mse**0.5 <= tolerance)
+        error_in_tolerance = (mse ** 0.5 <= tolerance)
         converged = error_in_tolerance or not delta_in_limits
 
-        done = ((abs(delta/sigma) > 2 * tolerance) and (converged and overshot)) \
+        done = (
+            (abs(delta / sigma) > 2 * tolerance,
+        ) and (converged and overshot)) \
                     or not sane
 
     if converged:
         pass  #print 'Final mean: %0.3f' % ms
     else:
-        #print 'Iterations are diverging too much'
+        # print 'Iterations are diverging too much'
         return [], [], m, sigma, 0
 
     # Calculate final normal CDF
@@ -378,7 +380,7 @@ def fitNormalToCdfAdaptive(values, probs, tolerance=.01):
     return values, _probs, ms, sigma, _correl
 
 #@+node:tom.20211211171913.48: ** spearman
-def spearman(x,y):
+def spearman(x, y):
     '''Compute Spearman's rank correlation coefficient for two data sequences.
     Return the coefficient and its 95% confidence limit .
 
@@ -428,14 +430,14 @@ def spearman(x,y):
             val = data[pos]
             n = counts.get(val, 0)
             if n > 0:
-                val = val*(1 + n * delta)
+                val = val * (1 + n * delta)
             n += 1
-            newdata.append((val,pos))
+            newdata.append((val, pos))
         newdata.sort()
 
         ranks = {}
         for i, (_, pos) in enumerate(newdata):
-            #val, pos = newdata[i]
+            # val, pos = newdata[i]
             ranks[pos] = i
 
         return ranks
@@ -444,7 +446,7 @@ def spearman(x,y):
     _y = rank(y)
 
     N = len(x)
-    N2 = N**2
+    N2 = N ** 2
 
     sum_d2 = 0.
     for i in range(len(_x)):
@@ -456,12 +458,12 @@ def spearman(x,y):
     if R == 1.0:
         return R, 0., 0.
 
-    t = R * math.sqrt((N - 2)/(1. - R*R))
-    C = t_test.interval(0.95, N-2)[1]  # t-test 95% confidence interval
+    t = R * math.sqrt((N - 2) / (1. - R * R))
+    C = t_test.interval(0.95, N - 2)[1]  # t-test 95% confidence interval
     return R, t, C
 
 #@+node:tom.20211211171913.49: ** pearson
-def pearson(x,y):
+def pearson(x, y):
     '''Given two sequences of the same length, return the sample Pearson correlation coefficient.
     See
         http://en.wikipedia.org/wiki/Pearson_product-moment_correlation_coefficient
@@ -474,8 +476,8 @@ def pearson(x,y):
     '''
 
     N = len(x)
-    xm = 1.0*sum(x)/N
-    ym = 1.0*sum(y)/N
+    xm = 1.0 * sum(x) / N
+    ym = 1.0 * sum(y) / N
 
     # Deviations x - xm, y - ym
     xdev = [z - xm for z in x]
@@ -489,7 +491,7 @@ def pearson(x,y):
     y2 = sum([a * a for a in ydev])
 
     try:
-        r = xy / (x2*y2)**.5
+        r = xy / (x2 * y2) ** .5
     except Exception as e:
         print(e)
         r = float('NaN')
@@ -524,8 +526,8 @@ if __name__ == '__main__':
     def self_printer(f):
         def new_f():
             print(f.__name__)
-            if f.__doc__: 
-                print (f.__doc__)
+            if f.__doc__:
+                print(f.__doc__)
             print()
             f()
             print()
@@ -534,9 +536,9 @@ if __name__ == '__main__':
     randn = np.random.randn
 
     def testCDF():
-        data = [1,5,2,6,2,3,5]
+        data = [1, 5, 2, 6, 2, 3, 5]
         data = [randn() for n in range(50)]
-        xdata, ydata, _, _ =  cdf(data)
+        xdata, ydata, _, _ = cdf(data)
 
         plt.plot(xdata, ydata, '-')
         plt.plot(xdata, ydata, 'bo')
@@ -545,12 +547,12 @@ if __name__ == '__main__':
 
     def testCDF2Normal():
         data = [randn() for n in range(20)]
-        data = [28,8,-3,7,-1,1,18,12]
-        xdata, ydata, _, _ =  cdf(data)
+        data = [28, 8, -3, 7, -1, 1, 18, 12]
+        xdata, ydata, _, _ = cdf(data)
 
         normvalues = fitNormalToCdf(xdata, ydata, 100)
 
-        x,y, m, s = normvalues
+        x, y, m, s = normvalues
         print('mean:', m)
         print('sigma:', s)
         print()
@@ -560,8 +562,8 @@ if __name__ == '__main__':
         plt.show()
 
     def testCalcNorm():
-        data = [28,8,-3,7,-1,1,18,12]
-        #data = [randn() for n in range(8)]
+        data = [28, 8, -3, 7, -1, 1, 18, 12]
+        # data = [randn() for n in range(8)]
         xdata, ydata, _, _ = cdf(data)
 
         probs = calcNormalForCdf(xdata, 6, 10.44)
@@ -571,7 +573,7 @@ if __name__ == '__main__':
         plt.show()
 
     def testNormCDF():
-        lower = -4 # in sigma
+        lower = -4  # in sigma
         upper = 4
         m = 1
         sigma = 1.0
@@ -587,8 +589,8 @@ if __name__ == '__main__':
         plt.show()
 
     def testFitNormalAdaptive():
-        data = [28,8,-3,7,-1,1,18,12]
-        #data = [randn() for n in range(10000)]
+        data = [28, 8, -3, 7, -1, 1, 18, 12]
+        # data = [randn() for n in range(10000)]
         xdata, ydata, _, _ = cdf(data)
 
         tolerance = 0.001
@@ -612,14 +614,16 @@ if __name__ == '__main__':
         for i in range(size):
             index, counts = randnum.gaussian_vals(0, sample_sdev, sample_size)
             m, s, s_corr = meanstd(counts)
-            vars.append(s**2)
+            vars.append(s ** 2)
 
         index1, varprob, _, _ = cdf(means)
 
-        m,s, s_corr = meanstd(vars)
-        print('sample size={}, sample standard deviation={:.3f}'.format (\
-            sample_size, sample_sdev))
-        print('variances: mean={:.3f}, sdev = {:.3f}'.format (m**.5, s**.5))
+        m, s, s_corr = meanstd(vars)
+        print(
+            'sample size={}, sample standard deviation={:.3f}'.format(\
+            sample_size, sample_sdev),
+        )
+        print('variances: mean={:.3f}, sdev = {:.3f}'.format(m ** .5, s ** .5))
 
         x, sdev, _, _ = cdf(vars)
         plt.plot(x, sdev, '-')
@@ -627,18 +631,18 @@ if __name__ == '__main__':
 
     @self_printer
     def testSpearman():
-        x = (106,86,100,101,99,103,97,113,112,110)
-        y = (7,0,27,50,28,29,20,12,6,17)
+        x = (106, 86, 100, 101, 99, 103, 97, 113, 112, 110)
+        y = (7, 0, 27, 50, 28, 29, 20, 12, 6, 17)
 
-        r, t, C = spearman(x,y)
+        r, t, C = spearman(x, y)
         N = len(x)
-        print('1) r={:.3f}, t: {:.3f} Confidence limit={:.3f}'.format(r, t, C), )
-        rmax = C * math.sqrt((1 - r*r)/(N -2))
+        print('1) r={:.3f}, t: {:.3f} Confidence limit={:.3f}'.format(r, t, C),)
+        rmax = C * math.sqrt((1 - r * r) / (N - 2))
         print('Rmax = {:.3f}'.format(rmax))
 
-        x = (1, 2, 3 ,4, 5)
+        x = (1, 2, 3, 4, 5)
         y = (1.5, 2.2, 5, 4.5, 6)
-        r, t, C = spearman(x,y)
+        r, t, C = spearman(x, y)
         N = len(x)
         print('2) r={:.3f}, t: {:.3f} Confidence limit={:.3f}'.format(r, t, C),)
         rmax = C * math.sqrt((1 - r * r) / (N - 2))
@@ -647,51 +651,53 @@ if __name__ == '__main__':
     @self_printer
     def testCorrelations():
         '''Calculate Pearson and Spearman correlation coefficients'''
-        x = (106,86,100,101,99,103,97,113,112,110)
-        y = (7,0,27,50,28,29,20,12,6,17)
+        x = (106, 86, 100, 101, 99, 103, 97, 113, 112, 110)
+        y = (7, 0, 27, 50, 28, 29, 20, 12, 6, 17)
 
-        r = pearson(x,y)
-        rspear, t, C = spearman(x,y)
-        s = 0.6326/math.sqrt(len(x)-1)
+        r = pearson(x, y)
+        rspear, t, C = spearman(x, y)
+        s = 0.6326 / math.sqrt(len(x) - 1)
 
         print("1) Pearson's r: {:.3f}".format(r))
-        print("1) Spearman's r: {:.3f}, t={:.3f}, C={:.3f}, SE={:.3f}".format(rspear, t, C, s))
+        print(
+            "1) Spearman's r: {:.3f}, t={:.3f}, C={:.3f}, SE={:.3f}".format(rspear, t, C, s))
         print()
 
-        x = (1, 2, 3 ,4, 5)
+        x = (1, 2, 3, 4, 5)
         y = (1.5, 2.2, 5, 4.5, 6)
-        r = pearson(x,y)
-        rspear, t, C = spearman(x,y)
-        s = 0.6326/math.sqrt(len(x)-1)
+        r = pearson(x, y)
+        rspear, t, C = spearman(x, y)
+        s = 0.6326 / math.sqrt(len(x) - 1)
 
         print("2) Pearson's r: {:.3f}".format(r))
-        print("2) Spearman's r: {:.3f}, t={:.3f}, C={:.3f}, SE={:.3f}".format(rspear, t, C, s))
+        print(
+            "2) Spearman's r: {:.3f}, t={:.3f}, C={:.3f}, SE={:.3f}".format(rspear, t, C, s))
 
     @self_printer
     def test_spearmanr():
         """Spearman correlation coefficient using Scipy library routine."""
-        x = (106,86,100,101,99,103,97,113,112,110)
-        y = (7,0,27,50,28,29,20,12,6,17)
+        x = (106, 86, 100, 101, 99, 103, 97, 113, 112, 110)
+        y = (7, 0, 27, 50, 28, 29, 20, 12, 6, 17)
         r, p = spearmanr(x, y)
-        print('1) r={:.3f}, p={:.3f}'.format(r,p))
+        print('1) r={:.3f}, p={:.3f}'.format(r, p))
 
-        x = (1, 2, 3 ,4, 5)
+        x = (1, 2, 3, 4, 5)
         y = (1.5, 2.2, 5, 4.5, 6)
         r, p = spearmanr(x, y)
-        print('2) r={:.3f}, p={:.3f}'.format(r,p))
+        print('2) r={:.3f}, p={:.3f}'.format(r, p))
 
     @self_printer
     def compare_spearman_spearmanr():
         """Compare scipy Spearman correlation with indigenous version."""
-        x = (106,86,100,101,99,103,97,113,112,110)
-        y = (7,0,27,50,28,29,20,12,6,17)
+        x = (106, 86, 100, 101, 99, 103, 97, 113, 112, 110)
+        y = (7, 0, 27, 50, 28, 29, 20, 12, 6, 17)
         rr, p = spearmanr(x, y)
         r, _, _ = spearman(x, y)
         print(f'spearmanr: {rr:0.3f}, spearman: {r:0.3f}')
 
     @self_printer
     def test_meanstd():
-        x = [1,2,3,4,5]
+        x = [1, 2, 3, 4, 5]
         m, s, s_corr = meanstd(x)
         print('Mean\tstd')
         print('{:.3f}\t{:.3f}'.format(m, s))
@@ -702,7 +708,8 @@ if __name__ == '__main__':
             t()
 
     # Tests = (testCalcNorm,)#, testCorrelations, test_spearmanr)#, testSpearman
-    Tests = (compare_spearman_spearmanr, testCorrelations, test_spearmanr, testSpearman)
+    Tests = (
+        compare_spearman_spearmanr, testCorrelations, test_spearmanr, testSpearman)
     runtests(Tests)
 #@-others
 #@-leo
