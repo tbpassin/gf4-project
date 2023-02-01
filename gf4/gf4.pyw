@@ -7,6 +7,7 @@
 import sys
 from pathlib import PurePath
 from copy import deepcopy
+import os.path
 
 import tkinter as Tk
 import tkinter.font as tkFont
@@ -57,6 +58,7 @@ COMMENTS = (';', '#')
 ENCODING = 'utf-8'
 # Special data import keyword
 ENDDATASET = 'ENDDATASET'
+GF4_DIR = os.path.dirname(__file__)
 #@+node:tom.20221211170940.1: ** get_valid_color()
 def get_valid_color(colors, key, default):
     """Given an .ini file key for a color, return the color or a default.

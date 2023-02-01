@@ -74,6 +74,12 @@
 <v t="tom.20221211135236.1"><vh>@clean config/gf4.ini</vh></v>
 </v>
 <v t="tom.20220506082557.1"><vh>Tests</vh>
+<v t="tom.20230129231139.1"><vh>Unit tests</vh>
+<v t="tom.20230129231146.1"><vh>@path unittests</vh>
+<v t="tom.20230201003427.1"><vh>@clean ../../gf4-testing.cmd</vh></v>
+<v t="tom.20230131195511.1"><vh>@file test_paths.py</vh></v>
+</v>
+</v>
 <v t="tom.20211207165011.1"><vh>Smoother and Tests</vh>
 <v t="tom.20211211171913.12"></v>
 <v t="tom.20211206195731.2"><vh>@file test_smooth.py</vh></v>
@@ -258,6 +264,21 @@ start with a "#" or ";" character will be ignored.
 ; Override initial colors using MatPlotLib CSSS4 color names or #xxyyzz hex values.
 ; main-line-color = red
 ; buffer-line-color = gray
+</t>
+<t tx="tom.20230129231139.1">"""
+###### MUST set PYTHONPATH=c:\tom\git\gf4-project\gf4 first ######
+Run pytest from the gf4-project directory -
+
+py -m pytest -k "not test_smooth and not fit_test"
+"""</t>
+<t tx="tom.20230129231146.1"></t>
+<t tx="tom.20230201003427.1">@language batch
+:: Run pytest against gf4
+@echo off
+setlocal
+set PYTHONPATH=c:\tom\git\gf4-project\gf4
+py -m pytest -k "not test_smooth and not fit_test"
+endlocal
 </t>
 </tnodes>
 </leo_file>
