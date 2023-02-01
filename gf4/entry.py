@@ -14,11 +14,11 @@ from __future__ import print_function
 
 try:
     import Tkinter as Tk
-except:
+except ImportError:
     import tkinter as Tk
 try:
     import tkMessageBox
-except:
+except ImportError:
     from tkinter import messagebox as tkMessageBox
 
 from math import pi, e as m_e  # pylint: disable = unused-import
@@ -75,7 +75,7 @@ class Dialog(Tk.Toplevel):
             try:
                 self.geometry("+%d+%d" % (parent.winfo_rootx()+50,
                                           parent.winfo_rooty()+50))
-            except:
+            except Exception:
                 pass
         else:
             self.geometry("350x100")
@@ -83,9 +83,6 @@ class Dialog(Tk.Toplevel):
         self.initial_focus.focus_set()
 
         self.wait_window(self)
-
-    #
-    # construction hooks
     #@+node:tom.20211211171304.6: *3* Dialog.body
     def body(self, master):
         # create dialog body.  return widget that should have

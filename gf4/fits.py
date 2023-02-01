@@ -3,9 +3,6 @@
 #@+others
 #@+node:tom.20211211181438.13: ** Imports
 """Piecewise Linear and other curve fitting procedures."""
-
-from __future__ import print_function
-
 import pwlf
 
 #@+node:tom.20211211181438.14: ** piecewiseLinear (fits.py)
@@ -21,9 +18,9 @@ def piecewiseLinear(x, y, num):
     RETURNS
     a numpy 1-D array of fitted y values
     """
-    
+
     fitter = pwlf.PiecewiseLinFit(x, y, False)
-    
+
     fitter.fit(num)    
     yHat = fitter.predict(x)
 

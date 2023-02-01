@@ -2,7 +2,7 @@
 #@+node:tom.20211211181438.2: * @file fit_test.py
 # pylint: disable = consider-using-f-string
 #@+others
-#@+node:tom.20211211181438.3: ** Organizer: Declarations (fit_test.py)
+#@+node:tom.20211211181438.3: ** Declarations (fit_test.py)
 '''Test a fitted regression against the null hypothesis of no relationship.'''
 
 import sys

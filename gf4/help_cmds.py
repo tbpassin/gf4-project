@@ -7,12 +7,11 @@ be converted by docutils before being displayed.
 
 Each entry is keyed by the command string used to dispatch it.
 """
-# pylint: disable = anomalous-backslash-in-string
 HELPTEXT = {
 #@+others
 #@+node:tom.20221115112809.1: ** Data Processing
 #@+node:tom.20221108025620.1: *3* autocor
-'autocor': '''
+'autocor': r'''
 
 autocor
 =======

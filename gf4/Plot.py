@@ -22,8 +22,6 @@ def plot(self, stackposition=MAIN, clearFirst=True):
     RETURNS
     nothing
     """
-    # pylint: disable = too-many-locals
-    # pylint: disable = too-many-branches
     _dat = self.stack[stackposition]
 
     if stackposition < STACKDEPTH:
@@ -50,14 +48,14 @@ def plot(self, stackposition=MAIN, clearFirst=True):
     #@-<< get axes >>
     #@+<< bail if no data >>
     #@+node:tom.20220115175032.1: *3* << bail if no data >>
-        if _dat is None or \
-                (_xdata is None or len(_xdata) == 0) or \
-                (_ydata is None or len(_ydata) == 0):
-            if clearFirst:
-                ax.clear()
-                self.fix_ticks()
-                self.canvas.show()
-            return
+    if _dat is None or \
+            (_xdata is None or len(_xdata) == 0) or \
+            (_ydata is None or len(_ydata) == 0):
+        if clearFirst:
+            ax.clear()
+            self.fix_ticks()
+            self.canvas.show()
+        return
 
     #@-<< bail if no data >>
     #@+<< setup labels >>
