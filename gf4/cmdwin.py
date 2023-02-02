@@ -413,8 +413,9 @@ def create_buttons_pack(host, plotmgr):
     create_button_group(but_frame_plot, 'Axes', AXES_BUTTONS, 'fill')
     create_button_group(but_frame_plot, 'Load/Save', LOAD_BUTTONS, 'fill')
 
+    but_frame_stack = create_button_group(cmd_frame, 'Stack', STACK_BUTTONS)
+    create_button_group(but_frame_stack, 'Plugins', PLUGIN_BUTTONS)
 
-    create_button_group(cmd_frame, 'Stack', STACK_BUTTONS)
     but_frame_curve = create_button_group(cmd_frame, 'Curve', CURVE_BUTTONS)
     create_button_group(cmd_frame, 'Math', MATH_BUTTONS)
 
@@ -426,7 +427,8 @@ def create_buttons_pack(host, plotmgr):
     create_button_group(but_frame_fit, 'Smooth', SMOOTHER_FIT_BUTTONS, 'fill')
     create_button_group(but_frame_fit, 'Statistics', STATS_BUTTONS, 'fill')
 
-    create_button_group(but_frame_curve, 'Plugins', PLUGIN_BUTTONS, 'fill')
+    # create_button_group(but_frame_curve, 'Plugins', PLUGIN_BUTTONS, 'fill')           
+
 #@+node:tom.20211211170819.21: ** cmdwindow
 def cmdwindow(plotmgr=None):
     _geom = ''
