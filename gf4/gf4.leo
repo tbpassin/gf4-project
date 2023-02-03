@@ -20,7 +20,7 @@
 <v t="tom.20211211170819.23"><vh>@file colors.py</vh></v>
 <v t="tom.20211211170819.26"><vh>@file createMenus.py</vh></v>
 <v t="tom.20211211170819.9"><vh>@file cmdwin.py</vh></v>
-<v t="tom.20211211170820.45"><vh>@file editDialog.py</vh></v>
+<v t="tom.20230203001637.1"><vh>@file editDialog.py</vh></v>
 <v t="tom.20211211170819.30"><vh>@file curve_generators.py</vh></v>
 <v t="tom.20211211170820.2"><vh>@file Dataset.py</vh></v>
 <v t="tom.20211211171304.2"><vh>@file entry.py</vh></v>
