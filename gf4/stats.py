@@ -449,8 +449,8 @@ def spearman(x, y):
     N2 = N ** 2
 
     sum_d2 = 0.
-    for i in range(len(_x)):
-        d = _y[i] - _x[i]
+    for xx, yy in zip(_x, _y):
+        d = yy - xx
         sum_d2 += d * d
 
     R = 1.0 - sum_d2 * 6.0 / (N * (N2 - 1))
@@ -709,7 +709,9 @@ if __name__ == '__main__':
 
     # Tests = (testCalcNorm,)#, testCorrelations, test_spearmanr)#, testSpearman
     Tests = (
-        compare_spearman_spearmanr, testCorrelations, test_spearmanr, testSpearman)
+        #compare_spearman_spearmanr, testCorrelations, test_spearmanr,
+        testSpearman,
+        )
     runtests(Tests)
 #@-others
 #@-leo

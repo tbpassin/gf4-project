@@ -17,7 +17,7 @@ ENCODING = 'utf-8'
 parmsaver = {}
 #@+node:tom.20211211170820.4: ** class Dataset
 class Dataset:
-    '''Class to represent a 2D curve.
+    """Class to represent a 2D curve.
 
     ATTRIBUTES
     xdata, ydata -- sequences holding the x or y data sets.  
@@ -35,7 +35,7 @@ class Dataset:
     ymax -- maximum value for Y axis
     parms -- dictionary of parameters,  Meant to store the current values
              so they can be written to a file.
-    '''
+    """
     # pylint: disable = too-many-public-methods
     #@+others
     #@+node:tom.20211211170820.6: *3* Dataset.__init__
@@ -324,6 +324,7 @@ class Dataset:
 
             if error_count > 0:
                 self.figurelabel = f'Skipped {error_count} rows because of data errors'
+                retval = f'{error_count} errors'
         else:
             retval = 'Dataset: No data'
         return retval
@@ -1207,7 +1208,7 @@ class Dataset:
         self.ydata = [y - mean for y in self.ydata]
         return True
     #@-others
-#@+node:tom.20211211170820.43: ** Organizer: if __name__ == '__main__': (Dataset.py)
+#@+node:tom.20211211170820.43: ** if __name__ == '__main__': (Dataset.py)
 if __name__ == '__main__':
     import random 
     import matplotlib.pyplot as plt

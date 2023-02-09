@@ -5,7 +5,7 @@
 #@+node:tom.20211211170819.27: ** Imports
 try:
     import Tkinter as Tk
-except:
+except ImportError:
     import tkinter as Tk
 
 from Linestyle import (LINETHIN, LINEMED, LINETHICK, CIRCLE, DIAMOND,

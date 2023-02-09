@@ -9,7 +9,7 @@ When closed, returns the text of the editing pane or an empty string.
 #import Tkinter as Tk
 try:
     import Tkinter as Tk
-except:
+except ImportError:
     import tkinter as Tk
 
 unittesting = False

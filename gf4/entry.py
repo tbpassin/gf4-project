@@ -24,6 +24,7 @@ except ImportError:
 from math import pi, e as m_e  # pylint: disable = unused-import
 import functools
 
+unittesting = False
 #@+node:tom.20221005234429.1: ** val_error decorator
 def val_error (except_type, msg1, msg2):
     def wrapper(f):
@@ -80,9 +81,9 @@ class Dialog(Tk.Toplevel):
         else:
             self.geometry("350x100")
 
-        self.initial_focus.focus_set()
-
-        self.wait_window(self)
+        if not unittesting:
+            self.initial_focus.focus_set()
+            self.wait_window(self)
     #@+node:tom.20211211171304.6: *3* Dialog.body
     def body(self, master):
         # create dialog body.  return widget that should have
@@ -115,11 +116,12 @@ class Dialog(Tk.Toplevel):
             self.initial_focus.focus_set() # put focus back
             return
 
-        self.fade()
-        self.withdraw()
-        self.update_idletasks()
-        self.apply()
-        self.cancel()
+        if not unittesting:
+            self.fade()
+            self.withdraw()
+            self.update_idletasks()
+            self.apply()
+            self.cancel()
 
 
     #@+node:tom.20211211171304.9: *3* Dialog.cancel
@@ -318,10 +320,7 @@ class GetTwoInts(TwoLineInput):
     #@-others
 #@+node:tom.20211211171304.33: ** class GetTwoNumbers(TwoLineInput)
 class GetTwoNumbers(TwoLineInput):
-    '''Get two numbers from user.  Try to make the first an integer.
-    If fail, try to make it a float.  If first is an integer,
-    try to make the second an integer.  Otherwise, make second
-    a float, too.
+    '''Get two numbers from user.  If either is a float, make both floats.
     '''
     #@+others
     #@+node:tom.20211211171304.34: *3* GetTwoNumbers(TwoLineInput).__init__
@@ -351,23 +350,6 @@ class GetTwoNumbers(TwoLineInput):
 
         return self.e1 # initial focus
 
-    #@+node:tom.20211211171304.36: *3* GetTwoNumbers(TwoLineInput).validate
-    @val_error(Exception, 'Error ...', "Try again")
-    @val_error(ValueError, "Bad input","Illegal value, try again")
-    @val_error(SyntaxError, "Syntax Error", "Fix syntax")
-    def validate(self):
-        self.result = None
-        first = eval(self.e1.get())  # pylint: disable = eval-used
-        if not isinstance(first, int):
-            first= float(first)
-        second = eval(self.e2.get())  # pylint: disable = eval-used
-        if type(second) != type(first):  # pylint: disable = unidiomatic-typecheck
-            self.isint = False
-            first = float(first)
-            second = float(second)
-
-        self.result = first, second
-        return True
     #@-others
 #@+node:tom.20211211171304.37: ** class TextFade(Tk.Text)
 class TextFade(Tk.Text):
@@ -467,6 +449,24 @@ class TextFade(Tk.Text):
 
         self.config(state=Tk.DISABLED)
     #@-others
+#@+node:tom.20211211171304.36: ** GetTwoNumbers(TwoLineInput).validate
+@val_error(Exception, 'Error ...', "Try again")
+@val_error(ValueError, "Bad input","Illegal value, try again")
+@val_error(SyntaxError, "Syntax Error", "Fix syntax")
+def validate(self):
+    # pylint: disable = eval-used
+    self.result = None
+    first = eval(self.e1.get())
+    self.isint = True
+    if not isinstance(first, int):
+        first= float(first)
+        self.isint = False
+    second = eval(self.e2.get())
+    if type(second) != type(first):  # pylint: disable = unidiomatic-typecheck
+        if isinstance(second, float) and not isinstance(first, float):
+            first = float(first)
+    self.result = first, second
+    return True
 #@+node:tom.20211211171304.42: ** if __name__ == '__main__'
 if __name__ == '__main__':
 

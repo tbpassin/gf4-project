@@ -78,6 +78,8 @@
 <v t="tom.20230129231146.1"><vh>@path unittests</vh>
 <v t="tom.20230201003427.1"><vh>@clean ../../gf4-testing.cmd</vh></v>
 <v t="tom.20230131195511.1"><vh>@file test_paths.py</vh></v>
+<v t="tom.20230203111004.1"><vh>@file test_dialogs.py</vh></v>
+<v t="tom.20230203183434.1"><vh>@file test_dataset.py</vh></v>
 </v>
 </v>
 <v t="tom.20211207165011.1"><vh>Smoother and Tests</vh>
