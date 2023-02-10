@@ -2504,6 +2504,7 @@ class PlotManager(AbstractPlotManager):
                         ''')
 
     #@+node:tom.20221110160822.1: *4* take_snapshot
+    @REQUIRE_MAIN
     def take_snapshot(self):
         fig = self.figure
         bitmap = fig.canvas.copy_from_bbox(fig.bbox)
@@ -2513,6 +2514,11 @@ class PlotManager(AbstractPlotManager):
         plotmgr.fadeit()
     #@+node:tom.20221110160842.1: *4* restore_snapshot
     def restore_snapshot(self):
+        if not self.snapshot:
+            self.announce('No saved snapshot to restore')
+            self.flashit()
+            return
+
         bitmap, stack = self.snapshot
         fig = self.figure
         canvas = fig.canvas

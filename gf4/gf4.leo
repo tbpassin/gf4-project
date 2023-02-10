@@ -59,8 +59,6 @@
 <v t="tom.20220904105233.1"><vh>@file find_peak.py</vh></v>
 <v t="tom.20220905122752.1"><vh>@file find_peak1.py</vh></v>
 <v t="tom.20220909175119.1"><vh>@file readout.py</vh></v>
-<v t="tom.20221104193114.1"><vh>@file take_snapshot.py</vh></v>
-<v t="tom.20221104194114.1"><vh>@file restore_snapshot.py</vh></v>
 <v t="tom.20221105131948.1"><vh>@file undo-save.py</vh></v>
 <v t="tom.20221105143807.1"><vh>@file undo.py</vh></v>
 <v t="tom.20221112235319.1"><vh>@file norm_cdf.py</vh></v>
