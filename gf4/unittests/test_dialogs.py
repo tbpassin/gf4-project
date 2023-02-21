@@ -19,7 +19,7 @@ def test_GetSingleInt():
     """GetSingleInt dialog should return an integer cast of the entry value."""
     SET = 25.5
     EXPECTED = 25
-    dia = entry.GetSingleInt(None, title = '', label = 'Integer', initval = INIT)
+    dia = entry.GetSingleInt(None, title='', label='Integer', initval=INIT)
     dia.e1.delete(0, END)
     dia.e1.insert(0, SET)
     dia.ok()
@@ -31,7 +31,7 @@ def test_GetSingleFloat():
     """GetSingleFloat dialog should return an float cast of the entry value."""
     SET = 25
     EXPECTED = SET
-    dia = entry.GetSingleFloat(None, title = '', label = 'Float', initval = INIT)
+    dia = entry.GetSingleFloat(None, title='', label='Float', initval=INIT)
     dia.e1.delete(0, END)
     dia.e1.insert(0, SET)
     dia.ok()
@@ -43,8 +43,8 @@ def test_GetTwoInts():
     """GetTwoIntw dialog should return integer casts of the entry values."""
     SET = 25.5
     EXPECTED1 = EXPECTED2 = 25
-    dia = entry.GetTwoInts(None, title = '', label1 = 'Integer',
-                label2 = 'Integer', initval1=INIT, initval2 = INIT)
+    dia = entry.GetTwoInts(None, title='', label1='Integer',
+                label2='Integer', initval1=INIT, initval2=INIT)
     dia.e1.delete(0, END)
     dia.e1.insert(0, SET)
     dia.e2.delete(0, END)
@@ -60,8 +60,8 @@ def test_GetTwoFloats():
     """GetSingleFloats dialog should return float casts of the entry value."""
     SET = 25
     EXPECTED1 = EXPECTED2 = SET
-    dia = entry.GetTwoFloats(None, title = '', label1 = 'Integer',
-                label2 = 'Integer', initval1=INIT, initval2 = INIT)
+    dia = entry.GetTwoFloats(None, title='', label1='Integer',
+                label2='Integer', initval1=INIT, initval2=INIT)
     dia.e1.delete(0, END)
     dia.e1.insert(0, SET)
     dia.e2.delete(0, END)
@@ -77,8 +77,8 @@ def test_GetTwoNumbers():
     """GetTwoNumbers dialog should return both integers if possible, else both floats."""
     SET1, SET2 = 25, 30.3
     EXPECTED1, EXPECTED2 = float(SET1), SET2
-    dia = entry.GetTwoFloats(None, title = '', label1 = 'Integer',
-                label2 = 'Integer', initval1=INIT, initval2 = INIT)
+    dia = entry.GetTwoFloats(None, title='', label1='Integer',
+                label2='Integer', initval1=INIT, initval2=INIT)
     dia.e1.delete(0, END)
     dia.e1.insert(0, SET1)
     dia.e2.delete(0, END)
