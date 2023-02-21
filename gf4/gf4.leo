@@ -58,6 +58,7 @@
 <v t="tom.20221101105447.1"><vh>@file autocorrel1.py</vh></v>
 <v t="tom.20220904105233.1"><vh>@file find_peak.py</vh></v>
 <v t="tom.20220905122752.1"><vh>@file find_peak1.py</vh></v>
+<v t="tom.20230104000405.1"><vh>@file lst_sqr_extrap.py</vh></v>
 <v t="tom.20220909175119.1"><vh>@file readout.py</vh></v>
 <v t="tom.20221105131948.1"><vh>@file undo-save.py</vh></v>
 <v t="tom.20221105143807.1"><vh>@file undo.py</vh></v>
@@ -274,9 +275,12 @@ py -m pytest -k "not test_smooth and not fit_test"
 <t tx="tom.20230129231146.1"></t>
 <t tx="tom.20230201003427.1">@language batch
 :: Run pytest against gf4
+:: This command file must be located in the parent directory of \gf4
 @echo off
 setlocal
-set PYTHONPATH=c:\tom\git\gf4-project\gf4
+set GF4DIR=%~dp0
+set PYTHONPATH=%GF4DIR%\gf4
+cd %PYTHONPATH%
 py -m pytest -k "not test_smooth and not fit_test"
 endlocal
 </t>
