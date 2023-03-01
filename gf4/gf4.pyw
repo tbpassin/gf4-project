@@ -977,9 +977,15 @@ class PlotManager(AbstractPlotManager):
                             'Increment', _start, _delta)
         if dia.result is None: return
 
-        new_start, new_delta = dia.result
-        _ds.xdata = [new_start + 1.0 * n * new_delta for n in
-                     range(0, len(_ds.xdata))]
+        new_start_, new_delta_ = dia.result
+
+        new_start, new_delta = float(new_start_), float(new_delta_)
+        new_x = [0] * len(_xdata)
+        x_ = new_start
+        for i in range(len(_xdata)):
+            x_ += new_delta
+            new_x[i] = x_
+        _ds.xdata = new_x
 
         if _ds.errorBands:
             for eb in _ds.errorBands:

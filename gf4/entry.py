@@ -350,6 +350,34 @@ class GetTwoNumbers(TwoLineInput):
 
         return self.e1 # initial focus
 
+    def validate(self):
+        """For each entry, if the string can be an int[float], make it an int[float]."""
+        first_ = self.e1.get()
+        second_ = self.e2.get()
+        try:
+            first = int(first_)
+        except ValueError:
+            try:
+                first = float(first_)
+            except ValueError:
+                tkMessageBox.showwarning(
+                    "Input Not A Number",
+                    f'Illegal value: "{first_}", please try again'
+                )
+                return False
+        try:
+            second = int(second_)
+        except ValueError:
+            try:
+                second = float(second_)
+            except ValueError:
+                tkMessageBox.showwarning(
+                    "Input Not A Number",
+                    f'Illegal value: "{second_}", please try again'
+                )
+                return False
+        self.result = first, second
+        return True
     #@-others
 #@+node:tom.20211211171304.37: ** class TextFade(Tk.Text)
 class TextFade(Tk.Text):
