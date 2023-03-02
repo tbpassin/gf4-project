@@ -350,32 +350,22 @@ class GetTwoNumbers(TwoLineInput):
 
         return self.e1 # initial focus
 
+    #@+node:tom.20211211171304.36: *3* GetTwoNumbers(TwoLineInput).validate
+    @val_error(Exception, 'Error ...', "Try again")
+    @val_error(ValueError, "Bad input","Illegal value, try again")
+    @val_error(SyntaxError, "Syntax Error", "Fix syntax")
     def validate(self):
-        """For each entry, if the string can be an int[float], make it an int[float]."""
-        first_ = self.e1.get()
-        second_ = self.e2.get()
-        try:
-            first = int(first_)
-        except ValueError:
-            try:
-                first = float(first_)
-            except ValueError:
-                tkMessageBox.showwarning(
-                    "Input Not A Number",
-                    f'Illegal value: "{first_}", please try again'
-                )
-                return False
-        try:
-            second = int(second_)
-        except ValueError:
-            try:
-                second = float(second_)
-            except ValueError:
-                tkMessageBox.showwarning(
-                    "Input Not A Number",
-                    f'Illegal value: "{second_}", please try again'
-                )
-                return False
+        # pylint: disable = eval-used
+        self.result = None
+        first = eval(self.e1.get())
+        self.isint = True
+        if not isinstance(first, int):
+            first= float(first)
+            self.isint = False
+        second = eval(self.e2.get())
+        if type(second) != type(first):  # pylint: disable = unidiomatic-typecheck
+            if isinstance(second, float) and not isinstance(first, float):
+                first = float(first)
         self.result = first, second
         return True
     #@-others
@@ -477,24 +467,6 @@ class TextFade(Tk.Text):
 
         self.config(state=Tk.DISABLED)
     #@-others
-#@+node:tom.20211211171304.36: ** GetTwoNumbers(TwoLineInput).validate
-@val_error(Exception, 'Error ...', "Try again")
-@val_error(ValueError, "Bad input","Illegal value, try again")
-@val_error(SyntaxError, "Syntax Error", "Fix syntax")
-def validate(self):
-    # pylint: disable = eval-used
-    self.result = None
-    first = eval(self.e1.get())
-    self.isint = True
-    if not isinstance(first, int):
-        first= float(first)
-        self.isint = False
-    second = eval(self.e2.get())
-    if type(second) != type(first):  # pylint: disable = unidiomatic-typecheck
-        if isinstance(second, float) and not isinstance(first, float):
-            first = float(first)
-    self.result = first, second
-    return True
 #@+node:tom.20211211171304.42: ** if __name__ == '__main__'
 if __name__ == '__main__':
 
