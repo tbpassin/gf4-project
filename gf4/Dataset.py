@@ -256,6 +256,14 @@ class Dataset:
             if not line.strip(): continue
 
             if line[0] in (';', '#'): continue
+
+            # Handle trailing comments
+            for ch in COMMENTS:
+                pos = line.find(ch)
+                if pos > 0:
+                    line = line[:pos]
+                    break
+
             fields = line.split()
 
             # First Numeric line
