@@ -1,3 +1,14 @@
+### Devel branch 1.5b3  3-2-2023
+- Data input: Allow trailing in-line comments
+
+### Devel branch 1.5b1 2-20-2023
+- Add statsmodels to requirements
+
+### Version 1.4 branch 12-29-2022
+- Allow extension names in the use_plugins file to have or omit a 'py' extension.
+
+- Added a few unit tests.
+
 
 ### Devel branch 1.4b3  12-12-2022
 - Added a Help button (marked with a "?") that explains that a different hover
