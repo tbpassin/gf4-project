@@ -338,16 +338,6 @@ def create_buttons_pack(host, plotmgr):
     phantom = Tk.Button(text='phantom')
     _font =  tkFont.nametofont(phantom['font'])
     sz = _font['size']
-    if platform.startswith('win'):
-        ascender = 10.6
-    else:
-        if 'Open Sans' in available_fonts or 'Noto Sans' \
-            in available_fonts:
-            ascender = 11
-        elif 'DejaVu Sans' in available_fonts:
-            ascender = 9
-        else:
-            ascender = 9.6
 
     # Find a preferred font, if installed
     ffamily = ''
@@ -357,7 +347,17 @@ def create_buttons_pack(host, plotmgr):
             break
 
     if ffamily:
-        # Create Tk font for this family
+        if platform.startswith('win'):
+            ascender = 10.6
+        else:
+            if ffamily in ('Open Sans', 'Noto Sans'):
+                ascender = 11
+            elif ffamily == 'DejaVu Sans':
+                ascender = 9
+            else:
+                ascender = 9.6
+
+        # Create a Tk font for this family
         NEWFONT = tkFont.Font(
                             family = ffamily, name = 'cmdButtonFont',
                             size = int(sz), weight = 'bold')
