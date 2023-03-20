@@ -136,7 +136,7 @@ The main program is called "gf4.pyw".</t>
 
 https://stackoverflow.com/questions/44835909/cannot-import-name-imagetk-python-3-5
 
-On Debian, this fixed this problem::
+On Debian/XUbuntu, this fixed this problem::
 
     sudo apt-get install python3-pil.imagetk
 
@@ -145,6 +145,7 @@ has replaced the imaging library *PIL*)::
 
     python3-pillow
     python3-pillow-tk
+
 </t>
 <t tx="tom.20220816180207.1">On Debian/Ubuntu, tkinter has to be installed by the package manager::
 
