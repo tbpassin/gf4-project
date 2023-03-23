@@ -95,6 +95,7 @@ def buildCommands(self):
        'int': self.integrate,
        'addcnst': self.add_constant,
        'scale': self.scale,
+       'invert': self.invert,
        'log': self.log10,
        'ln': self.log,
        'sqr': self.square,

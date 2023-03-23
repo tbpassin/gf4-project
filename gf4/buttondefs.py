@@ -89,6 +89,7 @@ MATH_BUTTONS = (
     ('Integrate', 'int', 'Integrate X'),
     SPACER, SPACER,
     ('Add Const', 'addcnst', 'Add Constant To Each Value'),
+    ('Invert', 'invert', 'Invert Y values'),
     ('Scale', 'scale', 'Scale: Multipy Each Value by a Constant'),
     ('Log 10', 'log', 'Replace values with their Logs Base 10'),
     ('Ln', 'ln',  'Replace values with their Natural Logs'),

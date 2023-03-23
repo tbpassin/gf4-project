@@ -1246,6 +1246,19 @@ class PlotManager(AbstractPlotManager):
         self.stack[MAIN].figurelabel = lab
 
         self.plot()
+    #@+node:tom.20230323110112.1: *4* invert
+    @CLEAR_ERROR_BANDS
+    @REQUIRE_MAIN
+    def invert(self):
+        success = self.stack[MAIN].invert()
+        if not success:
+            self.announce("Data contains 0 - can't invert")
+            self.flashit()
+            return
+        lab = self.stack[MAIN].figurelabel
+        if lab:
+            self.stack[MAIN].figurelabel = 'Inversion of %s' % (lab)
+        self.plot()
     #@+node:tom.20211207165051.88: *4* log
     @CLEAR_ERROR_BANDS
     @REQUIRE_MAIN

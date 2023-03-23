@@ -604,6 +604,24 @@ class Dataset:
         self.ydata = [math.log(y) for y in self.ydata]
         return True
 
+    #@+node:tom.20230323011457.1: *3* Dataset.invert
+    def invert(self):
+        """Invert Y values of dataset.
+        
+        If any points are = 0, change nothing.
+
+        RETURNS
+        False if any y values are = 0.0 or 0, True otherwise
+
+        """
+        for y in self.ydata:
+            if y == 0.0 or y == 0:
+                return False
+
+        self.ydata = [1./y for y in self.ydata]
+        return True
+
+
     #@+node:tom.20211211170820.27: *3* Dataset.log10
     def log10(self):
         '''Take the logarithm base 10 of the y values of the data sequence.
