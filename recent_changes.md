@@ -1,4 +1,7 @@
 
+### Devel Branch 2.5b5  4-23-3023
+- Fix "no data" bug when the last non-comment line is a ENDDATASET special comment.
+
 ### Devel Branch 1.5b4 3-23-2023
 - Add command button to invert a dataset.
 

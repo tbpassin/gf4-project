@@ -189,6 +189,7 @@ class Dataset:
             # Comment out all lines before first data line
             for i, line in enumerate(lines[:data_start_line]):
                 lines[i] = '#' + line
+
         #@-<< detect_csv >>
 
         for line in lines:
@@ -255,7 +256,7 @@ class Dataset:
             line = line.strip()
             if not line.strip(): continue
 
-            if line[0] in (';', '#'): continue
+            if line[0] in COMMENTS: continue
 
             # Handle trailing comments
             for ch in COMMENTS:
@@ -316,7 +317,6 @@ class Dataset:
                 sys.stderr.write(f'Skipping row {_rowcount}: {e}\n')
                 _x = _x[:retained_length]
                 _y = _y[:retained_length]
-
             #@-<< get numeric data >>
             #@-<< process line >>
 

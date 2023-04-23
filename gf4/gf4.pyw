@@ -800,7 +800,6 @@ class PlotManager(AbstractPlotManager):
             block = blocks[n]
             if not block.split():
                 continue
-
             lines = block.split('\n')
             _data = Dataset(None, None, PurePath(fname).name)
             _data.orig_filename = fname
@@ -852,6 +851,15 @@ class PlotManager(AbstractPlotManager):
         for n in range(min(len(blocks), STACKDEPTH)):
             block = blocks[n]
             lines = block.split('\n')
+            non_comment_lines = 0
+            for line in lines:
+                line = line.strip()
+                if not line:
+                    continue
+                if line[0] not in COMMENTS:
+                    non_comment_lines += 1
+            if not non_comment_lines:
+                continue
             _data = Dataset()
             _data.orig_filename = fname
             err = _data.setAsciiData(lines)
