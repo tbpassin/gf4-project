@@ -789,6 +789,14 @@ class PlotManager(AbstractPlotManager):
         self.current_path = fname
 
         blocks = data.split(ENDDATASET)
+        # There may be no data lines after the last ENDDATASET.
+        # If so, we don't want to try to use that last block
+        last = blocks[-1]
+        last_lines = last.splitlines()
+        last_datalines = [line for line in last_lines if line.strip() and 
+                            line.lstrip()[0] not in COMMENTS]
+        if not last_datalines:
+            blocks = blocks[:-1]
         numblocks = len(blocks)
         if numblocks < 1:
             self.announce('No data found')
@@ -841,6 +849,15 @@ class PlotManager(AbstractPlotManager):
         self.initpath = PurePath(fname).parent
 
         blocks = data.split(ENDDATASET)
+        # There may be no data lines after the last ENDDATASET.
+        # If so, we don't want to try to use that last block
+        last = blocks[-1]
+        last_lines = last.splitlines()
+        last_datalines = [line for line in last_lines if line.strip() and 
+                            line.lstrip()[0] not in COMMENTS]
+        if not last_datalines:
+            blocks = blocks[:-1]
+
         numblocks = len(blocks)
         if numblocks < 1:
             self.announce('No data found')
@@ -929,6 +946,15 @@ class PlotManager(AbstractPlotManager):
         if not data.strip(): return
 
         blocks = data.split(ENDDATASET)
+        # There may be no data lines after the last ENDDATASET.
+        # If so, we don't want to try to use that last block
+        last = blocks[-1]
+        last_lines = last.splitlines()
+        last_datalines = [line for line in last_lines if line.strip() and 
+                            line.lstrip()[0] not in COMMENTS]
+        if not last_datalines:
+            blocks = blocks[:-1]
+
         numblocks = len(blocks)
         if numblocks < 1:
             self.announce('No data found')
