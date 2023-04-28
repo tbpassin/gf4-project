@@ -1,6 +1,7 @@
 
-### Devel Branch 2.5b5  4-23-3023
+### Devel Branch 1.5b5  4-23-2023, 4-28-2023
 - Fix "no data" bug when the last non-comment line is a ENDDATASET special comment.
+- Ignore trailing comments while checking whether data is csv.
 
 ### Devel Branch 1.5b4 3-23-2023
 - Add command button to invert a dataset.
