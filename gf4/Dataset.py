@@ -165,6 +165,12 @@ class Dataset:
             line = line.lstrip()
             if line[0] in COMMENTS:
                 continue
+            # Eliminate trailing comments so we don't get fooled by commas in them
+            for ch in COMMENTS:
+                pos = line.find(ch)
+                if pos > -1:
+                    line = line[:pos]
+                    break
             if "," in line and not is_csv:
                 is_csv = True
             # Assume we are comma-separated, look for first data line
@@ -191,6 +197,7 @@ class Dataset:
                 lines[i] = '#' + line
 
         #@-<< detect_csv >>
+        print('\n'.join(lines))
 
         for line in lines:
             #@+<< process line >>

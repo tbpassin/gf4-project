@@ -811,6 +811,7 @@ class PlotManager(AbstractPlotManager):
             lines = block.split('\n')
             _data = Dataset(None, None, PurePath(fname).name)
             _data.orig_filename = fname
+
             err = _data.setAsciiData(lines, root = self.root)
             if err:
                 self.announce(f'No data in block {n}')
