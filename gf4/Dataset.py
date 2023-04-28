@@ -197,7 +197,6 @@ class Dataset:
                 lines[i] = '#' + line
 
         #@-<< detect_csv >>
-        print('\n'.join(lines))
 
         for line in lines:
             #@+<< process line >>
