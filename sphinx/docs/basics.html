@@ -1,0 +1,425 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>Data Format &#8212; GF4  documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/pyramid.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/sphinx_highlight.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Generating And Operating on Waveforms" href="waveforms.html" />
+    <link rel="prev" title="GF4’s Design Philosophy" href="philosophy.html" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Neuton&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nobile:regular,italic,bold,bolditalic&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
+<!--[if lte IE 6]>
+<link rel="stylesheet" href="_static/ie6.css" type="text/css" media="screen" charset="utf-8" />
+<![endif]-->
+
+  </head><body>
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="waveforms.html" title="Generating And Operating on Waveforms"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="philosophy.html" title="GF4’s Design Philosophy"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="GF4_Users_Guide.html">GF4  documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Data Format</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="data-format">
+<h1>Data Format<a class="headerlink" href="#data-format" title="Permalink to this heading">¶</a></h1>
+<p>GF4 accepts text files with whitespace-separated columns, one data point per
+row. It also accepts comma-separated columns (CSV files); these are converted
+internally to TAB-separated columns.  If the input file is a CSV file, GF4
+tries to identify the column headers by looking at the row just before the first
+data row.</p>
+<p>If there is only one column, GF4 inserts an imputed first column with
+values being consecutive integers beginning with 1. The “first” column becomes
+the “x”, or horizontal, axis. If there are more than two columns, a dialog is
+displayed so the user can choose the two desired columns. The number of columns
+is derived based on the first non-comment, non-blank line whose first field is a
+legal floating point number.</p>
+<p>Data fields must be numeric.  GF4 cannot make use of non-numeric data.  Data
+fields are converted to floating point numbers.  Date fields are not understood nor displayed.  Date columns should be converted to serial numbers, such as months or years, beginning with the beginning epoch.  The conversion should be done outside of GF4.  Alternatively, a leading data column could be deleted.  Once GF4 has loaded the data, its horizontal axis can be changed to reflect the starting point and increment by  using the <em>NewX</em> command button.</p>
+<p>Here is an example data file:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># A comment line</span>
+<span class="p">;</span> <span class="n">Another</span> <span class="n">comment</span> <span class="n">line</span><span class="o">.</span>  <span class="n">Also</span><span class="p">,</span> <span class="n">blank</span> <span class="n">lines</span> <span class="n">are</span> <span class="n">ignored</span><span class="o">.</span>
+<span class="c1"># x  y</span>
+<span class="mi">1</span>  <span class="mi">1</span>
+<span class="mi">2</span>  <span class="mi">4</span>
+<span class="mi">3</span>  <span class="mi">9</span>
+<span class="c1"># etc</span>
+</pre></div>
+</div>
+<p>Data points do not need to be equally spaced on the x axis.</p>
+<p>There are specially formatted (optional) comments to specify a title, axis labels, and a break between data sets:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">;;</span> <span class="n">FIGURELABEL</span><span class="p">:</span> <span class="n">The</span> <span class="n">Title</span>
+<span class="p">;;</span> <span class="n">XLABEL</span><span class="p">:</span> <span class="n">The</span> <span class="n">x</span> <span class="n">axis</span> <span class="n">label</span>
+<span class="p">;;</span> <span class="n">YLABEL</span><span class="p">:</span> <span class="n">the</span> <span class="n">y</span> <span class="n">axis</span> <span class="n">label</span>
+<span class="mi">1</span>    <span class="mf">3.0</span>
+<span class="mi">2</span>    <span class="mf">4.0</span>
+<span class="mi">3</span>    <span class="mf">6.0</span>
+<span class="mi">4</span>    <span class="mf">7.0</span>
+<span class="p">;;</span> <span class="n">ENDDATASET</span>
+</pre></div>
+</div>
+<p>The special comment key words are case sensitive.  If there is more than one dataset, the second one goes into the <strong>Y</strong> position in the stack, and so on up to the stack depth.  Beyond that additional data sets are ignored.</p>
+<section id="invalid-or-missing-data">
+<h2>Invalid or Missing Data<a class="headerlink" href="#invalid-or-missing-data" title="Permalink to this heading">¶</a></h2>
+<p>GF4 has no provision for handling invalid or missing data, except that a line
+in the data file that fails the attempt to convert its fields into floating
+point numbers will be ignored.</p>
+</section>
+<section id="editing-and-censoring-of-data-points">
+<h2>Editing and Censoring of Data Points<a class="headerlink" href="#editing-and-censoring-of-data-points" title="Permalink to this heading">¶</a></h2>
+<p>The only way that individual data points can be modified within GF4 is to copy
+the dataset to the system clipboard and then paste it into the <em>Load From Dialog</em>
+edit pane.  In the edit pane, individual rows can be corrected or commented out.</p>
+</section>
+</section>
+<section id="the-waveform-stack">
+<h1>The Waveform Stack<a class="headerlink" href="#the-waveform-stack" title="Permalink to this heading">¶</a></h1>
+<p>The waveform stack is the primary organizing concept of GF4.  Modeled after
+the stack in Hewlett-Packard RPN calculators, the stack is an array with positions
+that can hold data elements.  Conceptually, the stack is arranged as a vertical
+column with a “bottom” and a “top”.  Items on the stack can be “pushed” upwards,
+“dropped” downwards, “rotated” and “swapped”. These operations are illustrated
+in the next section.</p>
+<p>All operations that change data operate on the data in the stack bottom (the <strong>X</strong> position). All operations between two datasets, such as addition and correlation, use the <strong>X</strong> and <strong>Y</strong> positions (<strong>Y</strong> is the next position up from <strong>X</strong> <a class="footnote-reference brackets" href="#id2" id="id1" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>). the result of these operations only change data in the <strong>X</strong> position. The data in <strong>Y</strong> remains unchanged.</p>
+<p>The state of the stack can be viewed by using the <em>Help/ Show Stack</em> menu item in the main window.  This opens a small window that shows the name of the dataset
+currently in each stack position. It is helpful to keep this window open while
+one gains experience with GF4.  The image below depicts the stack viewer window:</p>
+<a class="reference internal image-reference" href="_images/stack_viewer_window.png"><img alt="_images/stack_viewer_window.png" src="_images/stack_viewer_window.png" style="width: 757.5px; height: 412.5px;" /></a>
+<p>The most common stack operations in practice are “Swap” and direct access.  The
+<strong>T</strong> position is often used as a temporary data cache.</p>
+<aside class="footnote-list brackets">
+<aside class="footnote brackets" id="id2" role="note">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id1">1</a><span class="fn-bracket">]</span></span>
+<p>For historical reasons, the <strong>Y</strong> stack position is also called the <em>Buffer</em> and the <strong>X</strong> position is also called <em>Main</em>.</p>
+</aside>
+</aside>
+<section id="stack-operations">
+<h2>Stack Operations<a class="headerlink" href="#stack-operations" title="Permalink to this heading">¶</a></h2>
+<p>The stack can be “pushed”, causing the existing
+elements to be moved one slot “higher”:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Stack</span> <span class="n">populated</span> <span class="k">with</span> <span class="n">data</span> <span class="n">elements</span> <span class="n">A</span><span class="p">,</span> <span class="n">B</span><span class="p">,</span> <span class="ow">and</span> <span class="n">C</span>
+
+<span class="o">|</span>   <span class="n">A</span>   <span class="o">|</span>   <span class="o">&lt;--</span> <span class="s2">&quot;T&quot;</span><span class="p">:</span> <span class="n">stack</span> <span class="n">top</span>
+<span class="o">|</span>   <span class="n">B</span>   <span class="o">|</span>   <span class="o">&lt;--</span> <span class="s2">&quot;Y&quot;</span>
+<span class="o">|</span>   <span class="n">C</span>   <span class="o">|</span>   <span class="o">&lt;--</span> <span class="s2">&quot;X&quot;</span><span class="p">:</span> <span class="n">stack</span> <span class="n">bottom</span>
+
+<span class="s2">&quot;Pushing&quot;</span> <span class="n">stack</span> <span class="n">duplicates</span> <span class="s2">&quot;X&quot;</span> <span class="n">element</span> <span class="p">(</span><span class="n">top</span> <span class="n">element</span> <span class="ow">is</span> <span class="n">lost</span><span class="p">)</span>
+
+<span class="o">|</span>   <span class="n">B</span>   <span class="o">|</span>   <span class="o">&lt;--</span> <span class="s2">&quot;T&quot;</span><span class="p">:</span> <span class="n">stack</span> <span class="n">top</span>
+<span class="o">|</span>   <span class="n">C</span>   <span class="o">|</span>   <span class="o">&lt;--</span> <span class="s2">&quot;Y&quot;</span>
+<span class="o">|</span>   <span class="n">C</span>   <span class="o">|</span>   <span class="o">&lt;--</span> <span class="s2">&quot;X&quot;</span><span class="p">:</span> <span class="n">stack</span> <span class="n">bottom</span>
+</pre></div>
+</div>
+<p>“Dropping” the stack moves elements one slot lower:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Stack</span> <span class="n">populated</span> <span class="k">with</span> <span class="n">data</span> <span class="n">elements</span> <span class="n">A</span><span class="p">,</span> <span class="n">B</span><span class="p">,</span> <span class="ow">and</span> <span class="n">C</span>
+
+<span class="o">|</span>   <span class="n">A</span>   <span class="o">|</span>   <span class="o">&lt;--</span> <span class="s2">&quot;T&quot;</span><span class="p">:</span> <span class="n">stack</span> <span class="n">top</span>
+<span class="o">|</span>   <span class="n">B</span>   <span class="o">|</span>   <span class="o">&lt;--</span> <span class="s2">&quot;Y&quot;</span>
+<span class="o">|</span>   <span class="n">C</span>   <span class="o">|</span>   <span class="o">&lt;--</span> <span class="s2">&quot;X&quot;</span><span class="p">:</span> <span class="n">stack</span> <span class="n">bottom</span>
+
+<span class="s2">&quot;Dropping&quot;</span> <span class="n">stack</span> <span class="n">duplicates</span> <span class="s2">&quot;T&quot;</span> <span class="n">element</span> <span class="p">(</span><span class="n">bottom</span> <span class="n">element</span> <span class="ow">is</span> <span class="n">lost</span><span class="p">)</span>
+
+<span class="o">|</span>   <span class="n">A</span>   <span class="o">|</span>   <span class="o">&lt;--</span> <span class="s2">&quot;T&quot;</span><span class="p">:</span> <span class="n">stack</span> <span class="n">top</span>
+<span class="o">|</span>   <span class="n">A</span>   <span class="o">|</span>   <span class="o">&lt;--</span> <span class="s2">&quot;Y&quot;</span>
+<span class="o">|</span>   <span class="n">B</span>   <span class="o">|</span>   <span class="o">&lt;--</span> <span class="s2">&quot;X&quot;</span><span class="p">:</span> <span class="n">stack</span> <span class="n">bottom</span>
+</pre></div>
+</div>
+<p>The stack can also be cyclically rotated up or down:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Stack</span> <span class="n">populated</span> <span class="k">with</span> <span class="n">data</span> <span class="n">elements</span> <span class="n">A</span><span class="p">,</span> <span class="n">B</span><span class="p">,</span> <span class="ow">and</span> <span class="n">C</span>
+
+<span class="o">|</span>   <span class="n">A</span>   <span class="o">|</span>   <span class="o">&lt;--</span> <span class="s2">&quot;T&quot;</span><span class="p">:</span> <span class="n">stack</span> <span class="n">top</span>
+<span class="o">|</span>   <span class="n">B</span>   <span class="o">|</span>   <span class="o">&lt;--</span> <span class="s2">&quot;Y&quot;</span>
+<span class="o">|</span>   <span class="n">C</span>   <span class="o">|</span>   <span class="o">&lt;--</span> <span class="s2">&quot;X&quot;</span><span class="p">:</span> <span class="n">stack</span> <span class="n">bottom</span>
+
+<span class="n">Rotated</span> <span class="s2">&quot;up&quot;</span> <span class="p">(</span><span class="n">T</span> <span class="o">-&gt;</span> <span class="n">X</span><span class="p">,</span> <span class="n">X</span> <span class="o">-&gt;</span> <span class="n">Y</span><span class="p">,</span> <span class="n">Y</span> <span class="o">-&gt;</span> <span class="n">T</span><span class="p">)</span>
+
+<span class="o">|</span>   <span class="n">B</span>   <span class="o">|</span>   <span class="o">&lt;--</span> <span class="s2">&quot;T&quot;</span><span class="p">:</span> <span class="n">stack</span> <span class="n">top</span>
+<span class="o">|</span>   <span class="n">C</span>   <span class="o">|</span>   <span class="o">&lt;--</span> <span class="s2">&quot;Y&quot;</span>
+<span class="o">|</span>   <span class="n">A</span>   <span class="o">|</span>   <span class="o">&lt;--</span> <span class="s2">&quot;X&quot;</span><span class="p">:</span> <span class="n">stack</span> <span class="n">bottom</span>
+
+<span class="n">Stack</span> <span class="n">populated</span> <span class="k">with</span> <span class="n">data</span> <span class="n">elements</span> <span class="n">A</span><span class="p">,</span> <span class="n">B</span><span class="p">,</span> <span class="ow">and</span> <span class="n">C</span>
+
+<span class="o">|</span>   <span class="n">A</span>   <span class="o">|</span>   <span class="o">&lt;--</span> <span class="s2">&quot;T&quot;</span><span class="p">:</span> <span class="n">stack</span> <span class="n">top</span>
+<span class="o">|</span>   <span class="n">B</span>   <span class="o">|</span>   <span class="o">&lt;--</span> <span class="s2">&quot;Y&quot;</span>
+<span class="o">|</span>   <span class="n">C</span>   <span class="o">|</span>   <span class="o">&lt;--</span> <span class="s2">&quot;X&quot;</span><span class="p">:</span> <span class="n">stack</span> <span class="n">bottom</span>
+
+<span class="n">Rotated</span> <span class="s2">&quot;down&quot;</span> <span class="p">(</span><span class="n">T</span> <span class="o">-&gt;</span> <span class="n">Y</span><span class="p">,</span> <span class="n">Y</span> <span class="o">-&gt;</span> <span class="n">X</span><span class="p">,</span> <span class="n">X</span> <span class="o">-&gt;</span> <span class="n">T</span><span class="p">)</span>
+
+<span class="o">|</span>   <span class="n">C</span>   <span class="o">|</span>   <span class="o">&lt;--</span> <span class="s2">&quot;T&quot;</span><span class="p">:</span> <span class="n">stack</span> <span class="n">top</span>
+<span class="o">|</span>   <span class="n">A</span>   <span class="o">|</span>   <span class="o">&lt;--</span> <span class="s2">&quot;Y&quot;</span>
+<span class="o">|</span>   <span class="n">B</span>   <span class="o">|</span>   <span class="o">&lt;--</span> <span class="s2">&quot;X&quot;</span><span class="p">:</span> <span class="n">stack</span> <span class="n">bottom</span>
+</pre></div>
+</div>
+<p>“Swap” exchanges the X and Y data elements:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Stack</span> <span class="n">populated</span> <span class="k">with</span> <span class="n">data</span> <span class="n">elements</span> <span class="n">A</span><span class="p">,</span> <span class="n">B</span><span class="p">,</span> <span class="ow">and</span> <span class="n">C</span>
+
+<span class="o">|</span>   <span class="n">A</span>   <span class="o">|</span>   <span class="o">&lt;--</span> <span class="s2">&quot;T&quot;</span><span class="p">:</span> <span class="n">stack</span> <span class="n">top</span>
+<span class="o">|</span>   <span class="n">B</span>   <span class="o">|</span>   <span class="o">&lt;--</span> <span class="s2">&quot;Y&quot;</span>
+<span class="o">|</span>   <span class="n">C</span>   <span class="o">|</span>   <span class="o">&lt;--</span> <span class="s2">&quot;X&quot;</span><span class="p">:</span> <span class="n">stack</span> <span class="n">bottom</span>
+
+<span class="n">Stack</span> <span class="n">after</span> <span class="n">a</span> <span class="s2">&quot;Swap&quot;</span>
+
+<span class="o">|</span>   <span class="n">A</span>   <span class="o">|</span>   <span class="o">&lt;--</span> <span class="s2">&quot;T&quot;</span><span class="p">:</span> <span class="n">stack</span> <span class="n">top</span>
+<span class="o">|</span>   <span class="n">C</span>   <span class="o">|</span>   <span class="o">&lt;--</span> <span class="s2">&quot;Y&quot;</span>
+<span class="o">|</span>   <span class="n">B</span>   <span class="o">|</span>   <span class="o">&lt;--</span> <span class="s2">&quot;X&quot;</span><span class="p">:</span> <span class="n">stack</span> <span class="n">bottom</span>
+</pre></div>
+</div>
+</section>
+<section id="direct-access">
+<h2>Direct Access<a class="headerlink" href="#direct-access" title="Permalink to this heading">¶</a></h2>
+<p>The data element in <strong>X</strong>, the stack bottom, can be copied to the <strong>Y</strong> and <strong>T</strong> positions.
+The <strong>Y</strong> and <strong>T</strong> data elements can be copied to the <strong>X</strong> position.  All the stack
+operations are carried out by clicking buttons in the auxiliary command window.</p>
+<img alt="_images/stack_ops.png" src="_images/stack_ops.png" />
+</section>
+</section>
+<section id="non-stack-storage">
+<h1>Non-Stack Storage<a class="headerlink" href="#non-stack-storage" title="Permalink to this heading">¶</a></h1>
+<p>In addition to the stack, there are several other data storage locations:</p>
+<p>1. A single slot accessed by the <em>Store 1*</em> and <em>Recall 1</em> buttons.
+These store from and retrieve to the <strong>X</strong> position.</p>
+<p>2. The system clipboard, accessed by the <em>Copy To Clipboard</em> and <em>Load From Dialog</em>
+buttons. The latter opens an editing window into which the clipboard can be
+copied.</p>
+<p>These buttons are marked in the image below:</p>
+<img alt="_images/loadsave.png" src="_images/loadsave.png" />
+</section>
+<section id="loading-and-saving-data">
+<h1>Loading And Saving Data<a class="headerlink" href="#loading-and-saving-data" title="Permalink to this heading">¶</a></h1>
+<p>All data is saved from and loaded to the <strong>X</strong> stack position. This will overwrite
+the previous contents.  If you want to keep the previous data set, push or copy
+it to one of the other positions.  Most often, the <strong>Y</strong> position is used for this.</p>
+<p>The data format is described in <a class="reference internal" href="#data-format"><span class="std std-ref">Data Format</span></a>.  Data is saved in TAB-separated
+format (even if it was originally in CSV format) and includes the special comments
+that will recreate the title and axis labels.  Error bars are not saved.</p>
+<p>Data can be saved to a file (using the <em>File/Save</em> menu item) or copied to the
+system clipboard (using the <em>Copy To Clipboard</em> button).  A data file can be read
+using the <em>File/Open</em> menu item.  Data, including CSV-format
+data, can also be loaded into the X position from the system clipboard using the
+<em>Load From Dialog</em> button.  Note that this dialog’s entry panel is a basic text editor,
+so the data from the clipboard can be edited before it is processed.</p>
+</section>
+<section id="saving-graphs">
+<h1>Saving Graphs<a class="headerlink" href="#saving-graphs" title="Permalink to this heading">¶</a></h1>
+<p>The visible graph can be saved as an image file, such as a .png file.  The
+standard MatPlotLib toolbar that GF4 displays near the bottom of the main window
+includes a button with an icon of a floppy disk.  Clicking this button opens
+the image save dialog.  There is no provision for loading an image into GF4, since
+it would not contain the numeric data in a form that GF4 could use.</p>
+</section>
+<section id="plotting-curves">
+<h1>Plotting Curves<a class="headerlink" href="#plotting-curves" title="Permalink to this heading">¶</a></h1>
+<p>Plotting commands are grouped together in the Command Window:</p>
+<figure class="align-default" id="id5">
+<img alt="_images/plot_cmd_buttons.png" src="_images/plot_cmd_buttons.png" />
+<figcaption>
+<p><span class="caption-text">Figure BA-1. Plotting Buttons in the Command Window.</span><a class="headerlink" href="#id5" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+<p>These same commands are also available in the <em>Plot</em> menu in the main GF4
+window.  This menu is also the only place where the graph properties can be
+changed.  These properties include line width and color, whether to use symbols
+instead of lines and if so, which symbol shape to use.</p>
+<p>Data in any of the three stack positions <strong>X</strong>, <strong>Y</strong>, and <strong>T</strong> can be overplotted;
+Only <strong>X</strong> and <strong>T</strong> can be plotted. These terms mean the following:</p>
+<ul class="simple">
+<li><p>Plot – create a new graph at displays the specified data set;</p></li>
+<li><p>Overplot – plot a dataset on top of an existing graph.  The axes may rescale if the new data would overflow the previous bounds of the graph.</p></li>
+</ul>
+<p>Overplotting is essential to getting the most out of GF4, since it provides a way
+to compare several data sets, or several ways of processing the same data.</p>
+<section id="default-plotting-settings">
+<h2>Default Plotting Settings<a class="headerlink" href="#default-plotting-settings" title="Permalink to this heading">¶</a></h2>
+<p>When GF4 starts up, it sets the following values for the plotting attributes:</p>
+<table class="docutils align-default" id="id6">
+<caption><span class="caption-text">Default Plot Settings</span><a class="headerlink" href="#id6" title="Permalink to this table">¶</a></caption>
+<thead>
+<tr class="row-odd"><th class="head"><p>Stack Position</p></th>
+<th class="head"><p>Color</p></th>
+<th class="head"><p>Line Thickness</p></th>
+<th class="head"><p>Line/Symbol</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>X</p></td>
+<td><p>black</p></td>
+<td><p>medium</p></td>
+<td><p>line</p></td>
+</tr>
+<tr class="row-odd"><td><p>Y</p></td>
+<td><p>cyan</p></td>
+<td><p>medium</p></td>
+<td><p>line</p></td>
+</tr>
+<tr class="row-even"><td><p>T</p></td>
+<td><p>black</p></td>
+<td><p>thin</p></td>
+<td><p>line</p></td>
+</tr>
+</tbody>
+</table>
+<p>These values are chosen to make it easy to distinguish between the data sets
+when overplotted.  The lighter color of the medium cyan line of the <strong>Y</strong> dataset is
+easy to distinguish from the medium weight black of the X dataset, while the lighter
+appearance of the cyan does not distract much from the heavier weight black line.
+The thin black line of the <strong>T</strong> dataset is easy to distinguish from the other two.</p>
+<p>When GF4 starts up, no stack position has data, so there is nothing to plot.
+When the first data set is read, it is automatically plotted.  When other datasets
+are read, GF4 notices that there is already data in the <strong>X</strong> stack position, and it
+does not plot the new data.  This allows the user to keep reading data files and
+overplotting them - possibly in different colors - without destroying an existing
+graph.  This can be a very useful capability.</p>
+</section>
+<section id="changing-colors-symbols-and-line-styles">
+<h2>Changing Colors, Symbols, and Line Styles<a class="headerlink" href="#changing-colors-symbols-and-line-styles" title="Permalink to this heading">¶</a></h2>
+<p>Curve plotting options can be changed for plotting/overplotting data in the
+<strong>X</strong> and <strong>Y</strong> stack positions. The line and color styles of the <em>T*</em> position
+cannot be changed. In practice, this is rarely a problem. Technically there
+would be no problem in providing for changes in the <strong>T</strong> appearance, but up
+until now it has seemed not to be worth the extra complexity for the user.
+Changing these properties using menus is a little tedious, but adding buttons to
+the command window would be bad for its readability and usability.</p>
+<p>Figure BA-2 depicts the Plot menu items that can change the appearance of
+<strong>X</strong> and <strong>Y</strong> data:</p>
+<figure class="align-default" id="id7">
+<img alt="_images/line_style_options.png" src="_images/line_style_options.png" />
+<figcaption>
+<p><span class="caption-text">Figure BA-2. Plot Menu Items For Changing Plotting Options.</span><a class="headerlink" href="#id7" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+<p>These menu items are reasonably self-explanatory.  For example, Figure BA-3 shows
+one of the menus expanded:</p>
+<figure class="align-default" id="id8">
+<img alt="_images/selecting_marker_style.png" src="_images/selecting_marker_style.png" />
+<figcaption>
+<p><span class="caption-text">Figure BA-3.  Selecting the “Buffer” (<strong>Y</strong>) Plotting Style <a class="footnote-reference brackets" href="#id4" id="id3" role="doc-noteref"><span class="fn-bracket">[</span>2<span class="fn-bracket">]</span></a>.</span><a class="headerlink" href="#id8" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+<aside class="footnote-list brackets">
+<aside class="footnote brackets" id="id4" role="note">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id3">2</a><span class="fn-bracket">]</span></span>
+<p>As mentioned in <a class="reference internal" href="#the-waveform-stack"><span class="std std-ref">The Waveform Stack</span></a>, the <strong>Y</strong> position is also called the <em>Buffer</em>, and the <strong>X</strong> position may be called <em>Main</em>.</p>
+</aside>
+</aside>
+</section>
+</section>
+<section id="help-for-commands">
+<h1>Help For Commands<a class="headerlink" href="#help-for-commands" title="Permalink to this heading">¶</a></h1>
+<p>For the commands that have buttons in the Command Window, hovering the mouse over
+the button causes a brief summary to display in the band at the top of the
+Command window.  Right-clicking on a button displays a more detailed
+explanation in the system browser.</p>
+<p>If an extended help message does not exist for the button, this will be
+announced in the announcement bar at the bottom of the main window.</p>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="GF4_Users_Guide.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">Data Format</a><ul>
+<li><a class="reference internal" href="#invalid-or-missing-data">Invalid or Missing Data</a></li>
+<li><a class="reference internal" href="#editing-and-censoring-of-data-points">Editing and Censoring of Data Points</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#the-waveform-stack">The Waveform Stack</a><ul>
+<li><a class="reference internal" href="#stack-operations">Stack Operations</a></li>
+<li><a class="reference internal" href="#direct-access">Direct Access</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#non-stack-storage">Non-Stack Storage</a></li>
+<li><a class="reference internal" href="#loading-and-saving-data">Loading And Saving Data</a></li>
+<li><a class="reference internal" href="#saving-graphs">Saving Graphs</a></li>
+<li><a class="reference internal" href="#plotting-curves">Plotting Curves</a><ul>
+<li><a class="reference internal" href="#default-plotting-settings">Default Plotting Settings</a></li>
+<li><a class="reference internal" href="#changing-colors-symbols-and-line-styles">Changing Colors, Symbols, and Line Styles</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#help-for-commands">Help For Commands</a></li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="philosophy.html"
+                          title="previous chapter">GF4’s Design Philosophy</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="waveforms.html"
+                          title="next chapter">Generating And Operating on Waveforms</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/basics.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="waveforms.html" title="Generating And Operating on Waveforms"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="philosophy.html" title="GF4’s Design Philosophy"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="GF4_Users_Guide.html">GF4  documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Data Format</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright Thomas B. Passin 2022.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 6.1.3.
+    </div>
+  </body>
+</html>
