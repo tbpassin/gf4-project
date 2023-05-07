@@ -157,7 +157,7 @@ def tutorial():
     # path = join(dirname(__file__), 'doc', 'html', helpdoc)
     # path = path.replace('\\', '/')
     # url = f'file:///{path}'
-    url = 'http://tompassin.net/gf4/docs/GF4_Users_Guide.html'
+    url = 'https://tbpassin.github.io/gf4-project/docs/GF4_Users_Guide.html'
     webbrowser.open_new_tab(url)
 #@+node:tom.20220508124357.1: ** blog
 def blog():
