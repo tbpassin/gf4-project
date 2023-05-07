@@ -7,7 +7,7 @@
 <find_panel_settings/>
 <vnodes>
 <v t="tom.20220507132007.1"><vh>Docs</vh>
-<v t="tom.20220507132007.2"><vh>@clean ../README.md</vh>
+<v t="tom.20220507132007.2"><vh>@clean README.md</vh>
 <v t="tom.20220507132007.3"><vh>gf4-project</vh>
 <v t="tom.20220816202839.1"><vh>Installing</vh>
 <v t="tom.20220816202850.1"><vh>Linux Issues</vh></v>
@@ -15,13 +15,13 @@
 <v t="tom.20220816202934.1"><vh>Running GF4</vh></v>
 </v>
 </v>
-<v t="tom.20220509230416.1"><vh>@clean ../DEVELOPERS_READ_THIS.md</vh>
+<v t="tom.20220509230416.1"><vh>@clean DEVELOPERS_READ_THIS.md</vh>
 <v t="tom.20220509230545.1"><vh>Leo-Editor, Or Those Strange Comment Lines</vh></v>
 </v>
-<v t="tom.20220820141745.1"><vh>@clean ../requirements.txt</vh></v>
-<v t="tom.20220901223400.1"><vh>@clean ../recent_changes.md</vh></v>
-<v t="tom.20220507132007.4"><vh>@path docs</vh>
+<v t="tom.20220820141745.1"><vh>@clean requirements.txt</vh></v>
+<v t="tom.20220901223400.1"><vh>@clean recent_changes.md</vh></v>
 <v t="tom.20220507132007.5"><vh>@button Build HTML</vh></v>
+<v t="tom.20220507132007.4"><vh>@path sphinx</vh>
 <v t="tom.20220507180306.1"><vh>GF4 User's Guide</vh>
 <v t="tom.20220507132007.6"><vh>@rst GF4_Users_Guide</vh></v>
 <v t="tom.20220507175416.1"><vh>@rst whatis</vh>
@@ -463,7 +463,7 @@ cmd = [executable, '-m', 'sphinx', '-C',
         '-D', "html_theme_options.sidebarwidth=20em",
 
         # sourcedir, outputdir:
-        r'.', r'html']
+        r'.', r'.\docs']
 
 subprocess.call(cmd)</t>
 <t tx="tom.20220507132007.6">:tocdepth: 3
@@ -489,7 +489,9 @@ Table of Contents
     curvefitting
     windowing
     macros
-    plugins</t>
+    plugins
+
+ </t>
 <t tx="tom.20220507132007.7">GF4 - "GF" being short for "Graphics Framework" - is a program to display
 two-dimensional data, such as time series data, and to perform mathematical
 operations on the data or between two related data sets. We will often call the
@@ -628,7 +630,8 @@ These buttons are marked in the image below:
 <t tx="tom.20220507175416.1"> </t>
 <t tx="tom.20220507175950.1">:tocdepth: 2
 </t>
-<t tx="tom.20220507180306.1">@nocolor</t>
+<t tx="tom.20220507180306.1">@nocolor
+</t>
 <t tx="tom.20220507180611.1"></t>
 <t tx="tom.20220507185750.1"></t>
 <t tx="tom.20220507190251.1">

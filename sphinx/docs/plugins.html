@@ -1,0 +1,203 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>The Plugin System &#8212; GF4  documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/pyramid.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/sphinx_highlight.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="Using Macros" href="macros.html" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Neuton&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nobile:regular,italic,bold,bolditalic&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
+<!--[if lte IE 6]>
+<link rel="stylesheet" href="_static/ie6.css" type="text/css" media="screen" charset="utf-8" />
+<![endif]-->
+
+  </head><body>
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="macros.html" title="Using Macros"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="GF4_Users_Guide.html">GF4  documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">The Plugin System</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="the-plugin-system">
+<h1>The Plugin System<a class="headerlink" href="#the-plugin-system" title="Permalink to this heading">¶</a></h1>
+<p>GF4 has a plugin capability. A plugin is a Python program that defines both a
+new command and a new command button to launch it.  It is also possible to override
+an existing command without creating a new button.</p>
+<p>Plugins must be placed in the <em>gf4/plugins</em> directory. Their file name must have
+the standard Python extension of “.py”.  This directory also includes a
+<em>README.txt</em> file that explains how the plugin system works.</p>
+<p>A plugin must contain a button definition and a function that does the computation
+and display.</p>
+<section id="defining-a-command-button">
+<h2>Defining a Command Button<a class="headerlink" href="#defining-a-command-button" title="Permalink to this heading">¶</a></h2>
+<p>The button definition must be a variable named <em>BUTTON_DEF</em>
+that assigns a tuple with three strings, like this:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1">#             Button Label  Cmd name          Help text</span>
+<span class="n">BUTTON_DEF</span>  <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;Double X&#39;</span><span class="p">,</span> <span class="s1">&#39;double-x&#39;</span><span class="p">,</span> <span class="s1">&#39;Double y values of the X dataset&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The command name can be arbitrary, but if it is the same as an existing command,
+the original command will be over-ridden by the new one.  The standard commands
+are defined in the GF4 file <em>BuildCommands.py</em>.  For example, the command string
+“pdfgaus” is linked to a function that creates a Gaussian probability
+distribution.</p>
+</section>
+<section id="the-implementing-function">
+<h2>The Implementing Function<a class="headerlink" href="#the-implementing-function" title="Permalink to this heading">¶</a></h2>
+<p>The function for implementing the new command must be named <em>proc()</em>.
+It takes no arguments.  For example, to rescale an existing curve by the factor
+of two:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">AbstractPlotMgr</span> <span class="kn">import</span> <span class="n">MAIN</span>
+<span class="kn">from</span> <span class="nn">.require_datasets</span> <span class="kn">import</span> <span class="n">needs_main</span>
+
+<span class="c1"># plotmgr will have been injected into the module by the time this is called</span>
+<span class="k">def</span> <span class="nf">proc</span><span class="p">():</span>
+    <span class="c1"># Return without trying to do anything if there is no X dataset.</span>
+    <span class="c1"># This could happen on startup.</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">has_main</span><span class="p">(</span><span class="n">plotmgr</span><span class="p">):</span>  <span class="c1"># see below</span>
+        <span class="k">return</span>
+    <span class="n">_ds</span> <span class="o">=</span> <span class="n">plotmgr</span><span class="o">.</span><span class="n">stack</span><span class="p">[</span><span class="n">MAIN</span><span class="p">]</span>  <span class="c1"># The dataset in the X position</span>
+    <span class="n">_ds</span><span class="o">.</span><span class="n">scale</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+    <span class="n">plotmgr</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>The “plotmgr” attribute represents the active PlotManager instance. Do not try
+to import it; it will be automatically injected into the module’s attributes
+when the command is created.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Leo users will notice that Leo complains about an <code class="docutils literal notranslate"><span class="pre">undefined</span> <span class="pre">name</span> <span class="pre">'plotmgr'</span></code> before the <em>proc()</em> function.  This happens because the <em>plotmgr</em> object is injected into the module’s later when the command is instantiated.  The message can be removed by adding a line <code class="docutils literal notranslate"><span class="pre">plotmgr</span> <span class="pre">=</span> <span class="pre">None</span></code> before <em>proc()</em> is defined.</p>
+</div>
+<p>The function <em>has_main()</em> performs the same job as the decorator <em>&#64;REQUIRE_MAIN</em>
+that is used in the <em>PlotManager</em> class.  There is also a similar function
+<em>has_main_buffer</em> corresponding to <em>&#64;REQUIRE_MAIN_BUFF</em>.  Other common imports
+from the <em>AbstractPlotManager</em> class are <em>BUFFER</em> and <em>STACKDEPTH.</em></p>
+<p>New command functions should use the same techniques for accessing the data and
+stack, and for plotting the results, as existing commands.</p>
+</section>
+<section id="over-riding-an-existing-command">
+<h2>Over-riding An Existing Command<a class="headerlink" href="#over-riding-an-existing-command" title="Permalink to this heading">¶</a></h2>
+<p>To override an existing command, you must first know its command string.  Use
+this command name in the <em>BUTTON_DEF</em> declaration. Then add the following declaration
+to the plugin file:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">OVERRIDE</span> <span class="o">=</span> <span class="kc">True</span>
+</pre></div>
+</div>
+<p>Any other value, or if <em>OVERRIDE</em> is not defined, will still override the command
+but a new button will also be created in the command window in the <em>plugins</em> group.</p>
+<p>If you use a command name different from any existing name but set <code class="docutils literal notranslate"><span class="pre">OVERRIDE</span> <span class="pre">=</span> <span class="pre">True</span></code>,
+the command will be created without a matching button.  This leaves you with no
+way to access the new command.</p>
+</section>
+<section id="adding-a-button-to-an-existing-group">
+<h2>Adding a Button To an Existing Group<a class="headerlink" href="#adding-a-button-to-an-existing-group" title="Permalink to this heading">¶</a></h2>
+<p>A plugin can have its command button added to an existing button group instead
+of the <em>Plugins</em> group.  To do this, look up the name of the group in
+<em>buttondefs.py</em>. Assign that name to the attribute <em>OWNER_GROUP</em>, and set
+<em>OVERRIDE</em> to <em>True</em>.  Example:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">OVERRIDE</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="n">OWNER_GROUP</span> <span class="o">=</span> <span class="s1">&#39;DATA_PROCESSING_BUTTONS&#39;</span>
+</pre></div>
+</div>
+</section>
+<section id="controlling-which-plugins-get-loaded">
+<h2>Controlling Which Plugins Get Loaded<a class="headerlink" href="#controlling-which-plugins-get-loaded" title="Permalink to this heading">¶</a></h2>
+<p>GF4 will load all plugins listed in the file <em>use_plugins.txt</em> located in the
+<em>plugins</em> directory.  Each plugin’s name must be on a separate line, without
+the “.py” extension.  Blank lines and lines that start with either “;” or “#”
+are ignored.</p>
+<p>If the <em>use_plugins.txt</em> file is not present, then all .py files in the plugins
+directory will be loaded.</p>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="GF4_Users_Guide.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">The Plugin System</a><ul>
+<li><a class="reference internal" href="#defining-a-command-button">Defining a Command Button</a></li>
+<li><a class="reference internal" href="#the-implementing-function">The Implementing Function</a></li>
+<li><a class="reference internal" href="#over-riding-an-existing-command">Over-riding An Existing Command</a></li>
+<li><a class="reference internal" href="#adding-a-button-to-an-existing-group">Adding a Button To an Existing Group</a></li>
+<li><a class="reference internal" href="#controlling-which-plugins-get-loaded">Controlling Which Plugins Get Loaded</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="macros.html"
+                          title="previous chapter">Using Macros</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/plugins.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="macros.html" title="Using Macros"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="GF4_Users_Guide.html">GF4  documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">The Plugin System</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright Thomas B. Passin 2022.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 6.1.3.
+    </div>
+  </body>
+</html>
