@@ -446,27 +446,50 @@ has downloaded, unzip it to some convenient location.
 <t tx="tom.20220507132007.5">@language python
 from sys import executable
 import subprocess
+import os
 
-c.k.simulateCommand('rst3')
+target = None
+HEAD = "GF4 User's Guide"
+p0 = c.p
+for p in c.all_unique_positions():
+    if p.h.startswith(HEAD):
+        target = p
+        c.selectPosition(target)
+        break
+if target:
+    c.k.simulateCommand('rst3')
 
-# Other likely themes: 
-#'-D', 'html_theme=sphinx_book_theme',
-#'-D', 'html_theme=bizstyle',
+    # Thw rst3 command writes to correct (@path sphinx) directory
+    # but Sphinx will look in current directory, which may
+    # not be the same.  So -
+    # if we start from a selected node outside the
+    # @path sphinx tree, temporarily cd to the docs directory.
+    cwd = os.getcwd()
+    if not cwd.endswith('sphinx'):
+        temp_cwd = os.path.join(cwd, 'sphinx')
+        os.chdir(temp_cwd)
 
-cmd = [executable, '-m', 'sphinx', '-C',
-        '-b', 'html',
-        '-D', "master_doc=GF4_Users_Guide",
-        '-D', 'source_suffix=.rst',
-        '-D', 'html_theme=pyramid',
-        '-D', 'project=GF4',
-        '-D', 'extensions=sphinx.ext.autosectionlabel',
-        '-D', 'copyright=Thomas B. Passin 2022',
-        '-D', "html_theme_options.sidebarwidth=20em",
+    # Other likely themes: 
+    #'-D', 'html_theme=sphinx_book_theme',
+    #'-D', 'html_theme=bizstyle',
 
-        # sourcedir, outputdir:
-        r'.', r'..\docs']
+    cmd = [executable, '-m', 'sphinx', '-C',
+            '-b', 'html',
+            '-D', "master_doc=GF4_Users_Guide",
+            '-D', 'source_suffix=.rst',
+            '-D', 'html_theme=pyramid',
+            '-D', 'project=GF4',
+            '-D', 'extensions=sphinx.ext.autosectionlabel',
+            '-D', 'copyright=Thomas B. Passin 2022',
+            '-D', "html_theme_options.sidebarwidth=20em",
 
-subprocess.call(cmd)</t>
+            # sourcedir, outputdir:
+            r'.', r'..\docs']
+
+    subprocess.call(cmd)
+else:
+    g.es('Cannot find the @rst tree to process', color = 'red')
+</t>
 <t tx="tom.20220507132007.6">:tocdepth: 3
 
 ===================
@@ -492,7 +515,7 @@ Table of Contents
     macros
     plugins
 
- </t>
+</t>
 <t tx="tom.20220507132007.7">GF4 - "GF" being short for "Graphics Framework" - is a program to display
 two-dimensional data, such as time series data, and to perform mathematical
 operations on the data or between two related data sets. We will often call the
@@ -630,7 +653,7 @@ These buttons are marked in the image below:
 </t>
 <t tx="tom.20220507175416.1"> </t>
 <t tx="tom.20220507175950.1">:tocdepth: 2
-</t>
+ </t>
 <t tx="tom.20220507180306.1">@nocolor
 </t>
 <t tx="tom.20220507180611.1"></t>
