@@ -463,7 +463,7 @@ cmd = [executable, '-m', 'sphinx', '-C',
         '-D', "html_theme_options.sidebarwidth=20em",
 
         # sourcedir, outputdir:
-        r'.', r'.\docs']
+        r'.', r'..\docs']
 
 subprocess.call(cmd)</t>
 <t tx="tom.20220507132007.6">:tocdepth: 3
