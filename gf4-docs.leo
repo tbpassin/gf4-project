@@ -20,6 +20,7 @@
 </v>
 <v t="tom.20220820141745.1"><vh>@clean requirements.txt</vh></v>
 <v t="tom.20220901223400.1"><vh>@clean recent_changes.md</vh></v>
+<v t="tom.20230507161216.1"><vh>@clean .nojekyll</vh></v>
 <v t="tom.20220507132007.5"><vh>@button Build HTML</vh></v>
 <v t="tom.20220507132007.4"><vh>@path sphinx</vh>
 <v t="tom.20220507180306.1"><vh>GF4 User's Guide</vh>
@@ -994,5 +995,6 @@ explanation in the system browser.
 
 If an extended help message does not exist for the button, this will be
 announced in the announcement bar at the bottom of the main window.</t>
+<t tx="tom.20230507161216.1"></t>
 </tnodes>
 </leo_file>
