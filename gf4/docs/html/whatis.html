@@ -1,18 +1,17 @@
 
 <!DOCTYPE html>
 
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
     <title>What Is GF4? &#8212; GF4  documentation</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="_static/pyramid.css" />
     <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-    <script src="_static/jquery.js"></script>
-    <script src="_static/underscore.js"></script>
     <script src="_static/doctools.js"></script>
+    <script src="_static/sphinx_highlight.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Quick Start" href="quickstart.html" />
@@ -48,7 +47,7 @@
           <div class="body" role="main">
             
   <section id="what-is-gf4">
-<h1>What Is GF4?<a class="headerlink" href="#what-is-gf4" title="Permalink to this headline">¶</a></h1>
+<h1>What Is GF4?<a class="headerlink" href="#what-is-gf4" title="Permalink to this heading">¶</a></h1>
 <p>GF4 - “GF” being short for “Graphics Framework” - is a program to display
 two-dimensional data, such as time series data, and to perform mathematical
 operations on the data or between two related data sets. We will often call the
@@ -60,7 +59,7 @@ polish notation” (RPN) style. This kind of calculator was made famous by
 Hewlett-Packard, starting with their HP-35 and HP-45 calculators. GF4 works with
 waveforms in place of the numbers manipulated by the hand calculators.</p>
 <p>Thus, a waveform can be scaled, squared, have its logarithm taken, integrated
-and differentiated <a class="footnote-reference brackets" href="#id2" id="id1">1</a>, be normalized and rectified, and so on. A discrete Fast
+and differentiated <a class="footnote-reference brackets" href="#id2" id="id1" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>, be normalized and rectified, and so on. A discrete Fast
 Fourier Transform is provided that is not limited to powers of two in data
 length. Data can be trimmed or padded. Curve fitting and smoothing of several
 varieties can be done. Two waveforms can be added, subtracted, multiplied, and
@@ -75,13 +74,14 @@ Unlike those calculators, the various stack levels can be accessed directly as
 well.</p>
 <p>GF4 is written in Python 3, and makes use of MatPlotLib, NumPy, Scipy, and
 some other standard libraries.</p>
-<dl class="footnote brackets">
-<dt class="label" id="id2"><span class="brackets"><a class="fn-backref" href="#id1">1</a></span></dt>
-<dd><p>That is, the discrete differencing equivalent of these operations.</p>
-</dd>
-</dl>
+<aside class="footnote-list brackets">
+<aside class="footnote brackets" id="id2" role="note">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id1">1</a><span class="fn-bracket">]</span></span>
+<p>That is, the discrete differencing equivalent of these operations.</p>
+</aside>
+</aside>
 <section id="typical-screen-shot">
-<h2>Typical Screen Shot<a class="headerlink" href="#typical-screen-shot" title="Permalink to this headline">¶</a></h2>
+<h2>Typical Screen Shot<a class="headerlink" href="#typical-screen-shot" title="Permalink to this heading">¶</a></h2>
 <p>Figure IN-1 depicts a fairly typical view of GF4 in action.  The ramp curve generator has produced a straight line, which was copied to the second stack position.  Then a Gaussian noise series was generated and added to the straight line to produce a very noisy ramp.  The underlying straight line, which still was available in its stack position, was then overlayed onto the noisy version.</p>
 <p>Of note is the title of the graph.  It was generated automatically, capturing a description of each processing step as a reminder for the user.  This is one of many “affordances” the program provides to reduce demands on the user.  The title can be changed by clicking on it, which turns the title line into an edit box.</p>
 <figure class="align-default" id="id3">
@@ -95,18 +95,18 @@ some other standard libraries.</p>
 </figure>
 </section>
 <section id="a-historical-note">
-<h2>A Historical Note<a class="headerlink" href="#a-historical-note" title="Permalink to this headline">¶</a></h2>
+<h2>A Historical Note<a class="headerlink" href="#a-historical-note" title="Permalink to this heading">¶</a></h2>
 <p>GF4 is a fifth generation implementation of the basic waveform calculator concept (the first generation - implemented on a 64K Z-80 CP/M machine - was not named).  The implementation language has changed from FORTH to Turbo Pascal to Delphi to the current Python.  Over this time the basic concept has not been changed, while the user interface has evolved, and more math operations added.</p>
 </section>
 <section id="some-typical-uses">
-<h2>Some Typical Uses<a class="headerlink" href="#some-typical-uses" title="Permalink to this headline">¶</a></h2>
+<h2>Some Typical Uses<a class="headerlink" href="#some-typical-uses" title="Permalink to this heading">¶</a></h2>
 <p>Typical uses of GF4 include curve fitting and observing the fit quality, comparing observed cdf curves against a Gaussian of the same mean and standard distribution, smoothing noisy time series data, and creating FFT transforms to try to identify prominent frequencies in a waveform.</p>
 <p>GF4 would make an excellent educational tool since it makes exploring the data so easy, which would help the student come to understand basic statistical limitations that are hard to convey otherwise.</p>
 <p>The effect of zero-padding and windowing a waveform before running an FFT is quite illuminating and easy to study.  Cumulative data, such as total covid case counts vs time, can be converted into daily rates by differentiating.  This leads to a very noisy dataset, and that can be smoothed with, for example, a LOWESS smoothing routine. The study of the shape of residuals after fitting a function is interesting and easy to do.</p>
 <p>No code need be written to perform any of these operations on datasets.</p>
 </section>
 <section id="what-gf4-is-not">
-<h2>What GF4 Is Not<a class="headerlink" href="#what-gf4-is-not" title="Permalink to this headline">¶</a></h2>
+<h2>What GF4 Is Not<a class="headerlink" href="#what-gf4-is-not" title="Permalink to this heading">¶</a></h2>
 <p>GF4 is not a rigorous tool for statistical calculations.  Although the mathematical operations are done as carefully as possible, usually using well-established scientific libraries such as numpy and scipy, various subtleties are not taken into account.  For example, error bars can be shown for a LOWESS smooth, but they do not take into account possible autocorrelation in the dataset.  FFTs, and correlations and convolutions between waveforms, may not normalized according to usual conventions.  This generally makes no practical difference to exploratory use, since it is the relative shapes and features that are normally of interest.  In addition, although processed data sets can be saved to files, and image files of the curves seen on the screen can be saved as well, error bars, regression coefficients, and the like cannot be output.</p>
 <p>GF4 is best used for understanding the features of a 2D dataset, and working out how effective various kinds of processing will be.  Is it too noisy or too contaminated to get useful results? Does a linear least squares fit make sense? Does this kind of a correlation seem to be meaningful? Is a smoothing window of 50 too wide?  Will a cosine or a supergaussian window produce a cleaner FFT for this particular data?  Will zero-padding the dataset improve the resolution?  Is this increase really “exponential”?  What will be the effect of a D.C offset on the FFT?</p>
 <p>If more than this is needed, the user should take that understanding and use it with other tools to produce a more complete analysis in depth.  The “R” language might be one suitable tool, for example.  After that is done, GF4 can again be used to assess the results as a kind of quality check.</p>
@@ -159,7 +159,7 @@ some other standard libraries.</p>
     </form>
     </div>
 </div>
-<script>$('#searchbox').show(0);</script>
+<script>document.getElementById('searchbox').style.display = "block"</script>
         </div>
       </div>
       <div class="clearer"></div>
@@ -182,7 +182,7 @@ some other standard libraries.</p>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright Thomas B. Passin 2022.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.5.0.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 6.1.3.
     </div>
   </body>
 </html>

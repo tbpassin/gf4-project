@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Created by Leo: http://leoeditor.com/leo_toc.html -->
-<leo_file xmlns:leo="http://leoeditor.com/namespaces/leo-python-editor/1.1" >
+<!-- Created by Leo: https://leo-editor.github.io/leo-editor/leo_toc.html -->
+<leo_file xmlns:leo="http://leo-editor.github.io/leo-editor/namespaces/leo-python-editor/1.1" >
 <leo_header file_format="2"/>
 <globals/>
 <preferences/>
@@ -20,7 +20,7 @@
 </v>
 <v t="tom.20220820141745.1"><vh>@clean ../requirements.txt</vh></v>
 <v t="tom.20220901223400.1"><vh>@clean ../recent_changes.md</vh></v>
-<v t="tom.20220507132007.4"><vh>@path doc</vh>
+<v t="tom.20220507132007.4"><vh>@path docs</vh>
 <v t="tom.20220507132007.5"><vh>@button Build HTML</vh></v>
 <v t="tom.20220507180306.1"><vh>GF4 User's Guide</vh>
 <v t="tom.20220507132007.6"><vh>@rst GF4_Users_Guide</vh></v>
@@ -827,6 +827,10 @@ graph.  This can be a very useful capability.
 </t>
 <t tx="tom.20220901223400.1">@language md
 @tabwidth -4
+
+### Devel Branch 1.5b5  4-23-2023, 4-28-2023
+- Fix "no data" bug when the last non-comment line is a ENDDATASET special comment.
+- Ignore trailing comments while checking whether data is csv.
 
 ### Devel Branch 1.5b4 3-23-2023
 - Add command button to invert a dataset.

@@ -1,18 +1,17 @@
 
 <!DOCTYPE html>
 
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
     <title>The Plugin System &#8212; GF4  documentation</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="_static/pyramid.css" />
     <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-    <script src="_static/jquery.js"></script>
-    <script src="_static/underscore.js"></script>
     <script src="_static/doctools.js"></script>
+    <script src="_static/sphinx_highlight.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="prev" title="Using Macros" href="macros.html" />
@@ -44,7 +43,7 @@
           <div class="body" role="main">
             
   <section id="the-plugin-system">
-<h1>The Plugin System<a class="headerlink" href="#the-plugin-system" title="Permalink to this headline">¶</a></h1>
+<h1>The Plugin System<a class="headerlink" href="#the-plugin-system" title="Permalink to this heading">¶</a></h1>
 <p>GF4 has a plugin capability. A plugin is a Python program that defines both a
 new command and a new command button to launch it.  It is also possible to override
 an existing command without creating a new button.</p>
@@ -54,7 +53,7 @@ the standard Python extension of “.py”.  This directory also includes a
 <p>A plugin must contain a button definition and a function that does the computation
 and display.</p>
 <section id="defining-a-command-button">
-<h2>Defining a Command Button<a class="headerlink" href="#defining-a-command-button" title="Permalink to this headline">¶</a></h2>
+<h2>Defining a Command Button<a class="headerlink" href="#defining-a-command-button" title="Permalink to this heading">¶</a></h2>
 <p>The button definition must be a variable named <em>BUTTON_DEF</em>
 that assigns a tuple with three strings, like this:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1">#             Button Label  Cmd name          Help text</span>
@@ -68,7 +67,7 @@ are defined in the GF4 file <em>BuildCommands.py</em>.  For example, the command
 distribution.</p>
 </section>
 <section id="the-implementing-function">
-<h2>The Implementing Function<a class="headerlink" href="#the-implementing-function" title="Permalink to this headline">¶</a></h2>
+<h2>The Implementing Function<a class="headerlink" href="#the-implementing-function" title="Permalink to this heading">¶</a></h2>
 <p>The function for implementing the new command must be named <em>proc()</em>.
 It takes no arguments.  For example, to rescale an existing curve by the factor
 of two:</p>
@@ -101,7 +100,7 @@ from the <em>AbstractPlotManager</em> class are <em>BUFFER</em> and <em>STACKDEP
 stack, and for plotting the results, as existing commands.</p>
 </section>
 <section id="over-riding-an-existing-command">
-<h2>Over-riding An Existing Command<a class="headerlink" href="#over-riding-an-existing-command" title="Permalink to this headline">¶</a></h2>
+<h2>Over-riding An Existing Command<a class="headerlink" href="#over-riding-an-existing-command" title="Permalink to this heading">¶</a></h2>
 <p>To override an existing command, you must first know its command string.  Use
 this command name in the <em>BUTTON_DEF</em> declaration. Then add the following declaration
 to the plugin file:</p>
@@ -115,7 +114,7 @@ the command will be created without a matching button.  This leaves you with no
 way to access the new command.</p>
 </section>
 <section id="adding-a-button-to-an-existing-group">
-<h2>Adding a Button To an Existing Group<a class="headerlink" href="#adding-a-button-to-an-existing-group" title="Permalink to this headline">¶</a></h2>
+<h2>Adding a Button To an Existing Group<a class="headerlink" href="#adding-a-button-to-an-existing-group" title="Permalink to this heading">¶</a></h2>
 <p>A plugin can have its command button added to an existing button group instead
 of the <em>Plugins</em> group.  To do this, look up the name of the group in
 <em>buttondefs.py</em>. Assign that name to the attribute <em>OWNER_GROUP</em>, and set
@@ -126,7 +125,7 @@ of the <em>Plugins</em> group.  To do this, look up the name of the group in
 </div>
 </section>
 <section id="controlling-which-plugins-get-loaded">
-<h2>Controlling Which Plugins Get Loaded<a class="headerlink" href="#controlling-which-plugins-get-loaded" title="Permalink to this headline">¶</a></h2>
+<h2>Controlling Which Plugins Get Loaded<a class="headerlink" href="#controlling-which-plugins-get-loaded" title="Permalink to this heading">¶</a></h2>
 <p>GF4 will load all plugins listed in the file <em>use_plugins.txt</em> located in the
 <em>plugins</em> directory.  Each plugin’s name must be on a separate line, without
 the “.py” extension.  Blank lines and lines that start with either “;” or “#”
@@ -178,7 +177,7 @@ directory will be loaded.</p>
     </form>
     </div>
 </div>
-<script>$('#searchbox').show(0);</script>
+<script>document.getElementById('searchbox').style.display = "block"</script>
         </div>
       </div>
       <div class="clearer"></div>
@@ -198,7 +197,7 @@ directory will be loaded.</p>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright Thomas B. Passin 2022.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.5.0.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 6.1.3.
     </div>
   </body>
 </html>
