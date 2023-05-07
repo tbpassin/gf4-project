@@ -18,8 +18,8 @@ PRECISION = (1e-3, 1e-5)  # (relative, absolute)
 def test_normalize():
     """The y data should be normalized to 1.0."""
     x = range(NUMPTS)
-    y = [50. - z**2 for z in x]
-    ds = Dataset(x,y)
+    y = [50. - z ** 2 for z in x]
+    ds = Dataset(x, y)
 
     ds.normalize()
     normed = max(ds.ydata)
@@ -30,7 +30,7 @@ def test_normalize():
 
 def test_get_ascii_data():
 # setAsciiData(self, lines, filename='', root = None)
-    DATALINES = ['0  0', '1 1',  '2   4', '3   9', '4   16']
+    DATALINES = ['0  0', '1 1', '2   4', '3   9', '4   16']
     ds = Dataset()
     result = ds.setAsciiData(DATALINES)
 
@@ -45,7 +45,7 @@ def test_get_ascii_data():
 #@+node:tom.20230203231108.1: ** test set_ascii_data_bad
 def test_get_ascii_data_bad():
     """Data ingest should skip bad rows."""
-    DATALINES = ['0  0', '1 1',  '2x   4', '3   9.xz', '4   16']
+    DATALINES = ['0  0', '1 1', '2x   4', '3   9.xz', '4   16']
     ds = Dataset()
     result = ds.setAsciiData(DATALINES)
     actual_x, actual_y = ds.xdata, ds.ydata

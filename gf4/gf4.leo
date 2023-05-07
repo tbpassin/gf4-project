@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Created by Leo: http://leoeditor.com/leo_toc.html -->
-<leo_file xmlns:leo="http://leoeditor.com/namespaces/leo-python-editor/1.1" >
+<!-- Created by Leo: https://leo-editor.github.io/leo-editor/leo_toc.html -->
+<leo_file xmlns:leo="http://leo-editor.github.io/leo-editor/namespaces/leo-python-editor/1.1" >
 <leo_header file_format="2"/>
 <globals/>
 <preferences/>
@@ -58,6 +58,7 @@
 <v t="tom.20221101105447.1"><vh>@file autocorrel1.py</vh></v>
 <v t="tom.20220904105233.1"><vh>@file find_peak.py</vh></v>
 <v t="tom.20220905122752.1"><vh>@file find_peak1.py</vh></v>
+<v t="tom.20230104000405.1"><vh>@file lst_sqr_extrap.py</vh></v>
 <v t="tom.20220909175119.1"><vh>@file readout.py</vh></v>
 <v t="tom.20221105131948.1"><vh>@file undo-save.py</vh></v>
 <v t="tom.20221105143807.1"><vh>@file undo.py</vh></v>
@@ -135,7 +136,7 @@ The main program is called "gf4.pyw".</t>
 
 https://stackoverflow.com/questions/44835909/cannot-import-name-imagetk-python-3-5
 
-On Debian, this fixed this problem::
+On Debian/XUbuntu, this fixed this problem::
 
     sudo apt-get install python3-pil.imagetk
 
@@ -144,6 +145,7 @@ has replaced the imaging library *PIL*)::
 
     python3-pillow
     python3-pillow-tk
+
 </t>
 <t tx="tom.20220816180207.1">On Debian/Ubuntu, tkinter has to be installed by the package manager::
 
@@ -274,9 +276,12 @@ py -m pytest -k "not test_smooth and not fit_test"
 <t tx="tom.20230129231146.1"></t>
 <t tx="tom.20230201003427.1">@language batch
 :: Run pytest against gf4
+:: This command file must be located in the parent directory of \gf4
 @echo off
 setlocal
-set PYTHONPATH=c:\tom\git\gf4-project\gf4
+set GF4DIR=%~dp0
+set PYTHONPATH=%GF4DIR%\gf4
+cd %PYTHONPATH%
 py -m pytest -k "not test_smooth and not fit_test"
 endlocal
 </t>

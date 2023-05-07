@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Created by Leo: http://leoeditor.com/leo_toc.html -->
-<leo_file xmlns:leo="http://leoeditor.com/namespaces/leo-python-editor/1.1" >
+<!-- Created by Leo: https://leo-editor.github.io/leo-editor/leo_toc.html -->
+<leo_file xmlns:leo="http://leo-editor.github.io/leo-editor/namespaces/leo-python-editor/1.1" >
 <leo_header file_format="2"/>
 <globals/>
 <preferences/>
@@ -20,7 +20,7 @@
 </v>
 <v t="tom.20220820141745.1"><vh>@clean ../requirements.txt</vh></v>
 <v t="tom.20220901223400.1"><vh>@clean ../recent_changes.md</vh></v>
-<v t="tom.20220507132007.4"><vh>@path doc</vh>
+<v t="tom.20220507132007.4"><vh>@path docs</vh>
 <v t="tom.20220507132007.5"><vh>@button Build HTML</vh></v>
 <v t="tom.20220507180306.1"><vh>GF4 User's Guide</vh>
 <v t="tom.20220507132007.6"><vh>@rst GF4_Users_Guide</vh></v>
@@ -628,7 +628,7 @@ These buttons are marked in the image below:
 <t tx="tom.20220507175416.1"></t>
 <t tx="tom.20220507175950.1">:tocdepth: 2
 </t>
-<t tx="tom.20220507180306.1"></t>
+<t tx="tom.20220507180306.1">@nocolor</t>
 <t tx="tom.20220507180611.1"></t>
 <t tx="tom.20220507185750.1"></t>
 <t tx="tom.20220507190251.1">
@@ -647,32 +647,35 @@ the FFT (Fast Fourier Transform) assume that the points are uniformly spaced.</t
 
 GF4 is written in Python.  A look at any of the GF4 source files will show
 a number of comment lines scattered throughout the file.  These are not
-normal comment lines;  here are a few examples::
+normal comment lines;  here are a few examples:
 
-    #@+leo-ver=5-thin
-    #@+node:tom.20211207165051.2: * @file gf4.pyw
-    #@+others
-    #@+node:tom.20211207165051.3: ** Imports
-    #@+node:tom.20211207165051.4: ** class PlotManager(AbstractPlotManager)
+```
+#@+leo-ver=5-thin
+#@+node:tom.20211207165051.2: * @file gf4.pyw
+#@+others
+#@+node:tom.20211207165051.3: ** Imports
+#@+node:tom.20211207165051.4: ** class PlotManager(AbstractPlotManager)
+```
 
-All these lines start with the prefix **#@**. What in the world are these? These
+All these lines start with the prefix `#@`. What in the world are these? These
 special comment lines are metadata inserted by the Leo-Editor IDE (Leo for
 short). Leo is much more than an IDE. As an IDE, Leo lets you overlay structure
 onto a file or project beyond the usual breakdown into classes, methods, and
 functions. This along with Leo's structure handling abilities (among other
 capabilities) makes understanding and managing large and complex code bases much
-easier than most other programs. These metadata comment lines are called
+easier than most other editors and IDEs. These metadata comment lines are called
 *sentinels*.
 
 The sentinel lines tell Leo, when it reads a file, how to create the overlay
 structure.  **Do not move or change them!**
 
-Since these lines are comments, they will not affect execution in any way.
-But they can be annoying when reading the code outside of Leo.  It is possible
-for Leo to write these files without sentinels.  Leo can load the files and 
-re-apply the overlay structure.  But the results will be less robust against
-significant restructuring, since Leo may not be able to match up old and new
-material as intended.  This could lead to a loss of some of the overlay structure (not the code itself).
+Since these lines are comments, they will not affect execution in any way. But
+they can be annoying when reading the code outside of Leo. It is possible for
+Leo to write these files without sentinels. Leo can load the files and re-apply
+the overlay structure. But the results will be less robust against significant
+restructuring, since Leo may not be able to match up old and new material as
+intended. This could lead to a loss of some of the overlay structure (not the
+code itself).
 
 The creator of GF4 has elected to keep the sentinel lines in the files.  This
 decision could be revisited at some point.  In the meantime, files can be edited
@@ -763,13 +766,14 @@ have never been implemented because they would complicate the user interface.
 </t>
 <t tx="tom.20220820141745.1">csaps
 docutils
-matplotlib
+matplotlib &lt;= 3.6.3
 numpy
 pillow &gt;= 9.1.0
 pwlf
 pyperclip
 scipy
-tk
+statsmodels
+
 </t>
 <t tx="tom.20220820182510.1">
 .. csv-table:: Waveform Generator Parameters
@@ -824,7 +828,33 @@ graph.  This can be a very useful capability.
 <t tx="tom.20220901223400.1">@language md
 @tabwidth -4
 
-### Devel branch 1.4b3  12-11-2022
+### Devel Branch 1.5b5  4-23-2023, 4-28-2023
+- Fix "no data" bug when the last non-comment line is a ENDDATASET special comment.
+- Ignore trailing comments while checking whether data is csv.
+
+### Devel Branch 1.5b4 3-23-2023
+- Add command button to invert a dataset.
+
+### Devel branch 1.5b3  3-2-2023
+- Data input: Allow trailing in-line comments
+
+### Devel branch 1.5b1 2-20-2023
+- Add statsmodels to requirements
+
+### Version 1.4 branch 12-29-2022
+- Allow extension names in the use_plugins file to have or omit a 'py' extension.
+
+- Added a few unit tests.
+
+### Devel branch 1.4b3  12-12-2022
+- Added a Help button (marked with a "?") that explains that a different hover
+color indicates that extended help is available.
+
+- Command button hover color is now different when a command has extended help
+(accessed by a right mouse click) so user can know which buttons to right click on.
+
+- Command button hover colors now work correctly in Linux as well as Windows.
+
 - Added the ability to read entries in a .ini file.  Initially, this will allow a user to override the startup line colors for [X], [Y] plots.
 
 - Temporary files for the extended help system are now written to the user's Downloads directory.  This works around the problem that on some Linux systems, Python's default location was not readable by the system browser.
@@ -856,50 +886,9 @@ can now by saved and restored.
 - Autocorrelation function now centered on zero-lag, is normalized
 to 1.0.
 
-- New exended Help facility for GF4 commands
+- New extended Help facility for GF4 commands
 
     Extended help for the command buttons is available by right-clicking on the buttons in the Commands window.  At this time only a few commands have help text; over time more of them will be written.
-
-### Devel branch v1.3b2
-- New "partial autocorrelation" command.
-
-- "Phasespace" plot
-
-    Lag can be specified (previously: only lag = 1). 
-
-- Startup Window Location, Size, Icons
-
-- Tweak initial vertical position of main window: 
-
-- Improve command window fonts and window height, especially on Linux.
-
-- Show program icon in main window.
-
-### Devel branch v1.2
-- Icons for desktop launchers
-
-    A new _icons_ directory contains icons for Linux and Windows desktop launchers.
-
-- Plugins command buttons
-
-    Plugins can add their command button to an existing button group.
-
-- New plugin Capability
-
-    Added a plugin feature. A plugin defines a new command button and a new
-    function to implement the command.  An existing command can optionally be
-    overridden with a new function without adding a new button.
-
-### Devel branch v1.1b4
-- Read Comma Separated Files.
-
-    We can now read comma-separated files.  This is a fairly naive implementation:
-    columns can be separated by comma characters.  There is no flexibility; either
-    all columns are separated by tabs, or by commas.
-
-    For CSV data, GF4 will try to get column names from the first non-numeric line
-    immediately before the first line that contains only numerical columns.
-
 </t>
 <t tx="tom.20220902112346.1">
 </t>

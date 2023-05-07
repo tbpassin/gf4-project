@@ -338,16 +338,6 @@ def create_buttons_pack(host, plotmgr):
     phantom = Tk.Button(text='phantom')
     _font =  tkFont.nametofont(phantom['font'])
     sz = _font['size']
-    if platform.startswith('win'):
-        ascender = 10.6
-    else:
-        if 'Open Sans' in available_fonts or 'Noto Sans' \
-            in available_fonts:
-            ascender = 11
-        elif 'DejaVu Sans' in available_fonts:
-            ascender = 9
-        else:
-            ascender = 9.6
 
     # Find a preferred font, if installed
     ffamily = ''
@@ -357,7 +347,17 @@ def create_buttons_pack(host, plotmgr):
             break
 
     if ffamily:
-        # Create Tk font for this family
+        if platform.startswith('win'):
+            ascender = 10.6
+        else:
+            if ffamily in ('Open Sans', 'Noto Sans'):
+                ascender = 11
+            elif ffamily == 'DejaVu Sans':
+                ascender = 9
+            else:
+                ascender = 9.6
+
+        # Create a Tk font for this family
         NEWFONT = tkFont.Font(
                             family = ffamily, name = 'cmdButtonFont',
                             size = int(sz), weight = 'bold')
@@ -416,7 +416,7 @@ def create_buttons_pack(host, plotmgr):
     but_frame_stack = create_button_group(cmd_frame, 'Stack', STACK_BUTTONS)
     create_button_group(but_frame_stack, 'Plugins', PLUGIN_BUTTONS)
 
-    but_frame_curve = create_button_group(cmd_frame, 'Curve', CURVE_BUTTONS)
+    create_button_group(cmd_frame, 'Curve', CURVE_BUTTONS)
     create_button_group(cmd_frame, 'Math', MATH_BUTTONS)
 
     but_frame_dp = create_button_group(cmd_frame, 'Data Processing', DATA_PROCESSING_BUTTONS)
@@ -427,7 +427,6 @@ def create_buttons_pack(host, plotmgr):
     create_button_group(but_frame_fit, 'Smooth', SMOOTHER_FIT_BUTTONS, 'fill')
     create_button_group(but_frame_fit, 'Statistics', STATS_BUTTONS, 'fill')
 
-    # create_button_group(but_frame_curve, 'Plugins', PLUGIN_BUTTONS, 'fill')           
 
 #@+node:tom.20211211170819.21: ** cmdwindow
 def cmdwindow(plotmgr=None):

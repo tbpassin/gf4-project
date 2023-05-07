@@ -1,6 +1,6 @@
 csaps
 docutils
-matplotlib
+matplotlib <= 3.6.3
 numpy
 pillow >= 9.1.0
 pwlf

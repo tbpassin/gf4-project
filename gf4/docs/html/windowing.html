@@ -1,22 +1,21 @@
 
 <!DOCTYPE html>
 
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
-    <title>GF4’s Design Philosophy &#8212; GF4  documentation</title>
+    <title>Windowing and FFTs &#8212; GF4  documentation</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="_static/pyramid.css" />
     <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-    <script src="_static/jquery.js"></script>
-    <script src="_static/underscore.js"></script>
     <script src="_static/doctools.js"></script>
+    <script src="_static/sphinx_highlight.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Data Format" href="basics.html" />
-    <link rel="prev" title="Quick Start" href="quickstart.html" />
+    <link rel="next" title="Using Macros" href="macros.html" />
+    <link rel="prev" title="Curve Fitting and Smoothing" href="curvefitting.html" />
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Neuton&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nobile:regular,italic,bold,bolditalic&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
 <!--[if lte IE 6]>
@@ -32,13 +31,13 @@
           <a href="genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
-          <a href="basics.html" title="Data Format"
+          <a href="macros.html" title="Using Macros"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="quickstart.html" title="Quick Start"
+          <a href="curvefitting.html" title="Curve Fitting and Smoothing"
              accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="GF4_Users_Guide.html">GF4  documentation</a> &#187;</li>
-        <li class="nav-item nav-item-this"><a href="">GF4’s Design Philosophy</a></li> 
+        <li class="nav-item nav-item-this"><a href="">Windowing and FFTs</a></li> 
       </ul>
     </div>  
 
@@ -47,26 +46,8 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <section id="gf4-s-design-philosophy">
-<h1>GF4’s Design Philosophy<a class="headerlink" href="#gf4-s-design-philosophy" title="Permalink to this headline">¶</a></h1>
-<p>There are some definite guiding principles that underline the design of GF4.
-In general, common user actions should be made as similar and simple as possible.
-So for example, operations that need input for parameters from the user (such as a scale factor)
-always use the same dialogs, and each operation remembers the values that were
-used the last time.</p>
-<p>The program should try to remove aggravations for the user.  So there are no
-modal error message boxes.  Instead, important messages flash gently at the
-bottom of the window, then fade away so the user needs to do nothing to get
-rid of them.  Since dialog boxes that flash out of existence can be annoying,
-GF4 dialog boxes fade away gently (system dialogs like the file save dialog
-do whatever the underlying system wants to do).</p>
-<p>As another example of convenience for the user, GF4’s parameter input dialogs accept Python
-numerical expressions so that the user may not have to calculate a value
-separately.</p>
-<p>There can be conflicts between the principles, or between the principles and
-ease of programming.  GF4 tries for simplicity in programming too, but user
-ease and consistency are given priority.  Many potentially interesting features
-have never been implemented because they would complicate the user interface.</p>
+  <section id="windowing-and-ffts">
+<h1>Windowing and FFTs<a class="headerlink" href="#windowing-and-ffts" title="Permalink to this heading">¶</a></h1>
 </section>
 
 
@@ -78,18 +59,18 @@ have never been implemented because they would complicate the user interface.</p
         <div class="sphinxsidebarwrapper">
   <div>
     <h4>Previous topic</h4>
-    <p class="topless"><a href="quickstart.html"
-                          title="previous chapter">Quick Start</a></p>
+    <p class="topless"><a href="curvefitting.html"
+                          title="previous chapter">Curve Fitting and Smoothing</a></p>
   </div>
   <div>
     <h4>Next topic</h4>
-    <p class="topless"><a href="basics.html"
-                          title="next chapter">Data Format</a></p>
+    <p class="topless"><a href="macros.html"
+                          title="next chapter">Using Macros</a></p>
   </div>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
-      <li><a href="_sources/philosophy.rst.txt"
+      <li><a href="_sources/windowing.rst.txt"
             rel="nofollow">Show Source</a></li>
     </ul>
    </div>
@@ -102,7 +83,7 @@ have never been implemented because they would complicate the user interface.</p
     </form>
     </div>
 </div>
-<script>$('#searchbox').show(0);</script>
+<script>document.getElementById('searchbox').style.display = "block"</script>
         </div>
       </div>
       <div class="clearer"></div>
@@ -114,18 +95,18 @@ have never been implemented because they would complicate the user interface.</p
           <a href="genindex.html" title="General Index"
              >index</a></li>
         <li class="right" >
-          <a href="basics.html" title="Data Format"
+          <a href="macros.html" title="Using Macros"
              >next</a> |</li>
         <li class="right" >
-          <a href="quickstart.html" title="Quick Start"
+          <a href="curvefitting.html" title="Curve Fitting and Smoothing"
              >previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="GF4_Users_Guide.html">GF4  documentation</a> &#187;</li>
-        <li class="nav-item nav-item-this"><a href="">GF4’s Design Philosophy</a></li> 
+        <li class="nav-item nav-item-this"><a href="">Windowing and FFTs</a></li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright Thomas B. Passin 2022.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.5.0.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 6.1.3.
     </div>
   </body>
 </html>

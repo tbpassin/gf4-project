@@ -165,6 +165,12 @@ class Dataset:
             line = line.lstrip()
             if line[0] in COMMENTS:
                 continue
+            # Eliminate trailing comments so we don't get fooled by commas in them
+            for ch in COMMENTS:
+                pos = line.find(ch)
+                if pos > -1:
+                    line = line[:pos]
+                    break
             if "," in line and not is_csv:
                 is_csv = True
             # Assume we are comma-separated, look for first data line
@@ -189,6 +195,7 @@ class Dataset:
             # Comment out all lines before first data line
             for i, line in enumerate(lines[:data_start_line]):
                 lines[i] = '#' + line
+
         #@-<< detect_csv >>
 
         for line in lines:
@@ -255,7 +262,15 @@ class Dataset:
             line = line.strip()
             if not line.strip(): continue
 
-            if line[0] in (';', '#'): continue
+            if line[0] in COMMENTS: continue
+
+            # Handle trailing comments
+            for ch in COMMENTS:
+                pos = line.find(ch)
+                if pos > 0:
+                    line = line[:pos]
+                    break
+
             fields = line.split()
 
             # First Numeric line
@@ -308,7 +323,6 @@ class Dataset:
                 sys.stderr.write(f'Skipping row {_rowcount}: {e}\n')
                 _x = _x[:retained_length]
                 _y = _y[:retained_length]
-
             #@-<< get numeric data >>
             #@-<< process line >>
 
@@ -595,6 +609,24 @@ class Dataset:
 
         self.ydata = [math.log(y) for y in self.ydata]
         return True
+
+    #@+node:tom.20230323011457.1: *3* Dataset.invert
+    def invert(self):
+        """Invert Y values of dataset.
+        
+        If any points are = 0, change nothing.
+
+        RETURNS
+        False if any y values are = 0.0 or 0, True otherwise
+
+        """
+        for y in self.ydata:
+            if y == 0.0 or y == 0:
+                return False
+
+        self.ydata = [1./y for y in self.ydata]
+        return True
+
 
     #@+node:tom.20211211170820.27: *3* Dataset.log10
     def log10(self):

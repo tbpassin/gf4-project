@@ -789,6 +789,14 @@ class PlotManager(AbstractPlotManager):
         self.current_path = fname
 
         blocks = data.split(ENDDATASET)
+        # There may be no data lines after the last ENDDATASET.
+        # If so, we don't want to try to use that last block
+        last = blocks[-1]
+        last_lines = last.splitlines()
+        last_datalines = [line for line in last_lines if line.strip() and 
+                            line.lstrip()[0] not in COMMENTS]
+        if not last_datalines:
+            blocks = blocks[:-1]
         numblocks = len(blocks)
         if numblocks < 1:
             self.announce('No data found')
@@ -800,10 +808,10 @@ class PlotManager(AbstractPlotManager):
             block = blocks[n]
             if not block.split():
                 continue
-
             lines = block.split('\n')
             _data = Dataset(None, None, PurePath(fname).name)
             _data.orig_filename = fname
+
             err = _data.setAsciiData(lines, root = self.root)
             if err:
                 self.announce(f'No data in block {n}')
@@ -842,6 +850,15 @@ class PlotManager(AbstractPlotManager):
         self.initpath = PurePath(fname).parent
 
         blocks = data.split(ENDDATASET)
+        # There may be no data lines after the last ENDDATASET.
+        # If so, we don't want to try to use that last block
+        last = blocks[-1]
+        last_lines = last.splitlines()
+        last_datalines = [line for line in last_lines if line.strip() and 
+                            line.lstrip()[0] not in COMMENTS]
+        if not last_datalines:
+            blocks = blocks[:-1]
+
         numblocks = len(blocks)
         if numblocks < 1:
             self.announce('No data found')
@@ -852,6 +869,15 @@ class PlotManager(AbstractPlotManager):
         for n in range(min(len(blocks), STACKDEPTH)):
             block = blocks[n]
             lines = block.split('\n')
+            non_comment_lines = 0
+            for line in lines:
+                line = line.strip()
+                if not line:
+                    continue
+                if line[0] not in COMMENTS:
+                    non_comment_lines += 1
+            if not non_comment_lines:
+                continue
             _data = Dataset()
             _data.orig_filename = fname
             err = _data.setAsciiData(lines)
@@ -921,6 +947,15 @@ class PlotManager(AbstractPlotManager):
         if not data.strip(): return
 
         blocks = data.split(ENDDATASET)
+        # There may be no data lines after the last ENDDATASET.
+        # If so, we don't want to try to use that last block
+        last = blocks[-1]
+        last_lines = last.splitlines()
+        last_datalines = [line for line in last_lines if line.strip() and 
+                            line.lstrip()[0] not in COMMENTS]
+        if not last_datalines:
+            blocks = blocks[:-1]
+
         numblocks = len(blocks)
         if numblocks < 1:
             self.announce('No data found')
@@ -977,9 +1012,15 @@ class PlotManager(AbstractPlotManager):
                             'Increment', _start, _delta)
         if dia.result is None: return
 
-        new_start, new_delta = dia.result
-        _ds.xdata = [new_start + 1.0 * n * new_delta for n in
-                     range(0, len(_ds.xdata))]
+        new_start_, new_delta_ = dia.result
+
+        new_start, new_delta = float(new_start_), float(new_delta_)
+        new_x = [0] * len(_xdata)
+        x_ = new_start
+        for i in range(len(_xdata)):
+            x_ += new_delta
+            new_x[i] = x_
+        _ds.xdata = new_x
 
         if _ds.errorBands:
             for eb in _ds.errorBands:
@@ -1239,6 +1280,19 @@ class PlotManager(AbstractPlotManager):
         lab = '%s Trimmed by %s' % (lab, N)
         self.stack[MAIN].figurelabel = lab
 
+        self.plot()
+    #@+node:tom.20230323110112.1: *4* invert
+    @CLEAR_ERROR_BANDS
+    @REQUIRE_MAIN
+    def invert(self):
+        success = self.stack[MAIN].invert()
+        if not success:
+            self.announce("Data contains 0 - can't invert")
+            self.flashit()
+            return
+        lab = self.stack[MAIN].figurelabel
+        if lab:
+            self.stack[MAIN].figurelabel = 'Inversion of %s' % (lab)
         self.plot()
     #@+node:tom.20211207165051.88: *4* log
     @CLEAR_ERROR_BANDS
