@@ -367,6 +367,7 @@ def create_buttons_pack(host, plotmgr):
         # _font will be the font of the group labels and the help text
         _font.config(**NEWFONT.config())
     else:
+        ascender = 9.6
         NEWFONT = tkFont.nametofont(_font.name)
         sz = adjust_font_size(NEWFONT, ascender)
         NEWFONT.config(size = sz, weight = 'bold')
