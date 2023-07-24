@@ -456,6 +456,7 @@ for p in c.all_unique_positions():
         target = p
         c.selectPosition(target)
         break
+
 if target:
     c.k.simulateCommand('rst3')
 
