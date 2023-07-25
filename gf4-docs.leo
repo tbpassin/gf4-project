@@ -794,7 +794,7 @@ have never been implemented because they would complicate the user interface.
 </t>
 <t tx="tom.20220820141745.1">csaps
 docutils
-matplotlib &lt;= 3.6.3
+matplotlib
 numpy
 pillow &gt;= 9.1.0
 pwlf
@@ -855,6 +855,9 @@ graph.  This can be a very useful capability.
 </t>
 <t tx="tom.20220901223400.1">@language md
 @tabwidth -4
+
+### Devel Branch 1.5   7-23-2023
+Now works with recent versions of MatPlotlib (i.e., &gt; 2.6.3).
 
 ### Devel Branch 1.5b5  4-23-2023, 4-28-2023
 - Fix "no data" bug when the last non-comment line is a ENDDATASET special comment.
