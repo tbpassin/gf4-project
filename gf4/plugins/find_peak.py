@@ -16,6 +16,7 @@ OWNER_GROUP = 'DATA_PROCESSING_BUTTONS'
 
 plotmgr = None  # Suppress pyflake complaints
 
+# plotmgr will have been injected into the module by the time this is called
 def proc():
     if not needs_main(plotmgr):
         return

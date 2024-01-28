@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Created by Leo: https://leo-editor.github.io/leo-editor/leo_toc.html -->
-<leo_file xmlns:leo="http://leo-editor.github.io/leo-editor/namespaces/leo-python-editor/1.1" >
+<leo_file xmlns:leo="https://leo-editor.github.io/leo-editor/namespaces/leo-python-editor/1.1" >
 <leo_header file_format="2"/>
 <globals/>
 <preferences/>
@@ -98,6 +98,9 @@
 <v t="tom.20220816180207.1"><vh>No tkinter</vh></v>
 <v t="tom.20220816175947.1"><vh>cannot import name 'ImageTK'</vh></v>
 </v>
+</v>
+<v t="tom.20230524110237.1"><vh>Exception Decorators</vh>
+<v t="tom.20221005234429.1"><vh>val_error decorator</vh></v>
 </v>
 </v>
 </vnodes>
@@ -257,6 +260,20 @@ The file should contain the desired plugins by file name, one to a line.
 The ".py" file extension may optionally be omitted.  Blank lines and lines that
 start with a "#" or ";" character will be ignored.
 </t>
+<t tx="tom.20221005234429.1">def val_error (except_type, msg1, msg2):
+    def wrapper(f):
+        @functools.wraps(f)
+        def inner(*args, **kwargs):
+            try:
+                return f(*args, **kwargs)
+            except except_type as e:
+                emsg = f'{e}'.split('(&lt;string')[0]
+                tkMessageBox.showwarning(f'{msg1}', f'{emsg}: {msg2}')
+                return False
+        return inner
+    return wrapper
+
+</t>
 <t tx="tom.20221105083713.1"></t>
 <t tx="tom.20221121171302.1"></t>
 <t tx="tom.20221128184455.1"></t>
@@ -285,5 +302,6 @@ cd %PYTHONPATH%
 py -m pytest -k "not test_smooth and not fit_test"
 endlocal
 </t>
+<t tx="tom.20230524110237.1"></t>
 </tnodes>
 </leo_file>

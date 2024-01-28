@@ -66,6 +66,9 @@ EXTENDED_HELP_TEXT = (
 HELP_PANEL_BG = 'lightblue'
 MACRO_TEXT = 'Record'
 MACRO_FULLTEXT = 'Record Macro'
+MACRO_RECORDING_TEXT = 'Recording'
+MACRO_ON_MSG = 'Macro Recording Started'
+MACRO_OFF_MSG = 'Macro Recording Ended'
 PADY = 2
 
 entry = None
@@ -143,13 +146,15 @@ def click(event):
     global is_recording, macro
     w = event.widget
     flash_button(w)
-    if w.cget('text') == MACRO_TEXT:
+    if w.cget('text') in (MACRO_TEXT, MACRO_RECORDING_TEXT):
         if is_recording:
             is_recording = False
             w.config(bg = BUTTON_BG)
+            w['text'] = MACRO_TEXT
         else:
             w.config(bg=BUTTON_RECORD_COLOR)
             is_recording = True
+            w['text'] = MACRO_RECORDING_TEXT
             macro = ''
 
 #@+node:tom.20211211170819.12: ** on_enter
@@ -346,6 +351,7 @@ def create_buttons_pack(host, plotmgr):
             ffamily = f
             break
 
+    ascender = 9.6  # Default when no case matches if statement
     if ffamily:
         if platform.startswith('win'):
             ascender = 10.6

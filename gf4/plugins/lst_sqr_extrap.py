@@ -11,7 +11,9 @@ BUTTON_DEF = ('Lst Sqr + Extrap', 'lst-sqr-extrap',
                'Least squares fit of [X] Data With Nth-Order Polynomial and Optional Extrapolation')
 OVERRIDE = False
 plotmgr = None
-
+# mypy fails some of the following because plotmgr is None here,
+# but at runtime it will be an instance of an actual PlotManager.
+# mypy: disable-error-code = "attr-defined"
 #@+<< helptext >>
 #@+node:tom.20230106182809.1: ** << helptext >>
 HELPTEXT[

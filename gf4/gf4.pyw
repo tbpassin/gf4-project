@@ -2367,7 +2367,7 @@ class PlotManager(AbstractPlotManager):
         self.stack[MAIN].halfSupergaussian()
         lab = self.stack[MAIN].figurelabel
         if lab and lab != 'Figure Label':
-            self.stack[MAIN].figurelabel = 'Windowed %s' % (lab)
+            self.stack[MAIN].figurelabel = ' Half Supergaussian Windowed %s' % (lab)
 
         self.plot()
 

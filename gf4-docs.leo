@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Created by Leo: https://leo-editor.github.io/leo-editor/leo_toc.html -->
-<leo_file xmlns:leo="http://leo-editor.github.io/leo-editor/namespaces/leo-python-editor/1.1" >
+<leo_file xmlns:leo="https://leo-editor.github.io/leo-editor/namespaces/leo-python-editor/1.1" >
 <leo_header file_format="2"/>
 <globals/>
 <preferences/>
@@ -21,6 +21,7 @@
 <v t="tom.20220820141745.1"><vh>@clean requirements.txt</vh></v>
 <v t="tom.20220901223400.1"><vh>@clean recent_changes.md</vh></v>
 <v t="tom.20230507161216.1"><vh>@clean .nojekyll</vh></v>
+<v t="tom.20231214172831.1"><vh>@clean index.html</vh></v>
 <v t="tom.20220507132007.5"><vh>@button Build HTML</vh></v>
 <v t="tom.20220507132007.4"><vh>@path sphinx</vh>
 <v t="tom.20220507180306.1"><vh>GF4 User's Guide</vh>
@@ -456,7 +457,6 @@ for p in c.all_unique_positions():
         target = p
         c.selectPosition(target)
         break
-
 if target:
     c.k.simulateCommand('rst3')
 
@@ -856,6 +856,10 @@ graph.  This can be a very useful capability.
 <t tx="tom.20220901223400.1">@language md
 @tabwidth -4
 
+### Devel Branch 1.51   11-18-2023
+- Macro button changes label to "Recording" when in the recording state.
+- Fix unintialized variable "ascender" in cmdwin.py
+
 ### Devel Branch 1.5   7-23-2023
 Now works with recent versions of MatPlotlib (i.e., &gt; 2.6.3).
 
@@ -1023,5 +1027,14 @@ explanation in the system browser.
 If an extended help message does not exist for the button, this will be
 announced in the announcement bar at the bottom of the main window.</t>
 <t tx="tom.20230507161216.1"></t>
+<t tx="tom.20231214172831.1">&lt;html&gt;
+&lt;head&gt;
+    &lt;!-- Redirect for github.io home page --&gt;
+    &lt;meta http-equiv="refresh" content="0;url=docs/GF4_Users_Guide.html"&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;p&gt;If you are not redirected, &lt;a href="docs/GF4_Users_Guide.html"&gt;click here&lt;/a&gt;.&lt;/p&gt;
+&lt;/body&gt;
+&lt;/html&gt;</t>
 </tnodes>
 </leo_file>
