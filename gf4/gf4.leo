@@ -6,13 +6,13 @@
 <preferences/>
 <find_panel_settings/>
 <vnodes>
-<v t="tom.20211211170510.1"><vh>GF4 Files</vh>
-<v t="tom.20220411232217.1"><vh>Administrative and License</vh>
-<v t="tom.20220411133313.1"><vh>@clean Copyright_and_Authorship.txt</vh></v>
-<v t="tom.20220411133954.1"><vh>@clean Software_License.txt</vh></v>
-<v t="tom.20220411171338.1"><vh>@clean ABOUT.txt</vh></v>
+<v t="tom.20211211170510.1" descendentVnodeUnknownAttributes="7d7100285805000000302e302e3071017d710258090000005f6d6f645f74696d6571034741d9d712626eaf45735805000000302e302e3171047d710558090000005f6d6f645f74696d6571064741d9d712626eaf45735805000000302e302e3271077d710858090000005f6d6f645f74696d6571094741d9d712626e8e6373580a000000302e312e32372e302e30710a7d710b58090000005f6d6f645f74696d65710c4741da1de95f40ea3e73580a000000302e312e32372e302e31710d7d710e58090000005f6d6f645f74696d65710f4741d9d712626f4407735805000000302e322e3071107d711158090000005f6d6f645f74696d6571124741d9d712626ed026735809000000302e332e302e302e3071137d711458090000005f6d6f645f74696d6571154741d9d712626e8e6373752e"><vh>GF4 Files</vh>
+<v t="tom.20220411232217.1" descendentVnodeUnknownAttributes="7d7100285803000000302e3071017d710258090000005f6d6f645f74696d6571034741d9d712626eaf45735803000000302e3171047d710558090000005f6d6f645f74696d6571064741d9d712626eaf45735803000000302e3271077d710858090000005f6d6f645f74696d6571094741d9d712626e8e6373752e"><vh>Administrative and License</vh>
+<v t="tom.20220411133313.1" descendentVnodeUnknownAttributes="7d710058010000003071017d710258090000005f6d6f645f74696d6571034741d9d712626eaf4573732e"><vh>@clean Copyright_and_Authorship.txt</vh></v>
+<v t="tom.20220411133954.1" descendentVnodeUnknownAttributes="7d710058010000003071017d710258090000005f6d6f645f74696d6571034741d9d712626eaf4573732e"><vh>@clean Software_License.txt</vh></v>
+<v t="tom.20220411171338.1" descendentVnodeUnknownAttributes="7d710058010000003071017d710258090000005f6d6f645f74696d6571034741d9d712626e8e6373732e"><vh>@clean ABOUT.txt</vh></v>
 </v>
-<v t="tom.20211211170532.1"><vh>Program files</vh>
+<v t="tom.20211211170532.1" descendentVnodeUnknownAttributes="7d7100285808000000302e32372e302e3071017d710258090000005f6d6f645f74696d6571034741da1de95f40ea3e735808000000302e32372e302e3171047d710558090000005f6d6f645f74696d6571064741d9d712626f440773752e"><vh>Program files</vh>
 <v t="tom.20211207165051.2"><vh>@file gf4.pyw</vh></v>
 <v t="tom.20211211170701.2"><vh>@file AbstractPlotMgr.py</vh></v>
 <v t="tom.20211211170819.2"><vh>@file BuildCommands.py</vh></v>
@@ -40,14 +40,14 @@
 <v t="tom.20211211171913.55"><vh>@file trend.py</vh></v>
 <v t="tom.20221027233021.1"><vh>@file utility.py</vh></v>
 <v t="tom.20220506081351.1"><vh>@file versions.py</vh></v>
-<v t="tom.20220829181040.1"><vh>@path plugins</vh>
-<v t="tom.20221105083713.1"><vh>Infrastructure</vh>
-<v t="tom.20220830215645.1"><vh>@clean README.txt</vh>
+<v t="tom.20220829181040.1" descendentVnodeUnknownAttributes="7d7100285805000000302e302e3071017d710258090000005f6d6f645f74696d6571034741da1de95f40ea3e735805000000302e302e3171047d710558090000005f6d6f645f74696d6571064741d9d712626f440773752e"><vh>@path plugins</vh>
+<v t="tom.20221105083713.1" descendentVnodeUnknownAttributes="7d7100285803000000302e3071017d710258090000005f6d6f645f74696d6571034741da1de95f40ea3e735803000000302e3171047d710558090000005f6d6f645f74696d6571064741d9d712626f440773752e"><vh>Infrastructure</vh>
+<v t="tom.20220830215645.1" descendentVnodeUnknownAttributes="7d710058010000003071017d710258090000005f6d6f645f74696d6571034741da1de95f40ea3e73732e"><vh>@clean README.txt</vh>
 <v t="tom.20220830223226.1"><vh>What A Plugin Should Import</vh></v>
 <v t="tom.20220830223435.1"><vh>What A Plugin Must Include</vh></v>
 <v t="tom.20220830224004.1"><vh>How To Specify Which Plugins To Use</vh></v>
 </v>
-<v t="tom.20220830112255.1"><vh>@clean use_plugins.txt</vh></v>
+<v t="tom.20220830112255.1" descendentVnodeUnknownAttributes="7d710058010000003071017d710258090000005f6d6f645f74696d6571034741d9d712626f440773732e"><vh>@clean use_plugins.txt</vh></v>
 <v t="tom.20220830184545.1"><vh>@file require_datasets.py</vh></v>
 </v>
 <v t="tom.20220829181057.1"><vh>@file test_plugin.py</vh></v>
@@ -69,13 +69,13 @@
 <v t="tom.20221124112244.1"><vh>@file show_sigma.py</vh></v>
 </v>
 </v>
-<v t="tom.20221211135219.1"><vh>Config File</vh>
-<v t="tom.20221211135236.1"><vh>@clean config/gf4.ini</vh></v>
+<v t="tom.20221211135219.1" descendentVnodeUnknownAttributes="7d71005803000000302e3071017d710258090000005f6d6f645f74696d6571034741d9d712626ed02673732e"><vh>Config File</vh>
+<v t="tom.20221211135236.1" descendentVnodeUnknownAttributes="7d710058010000003071017d710258090000005f6d6f645f74696d6571034741d9d712626ed02673732e"><vh>@clean config/gf4.ini</vh></v>
 </v>
-<v t="tom.20220506082557.1"><vh>Tests</vh>
-<v t="tom.20230129231139.1"><vh>Unit tests</vh>
-<v t="tom.20230129231146.1"><vh>@path unittests</vh>
-<v t="tom.20230201003427.1"><vh>@clean ../../gf4-testing.cmd</vh></v>
+<v t="tom.20220506082557.1" descendentVnodeUnknownAttributes="7d71005807000000302e302e302e3071017d710258090000005f6d6f645f74696d6571034741d9d712626e8e6373732e"><vh>Tests</vh>
+<v t="tom.20230129231139.1" descendentVnodeUnknownAttributes="7d71005805000000302e302e3071017d710258090000005f6d6f645f74696d6571034741d9d712626e8e6373732e"><vh>Unit tests</vh>
+<v t="tom.20230129231146.1" descendentVnodeUnknownAttributes="7d71005803000000302e3071017d710258090000005f6d6f645f74696d6571034741d9d712626e8e6373732e"><vh>@path unittests</vh>
+<v t="tom.20230201003427.1" descendentVnodeUnknownAttributes="7d710058010000003071017d710258090000005f6d6f645f74696d6571034741d9d712626e8e6373732e"><vh>@clean ../../gf4-testing.cmd</vh></v>
 <v t="tom.20230131195511.1"><vh>@file test_paths.py</vh></v>
 <v t="tom.20230203111004.1"><vh>@file test_dialogs.py</vh></v>
 <v t="tom.20230203183434.1"><vh>@file test_dataset.py</vh></v>
@@ -108,9 +108,9 @@
 <t tx="tom.20211207165011.1"></t>
 <t tx="tom.20211211170510.1"></t>
 <t tx="tom.20211211170532.1"></t>
-<t tx="tom.20220411133313.1">The software in this GF4 project is writtten by and copyrighted by: Thomas B. Passin 2014 - 2022.
+<t tx="tom.20220411133313.1" _mod_time="4741d9d712626eaf452e">The software in this GF4 project is writtten by and copyrighted by: Thomas B. Passin 2014 - 2022.
 </t>
-<t tx="tom.20220411133954.1">The GF4 software package is covered by the standard MIT license, reproduced below:
+<t tx="tom.20220411133954.1" _mod_time="4741d9d712626eaf452e">The GF4 software package is covered by the standard MIT license, reproduced below:
 
 The MIT License (MIT)
 Copyright © 1992 - 2022 Thomas B. Passin
@@ -120,7 +120,7 @@ Permission is hereby granted, free of charge, to any person obtaining a copy of 
 The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.</t>
-<t tx="tom.20220411171338.1">GF4 is a computer program for visualizing and processing two-dimensional data
+<t tx="tom.20220411171338.1" _mod_time="4741d9d712626e8e632e">GF4 is a computer program for visualizing and processing two-dimensional data
 such as X-Y and time series data. The user interface is modeled after a
 reverse-polish notation (RPN) style of desk calculator, with the roles of
 numbers being replaced by 2D data sets.
@@ -163,7 +163,7 @@ permissions) - see https://riptutorial.com/tkinter/example/3206/installation-or-
 
 </t>
 <t tx="tom.20220829181040.1"></t>
-<t tx="tom.20220830112255.1"># The list of plugins to import. Omit the ".py" extension.
+<t tx="tom.20220830112255.1" _mod_time="4741d9d712626f44072e"># The list of plugins to import. Omit the ".py" extension.
 find_peak
 readout
 calculator
@@ -172,7 +172,7 @@ poly_lowess
 show_sigma
 low_quad
 </t>
-<t tx="tom.20220830215645.1">GF4 has a plugin mechanism that can load plugin files located in the "plugins"
+<t tx="tom.20220830215645.1" _mod_time="4741da1de95f40ea3e2e">GF4 has a plugin mechanism that can load plugin files located in the "plugins"
 directory.  This README provides some basic information for developers of plugins.
 
 WHAT A PLUGIN PROVIDES
@@ -225,12 +225,13 @@ This function must be named "proc" and take no parameters. The function is not
 expected to return anything.  For example:
 
 # plotmgr will have been injected into the module by the time this is called
-def proc():
-    if not has_main(plotmgr):  # Do nothing if no data
-        return
-    _ds = plotmgr.stack[MAIN]  # The "X" Dataset
-    _ds.scale(2)
-    plotmgr.plot()
+
+    def proc():
+        if not has_main(plotmgr):  # Do nothing if no data
+            return
+        _ds = plotmgr.stack[MAIN]  # The "X" Dataset
+        _ds.scale(2)
+        plotmgr.plot()
 
 The "plotmgr" attribute represents the active PlotManager instance. Do not try
 to import it; it will be automatically injected into the module's attributes
@@ -278,7 +279,7 @@ start with a "#" or ";" character will be ignored.
 <t tx="tom.20221121171302.1"></t>
 <t tx="tom.20221128184455.1"></t>
 <t tx="tom.20221211135219.1"></t>
-<t tx="tom.20221211135236.1">; GF4 configuration file
+<t tx="tom.20221211135236.1" _mod_time="4741d9d712626ed0262e">; GF4 configuration file
 [colors]
 ; Override initial colors using MatPlotLib CSSS4 color names or #xxyyzz hex values.
 ; main-line-color = red
@@ -291,7 +292,7 @@ Run pytest from the gf4-project directory -
 py -m pytest -k "not test_smooth and not fit_test"
 """</t>
 <t tx="tom.20230129231146.1"></t>
-<t tx="tom.20230201003427.1">@language batch
+<t tx="tom.20230201003427.1" _mod_time="4741d9d712626e8e632e">@language batch
 :: Run pytest against gf4
 :: This command file must be located in the parent directory of \gf4
 @echo off

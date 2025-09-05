@@ -277,7 +277,7 @@ Overplotting is essential to getting the most out of GF4, since it provides a wa
 to compare several data sets, or several ways of processing the same data.
 
 </t>
-<t tx="tom.20220507132007.2">@language md
+<t tx="tom.20220507132007.2" _mod_time="4741d9d712626d08132e">@language md
 @tabwidth -4
 @others
 
@@ -474,7 +474,8 @@ if target:
     #'-D', 'html_theme=sphinx_book_theme',
     #'-D', 'html_theme=bizstyle',
 
-    cmd = [executable, '-m', 'sphinx', '-C',
+    cmd = [executable, '-m', 'sphinx',
+            '-C',  # Required to avoid using a conf.py file
             '-b', 'html',
             '-D', "master_doc=GF4_Users_Guide",
             '-D', 'source_suffix=.rst',
@@ -486,6 +487,7 @@ if target:
 
             # sourcedir, outputdir:
             r'.', r'..\docs']
+            # r'.', r'c:\temp\sphinx\gf4']
 
     subprocess.call(cmd)
 else:
@@ -667,7 +669,7 @@ the FFT (Fast Fourier Transform) assume that the points are uniformly spaced.</t
 <t tx="tom.20220507191015.1"></t>
 <t tx="tom.20220507191131.1"></t>
 <t tx="tom.20220507191549.1"></t>
-<t tx="tom.20220509230416.1">@language md
+<t tx="tom.20220509230416.1" _mod_time="4741d9d712626d08132e">@language md
 @tabwidth -4
 @others
 </t>
@@ -792,7 +794,7 @@ ease of programming.  GF4 tries for simplicity in programming too, but user
 ease and consistency are given priority.  Many potentially interesting features 
 have never been implemented because they would complicate the user interface.
 </t>
-<t tx="tom.20220820141745.1">csaps
+<t tx="tom.20220820141745.1" _mod_time="4741d9d712626f44072e">csaps
 docutils
 matplotlib
 numpy
@@ -853,7 +855,7 @@ does not plot the new data.  This allows the user to keep reading data files and
 overplotting them - possibly in different colors - without destroying an existing
 graph.  This can be a very useful capability.
 </t>
-<t tx="tom.20220901223400.1">@language md
+<t tx="tom.20220901223400.1" _mod_time="4741d9d712626f44072e">@language md
 @tabwidth -4
 
 ### Devel Branch 1.51   11-18-2023
@@ -1026,8 +1028,8 @@ explanation in the system browser.
 
 If an extended help message does not exist for the button, this will be
 announced in the announcement bar at the bottom of the main window.</t>
-<t tx="tom.20230507161216.1"></t>
-<t tx="tom.20231214172831.1">&lt;html&gt;
+<t tx="tom.20230507161216.1" _mod_time="4741d9d712626d08132e"></t>
+<t tx="tom.20231214172831.1" _mod_time="4741d9d712626f44072e">&lt;html&gt;
 &lt;head&gt;
     &lt;!-- Redirect for github.io home page --&gt;
     &lt;meta http-equiv="refresh" content="0;url=docs/GF4_Users_Guide.html"&gt;
