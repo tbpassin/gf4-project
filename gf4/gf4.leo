@@ -6,13 +6,13 @@
 <preferences/>
 <find_panel_settings/>
 <vnodes>
-<v t="tom.20211211170510.1" descendentVnodeUnknownAttributes="7d7100285805000000302e302e3071017d710258090000005f6d6f645f74696d6571034741d9d712626eaf45735805000000302e302e3171047d710558090000005f6d6f645f74696d6571064741d9d712626eaf45735805000000302e302e3271077d710858090000005f6d6f645f74696d6571094741d9d712626e8e6373580a000000302e312e32372e302e30710a7d710b58090000005f6d6f645f74696d65710c4741da1de95f40ea3e73580a000000302e312e32372e302e31710d7d710e58090000005f6d6f645f74696d65710f4741d9d712626f4407735805000000302e322e3071107d711158090000005f6d6f645f74696d6571124741d9d712626ed026735809000000302e332e302e302e3071137d711458090000005f6d6f645f74696d6571154741d9d712626e8e6373752e"><vh>GF4 Files</vh>
-<v t="tom.20220411232217.1" descendentVnodeUnknownAttributes="7d7100285803000000302e3071017d710258090000005f6d6f645f74696d6571034741d9d712626eaf45735803000000302e3171047d710558090000005f6d6f645f74696d6571064741d9d712626eaf45735803000000302e3271077d710858090000005f6d6f645f74696d6571094741d9d712626e8e6373752e"><vh>Administrative and License</vh>
-<v t="tom.20220411133313.1" descendentVnodeUnknownAttributes="7d710058010000003071017d710258090000005f6d6f645f74696d6571034741d9d712626eaf4573732e"><vh>@clean Copyright_and_Authorship.txt</vh></v>
-<v t="tom.20220411133954.1" descendentVnodeUnknownAttributes="7d710058010000003071017d710258090000005f6d6f645f74696d6571034741d9d712626eaf4573732e"><vh>@clean Software_License.txt</vh></v>
-<v t="tom.20220411171338.1" descendentVnodeUnknownAttributes="7d710058010000003071017d710258090000005f6d6f645f74696d6571034741d9d712626e8e6373732e"><vh>@clean ABOUT.txt</vh></v>
+<v t="tom.20211211170510.1"><vh>GF4 Files</vh>
+<v t="tom.20220411232217.1"><vh>Administrative and License</vh>
+<v t="tom.20220411133313.1"><vh>@clean Copyright_and_Authorship.txt</vh></v>
+<v t="tom.20220411133954.1"><vh>@clean Software_License.txt</vh></v>
+<v t="tom.20220411171338.1"><vh>@clean ABOUT.txt</vh></v>
 </v>
-<v t="tom.20211211170532.1" descendentVnodeUnknownAttributes="7d7100285808000000302e32372e302e3071017d710258090000005f6d6f645f74696d6571034741da1de95f40ea3e735808000000302e32372e302e3171047d710558090000005f6d6f645f74696d6571064741d9d712626f440773752e"><vh>Program files</vh>
+<v t="tom.20211211170532.1"><vh>Program files</vh>
 <v t="tom.20211207165051.2"><vh>@file gf4.pyw</vh></v>
 <v t="tom.20211211170701.2"><vh>@file AbstractPlotMgr.py</vh></v>
 <v t="tom.20211211170819.2"><vh>@file BuildCommands.py</vh></v>
@@ -40,14 +40,14 @@
 <v t="tom.20211211171913.55"><vh>@file trend.py</vh></v>
 <v t="tom.20221027233021.1"><vh>@file utility.py</vh></v>
 <v t="tom.20220506081351.1"><vh>@file versions.py</vh></v>
-<v t="tom.20220829181040.1" descendentVnodeUnknownAttributes="7d7100285805000000302e302e3071017d710258090000005f6d6f645f74696d6571034741da1de95f40ea3e735805000000302e302e3171047d710558090000005f6d6f645f74696d6571064741d9d712626f440773752e"><vh>@path plugins</vh>
-<v t="tom.20221105083713.1" descendentVnodeUnknownAttributes="7d7100285803000000302e3071017d710258090000005f6d6f645f74696d6571034741da1de95f40ea3e735803000000302e3171047d710558090000005f6d6f645f74696d6571064741d9d712626f440773752e"><vh>Infrastructure</vh>
-<v t="tom.20220830215645.1" descendentVnodeUnknownAttributes="7d710058010000003071017d710258090000005f6d6f645f74696d6571034741da1de95f40ea3e73732e"><vh>@clean README.txt</vh>
+<v t="tom.20220829181040.1"><vh>@path plugins</vh>
+<v t="tom.20221105083713.1"><vh>Infrastructure</vh>
+<v t="tom.20220830215645.1"><vh>@clean README.txt</vh>
 <v t="tom.20220830223226.1"><vh>What A Plugin Should Import</vh></v>
 <v t="tom.20220830223435.1"><vh>What A Plugin Must Include</vh></v>
 <v t="tom.20220830224004.1"><vh>How To Specify Which Plugins To Use</vh></v>
 </v>
-<v t="tom.20220830112255.1" descendentVnodeUnknownAttributes="7d710058010000003071017d710258090000005f6d6f645f74696d6571034741d9d712626f440773732e"><vh>@clean use_plugins.txt</vh></v>
+<v t="tom.20220830112255.1"><vh>@clean use_plugins.txt</vh></v>
 <v t="tom.20220830184545.1"><vh>@file require_datasets.py</vh></v>
 </v>
 <v t="tom.20220829181057.1"><vh>@file test_plugin.py</vh></v>
@@ -69,13 +69,13 @@
 <v t="tom.20221124112244.1"><vh>@file show_sigma.py</vh></v>
 </v>
 </v>
-<v t="tom.20221211135219.1" descendentVnodeUnknownAttributes="7d71005803000000302e3071017d710258090000005f6d6f645f74696d6571034741d9d712626ed02673732e"><vh>Config File</vh>
-<v t="tom.20221211135236.1" descendentVnodeUnknownAttributes="7d710058010000003071017d710258090000005f6d6f645f74696d6571034741d9d712626ed02673732e"><vh>@clean config/gf4.ini</vh></v>
+<v t="tom.20221211135219.1"><vh>Config File</vh>
+<v t="tom.20221211135236.1"><vh>@clean config/gf4.ini</vh></v>
 </v>
-<v t="tom.20220506082557.1" descendentVnodeUnknownAttributes="7d71005807000000302e302e302e3071017d710258090000005f6d6f645f74696d6571034741d9d712626e8e6373732e"><vh>Tests</vh>
-<v t="tom.20230129231139.1" descendentVnodeUnknownAttributes="7d71005805000000302e302e3071017d710258090000005f6d6f645f74696d6571034741d9d712626e8e6373732e"><vh>Unit tests</vh>
-<v t="tom.20230129231146.1" descendentVnodeUnknownAttributes="7d71005803000000302e3071017d710258090000005f6d6f645f74696d6571034741d9d712626e8e6373732e"><vh>@path unittests</vh>
-<v t="tom.20230201003427.1" descendentVnodeUnknownAttributes="7d710058010000003071017d710258090000005f6d6f645f74696d6571034741d9d712626e8e6373732e"><vh>@clean ../../gf4-testing.cmd</vh></v>
+<v t="tom.20220506082557.1"><vh>Tests</vh>
+<v t="tom.20230129231139.1"><vh>Unit tests</vh>
+<v t="tom.20230129231146.1"><vh>@path unittests</vh>
+<v t="tom.20230201003427.1"><vh>@clean ../../gf4-testing.cmd</vh></v>
 <v t="tom.20230131195511.1"><vh>@file test_paths.py</vh></v>
 <v t="tom.20230203111004.1"><vh>@file test_dialogs.py</vh></v>
 <v t="tom.20230203183434.1"><vh>@file test_dataset.py</vh></v>
@@ -101,6 +101,9 @@
 </v>
 <v t="tom.20230524110237.1"><vh>Exception Decorators</vh>
 <v t="tom.20221005234429.1"><vh>val_error decorator</vh></v>
+</v>
+<v t="tom.20250907102103.1"><vh>Requirements</vh>
+<v t="tom.20250907102111.1"><vh>Data Import</vh></v>
 </v>
 </v>
 </vnodes>
@@ -172,7 +175,7 @@ poly_lowess
 show_sigma
 low_quad
 </t>
-<t tx="tom.20220830215645.1" _mod_time="4741da1de95f40ea3e2e">GF4 has a plugin mechanism that can load plugin files located in the "plugins"
+<t tx="tom.20220830215645.1" _mod_time="4741da1de97a687b8b2e">GF4 has a plugin mechanism that can load plugin files located in the "plugins"
 directory.  This README provides some basic information for developers of plugins.
 
 WHAT A PLUGIN PROVIDES
@@ -279,12 +282,14 @@ start with a "#" or ";" character will be ignored.
 <t tx="tom.20221121171302.1"></t>
 <t tx="tom.20221128184455.1"></t>
 <t tx="tom.20221211135219.1"></t>
-<t tx="tom.20221211135236.1" _mod_time="4741d9d712626ed0262e">; GF4 configuration file
+<t tx="tom.20221211135236.1" _mod_time="4741da313a418409ea2e">; GF4 configuration file
 [colors]
 ; Override initial colors using MatPlotLib CSSS4 color names or #xxyyzz hex values.
 ; main-line-color = red
 ; buffer-line-color = gray
-</t>
+
+[dates]
+default-date-format = '%%Y-%%m-%%d'</t>
 <t tx="tom.20230129231139.1">"""
 ###### MUST set PYTHONPATH=c:\tom\git\gf4-project\gf4 first ######
 Run pytest from the gf4-project directory -
@@ -304,5 +309,35 @@ py -m pytest -k "not test_smooth and not fit_test"
 endlocal
 </t>
 <t tx="tom.20230524110237.1"></t>
+<t tx="tom.20250907102103.1"></t>
+<t tx="tom.20250907102111.1">Data Source (Descriptive note)
+
+Input data are in the form of a block of text. Each data point is contained in a row of the text. Each axis of the data point is in its own column.
+
+Robustness
+
+1. Highly robust - ignore lines that don't convert to numbers or dates.
+2. Ignore blank lines.
+3. Ignore lines starting with a comment character (',', '#')
+4. Ignore line content following a comment character.
+5. Either csv or whitespace-separated columns are allowed. Don't mix.
+
+Data ingestion
+
+6. Report number of data columns, as discovered during processing..
+7. If there is only one data column, consider it to be the second column and create a serially numbered first column starting at 0.
+8. Data columns may be integers, floats, or dates.
+9. Data elements are converted to floats.
+10. Recognize special comment lines and extract (key, value) pairs from them.
+11. All data for a data point must be on the same row.
+
+Date handling
+
+12. For date formats, user may optionally specify a format.
+13. Dates must be converted to years as floats (e.g., 2025-08-15 -&gt; 2025.6189).
+14. Date conversion must account for leap years correctly.
+15. If a column is a date, check to see if all the dates in the column are ordered serially. Inform user if not.
+16. If an optional date format has been specified in the data, but that format is invalid, inform user and terminate processing.
+</t>
 </tnodes>
 </leo_file>

@@ -79,7 +79,7 @@ def get_valid_color(colors, key, default):
     RETURNS
     The color for given key in the .ini file, or the default value.
     """
-    global mcolors
+    global confi
     color = colors.get(key, None)
     if color:
         bad_color_msg = f'Invalid .ini file color for {key}: {color}'

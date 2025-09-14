@@ -8,9 +8,11 @@ from __future__ import print_function
 import sys
 import math
 import copy
+from datetime import datetime
 import numpy as np
 
 from entry import GetTwoInts
+from utility import config_date_format
 
 COMMENTS = '#;'
 ENCODING = 'utf-8'
@@ -25,6 +27,7 @@ class Dataset:
                     ndarrays.
     auxDataset -- dictionary of auxiliary data sets (e.g., for holding 
                   statistical information)
+    date_format -- format to use for converting dates to numbers.
     errorBands -- List of Datasets to hold errors
     orig_filename -- file path, if any,  used to load data (before 
                      any transformations have been applied).
@@ -42,6 +45,7 @@ class Dataset:
     def __init__(self, xdata=None, ydata=None, figurelabel=''):
         self.xdata = xdata
         self.ydata = ydata
+        self.date_format = config_date_format 
         self.subgraphs = []
         self.errorBands = []
         self.auxDataset = {}
@@ -81,6 +85,50 @@ class Dataset:
 
         for ds in self.errorBands:
             ds.ydata = [y * norm for y in ds.ydata]
+    #@+node:tom.20250912235911.1: *3* DataSet.parse_value
+    def parse_value(self, s: str) -> float:
+        """Convert a string to a float and return it.
+
+        If the string cannot be converted as a float, try
+        several commmon date formats (e.g., 2025-08-14).
+        A date is returned as a float representing the year
+        with a decimal fraction, such as 2025.215.
+
+        Raise ValueError if all conversions fail.
+        """
+
+        # Try numeric
+        try:
+            return float(s)
+        except ValueError:
+            pass
+
+        # Try common date formats, the default first
+        # Note: The default format may have come from the gf4.ini file
+        date_formats = [
+            "%Y-%m-%d",
+            "%Y/%m/%d",
+            "%m-%d-%Y",
+            "%m/%d/%Y",
+        ]
+        try:
+            date_formats.remove(self.date_format)
+        except ValueError:
+            pass
+
+        date_formats.insert(0, self.date_format)
+
+        for fmt in date_formats:
+            try:
+                dt = datetime.strptime(s, fmt)
+                start = datetime(dt.year, 1, 1)
+                end = datetime(dt.year + 1, 1, 1)
+                fraction = (dt - start).days / (end - start).days
+                return dt.year + fraction
+            except ValueError:
+                continue
+
+        # raise ValueError(f"Unrecognized value: {s!r}")
     #@+node:tom.20211211170820.10: *3* Dataset.setAsciiData
     def setAsciiData(self, lines, filename='', root = None):
         """
@@ -102,7 +150,7 @@ class Dataset:
         numbers are the same, the data is considered to have only that one column,
         and the x-axis values are automatically assigned.
 
-        The x- and y- data sequences are assigned to the data set.
+        The x- and y- data sequences are assigned to the DataSet.
 
         Metadata such as labels are each on a single line starting with 
         two or more ';' characters.  The name of the metadata follows, 
@@ -116,6 +164,7 @@ class Dataset:
             YLABEL
             YMIN
             YMAX
+            DATE_FORMAT
 
         As a special case, a line that starts with the XLABEL meta comment may
         also contain a "YLABEL" tag embedded in the line.  In this case,
@@ -180,7 +229,8 @@ class Dataset:
                 try:
                     # we don't actually use val; just seeing if all fields are numeric 
                     for f in fields:
-                        val = float(f)
+                        # val = float(f)
+                        val = self.parse_value(f)
                     data_start_line = i
                     header_start_line = data_start_line - 1
                     if header_start_line > -1:
@@ -254,6 +304,8 @@ class Dataset:
                     try:
                         self.ymax = float(val)
                     except Exception: pass
+                elif key == 'DATE_FORMAT':
+                    self.date_format = val
 
                 continue
             #@-<< handle special comments >>
@@ -278,7 +330,7 @@ class Dataset:
                 #@+<< detect number of data columns >>
                 #@+node:tom.20220821124613.1: *6* << detect number of data columns >>
                 try:
-                    _ = float(fields[0])
+                    _ = self.parse_value(fields[0])
                     _firstline = False
                 except Exception as e:
                     print(e)
@@ -311,10 +363,11 @@ class Dataset:
                 if _isSingleCol:
                     count = count + 1
                     _x.append(count)
-                    _y.append(float(fields[col1]))
+                    # _y.append(float(fields[col1]))
+                    _y.append(self.parse_value(fields[col1]))
                 else:
-                    _x.append(float(fields[col1]))
-                    _y.append(float(fields[col2]))
+                    _x.append(self.parse_value(fields[col1]))
+                    _y.append(self.parse_value(fields[col2]))
 
                 _datalines += 1
             except ValueError as e:
@@ -1248,6 +1301,10 @@ if __name__ == '__main__':
     passfail = {True:'Pass', False:'Fail'}
     base_xdata = [1,2,3,4,5,6,7,8,9,10]
     base_ydata = base_xdata[:]
+    
+    # Note mixed format - both should be handled properly
+    base_date_data = ['2025/01/01', '2025/02/01', '2025-03-01']
+    base_linear_data = ['0', '1', '2']
 
     def self_printer(f):
         def new_f():
@@ -1257,62 +1314,8 @@ if __name__ == '__main__':
             print()
         return new_f
 
-    @self_printer
-    def test_pad():
-        '''Test padding'''
-        ds = Dataset()
-        ds.xdata = base_xdata[:]
-        ds.ydata = base_ydata[:]
-        ds.pad_truncate(13)
-
-        expected = ([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13],
-                    [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 0, 0, 0])
-        if expected == (ds.xdata, ds.ydata):
-            print ('Pass')
-        else:
-            print ('Expected:')
-            print (expected)
-            print ('Actual:')
-            print (ds.ydata, ds.xdata)
-            print ('====Fail=====')
-
-    @self_printer
-    def test_truncate():
-        '''Test truncation'''
-        ds = Dataset()
-        ds.xdata = base_xdata[:]
-        ds.ydata = base_ydata[:]
-        ds.pad_truncate(3)
-
-        expected = ([1, 2, 3],
-                    [1, 2, 3])
-        if expected == (ds.xdata, ds.ydata):
-            print ('Pass')
-        else:
-            print ('Expected:')
-            print (expected)
-            print ('Actual:')
-            print ((ds.ydata, ds.xdata))
-            print ('====Fail=====')
-
-    @self_printer
-    def shift_right():
-        '''Test shifting right by 3'''
-        ds = Dataset()
-        ds.xdata = base_xdata[:]
-        ds.ydata = base_ydata[:]
-        ds.shift(3)
-
-        expected = [0,0,0,1,2,3,4,5,6,7]
-        if expected == ds.ydata:
-            print ('Pass')
-        else:
-            print ('Expected:')
-            print (expected)
-            print ('Actual:')
-            print (ds.ydata)
-            print ('====Fail=====')
-
+    #@+others
+    #@+node:tom.20250913160340.1: *3* shift_left
     @self_printer
     def shift_left():
         '''Test shifting left by 3'''
@@ -1330,7 +1333,25 @@ if __name__ == '__main__':
             print ('Actual:')
             print (ds.ydata)
             print ('====Fail=====')
+    #@+node:tom.20250913160335.1: *3* shift_right
+    @self_printer
+    def shift_right():
+        '''Test shifting right by 3'''
+        ds = Dataset()
+        ds.xdata = base_xdata[:]
+        ds.ydata = base_ydata[:]
+        ds.shift(3)
 
+        expected = [0,0,0,1,2,3,4,5,6,7]
+        if expected == ds.ydata:
+            print ('Pass')
+        else:
+            print ('Expected:')
+            print (expected)
+            print ('Actual:')
+            print (ds.ydata)
+            print ('====Fail=====')
+    #@+node:tom.20250913160347.1: *3* shift_right_many
     @self_printer
     def shift_right_many():
         '''Test shift right by too many points'''
@@ -1348,43 +1369,7 @@ if __name__ == '__main__':
             print ('Actual:')
             print (ds.ydata)
             print ('====Fail=====')
-
-    @self_printer
-    def test_scale():
-        '''Test Scaling by factor 2'''
-        ds = Dataset()
-        ds.xdata = base_xdata[:]
-        ds.ydata = base_ydata[:]
-        ds.scale(2)
-
-        expected = [2,4,6,8,10,12,14,16,18,20]
-        if expected == ds.ydata:
-            print ('Pass')
-        else:
-            print ('Expected:')
-            print (expected)
-            print ('Actual:')
-            print (ds.ydata)
-            print ('====Fail=====')
-
-    @self_printer
-    def test_transpose():
-        '''Test Transposing Axes'''
-        ds = Dataset()
-        ds.xdata = base_xdata[:]
-        ds.ydata = base_ydata[:]
-        ds.transpose()
-
-        expected = (base_ydata, base_xdata)
-        if expected == (ds.ydata, ds.xdata):
-            print ('Pass')
-        else:
-            print ('Expected:')
-            print (expected)
-            print ('Actual:')
-            print ((ds.ydata, ds.xdata))
-            print ('====Fail=====')
-
+    #@+node:tom.20250913160413.1: *3* test_add_constant
     @self_printer
     def test_add_constant():
         '''Test Adding constant 2.5 to Y axis data'''
@@ -1402,7 +1387,20 @@ if __name__ == '__main__':
             print ('Actual:')
             print (ds.ydata)
             print ('====Fail=====')
+    #@+node:tom.20250913160504.1: *3* test_date_axis
+    @self_printer
+    def test_date_axis():
+        """Test input data that contains dates in the first column."""
+        ds = Dataset()
+        lines = [f'{x}  {y}' for x, y in zip(base_date_data, base_linear_data)]
+        ds.setAsciiData(lines)
 
+        if ds.xdata and ds.ydata:
+            plt.plot(ds.xdata, ds.ydata)
+            plt.show()
+        else:
+            print('Could not convert some dates')
+    #@+node:tom.20250913160424.1: *3* test_halfsupergauss
     @self_printer
     def test_halfsupergauss():
         '''Test half Supergaussian window of order 6'''
@@ -1435,6 +1433,7 @@ if __name__ == '__main__':
         ds.fullSuperGaussian(2)
         print (''.join(['%0.4f\n' % (ds.ydata[i]) for i in range(len(ds.ydata))]))
 
+    #@+node:tom.20250913160437.1: *3* test_len_method
     @self_printer
     def test_len_method():
         '''Test len() function on Dataset'''
@@ -1465,7 +1464,7 @@ if __name__ == '__main__':
         if ds: passed =  False
         else: passed =  True
         print (passfail[passed])
-
+    #@+node:tom.20250913160444.1: *3* test_lopass
     @self_printer
     def test_lopass():
         '''Test lopass()'''
@@ -1485,7 +1484,46 @@ if __name__ == '__main__':
             print ('Actual:')
             print (results)
             print ('====Fail====')
+    #@+node:tom.20250913160246.1: *3* test_pad
+    @self_printer
+    def test_pad():
+        '''Test padding'''
+        ds = Dataset()
+        ds.xdata = base_xdata[:]
+        ds.ydata = base_ydata[:]
+        ds.pad_truncate(13)
 
+        expected = ([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13],
+                    [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 0, 0, 0])
+        if expected == (ds.xdata, ds.ydata):
+            print ('Pass')
+        else:
+            print ('Expected:')
+            print (expected)
+            print ('Actual:')
+            print (ds.ydata, ds.xdata)
+            print ('====Fail=====')
+
+    #@+node:tom.20250913160400.1: *3* test_scale
+    @self_printer
+    def test_scale():
+        '''Test Scaling by factor 2'''
+        ds = Dataset()
+        ds.xdata = base_xdata[:]
+        ds.ydata = base_ydata[:]
+        ds.scale(2)
+
+        expected = [2,4,6,8,10,12,14,16,18,20]
+        if expected == ds.ydata:
+            print ('Pass')
+        else:
+            print ('Expected:')
+            print (expected)
+            print ('Actual:')
+            print (ds.ydata)
+            print ('====Fail=====')
+
+    #@+node:tom.20250913160453.1: *3* test_sliding_var
     @self_printer
     def test_sliding_var():
         '''Sliding variances'''
@@ -1501,9 +1539,47 @@ if __name__ == '__main__':
         plt.plot(ds.xdata, ds.ydata, 'ro')
         plt.plot((ds.xdata[0], ds.xdata[-1]), (sigma, sigma), 'black')
         plt.show()
+    #@+node:tom.20250913160408.1: *3* test_transpose
+    @self_printer
+    def test_transpose():
+        '''Test Transposing Axes'''
+        ds = Dataset()
+        ds.xdata = base_xdata[:]
+        ds.ydata = base_ydata[:]
+        ds.transpose()
 
-    # Tests = [test_halfsupergauss, test_supergauss]#test_sliding_var, test_lopass]
-    Tests = [test_sliding_var, test_lopass, test_pad]
+        expected = (base_ydata, base_xdata)
+        if expected == (ds.ydata, ds.xdata):
+            print ('Pass')
+        else:
+            print ('Expected:')
+            print (expected)
+            print ('Actual:')
+            print ((ds.ydata, ds.xdata))
+            print ('====Fail=====')
+    #@+node:tom.20250913160304.1: *3* test_truncate
+    @self_printer
+    def test_truncate():
+        '''Test truncation'''
+        ds = Dataset()
+        ds.xdata = base_xdata[:]
+        ds.ydata = base_ydata[:]
+        ds.pad_truncate(3)
+
+        expected = ([1, 2, 3],
+                    [1, 2, 3])
+        if expected == (ds.xdata, ds.ydata):
+            print ('Pass')
+        else:
+            print ('Expected:')
+            print (expected)
+            print ('Actual:')
+            print ((ds.ydata, ds.xdata))
+            print ('====Fail=====')
+    #@-others
+
+    # Tests = [test_sliding_var, test_lopass, test_pad]
+    Tests = [test_date_axis]
     for f in Tests:
         f()
 #@-others
