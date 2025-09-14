@@ -130,7 +130,7 @@ Data in the "X" slot can be saved in two ways:
     2. By copying it to the clipboard.
 
 Saved data will include the plot title and the axis labels, if any have been
-added.  The are denoted using the special comments described above.
+added.  They are denoted using the special comments described above.
 '''
 #@+node:tom.20220412003510.1: *3* Plotting Data
 H5 = '''
