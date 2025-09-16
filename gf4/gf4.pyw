@@ -970,14 +970,14 @@ class PlotManager(AbstractPlotManager):
             _data = Dataset()
             nlines = _data.setAsciiData(lines)
             if nlines:
-                self.announce('%s' % nlines)
-                self.flashit()
-                self.announce('%s' % nlines)
-            else:
                 if n < STACKDEPTH:
                     self.set_data(_data, n)
                 else:
                     break
+            else:
+                self.announce('%s data lines' % nlines)
+                self.flashit()
+                self.announce('%s data lines' % nlines)
 
         if first_time:
             self.plot()

@@ -282,14 +282,14 @@ start with a "#" or ";" character will be ignored.
 <t tx="tom.20221121171302.1"></t>
 <t tx="tom.20221128184455.1"></t>
 <t tx="tom.20221211135219.1"></t>
-<t tx="tom.20221211135236.1" _mod_time="4741da313a418409ea2e">; GF4 configuration file
+<t tx="tom.20221211135236.1" _mod_time="4741da3239659462642e">; GF4 configuration file
 [colors]
 ; Override initial colors using MatPlotLib CSSS4 color names or #xxyyzz hex values.
 ; main-line-color = red
 ; buffer-line-color = gray
 
 [dates]
-default-date-format = '%%Y-%%m-%%d'</t>
+default-date-format = %%Y-%%m-%%d %%Y/%%m/%%d</t>
 <t tx="tom.20230129231139.1">"""
 ###### MUST set PYTHONPATH=c:\tom\git\gf4-project\gf4 first ######
 Run pytest from the gf4-project directory -
