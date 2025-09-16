@@ -38,7 +38,7 @@ def test_get_ascii_data():
     expected_x = [float(x.split()[0]) for x in DATALINES]
     expected_y = [float(x.split()[1]) for x in DATALINES]
 
-    assert bool(result) is False
+    assert result == 5
     assert actual_x == pytest.approx(expected_x, *PRECISION)
     assert actual_y == pytest.approx(expected_y, *PRECISION)
 
@@ -62,7 +62,7 @@ def test_get_ascii_data_bad():
         else:
             expected_x.append(x_)
             expected_y.append(y_)
-    assert result != ''
+    assert result == 2
     assert actual_x == pytest.approx(expected_x, *PRECISION)
     assert actual_y == pytest.approx(expected_y, *PRECISION)
 #@-others

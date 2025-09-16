@@ -188,7 +188,7 @@ class Dataset:
         filename -- The file that sourced the data, if it came from a file.
 
         RETURNS
-        the exception if data can't be converted, else None
+        the number of data lines found
         #@-<< docstring >>
         """
         # pylint: disable = too-many-locals
@@ -390,7 +390,7 @@ class Dataset:
                         _y.append(val_y)
 
                 _datalines += 1
-            except ValueError as e:
+            except (ValueError, IndexError) as e:
                 error_count += 1
                 retained_length = min(len(_x), len(_y))
                 sys.stderr.write(f'Skipping row {_rowcount}: {e}\n')
@@ -411,9 +411,7 @@ class Dataset:
 
             if error_count > 0:
                 self.figurelabel = f'Skipped {error_count} rows because of data errors'
-                retval = f'{error_count} errors'
-        else:
-            retval = 'Dataset: No data'
+        retval = _datalines
         return retval
 
     #@+node:tom.20211211170820.11: *3* Dataset.dedup

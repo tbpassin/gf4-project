@@ -812,8 +812,8 @@ class PlotManager(AbstractPlotManager):
             _data = Dataset(None, None, PurePath(fname).name)
             _data.orig_filename = fname
 
-            err = _data.setAsciiData(lines, root = self.root)
-            if err:
+            nlines = _data.setAsciiData(lines, root = self.root)
+            if nlines == 0:
                 self.announce(f'No data in block {n}')
                 self.flashit()
                 self.announce(f'No data in block {n}')
@@ -880,11 +880,12 @@ class PlotManager(AbstractPlotManager):
                 continue
             _data = Dataset()
             _data.orig_filename = fname
-            err = _data.setAsciiData(lines)
-            if err:
-                self.announce('%s' % err)
+            nlines = _data.setAsciiData(lines)
+            if nlines == 0:
+                self.announce(f'No data in block {n}')
                 self.flashit()
-                self.announce('%s' % err)
+                self.announce(f'No data in block {n}')
+                print(len(lines), 'lines')
                 return
 
             if n < STACKDEPTH:
@@ -967,11 +968,11 @@ class PlotManager(AbstractPlotManager):
             block = blocks[n]
             lines = block.split('\n')
             _data = Dataset()
-            err = _data.setAsciiData(lines)
-            if err:
-                self.announce('%s' % err)
+            nlines = _data.setAsciiData(lines)
+            if nlines:
+                self.announce('%s' % nlines)
                 self.flashit()
-                self.announce('%s' % err)
+                self.announce('%s' % nlines)
             else:
                 if n < STACKDEPTH:
                     self.set_data(_data, n)
