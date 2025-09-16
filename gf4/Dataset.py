@@ -2,7 +2,7 @@
 #@+node:tom.20211211170820.2: * @file Dataset.py
 # pylint: disable = consider-using-f-string
 #@+others
-#@+node:tom.20211211170820.3: ** Imports
+#@+node:tom.20211211170820.3: ** Imports and Constants
 from __future__ import print_function
 
 import sys
@@ -17,6 +17,7 @@ from utility import config_date_format
 COMMENTS = '#;'
 ENCODING = 'utf-8'
 parmsaver = {}
+DEFAULT_DATES = ['%Y-%m-%d', '%Y/%m/%d']
 #@+node:tom.20211211170820.4: ** class Dataset
 class Dataset:
     """Class to represent a 2D curve.
@@ -45,7 +46,7 @@ class Dataset:
     def __init__(self, xdata=None, ydata=None, figurelabel=''):
         self.xdata = xdata
         self.ydata = ydata
-        self.date_format = config_date_format 
+        self.date_formats = self.make_date_list(config_date_format)
         self.subgraphs = []
         self.errorBands = []
         self.auxDataset = {}
@@ -55,6 +56,21 @@ class Dataset:
         self.figurelabel = figurelabel
         self.parms = {}
 
+    def make_date_list(self, date_config_string):
+        """return a list of date formats from a string.
+        
+        The string must contain space-separated date formats.
+        The list's items must be in the same order as they appear
+        in the string.  Example:
+        
+        "%Y-%m-%d %Y/%m/%d" -> ['%Y-%m-%d', '%Y/%m/%d']
+        """
+        if not date_config_string:
+            return DEFAULT_DATES
+
+        dates = date_config_string.split()
+        date_list = [d for d in dates]
+        return date_list
     #@+node:tom.20211211170820.5: *3* Dataset.__len__
     def __len__(self):
         if self.xdata is None:
@@ -103,20 +119,16 @@ class Dataset:
         except ValueError:
             pass
 
-        # Try common date formats, the default first
+        # Try common date formats, the default ones irst
         # Note: The default format may have come from the gf4.ini file
-        date_formats = [
+        date_formats = self.date_formats
+        for fmt in (
             "%Y-%m-%d",
             "%Y/%m/%d",
             "%m-%d-%Y",
-            "%m/%d/%Y",
-        ]
-        try:
-            date_formats.remove(self.date_format)
-        except ValueError:
-            pass
-
-        date_formats.insert(0, self.date_format)
+            "%m/%d/%Y",):
+            if fmt not in date_formats:
+                date_formats.append(fmt)
 
         for fmt in date_formats:
             try:
@@ -128,7 +140,6 @@ class Dataset:
             except ValueError:
                 continue
 
-        # raise ValueError(f"Unrecognized value: {s!r}")
     #@+node:tom.20211211170820.10: *3* Dataset.setAsciiData
     def setAsciiData(self, lines, filename='', root = None):
         """
@@ -197,6 +208,9 @@ class Dataset:
         _numcols = 0
         _firstline = True
         retval = ''
+
+        # Restore default date formats in case they have been changed
+        self.date_formats = self.make_date_list(config_date_format)
         #@-<< init >>
         #@+<< detect_csv >>
         #@+node:tom.20220819125339.1: *4* << detect_csv >>
@@ -305,7 +319,8 @@ class Dataset:
                         self.ymax = float(val)
                     except Exception: pass
                 elif key == 'DATE_FORMAT':
-                    self.date_format = val
+                    # Overrides internal default and values in gf4.ini
+                    self.date_formats = self.make_date_list(val)
 
                 continue
             #@-<< handle special comments >>
@@ -1297,11 +1312,14 @@ class Dataset:
 if __name__ == '__main__':
     import random 
     import matplotlib.pyplot as plt
+    from configparser import NoSectionError
+
+    from utility import config
 
     passfail = {True:'Pass', False:'Fail'}
     base_xdata = [1,2,3,4,5,6,7,8,9,10]
     base_ydata = base_xdata[:]
-    
+
     # Note mixed format - both should be handled properly
     base_date_data = ['2025/01/01', '2025/02/01', '2025-03-01']
     base_linear_data = ['0', '1', '2']
@@ -1393,6 +1411,7 @@ if __name__ == '__main__':
         """Test input data that contains dates in the first column."""
         ds = Dataset()
         lines = [f'{x}  {y}' for x, y in zip(base_date_data, base_linear_data)]
+
         ds.setAsciiData(lines)
 
         if ds.xdata and ds.ydata:
@@ -1576,10 +1595,52 @@ if __name__ == '__main__':
             print ('Actual:')
             print ((ds.ydata, ds.xdata))
             print ('====Fail=====')
+    #@+node:tom.20250915130944.1: *3* make_date_formats
+    @self_printer
+    def make_date_formats():
+        """Test building the list of date formats used to convert dates.
+        
+        The default list of dates may come from the gf4.ini file or
+        DEFAULT_DATES.
+        """
+        fmt_list = []
+        formats_from_inifile = False
+        try:
+            dates = config.get('dates', 'default-date-format')
+            fmt_list = [fmt for fmt in dates.split()]
+            formats_from_inifile = True
+        except NoSectionError:
+            fmt_list = DEFAULT_DATES
+
+        ds = Dataset()
+        default_date_formats = ds.date_formats
+        if formats_from_inifile:
+            expected = default_date_formats == fmt_list
+            print(f'{expected}: Default date formats match gf4.ini formats')
+        else:
+            expected = fmt_list == DEFAULT_DATES
+            print(f'{expected}: date formats match DEFAULT_DATES')
+
+    #@+node:tom.20250915225557.1: *3* test_date_fmt_from_metadata
+    @self_printer
+    def test_date_fmt_from_metadata():
+        """Use DATE_FORMAT when available in metadata from input data."""
+        text = """\
+    ;; DATE_FORMAT:xy%Y/xy%m/xy%d
+    2025/01/01   0
+    2025/02/01   1
+    2025/03/01   4
+    """
+        ds = Dataset()
+        ds.setAsciiData(text.split('\n'))
+        expected = 'xy%Y/xy%m/xy%d'
+        actual = ds.date_formats[0]
+        correct = actual == expected
+        print(f'{correct}')
     #@-others
 
     # Tests = [test_sliding_var, test_lopass, test_pad]
-    Tests = [test_date_axis]
+    Tests = (test_date_fmt_from_metadata, make_date_formats, test_date_axis)
     for f in Tests:
         f()
 #@-others

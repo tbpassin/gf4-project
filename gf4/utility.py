@@ -41,7 +41,9 @@ def setIcon(win, icon):
     photo = Tk.PhotoImage(file = icon)
     win.wm_iconphoto(False, photo)
 #@+node:tom.20250912232354.1: ** set default date format
-config_date_format = config.get('dates', 'default-date-format') \
-                     or DEFAULT_DATE_FORMAT
+try:
+    config_date_format = config.get('dates', 'default-date-format')
+except:
+    config_date_format = DEFAULT_DATE_FORMAT
 #@-others
 #@-leo
