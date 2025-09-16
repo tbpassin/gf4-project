@@ -828,6 +828,12 @@ class PlotManager(AbstractPlotManager):
         if first_time:
             self.plot()
 
+        if (msg := _data.annotation):
+            self.announce(msg)
+            self.fadeit()
+            print(msg)
+            _data.annotation = ''
+
     #@+node:tom.20211207165051.63: *4* load_plot_data
     def load_plot_data(self, fname, overplot=False):
         '''Load the data from the specified file into the specified Dataset.
@@ -899,6 +905,12 @@ class PlotManager(AbstractPlotManager):
             if overplot: self.overplot()
             else: self.plot()
 
+        if (msg := _data.annotation):
+            self.announce(msg)
+            self.fadeit()
+            print(msg)
+            _data.annotation = ''
+
     #@+node:tom.20211207165051.64: *4* copy_data_to_clipboard
     def copy_data_to_clipboard(self):
         '''Copy data from MAIN stack buffer position into the clipboad.
@@ -912,8 +924,8 @@ class PlotManager(AbstractPlotManager):
         '''
 
         _ds = self.stack[MAIN]
-        if _ds is None or not any(_ds.xdata):
-            self.announce("No data to work with")
+        if _ds is None or not _ds.xdata:
+            self.announce("No data to copy")
             self.flashit()
             return
 
@@ -981,6 +993,12 @@ class PlotManager(AbstractPlotManager):
 
         if first_time:
             self.plot()
+
+        if (msg := _data.annotation):
+            self.announce(msg)
+            self.fadeit()
+            print(msg)
+            _data.annotation = ''
     #@+node:tom.20211207213410.1: *3* Curve Operations
     #@+node:tom.20211207165051.68: *4* setNumPoints
     def setNumPoints(self):

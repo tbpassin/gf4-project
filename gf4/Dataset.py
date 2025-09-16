@@ -47,6 +47,7 @@ class Dataset:
         self.xdata = xdata
         self.ydata = ydata
         self.date_formats = self.make_date_list(config_date_format)
+        self.annotation = ''
         self.subgraphs = []
         self.errorBands = []
         self.auxDataset = {}
@@ -397,7 +398,6 @@ class Dataset:
                         _datalines += 1
             except (ValueError, IndexError) as e:
                 sys.stderr.write(f'Skipping row {_rowcount}: {e}\n')
-
                 error_count += 1
             #@-<< get numeric data >>
             #@-<< process line >>
@@ -413,7 +413,8 @@ class Dataset:
                     self.yaxislabel = headers[col2]
 
             if error_count > 0:
-                self.figurelabel = f'Skipped {error_count} rows because of data errors'
+                _rows = 'row' if error_count == 1 else 'rows'
+                self.annotation = f'Skipped {error_count} {_rows} because of non-numeric text'
         retval = _datalines
         return retval
 
