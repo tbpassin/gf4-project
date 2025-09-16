@@ -199,14 +199,15 @@ class Dataset:
         self.orig_filename = filename
         _x = []
         _y = []
-        count = 0
-        _rowcount = 0
-        error_count = 0
-        _datalines = 0
-        _isSingleCol = False
+
         #_hasTwoCols = False
-        _numcols = 0
+        _datalines = 0
         _firstline = True
+        _isSingleCol = False
+        _numcols = 0
+        _rowcount = 0
+        count = 0
+        error_count = 0
         retval = ''
 
         # Restore default date formats in case they have been changed
@@ -257,8 +258,8 @@ class Dataset:
         if is_csv:
             lines = [line.replace(',', '\t') for line in lines]
             # Comment out all lines before first data line
-            for i, line in enumerate(lines[:data_start_line]):
-                lines[i] = '#' + line
+            # for i, line in enumerate(lines[:data_start_line]):
+                # lines[i] = '#' + line
 
         #@-<< detect_csv >>
 
@@ -268,6 +269,7 @@ class Dataset:
             _rowcount += 1
             line = line.strip()
             if not line: continue
+
             comment = ''
             if line[0] in COMMENTS:
                 comment = line[0]
@@ -326,8 +328,8 @@ class Dataset:
             #@-<< handle special comments >>
             #@+<< get numeric data >>
             #@+node:tom.20220401205749.1: *5* << get numeric data >>
-            line = line.strip()
-            if not line.strip(): continue
+            # line = line.strip()
+            # if not line.strip(): continue
 
             if line[0] in COMMENTS: continue
 
@@ -378,17 +380,14 @@ class Dataset:
                 if _isSingleCol:
                     count = count + 1
                     _x.append(count)
-                    # _y.append(float(fields[col1]))
                     val = self.parse_value(fields[col1])
                     if val:
                         _y.append(val)
                 else:
                     val_x = self.parse_value(fields[col1])
                     val_y = self.parse_value(fields[col2])
-                    if val_x and val_y:
-                        _x.append(val_x)
-                        _y.append(val_y)
-
+                    _x.append(val_x)
+                    _y.append(val_y)
                 _datalines += 1
             except (ValueError, IndexError) as e:
                 error_count += 1
@@ -1336,7 +1335,8 @@ if __name__ == '__main__':
         return new_f
 
     #@+others
-    #@+node:tom.20250913160340.1: *3* shift_left
+    #@+node:tom.20250916124022.1: *3* Shifts
+    #@+node:tom.20250913160340.1: *4* shift_left
     @self_printer
     def shift_left():
         '''Test shifting left by 3'''
@@ -1354,7 +1354,7 @@ if __name__ == '__main__':
             print ('Actual:')
             print (ds.ydata)
             print ('====Fail=====')
-    #@+node:tom.20250913160335.1: *3* shift_right
+    #@+node:tom.20250913160335.1: *4* shift_right
     @self_printer
     def shift_right():
         '''Test shifting right by 3'''
@@ -1372,7 +1372,7 @@ if __name__ == '__main__':
             print ('Actual:')
             print (ds.ydata)
             print ('====Fail=====')
-    #@+node:tom.20250913160347.1: *3* shift_right_many
+    #@+node:tom.20250913160347.1: *4* shift_right_many
     @self_printer
     def shift_right_many():
         '''Test shift right by too many points'''
@@ -1390,7 +1390,8 @@ if __name__ == '__main__':
             print ('Actual:')
             print (ds.ydata)
             print ('====Fail=====')
-    #@+node:tom.20250913160413.1: *3* test_add_constant
+    #@+node:tom.20250916124105.1: *3* Transforms
+    #@+node:tom.20250913160413.1: *4* test_add_constant
     @self_printer
     def test_add_constant():
         '''Test Adding constant 2.5 to Y axis data'''
@@ -1408,7 +1409,7 @@ if __name__ == '__main__':
             print ('Actual:')
             print (ds.ydata)
             print ('====Fail=====')
-    #@+node:tom.20250913160424.1: *3* test_halfsupergauss
+    #@+node:tom.20250913160424.1: *4* test_halfsupergauss
     @self_printer
     def test_halfsupergauss():
         '''Test half Supergaussian window of order 6'''
@@ -1441,7 +1442,7 @@ if __name__ == '__main__':
         ds.fullSuperGaussian(2)
         print (''.join(['%0.4f\n' % (ds.ydata[i]) for i in range(len(ds.ydata))]))
 
-    #@+node:tom.20250913160437.1: *3* test_len_method
+    #@+node:tom.20250913160437.1: *4* test_len_method
     @self_printer
     def test_len_method():
         '''Test len() function on Dataset'''
@@ -1472,7 +1473,7 @@ if __name__ == '__main__':
         if ds: passed =  False
         else: passed =  True
         print (passfail[passed])
-    #@+node:tom.20250913160444.1: *3* test_lopass
+    #@+node:tom.20250913160444.1: *4* test_lopass
     @self_printer
     def test_lopass():
         '''Test lopass()'''
@@ -1492,7 +1493,7 @@ if __name__ == '__main__':
             print ('Actual:')
             print (results)
             print ('====Fail====')
-    #@+node:tom.20250913160246.1: *3* test_pad
+    #@+node:tom.20250913160246.1: *4* test_pad
     @self_printer
     def test_pad():
         '''Test padding'''
@@ -1512,7 +1513,7 @@ if __name__ == '__main__':
             print (ds.ydata, ds.xdata)
             print ('====Fail=====')
 
-    #@+node:tom.20250913160400.1: *3* test_scale
+    #@+node:tom.20250913160400.1: *4* test_scale
     @self_printer
     def test_scale():
         '''Test Scaling by factor 2'''
@@ -1531,7 +1532,7 @@ if __name__ == '__main__':
             print (ds.ydata)
             print ('====Fail=====')
 
-    #@+node:tom.20250913160453.1: *3* test_sliding_var
+    #@+node:tom.20250913160453.1: *4* test_sliding_var
     @self_printer
     def test_sliding_var():
         '''Sliding variances'''
@@ -1547,7 +1548,7 @@ if __name__ == '__main__':
         plt.plot(ds.xdata, ds.ydata, 'ro')
         plt.plot((ds.xdata[0], ds.xdata[-1]), (sigma, sigma), 'black')
         plt.show()
-    #@+node:tom.20250913160408.1: *3* test_transpose
+    #@+node:tom.20250913160408.1: *4* test_transpose
     @self_printer
     def test_transpose():
         '''Test Transposing Axes'''
@@ -1565,7 +1566,7 @@ if __name__ == '__main__':
             print ('Actual:')
             print ((ds.ydata, ds.xdata))
             print ('====Fail=====')
-    #@+node:tom.20250913160304.1: *3* test_truncate
+    #@+node:tom.20250913160304.1: *4* test_truncate
     @self_printer
     def test_truncate():
         '''Test truncation'''
@@ -1584,7 +1585,20 @@ if __name__ == '__main__':
             print ('Actual:')
             print ((ds.ydata, ds.xdata))
             print ('====Fail=====')
-    #@+node:tom.20250913160504.1: *3* test_date_axis
+    #@+node:tom.20250916124138.1: *3* Data Input
+    #@+node:tom.20250916122900.1: *4* test_correct_number_of_points
+    @self_printer
+    def test_correct_number_of_points():
+        """Number of data points in Dataset should equal number of input points."""
+        DATA = ('0  0', '1  1', '2  4', '3  9', '4  16')
+        data_len = len(DATA)
+
+        ds = Dataset()
+        ds.setAsciiData(DATA)
+        correct = data_len == len(ds.xdata)
+        print(passfail[correct])
+        print('--------------------------------')
+    #@+node:tom.20250913160504.1: *4* test_date_axis
     @self_printer
     def test_date_axis():
         """Test input data that contains dates in the first column."""
@@ -1599,7 +1613,7 @@ if __name__ == '__main__':
             plt.show()
         else:
             print('Could not convert some dates')
-    #@+node:tom.20250915130944.1: *3* make_date_formats
+    #@+node:tom.20250915130944.1: *4* make_date_formats
     @self_printer
     def make_date_formats():
         """Test building the list of date formats used to convert dates.
@@ -1627,7 +1641,7 @@ if __name__ == '__main__':
 
         print('--------------------------------')
 
-    #@+node:tom.20250915225557.1: *3* test_date_fmt_from_metadata
+    #@+node:tom.20250915225557.1: *4* test_date_fmt_from_metadata
     @self_printer
     def test_date_fmt_from_metadata():
         """Use DATE_FORMAT when available in metadata from input data."""
@@ -1644,7 +1658,7 @@ if __name__ == '__main__':
         correct = actual == expected
         print(passfail[correct])
         print('--------------------------------')
-    #@+node:tom.20250916002621.1: *3* test_invalid_data_input_field
+    #@+node:tom.20250916002621.1: *4* test_invalid_data_input_field
     @self_printer
     def test_invalid_data_input_field():
         """Lines that contain invalid fields should be skipped.
@@ -1669,7 +1683,7 @@ if __name__ == '__main__':
 
     # Tests = [test_sliding_var, test_lopass, test_pad]
     Tests = (test_invalid_data_input_field, test_date_fmt_from_metadata,
-            make_date_formats, test_date_axis)
+            make_date_formats, test_date_axis, test_correct_number_of_points)
     for f in Tests:
         f()
 #@-others
