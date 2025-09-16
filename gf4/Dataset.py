@@ -379,10 +379,15 @@ class Dataset:
                     count = count + 1
                     _x.append(count)
                     # _y.append(float(fields[col1]))
-                    _y.append(self.parse_value(fields[col1]))
+                    val = self.parse_value(fields[col1])
+                    if val:
+                        _y.append(val)
                 else:
-                    _x.append(self.parse_value(fields[col1]))
-                    _y.append(self.parse_value(fields[col2]))
+                    val_x = self.parse_value(fields[col1])
+                    val_y = self.parse_value(fields[col2])
+                    if val_x and val_y:
+                        _x.append(val_x)
+                        _y.append(val_y)
 
                 _datalines += 1
             except ValueError as e:
@@ -1405,20 +1410,6 @@ if __name__ == '__main__':
             print ('Actual:')
             print (ds.ydata)
             print ('====Fail=====')
-    #@+node:tom.20250913160504.1: *3* test_date_axis
-    @self_printer
-    def test_date_axis():
-        """Test input data that contains dates in the first column."""
-        ds = Dataset()
-        lines = [f'{x}  {y}' for x, y in zip(base_date_data, base_linear_data)]
-
-        ds.setAsciiData(lines)
-
-        if ds.xdata and ds.ydata:
-            plt.plot(ds.xdata, ds.ydata)
-            plt.show()
-        else:
-            print('Could not convert some dates')
     #@+node:tom.20250913160424.1: *3* test_halfsupergauss
     @self_printer
     def test_halfsupergauss():
@@ -1595,6 +1586,21 @@ if __name__ == '__main__':
             print ('Actual:')
             print ((ds.ydata, ds.xdata))
             print ('====Fail=====')
+    #@+node:tom.20250913160504.1: *3* test_date_axis
+    @self_printer
+    def test_date_axis():
+        """Test input data that contains dates in the first column."""
+        ds = Dataset()
+        lines = [f'{x}  {y}' for x, y in zip(base_date_data, base_linear_data)]
+
+        ds.setAsciiData(lines)
+
+        if ds.xdata and ds.ydata:
+            print('X axis should contain decimal dates')
+            plt.plot(ds.xdata, ds.ydata)
+            plt.show()
+        else:
+            print('Could not convert some dates')
     #@+node:tom.20250915130944.1: *3* make_date_formats
     @self_printer
     def make_date_formats():
@@ -1616,10 +1622,12 @@ if __name__ == '__main__':
         default_date_formats = ds.date_formats
         if formats_from_inifile:
             expected = default_date_formats == fmt_list
-            print(f'{expected}: Default date formats match gf4.ini formats')
+            print(f'{passfail[expected]}: Default date formats match gf4.ini formats')
         else:
             expected = fmt_list == DEFAULT_DATES
-            print(f'{expected}: date formats match DEFAULT_DATES')
+            print(f'{passfail[expected]}: date formats match DEFAULT_DATES')
+
+        print('--------------------------------')
 
     #@+node:tom.20250915225557.1: *3* test_date_fmt_from_metadata
     @self_printer
@@ -1636,11 +1644,34 @@ if __name__ == '__main__':
         expected = 'xy%Y/xy%m/xy%d'
         actual = ds.date_formats[0]
         correct = actual == expected
-        print(f'{correct}')
+        print(passfail[correct])
+        print('--------------------------------')
+    #@+node:tom.20250916002621.1: *3* test_invalid_data_input_field
+    @self_printer
+    def test_invalid_data_input_field():
+        """Lines that contain invalid fields should be skipped.
+        
+        This test makes sure that they do not put None
+        into the Dataset.
+        """
+        text = """\
+        1   1
+        2   4
+        x3  9
+        4   16
+        """
+
+        ds = Dataset()
+        ds.setAsciiData(text.split('\n'))
+        good = not (None in ds.xdata or None in ds.ydata)
+        print(passfail[good])
+        print('--------------------------------')
+
     #@-others
 
     # Tests = [test_sliding_var, test_lopass, test_pad]
-    Tests = (test_date_fmt_from_metadata, make_date_formats, test_date_axis)
+    Tests = (test_invalid_data_input_field, test_date_fmt_from_metadata,
+            make_date_formats, test_date_axis)
     for f in Tests:
         f()
 #@-others
