@@ -64,7 +64,7 @@ def test_get_ascii_data_bad():
             expected_x.append(x_)
             expected_y.append(y_)
 
-    assert result == 2
+    assert result == 3
     assert actual_x == pytest.approx(expected_x, *PRECISION)
     assert actual_y == pytest.approx(expected_y, *PRECISION)
 #@-others

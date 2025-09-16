@@ -381,20 +381,24 @@ class Dataset:
                     count = count + 1
                     _x.append(count)
                     val = self.parse_value(fields[col1])
-                    if val:
+                    if val is None:
+                        error_count += 1
+                    else:
                         _y.append(val)
+                        _datalines += 1
                 else:
                     val_x = self.parse_value(fields[col1])
                     val_y = self.parse_value(fields[col2])
-                    _x.append(val_x)
-                    _y.append(val_y)
-                _datalines += 1
+                    if val_x is None or val_y is None:
+                        error_count += 1
+                    else:
+                        _x.append(val_x)
+                        _y.append(val_y)
+                        _datalines += 1
             except (ValueError, IndexError) as e:
-                error_count += 1
-                retained_length = min(len(_x), len(_y))
                 sys.stderr.write(f'Skipping row {_rowcount}: {e}\n')
-                _x = _x[:retained_length]
-                _y = _y[:retained_length]
+
+                error_count += 1
             #@-<< get numeric data >>
             #@-<< process line >>
 
@@ -1663,20 +1667,25 @@ if __name__ == '__main__':
     def test_invalid_data_input_field():
         """Lines that contain invalid fields should be skipped.
         
-        This test makes sure that they do not put None
-        into the Dataset.
+        This test makes sure that None is not put into the Dataset
+        and that lines that contain invalid data are skipped.
         """
         text = """\
         1   1
-        2   4
+        2   4y
         x3  9
         4   16
         """
 
         ds = Dataset()
-        ds.setAsciiData(text.split('\n'))
-        good = not (None in ds.xdata or None in ds.ydata)
-        print(passfail[good])
+        numpoints = ds.setAsciiData(text.split('\n'))
+        noneok = None not in ds.xdata and None not in ds.ydata
+        print(f'{passfail[noneok]}: No None data items')
+        if not noneok:
+            print(ds.xdata, ds.ydata)
+        
+        correct_num = numpoints == len(ds.xdata)
+        print(f'{passfail[correct_num]}: Rejected invalid data values')
         print('--------------------------------')
 
     #@-others
