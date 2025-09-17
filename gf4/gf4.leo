@@ -166,7 +166,7 @@ permissions) - see https://riptutorial.com/tkinter/example/3206/installation-or-
 
 </t>
 <t tx="tom.20220829181040.1"></t>
-<t tx="tom.20220830112255.1" _mod_time="4741d9d712626f44072e"># The list of plugins to import. Omit the ".py" extension.
+<t tx="tom.20220830112255.1" _mod_time="4741da32bc6ccd277d2e"># The list of plugins to import. Omit the ".py" extension.
 find_peak
 readout
 calculator
@@ -174,7 +174,7 @@ local_poly_fit
 poly_lowess
 show_sigma
 low_quad
-</t>
+lst_sqr_extrap</t>
 <t tx="tom.20220830215645.1" _mod_time="4741da1de97a687b8b2e">GF4 has a plugin mechanism that can load plugin files located in the "plugins"
 directory.  This README provides some basic information for developers of plugins.
 
