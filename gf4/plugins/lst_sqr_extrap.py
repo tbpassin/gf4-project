@@ -9,7 +9,7 @@ from help_cmds import HELPTEXT
 
 BUTTON_DEF = ('Lst Sqr + Extrap', 'lst-sqr-extrap',
                'Least squares fit of [X] Data With Nth-Order Polynomial and Optional Extrapolation')
-OVERRIDE = True
+OVERRIDE = True  # Override default location.
 OWNER_GROUP = 'CURVE_FIT_BUTTONS'
 
 plotmgr = None
