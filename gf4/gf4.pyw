@@ -2650,7 +2650,9 @@ if __name__ == '__main__':
     plotmgr = PlotManager()
     plotmgr.root.update_idletasks()
     setIcon(plotmgr.root, ICONPATH)
-    cmdwindow(plotmgr)
+    cmdwin = cmdwindow(plotmgr)
+    cmdwin.update_idletasks()
+    cmd_geom = cmdwin.geometry()
 
     fname = ''
 

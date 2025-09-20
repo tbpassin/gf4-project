@@ -466,11 +466,11 @@ def cmdwindow(plotmgr=None):
         if w_height < int(root_height):
             w_height = int(root_height)
 
-        #win.geometry('+%s+%s' %(xoffset, yoffset))  # Can just set offsets
         win.geometry(f'{w_width}x{w_height}+{xoffset}+{yoffset}')
     else:
         pass
-        #win.geometry('700x700')
+
+    return win
 
 if __name__ == '__main__':
     cmdwindow(None)
