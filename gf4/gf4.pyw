@@ -2663,12 +2663,16 @@ if __name__ == '__main__':
     root_height = plotmgr.root.winfo_height()
     root_y = root.winfo_y()
     screen_width = root.winfo_screenwidth()
+    loffset = 0
+    if sys.platform.startswith('linux'):
+        screen_width -= 60
+        loffset = 60
 
     margin = 25
     if cmd_width + root_width + 2*margin > screen_width:
         root_width = screen_width - cmd_width - 2*margin
 
-    root_left = margin
+    root_left = margin + loffset
     cmd_left = root_left + root_width
     plotmgr.root.geometry(f'{root_width}x{root_height}+{root_left}+{root_y}')
     cmdwin.geometry(f'{cmd_width}x{cmd_height}+{cmd_left}+{root_y}')
