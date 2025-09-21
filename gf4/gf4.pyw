@@ -102,7 +102,7 @@ class PlotManager(AbstractPlotManager):
     # pylint: disable = too-many-public-methods
 
     # Putting these imports at the top of the module doesn't work
-    # Because they expect to be called as methods with a "self" param.
+    # because they expect to be called as methods with a "self" param.
     from Plot import plot
     from Timehack import timehack
     from BuildCommands import buildCommands
@@ -2648,11 +2648,30 @@ if __name__ == '__main__':
     matplotlib.rcParams['ytick.direction'] = 'out'
 
     plotmgr = PlotManager()
-    plotmgr.root.update_idletasks()
-    setIcon(plotmgr.root, ICONPATH)
+    root = plotmgr.root
+    root.update_idletasks()
+    setIcon(root, ICONPATH)
+
     cmdwin = cmdwindow(plotmgr)
     cmdwin.update_idletasks()
     cmd_geom = cmdwin.geometry()
+
+    cmd_width = cmdwin.winfo_width()
+    cmd_height = cmdwin.winfo_height()
+
+    root_width = root.winfo_width()
+    root_height = plotmgr.root.winfo_height()
+    root_y = root.winfo_y()
+    screen_width = root.winfo_screenwidth()
+
+    margin = 25
+    if cmd_width + root_width + 2*margin > screen_width:
+        root_width = screen_width - cmd_width - 2*margin
+
+    root_left = margin
+    cmd_left = root_left + root_width
+    plotmgr.root.geometry(f'{root_width}x{root_height}+{root_left}+{root_y}')
+    cmdwin.geometry(f'{cmd_width}x{cmd_height}+{cmd_left}+{root_y}')
 
     fname = ''
 
@@ -2669,7 +2688,7 @@ if __name__ == '__main__':
             print (e)
 
     plotmgr.announce('Using: %s' % (sys.executable))
-    plotmgr.fadeit()
+    root.after(2000, plotmgr.fadeit)
 
     Tk.mainloop()
 #@-others
