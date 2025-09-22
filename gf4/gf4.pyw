@@ -221,22 +221,6 @@ class PlotManager(AbstractPlotManager):
         self.current_path = ''
         self.buildCommands()
         self.setMenus()
-
-        self.set_init_pos()
-    #@+node:tom.20221006234409.1: *3* set_init_pos
-    def set_init_pos(self):
-        """Set initial position of main window.
-        
-        A position near left of screen leaves room for button window 
-        to be located without overlapping main window on most screens.
-        A position not too far above the screen bottom leaves room above
-        the window for the stack readout window.
-        """
-        self.root.update()  # Required to get the actual window height.
-        hs = self.root.winfo_screenheight()
-        hw = self.root.winfo_height()
-        y = hs - hw - 150
-        self.root.geometry(f'+50+{y}')
     #@+node:tom.20211207165051.22: *3* setMenus
     def setMenus(self):
         mainMenu = createMenus.setMenus(self)
@@ -270,8 +254,17 @@ class PlotManager(AbstractPlotManager):
 
     #@+node:tom.20211207165051.13: *4* setupFigure
     def setupFigure(self, title='GF4'):
+        """Create the main plot window.
+        
+        "withdraw()" it so it's not visible during setup so the
+        main and plotting windows can have their geometry set before
+        becoming visible.
+        
+        This method exits with the window still not visible.
+        """
         root = Tk.Tk()
-        root.option_add('*tearOff', False)  # Tk specific menu option
+        root.withdraw()
+        root.option_add('*tearOff', False)  # Tk-specific menu option
 
         root.bind('<Alt-F4>', self.quit)
 
@@ -312,6 +305,7 @@ class PlotManager(AbstractPlotManager):
 
         self.set_editable_labels()
         self.currentLabelEditing = None
+        root.update_idletasks()
 
     #@+node:tom.20211207165051.14: *4* fadeit
     def fadeit(self, widget=None):
@@ -2644,6 +2638,9 @@ class PlotManager(AbstractPlotManager):
 
 #@+node:tom.20211207165051.136: ** __main__
 if __name__ == '__main__':
+    """On entry, the main plotting window has been withdrawn to
+    make it invisible during geometry setup.
+    """
     matplotlib.rcParams['xtick.direction'] = 'out'
     matplotlib.rcParams['ytick.direction'] = 'out'
 
@@ -2652,30 +2649,33 @@ if __name__ == '__main__':
     root.update_idletasks()
     setIcon(root, ICONPATH)
 
-    cmdwin = cmdwindow(plotmgr)
+    cmdwin = cmdwindow(plotmgr)  # Withdrawn on creation
     cmdwin.update_idletasks()
-    cmd_geom = cmdwin.geometry()
 
-    cmd_width = cmdwin.winfo_width()
-    cmd_height = cmdwin.winfo_height()
+    cmd_width = cmdwin.winfo_reqwidth()
+    cmd_height = cmdwin.winfo_reqheight()
 
-    root_width = root.winfo_width()
-    root_height = plotmgr.root.winfo_height()
-    root_y = root.winfo_y()
+    root_width = root.winfo_reqwidth()
+    root_height = root.winfo_reqheight()
+    root_y = 80
     screen_width = root.winfo_screenwidth()
     loffset = 0
     if sys.platform.startswith('linux'):
-        screen_width -= 60
+        screen_width -= 60  # Account for a possible panel on the screen left
         loffset = 60
 
     margin = 25
     if cmd_width + root_width + 2*margin > screen_width:
-        root_width = screen_width - cmd_width - 2*margin
+        # Guard values if screen isn't wide enough
+        root_width = max(screen_width - cmd_width - 2*margin, 200)
 
     root_left = margin + loffset
     cmd_left = root_left + root_width
-    plotmgr.root.geometry(f'{root_width}x{root_height}+{root_left}+{root_y}')
+    root.geometry(f'{root_width}x{root_height}+{root_left}+{root_y}')
     cmdwin.geometry(f'{cmd_width}x{cmd_height}+{cmd_left}+{root_y}')
+
+    root.deiconify()
+    cmdwin.deiconify()
 
     fname = ''
 

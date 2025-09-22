@@ -440,40 +440,43 @@ def cmdwindow(plotmgr=None):
     _geom = ''
     if plotmgr:
         win = Tk.Toplevel(plotmgr.root)
-        win.transient(plotmgr.root)
         _geom = plotmgr.root.geometry()
     else:
         win = Tk.Tk()
 
+    win.withdraw()
+
     win.title("GF4 Commands")
     setIcon(win, ICONPATH)
 
+    # if plotmgr:
+        # plotmgr.root.update_idletasks()
+
     create_buttons_pack(win, plotmgr)
-    win.update_idletasks()
-    if plotmgr:
-        plotmgr.root.update_idletasks()
 
     # Set initial window position in screen
     #win.geometry('+1250+100')
     if _geom:
+        ...
         # Example geometry syntax: '902x670+182+182'
-        root_dims, root_xoffset, root_yoffset = _geom.split('+')
-        root_width, root_height = root_dims.split('x')
-        xoffset = int(root_xoffset) + int(root_width) + 5
-        yoffset = int(root_yoffset)
-        w_width = win.winfo_width() + 50
-        w_height = win.winfo_height()
-        if w_height < int(root_height):
-            w_height = int(root_height)
+        # root_dims, root_xoffset, root_yoffset = _geom.split('+')
+        # root_width, root_height = root_dims.split('x')
+        # xoffset = int(root_xoffset) + int(root_width) + 5
+        # yoffset = int(root_yoffset)
+        # w_width = win.winfo_width() + 50
+        # w_height = win.winfo_height()
+        # if w_height < int(root_height):
+            # w_height = int(root_height)
 
-        win.geometry(f'{w_width}x{w_height}+{xoffset}+{yoffset}')
+        # win.geometry(f'{w_width}x{w_height}+{xoffset}+{yoffset}')
+        # win.update_idletasks()
     else:
         pass
-
     return win
 
 if __name__ == '__main__':
-    cmdwindow(None)
+    win = cmdwindow(None)
+    win.deiconify()
     Tk.mainloop()
 #@-others
 #@@language python
