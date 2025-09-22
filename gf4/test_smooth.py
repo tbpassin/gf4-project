@@ -23,13 +23,13 @@ SRANGE = (5,10,15,20,30)
 if __name__ == '__main__':
 
     INTERNAL_DATA = False
-    if len(sys.argv) == 1: 
+    if len(sys.argv) == 1:
         INTERNAL_DATA = True
         #print('No file on command line')
         #sys.exit(0)
 
     if not INTERNAL_DATA:
-        basename = 'dat.txt'   
+        basename = 'dat.txt'
         if len(sys.argv) > 2:
             ofilenames  = [sys.argv[2] + '_%s.txt' % (s) for s in SRANGE]
         else:
@@ -71,7 +71,7 @@ if __name__ == '__main__':
             header = ';;FIGURELABEL: %s\n' % oname
             with open(oname, 'w') as of:
                 of.write(header)
-                of.write(''.join(result)) 
+                of.write(''.join(result))
 #@-others
 #@@language python
 #@@tabwidth -4

@@ -66,6 +66,9 @@ EXTENDED_HELP_TEXT = (
 HELP_PANEL_BG = 'lightblue'
 MACRO_TEXT = 'Record'
 MACRO_FULLTEXT = 'Record Macro'
+MACRO_RECORDING_TEXT = 'Recording'
+MACRO_ON_MSG = 'Macro Recording Started'
+MACRO_OFF_MSG = 'Macro Recording Ended'
 PADY = 2
 
 entry = None
@@ -143,13 +146,15 @@ def click(event):
     global is_recording, macro
     w = event.widget
     flash_button(w)
-    if w.cget('text') == MACRO_TEXT:
+    if w.cget('text') in (MACRO_TEXT, MACRO_RECORDING_TEXT):
         if is_recording:
             is_recording = False
             w.config(bg = BUTTON_BG)
+            w['text'] = MACRO_TEXT
         else:
             w.config(bg=BUTTON_RECORD_COLOR)
             is_recording = True
+            w['text'] = MACRO_RECORDING_TEXT
             macro = ''
 
 #@+node:tom.20211211170819.12: ** on_enter
@@ -346,6 +351,7 @@ def create_buttons_pack(host, plotmgr):
             ffamily = f
             break
 
+    ascender = 9.6  # Default when no case matches if statement
     if ffamily:
         if platform.startswith('win'):
             ascender = 10.6
@@ -367,6 +373,7 @@ def create_buttons_pack(host, plotmgr):
         # _font will be the font of the group labels and the help text
         _font.config(**NEWFONT.config())
     else:
+        ascender = 9.6
         NEWFONT = tkFont.nametofont(_font.name)
         sz = adjust_font_size(NEWFONT, ascender)
         NEWFONT.config(size = sz, weight = 'bold')
@@ -433,40 +440,43 @@ def cmdwindow(plotmgr=None):
     _geom = ''
     if plotmgr:
         win = Tk.Toplevel(plotmgr.root)
-        win.transient(plotmgr.root)
         _geom = plotmgr.root.geometry()
     else:
         win = Tk.Tk()
 
+    win.withdraw()
+
     win.title("GF4 Commands")
     setIcon(win, ICONPATH)
 
+    # if plotmgr:
+        # plotmgr.root.update_idletasks()
+
     create_buttons_pack(win, plotmgr)
-    win.update_idletasks()
-    if plotmgr:
-        plotmgr.root.update_idletasks()
 
     # Set initial window position in screen
     #win.geometry('+1250+100')
     if _geom:
+        ...
         # Example geometry syntax: '902x670+182+182'
-        root_dims, root_xoffset, root_yoffset = _geom.split('+')
-        root_width, root_height = root_dims.split('x')
-        xoffset = int(root_xoffset) + int(root_width) + 5
-        yoffset = int(root_yoffset)
-        w_width = win.winfo_width() + 50
-        w_height = win.winfo_height()
-        if w_height < int(root_height):
-            w_height = int(root_height)
+        # root_dims, root_xoffset, root_yoffset = _geom.split('+')
+        # root_width, root_height = root_dims.split('x')
+        # xoffset = int(root_xoffset) + int(root_width) + 5
+        # yoffset = int(root_yoffset)
+        # w_width = win.winfo_width() + 50
+        # w_height = win.winfo_height()
+        # if w_height < int(root_height):
+            # w_height = int(root_height)
 
-        #win.geometry('+%s+%s' %(xoffset, yoffset))  # Can just set offsets
-        win.geometry(f'{w_width}x{w_height}+{xoffset}+{yoffset}')
+        # win.geometry(f'{w_width}x{w_height}+{xoffset}+{yoffset}')
+        # win.update_idletasks()
     else:
         pass
-        #win.geometry('700x700')
+    return win
 
 if __name__ == '__main__':
-    cmdwindow(None)
+    win = cmdwindow(None)
+    win.deiconify()
     Tk.mainloop()
 #@-others
 #@@language python

@@ -22,7 +22,8 @@ GIT_STR = f'; Changeset; {changeset}' if changeset else ""
 #@+node:tom.20220505130330.1: *3* Intro
 INTRO = f"""
        GF4 Waveform Calculator/Plotter
---------------------------------------------------------
+--------------------------------------------------------------------
+
 Plots 2D curves and performs calculations on them. GF4 is modeled
 after a reverse polish notation (RPN) calculator, where 2D waveforms take 
 the place of plain numbers.
@@ -31,8 +32,9 @@ Version: {version}{BRANCH_STR}{GIT_STR}
 """
 #@+node:tom.20220412003223.1: *3* Data Format
 H1 = """
-  Input Data Format
------------------------------------------------
+   Input Data Format
+----------------------------------
+
 GF4 accepts text files with whitespace-separated columns, one data point per
 row.  Optionally they can be separated by a comma.  All data lines in a file 
 must use the same separator. Column headers for csv files are extracted from
@@ -45,8 +47,12 @@ is displayed so the user can choose the two desired columns. The number of
 columns is derived based on the first non-comment, non-blank line whose
 fields are all legal floating point number.
 
-Data fields must be numeric.  GF4 cannot make use of non-numeric data.  Data
-fields are converted to floating point numbers.
+Data fields must be numeric or dates.  GF4 cannot make use of non-numeric data. 
+Data fields are converted to floating point numbers. The default date format is 
+"%Y-%m-%d", that is, for example, "2025-03-30". The default date format can be 
+specified in the gf4.ini configuration file.  If date conversion with the default 
+format fails, some other common formats are tried, including "%Y/%m/%d". Dates
+are converted to decimal years.
 
 Here is an example data file:
 
@@ -124,7 +130,7 @@ Data in the "X" slot can be saved in two ways:
     2. By copying it to the clipboard.
 
 Saved data will include the plot title and the axis labels, if any have been
-added.  The are denoted using the special comments described above.
+added.  They are denoted using the special comments described above.
 '''
 #@+node:tom.20220412003510.1: *3* Plotting Data
 H5 = '''

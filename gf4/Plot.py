@@ -82,7 +82,7 @@ def plot(self, stackposition=MAIN, clearFirst=True):
         ax.clear()
         self.setFigureTitle(_figlabel or 'Figure Label')
 
-    ax.grid(b=True, linestyle=LINE_SOLID, color=self.gridcolor,
+    ax.grid(visible=True, linestyle=LINE_SOLID, color=self.gridcolor,
             linewidth=LINETHIN)
     ax.set_xlabel(_xlabel or 'X Axis')
     ax.set_ylabel(_ylabel or 'Y Axis')

@@ -6,3 +6,4 @@ local_poly_fit
 poly_lowess
 show_sigma
 low_quad
+lst_sqr_extrap

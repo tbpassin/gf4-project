@@ -79,7 +79,7 @@ def get_valid_color(colors, key, default):
     RETURNS
     The color for given key in the .ini file, or the default value.
     """
-    global mcolors
+    global confi
     color = colors.get(key, None)
     if color:
         bad_color_msg = f'Invalid .ini file color for {key}: {color}'
@@ -102,7 +102,7 @@ class PlotManager(AbstractPlotManager):
     # pylint: disable = too-many-public-methods
 
     # Putting these imports at the top of the module doesn't work
-    # Because they expect to be called as methods with a "self" param.
+    # because they expect to be called as methods with a "self" param.
     from Plot import plot
     from Timehack import timehack
     from BuildCommands import buildCommands
@@ -221,22 +221,6 @@ class PlotManager(AbstractPlotManager):
         self.current_path = ''
         self.buildCommands()
         self.setMenus()
-
-        self.set_init_pos()
-    #@+node:tom.20221006234409.1: *3* set_init_pos
-    def set_init_pos(self):
-        """Set initial position of main window.
-        
-        A position near left of screen leaves room for button window 
-        to be located without overlapping main window on most screens.
-        A position not too far above the screen bottom leaves room above
-        the window for the stack readout window.
-        """
-        self.root.update()  # Required to get the actual window height.
-        hs = self.root.winfo_screenheight()
-        hw = self.root.winfo_height()
-        y = hs - hw - 150
-        self.root.geometry(f'+50+{y}')
     #@+node:tom.20211207165051.22: *3* setMenus
     def setMenus(self):
         mainMenu = createMenus.setMenus(self)
@@ -270,8 +254,17 @@ class PlotManager(AbstractPlotManager):
 
     #@+node:tom.20211207165051.13: *4* setupFigure
     def setupFigure(self, title='GF4'):
+        """Create the main plot window.
+        
+        "withdraw()" it so it's not visible during setup so the
+        main and plotting windows can have their geometry set before
+        becoming visible.
+        
+        This method exits with the window still not visible.
+        """
         root = Tk.Tk()
-        root.option_add('*tearOff', False)  # Tk specific menu option
+        root.withdraw()
+        root.option_add('*tearOff', False)  # Tk-specific menu option
 
         root.bind('<Alt-F4>', self.quit)
 
@@ -312,6 +305,7 @@ class PlotManager(AbstractPlotManager):
 
         self.set_editable_labels()
         self.currentLabelEditing = None
+        root.update_idletasks()
 
     #@+node:tom.20211207165051.14: *4* fadeit
     def fadeit(self, widget=None):
@@ -812,8 +806,8 @@ class PlotManager(AbstractPlotManager):
             _data = Dataset(None, None, PurePath(fname).name)
             _data.orig_filename = fname
 
-            err = _data.setAsciiData(lines, root = self.root)
-            if err:
+            nlines = _data.setAsciiData(lines, root = self.root)
+            if nlines == 0:
                 self.announce(f'No data in block {n}')
                 self.flashit()
                 self.announce(f'No data in block {n}')
@@ -827,6 +821,12 @@ class PlotManager(AbstractPlotManager):
 
         if first_time:
             self.plot()
+
+        if (msg := _data.annotation):
+            self.announce(msg)
+            self.fadeit()
+            print(msg)
+            _data.annotation = ''
 
     #@+node:tom.20211207165051.63: *4* load_plot_data
     def load_plot_data(self, fname, overplot=False):
@@ -880,11 +880,12 @@ class PlotManager(AbstractPlotManager):
                 continue
             _data = Dataset()
             _data.orig_filename = fname
-            err = _data.setAsciiData(lines)
-            if err:
-                self.announce('%s' % err)
+            nlines = _data.setAsciiData(lines)
+            if nlines == 0:
+                self.announce(f'No data in block {n}')
                 self.flashit()
-                self.announce('%s' % err)
+                self.announce(f'No data in block {n}')
+                print(len(lines), 'lines')
                 return
 
             if n < STACKDEPTH:
@@ -897,6 +898,12 @@ class PlotManager(AbstractPlotManager):
         else:
             if overplot: self.overplot()
             else: self.plot()
+
+        if (msg := _data.annotation):
+            self.announce(msg)
+            self.fadeit()
+            print(msg)
+            _data.annotation = ''
 
     #@+node:tom.20211207165051.64: *4* copy_data_to_clipboard
     def copy_data_to_clipboard(self):
@@ -911,8 +918,8 @@ class PlotManager(AbstractPlotManager):
         '''
 
         _ds = self.stack[MAIN]
-        if _ds is None or not any(_ds.xdata):
-            self.announce("No data to work with")
+        if _ds is None or not _ds.xdata:
+            self.announce("No data to copy")
             self.flashit()
             return
 
@@ -967,19 +974,25 @@ class PlotManager(AbstractPlotManager):
             block = blocks[n]
             lines = block.split('\n')
             _data = Dataset()
-            err = _data.setAsciiData(lines)
-            if err:
-                self.announce('%s' % err)
-                self.flashit()
-                self.announce('%s' % err)
-            else:
+            nlines = _data.setAsciiData(lines)
+            if nlines:
                 if n < STACKDEPTH:
                     self.set_data(_data, n)
                 else:
                     break
+            else:
+                self.announce('%s data lines' % nlines)
+                self.flashit()
+                self.announce('%s data lines' % nlines)
 
         if first_time:
             self.plot()
+
+        if (msg := _data.annotation):
+            self.announce(msg)
+            self.fadeit()
+            print(msg)
+            _data.annotation = ''
     #@+node:tom.20211207213410.1: *3* Curve Operations
     #@+node:tom.20211207165051.68: *4* setNumPoints
     def setNumPoints(self):
@@ -2367,7 +2380,7 @@ class PlotManager(AbstractPlotManager):
         self.stack[MAIN].halfSupergaussian()
         lab = self.stack[MAIN].figurelabel
         if lab and lab != 'Figure Label':
-            self.stack[MAIN].figurelabel = 'Windowed %s' % (lab)
+            self.stack[MAIN].figurelabel = ' Half Supergaussian Windowed %s' % (lab)
 
         self.plot()
 
@@ -2625,13 +2638,44 @@ class PlotManager(AbstractPlotManager):
 
 #@+node:tom.20211207165051.136: ** __main__
 if __name__ == '__main__':
+    """On entry, the main plotting window has been withdrawn to
+    make it invisible during geometry setup.
+    """
     matplotlib.rcParams['xtick.direction'] = 'out'
     matplotlib.rcParams['ytick.direction'] = 'out'
 
     plotmgr = PlotManager()
-    plotmgr.root.update_idletasks()
-    setIcon(plotmgr.root, ICONPATH)
-    cmdwindow(plotmgr)
+    root = plotmgr.root
+    root.update_idletasks()
+    setIcon(root, ICONPATH)
+
+    cmdwin = cmdwindow(plotmgr)  # Withdrawn on creation
+    cmdwin.update_idletasks()
+
+    cmd_width = cmdwin.winfo_reqwidth()
+    cmd_height = cmdwin.winfo_reqheight()
+
+    root_width = root.winfo_reqwidth()
+    root_height = root.winfo_reqheight()
+    root_y = 80
+    screen_width = root.winfo_screenwidth()
+    loffset = 0
+    if sys.platform.startswith('linux'):
+        screen_width -= 60  # Account for a possible panel on the screen left
+        loffset = 60
+
+    margin = 25
+    if cmd_width + root_width + 2*margin > screen_width:
+        # Guard values if screen isn't wide enough
+        root_width = max(screen_width - cmd_width - 2*margin, 200)
+
+    root_left = margin + loffset
+    cmd_left = root_left + root_width
+    root.geometry(f'{root_width}x{root_height}+{root_left}+{root_y}')
+    cmdwin.geometry(f'{cmd_width}x{cmd_height}+{cmd_left}+{root_y}')
+
+    root.deiconify()
+    cmdwin.deiconify()
 
     fname = ''
 
@@ -2648,7 +2692,7 @@ if __name__ == '__main__':
             print (e)
 
     plotmgr.announce('Using: %s' % (sys.executable))
-    plotmgr.fadeit()
+    root.after(2000, plotmgr.fadeit)
 
     Tk.mainloop()
 #@-others

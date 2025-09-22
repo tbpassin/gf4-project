@@ -72,7 +72,7 @@ CURVE_BUTTONS = (
     ('Transpose', 'transpose', 'Transpose x and y axes'),
     ('SortX', 'sortx', 'Sort on x Axis'),
     ('PhaseSpc', 'phase', 'Create Phase Space Plot: y(t+N) vs y(t)'),
-    ( 'Y vs X', 'YvsX', 'Plot y data of Y vs y data of X'),
+    ( 'Y vs X', 'YvsX', 'New data set having y data of Y vs y data of X'),
     SPACER, SPACER,
     ('NumPts', 'numpts', 'Change/Set Number of Points When Generating Waveforms'),
     ('NewX', 'newX', 'Replace x Axis Values')

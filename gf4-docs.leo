@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Created by Leo: https://leo-editor.github.io/leo-editor/leo_toc.html -->
-<leo_file xmlns:leo="http://leo-editor.github.io/leo-editor/namespaces/leo-python-editor/1.1" >
+<leo_file xmlns:leo="https://leo-editor.github.io/leo-editor/namespaces/leo-python-editor/1.1" >
 <leo_header file_format="2"/>
 <globals/>
 <preferences/>
@@ -21,6 +21,7 @@
 <v t="tom.20220820141745.1"><vh>@clean requirements.txt</vh></v>
 <v t="tom.20220901223400.1"><vh>@clean recent_changes.md</vh></v>
 <v t="tom.20230507161216.1"><vh>@clean .nojekyll</vh></v>
+<v t="tom.20231214172831.1"><vh>@clean index.html</vh></v>
 <v t="tom.20220507132007.5"><vh>@button Build HTML</vh></v>
 <v t="tom.20220507132007.4"><vh>@path sphinx</vh>
 <v t="tom.20220507180306.1"><vh>GF4 User's Guide</vh>
@@ -104,7 +105,7 @@ GF4 would make an excellent educational tool since it makes exploring the data s
 The effect of zero-padding and windowing a waveform before running an FFT is quite illuminating and easy to study.  Cumulative data, such as total covid case counts vs time, can be converted into daily rates by differentiating.  This leads to a very noisy dataset, and that can be smoothed with, for example, a LOWESS smoothing routine. The study of the shape of residuals after fitting a function is interesting and easy to do.
 
 No code need be written to perform any of these operations on datasets.</t>
-<t tx="tom.20220507132007.11">GF4 is not a rigorous tool for statistical calculations.  Although the mathematical operations are done as carefully as possible, usually using well-established scientific libraries such as numpy and scipy, various subtleties are not taken into account.  For example, error bars can be shown for a LOWESS smooth, but they do not take into account possible autocorrelation in the dataset.  FFTs, and correlations and convolutions between waveforms, may not normalized according to usual conventions.  This generally makes no practical difference to exploratory use, since it is the relative shapes and features that are normally of interest.  In addition, although processed data sets can be saved to files, and image files of the curves seen on the screen can be saved as well, error bars, regression coefficients, and the like cannot be output.
+<t tx="tom.20220507132007.11">GF4 is not a rigorous tool for statistical calculations.  Although the mathematical operations are done as carefully as possible, usually using well-established scientific libraries such as numpy and scipy, various subtleties are not taken into account.  For example, error bars can be shown for a LOWESS smooth, but only  lag-one autocorrelation is taken into account in the dataset.  FFTs, and correlations and convolutions between waveforms, may not normalized according to usual conventions.  This generally makes no practical difference to exploratory use, since it is the relative shapes and features that are normally of interest.  In addition, although processed data sets can be saved to files, and image files of the curves seen on the screen can be saved as well, error bars, regression coefficients, and the like cannot be output.
 
 GF4 is best used for understanding the features of a 2D dataset, and working out how effective various kinds of processing will be.  Is it too noisy or too contaminated to get useful results? Does a linear least squares fit make sense? Does this kind of a correlation seem to be meaningful? Is a smoothing window of 50 too wide?  Will a cosine or a supergaussian window produce a cleaner FFT for this particular data?  Will zero-padding the dataset improve the resolution?  Is this increase really "exponential"?  What will be the effect of a D.C offset on the FFT?
 
@@ -276,7 +277,7 @@ Overplotting is essential to getting the most out of GF4, since it provides a wa
 to compare several data sets, or several ways of processing the same data.
 
 </t>
-<t tx="tom.20220507132007.2">@language md
+<t tx="tom.20220507132007.2" _mod_time="4741d9d712626d08132e">@language md
 @tabwidth -4
 @others
 
@@ -473,7 +474,8 @@ if target:
     #'-D', 'html_theme=sphinx_book_theme',
     #'-D', 'html_theme=bizstyle',
 
-    cmd = [executable, '-m', 'sphinx', '-C',
+    cmd = [executable, '-m', 'sphinx',
+            '-C',  # Required to avoid using a conf.py file
             '-b', 'html',
             '-D', "master_doc=GF4_Users_Guide",
             '-D', 'source_suffix=.rst',
@@ -485,6 +487,7 @@ if target:
 
             # sourcedir, outputdir:
             r'.', r'..\docs']
+            # r'.', r'c:\temp\sphinx\gf4']
 
     subprocess.call(cmd)
 else:
@@ -540,7 +543,7 @@ function, step, ramp, sine and damped sine, Gaussian PDF and CDF distributions,
 and more. Altogether there are nearly 80 different operations available.
 
 A basic macro facility is provided to automate a sequence of repeated
-operations.
+operations. Plugins can be written to add new commands.
 
 Like RPN calculators, GF4 operations are organized around a stack of data sets.
 Unlike those calculators, the various stack levels can be accessed directly as
@@ -666,7 +669,7 @@ the FFT (Fast Fourier Transform) assume that the points are uniformly spaced.</t
 <t tx="tom.20220507191015.1"></t>
 <t tx="tom.20220507191131.1"></t>
 <t tx="tom.20220507191549.1"></t>
-<t tx="tom.20220509230416.1">@language md
+<t tx="tom.20220509230416.1" _mod_time="4741d9d712626d08132e">@language md
 @tabwidth -4
 @others
 </t>
@@ -791,9 +794,9 @@ ease of programming.  GF4 tries for simplicity in programming too, but user
 ease and consistency are given priority.  Many potentially interesting features 
 have never been implemented because they would complicate the user interface.
 </t>
-<t tx="tom.20220820141745.1">csaps
+<t tx="tom.20220820141745.1" _mod_time="4741d9d712626f44072e">csaps
 docutils
-matplotlib &lt;= 3.6.3
+matplotlib
 numpy
 pillow &gt;= 9.1.0
 pwlf
@@ -852,8 +855,15 @@ does not plot the new data.  This allows the user to keep reading data files and
 overplotting them - possibly in different colors - without destroying an existing
 graph.  This can be a very useful capability.
 </t>
-<t tx="tom.20220901223400.1">@language md
+<t tx="tom.20220901223400.1" _mod_time="4741d9d712626f44072e">@language md
 @tabwidth -4
+
+### Devel Branch 1.51   11-18-2023
+- Macro button changes label to "Recording" when in the recording state.
+- Fix unintialized variable "ascender" in cmdwin.py
+
+### Devel Branch 1.5   7-23-2023
+Now works with recent versions of MatPlotlib (i.e., &gt; 2.6.3).
 
 ### Devel Branch 1.5b5  4-23-2023, 4-28-2023
 - Fix "no data" bug when the last non-comment line is a ENDDATASET special comment.
@@ -1018,6 +1028,15 @@ explanation in the system browser.
 
 If an extended help message does not exist for the button, this will be
 announced in the announcement bar at the bottom of the main window.</t>
-<t tx="tom.20230507161216.1"></t>
+<t tx="tom.20230507161216.1" _mod_time="4741d9d712626d08132e"></t>
+<t tx="tom.20231214172831.1" _mod_time="4741d9d712626f44072e">&lt;html&gt;
+&lt;head&gt;
+    &lt;!-- Redirect for github.io home page --&gt;
+    &lt;meta http-equiv="refresh" content="0;url=docs/GF4_Users_Guide.html"&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;p&gt;If you are not redirected, &lt;a href="docs/GF4_Users_Guide.html"&gt;click here&lt;/a&gt;.&lt;/p&gt;
+&lt;/body&gt;
+&lt;/html&gt;</t>
 </tnodes>
 </leo_file>

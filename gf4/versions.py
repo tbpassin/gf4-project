@@ -6,21 +6,20 @@
 import os.path
 from subprocess import run
 
-APPVERSION = '1.5b5'
+APPVERSION = '1.6'
 ENCODING = 'utf-8'
 
 def getGitInfo():
     branch = version = ''
     rootdir = os.path.dirname(os.path.dirname(__file__))
 
-# pylint: disable = subprocess-run-check
+    # pylint: disable = subprocess-run-check
     try:
-        cmd = ['git', 'log']
+        cmd = 'git rev-parse --short HEAD'.split()
         gitlog = run(cmd, cwd=rootdir, capture_output = True)
-        log = gitlog.stdout.decode(ENCODING)[:30]
-        version = log.split()[1][:9]
+        version = gitlog.stdout.decode(ENCODING)
 
-        cmd = 'git symbolic-ref --short HEAD'.split()
+        cmd = 'git branch --show-current'.split()
         git_result = run(cmd, cwd=rootdir, capture_output = True)
         branch = git_result.stdout.decode(ENCODING).strip()
     except Exception:

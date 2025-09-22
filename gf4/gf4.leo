@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Created by Leo: https://leo-editor.github.io/leo-editor/leo_toc.html -->
-<leo_file xmlns:leo="http://leo-editor.github.io/leo-editor/namespaces/leo-python-editor/1.1" >
+<leo_file xmlns:leo="https://leo-editor.github.io/leo-editor/namespaces/leo-python-editor/1.1" >
 <leo_header file_format="2"/>
 <globals/>
 <preferences/>
@@ -99,15 +99,21 @@
 <v t="tom.20220816175947.1"><vh>cannot import name 'ImageTK'</vh></v>
 </v>
 </v>
+<v t="tom.20230524110237.1"><vh>Exception Decorators</vh>
+<v t="tom.20221005234429.1"><vh>val_error decorator</vh></v>
+</v>
+<v t="tom.20250907102103.1"><vh>Requirements</vh>
+<v t="tom.20250907102111.1"><vh>Data Import</vh></v>
+</v>
 </v>
 </vnodes>
 <tnodes>
 <t tx="tom.20211207165011.1"></t>
 <t tx="tom.20211211170510.1"></t>
 <t tx="tom.20211211170532.1"></t>
-<t tx="tom.20220411133313.1">The software in this GF4 project is writtten by and copyrighted by: Thomas B. Passin 2014 - 2022.
+<t tx="tom.20220411133313.1" _mod_time="4741d9d712626eaf452e">The software in this GF4 project is writtten by and copyrighted by: Thomas B. Passin 2014 - 2022.
 </t>
-<t tx="tom.20220411133954.1">The GF4 software package is covered by the standard MIT license, reproduced below:
+<t tx="tom.20220411133954.1" _mod_time="4741d9d712626eaf452e">The GF4 software package is covered by the standard MIT license, reproduced below:
 
 The MIT License (MIT)
 Copyright © 1992 - 2022 Thomas B. Passin
@@ -117,7 +123,7 @@ Permission is hereby granted, free of charge, to any person obtaining a copy of 
 The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.</t>
-<t tx="tom.20220411171338.1">GF4 is a computer program for visualizing and processing two-dimensional data
+<t tx="tom.20220411171338.1" _mod_time="4741d9d712626e8e632e">GF4 is a computer program for visualizing and processing two-dimensional data
 such as X-Y and time series data. The user interface is modeled after a
 reverse-polish notation (RPN) style of desk calculator, with the roles of
 numbers being replaced by 2D data sets.
@@ -160,7 +166,7 @@ permissions) - see https://riptutorial.com/tkinter/example/3206/installation-or-
 
 </t>
 <t tx="tom.20220829181040.1"></t>
-<t tx="tom.20220830112255.1"># The list of plugins to import. Omit the ".py" extension.
+<t tx="tom.20220830112255.1" _mod_time="4741da3388babbca762e"># The list of plugins to import. Omit the ".py" extension.
 find_peak
 readout
 calculator
@@ -168,8 +174,8 @@ local_poly_fit
 poly_lowess
 show_sigma
 low_quad
-</t>
-<t tx="tom.20220830215645.1">GF4 has a plugin mechanism that can load plugin files located in the "plugins"
+lst_sqr_extrap</t>
+<t tx="tom.20220830215645.1" _mod_time="4741da1de97a687b8b2e">GF4 has a plugin mechanism that can load plugin files located in the "plugins"
 directory.  This README provides some basic information for developers of plugins.
 
 WHAT A PLUGIN PROVIDES
@@ -222,12 +228,13 @@ This function must be named "proc" and take no parameters. The function is not
 expected to return anything.  For example:
 
 # plotmgr will have been injected into the module by the time this is called
-def proc():
-    if not has_main(plotmgr):  # Do nothing if no data
-        return
-    _ds = plotmgr.stack[MAIN]  # The "X" Dataset
-    _ds.scale(2)
-    plotmgr.plot()
+
+    def proc():
+        if not has_main(plotmgr):  # Do nothing if no data
+            return
+        _ds = plotmgr.stack[MAIN]  # The "X" Dataset
+        _ds.scale(2)
+        plotmgr.plot()
 
 The "plotmgr" attribute represents the active PlotManager instance. Do not try
 to import it; it will be automatically injected into the module's attributes
@@ -257,16 +264,32 @@ The file should contain the desired plugins by file name, one to a line.
 The ".py" file extension may optionally be omitted.  Blank lines and lines that
 start with a "#" or ";" character will be ignored.
 </t>
+<t tx="tom.20221005234429.1">def val_error (except_type, msg1, msg2):
+    def wrapper(f):
+        @functools.wraps(f)
+        def inner(*args, **kwargs):
+            try:
+                return f(*args, **kwargs)
+            except except_type as e:
+                emsg = f'{e}'.split('(&lt;string')[0]
+                tkMessageBox.showwarning(f'{msg1}', f'{emsg}: {msg2}')
+                return False
+        return inner
+    return wrapper
+
+</t>
 <t tx="tom.20221105083713.1"></t>
 <t tx="tom.20221121171302.1"></t>
 <t tx="tom.20221128184455.1"></t>
 <t tx="tom.20221211135219.1"></t>
-<t tx="tom.20221211135236.1">; GF4 configuration file
+<t tx="tom.20221211135236.1" _mod_time="4741da3388babb1b7a2e">; GF4 configuration file
 [colors]
 ; Override initial colors using MatPlotLib CSSS4 color names or #xxyyzz hex values.
 ; main-line-color = red
 ; buffer-line-color = gray
-</t>
+
+[dates]
+default-date-format = %%Y-%%m-%%d %%Y/%%m/%%d</t>
 <t tx="tom.20230129231139.1">"""
 ###### MUST set PYTHONPATH=c:\tom\git\gf4-project\gf4 first ######
 Run pytest from the gf4-project directory -
@@ -274,7 +297,7 @@ Run pytest from the gf4-project directory -
 py -m pytest -k "not test_smooth and not fit_test"
 """</t>
 <t tx="tom.20230129231146.1"></t>
-<t tx="tom.20230201003427.1">@language batch
+<t tx="tom.20230201003427.1" _mod_time="4741d9d712626e8e632e">@language batch
 :: Run pytest against gf4
 :: This command file must be located in the parent directory of \gf4
 @echo off
@@ -284,6 +307,37 @@ set PYTHONPATH=%GF4DIR%\gf4
 cd %PYTHONPATH%
 py -m pytest -k "not test_smooth and not fit_test"
 endlocal
+</t>
+<t tx="tom.20230524110237.1"></t>
+<t tx="tom.20250907102103.1"></t>
+<t tx="tom.20250907102111.1">Data Source (Descriptive note)
+
+Input data are in the form of a block of text. Each data point is contained in a row of the text. Each axis of the data point is in its own column.
+
+Robustness
+
+1. Highly robust - ignore lines that don't convert to numbers or dates.
+2. Ignore blank lines.
+3. Ignore lines starting with a comment character (',', '#')
+4. Ignore line content following a comment character.
+5. Either csv or whitespace-separated columns are allowed. Don't mix.
+
+Data ingestion
+
+6. Report number of data columns, as discovered during processing..
+7. If there is only one data column, consider it to be the second column and create a serially numbered first column starting at 0.
+8. Data columns may be integers, floats, or dates.
+9. Data elements are converted to floats.
+10. Recognize special comment lines and extract (key, value) pairs from them.
+11. All data for a data point must be on the same row.
+
+Date handling
+
+12. For date formats, user may optionally specify a format.
+13. Dates must be converted to years as floats (e.g., 2025-08-15 -&gt; 2025.6189).
+14. Date conversion must account for leap years correctly.
+15. If a column is a date, check to see if all the dates in the column are ordered serially. Inform user if not.
+16. If an optional date format has been specified in the data, but that format is invalid, inform user and terminate processing.
 </t>
 </tnodes>
 </leo_file>

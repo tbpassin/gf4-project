@@ -29,7 +29,6 @@ def test_normalize():
 #@+node:tom.20230203223101.1: ** test_set_ascii_data
 
 def test_get_ascii_data():
-# setAsciiData(self, lines, filename='', root = None)
     DATALINES = ['0  0', '1 1', '2   4', '3   9', '4   16']
     ds = Dataset()
     result = ds.setAsciiData(DATALINES)
@@ -38,7 +37,8 @@ def test_get_ascii_data():
     expected_x = [float(x.split()[0]) for x in DATALINES]
     expected_y = [float(x.split()[1]) for x in DATALINES]
 
-    assert bool(result) is False
+    assert result == 5
+    print(actual_x, actual_y)
     assert actual_x == pytest.approx(expected_x, *PRECISION)
     assert actual_y == pytest.approx(expected_y, *PRECISION)
 
@@ -50,6 +50,7 @@ def test_get_ascii_data_bad():
     result = ds.setAsciiData(DATALINES)
     actual_x, actual_y = ds.xdata, ds.ydata
     # expected_x = [float(x.split()[0]) for x in DATALINES]
+
     splits = [z.split() for z in DATALINES]
     sx, sy = zip(*splits)
     expected_x, expected_y = [], []
@@ -62,7 +63,8 @@ def test_get_ascii_data_bad():
         else:
             expected_x.append(x_)
             expected_y.append(y_)
-    assert result != ''
+
+    assert result == 3
     assert actual_x == pytest.approx(expected_x, *PRECISION)
     assert actual_y == pytest.approx(expected_y, *PRECISION)
 #@-others

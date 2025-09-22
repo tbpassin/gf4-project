@@ -17,6 +17,8 @@ ICONPATH = HOMEPATH / 'icons' / ICONFILE
 CONFIGDIR = 'config'
 CONFIGFILE = 'gf4.ini'
 CONFIGPATH = HOMEPATH / CONFIGDIR / CONFIGFILE
+
+DEFAULT_DATE_FORMAT = '%Y-%m-%d'
 #@+node:tom.20221211134841.1: ** Create Config Parser
 config=ConfigParser()
 config.read(CONFIGPATH)
@@ -38,5 +40,10 @@ def setIcon(win, icon):
 
     photo = Tk.PhotoImage(file = icon)
     win.wm_iconphoto(False, photo)
+#@+node:tom.20250912232354.1: ** set default date format
+try:
+    config_date_format = config.get('dates', 'default-date-format')
+except:
+    config_date_format = DEFAULT_DATE_FORMAT
 #@-others
 #@-leo
