@@ -9,7 +9,6 @@ from .require_datasets import has_main
 
 SPAN = 10
 BUTTON_DEF  = ('Find Peak1', 'find-peak-1', 'Find the peak near the given x-axis location')
-# Put our command button into the "Data Processing" goup
 OVERRIDE = False
 
 plotmgr = None  # Suppress pyflake complaints

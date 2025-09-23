@@ -2657,7 +2657,7 @@ if __name__ == '__main__':
 
     root_width = root.winfo_reqwidth()
     root_height = root.winfo_reqheight()
-    root_y = 80
+    root_y = 120
     screen_width = root.winfo_screenwidth()
     loffset = 0
     if sys.platform.startswith('linux'):

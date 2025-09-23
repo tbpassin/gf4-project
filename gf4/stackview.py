@@ -56,7 +56,7 @@ class Stackwin(Tk.Toplevel):
             root_dims, root_xoffset, root_yoffset = _geom.split('+')
             root_width, root_height = root_dims.split('x')
             xoffset = int(root_xoffset) + int(root_width) - 50
-            yoffset = 50
+            yoffset = 10
             self.geometry('700x70')
             self.geometry('+%s+%s' %(xoffset, yoffset))
         else:
