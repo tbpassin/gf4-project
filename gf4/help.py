@@ -205,7 +205,6 @@ def msg_window(text, plotmgr=None):
 
     # Set initial window position in screen
     if _geom:
-        #902x670+182+182
         root_dims, root_xoffset, root_yoffset = _geom.split('+')
         root_width, root_height = root_dims.split('x')
         xoffset = int(root_xoffset) + int(root_width) + 5
