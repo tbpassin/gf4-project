@@ -178,6 +178,7 @@ def msg_window(text, plotmgr=None):
         _geom = plotmgr.root.geometry()
     else:
         win = Tk.Tk()
+    win.withdraw()
 
     win.title("About GF4")
     setIcon(win, ICONPATH)
@@ -185,7 +186,7 @@ def msg_window(text, plotmgr=None):
     win.grid_columnconfigure(0, weight=1)
     win.grid_rowconfigure(0, weight=1)
 
-    text_box = Tk.Text(win, wrap = 'word', padx = 15, width = 100, height = 50)
+    text_box = Tk.Text(win, wrap = 'word', padx = 15, width = 70, height = 50)
     text_box.grid(row=0, column=0, sticky='ew')
 
     # Thanks to https://www.pythontutorial.net/tkinter/tkinter-scrollbar/
@@ -207,14 +208,13 @@ def msg_window(text, plotmgr=None):
     if _geom:
         root_dims, root_xoffset, root_yoffset = _geom.split('+')
         root_width, root_height = root_dims.split('x')
-        xoffset = int(root_xoffset) + int(root_width) + 5
-        yoffset = int(root_yoffset)
-        #win.geometry(f'600x{root_height}')
-        win.geometry('600x800')
-        # win.geometry('+%s+%s' %(xoffset, yoffset))
+        xoffset = int(root_xoffset) + int(root_width) + 20
+        yoffset = int(root_yoffset) - 20
         win.geometry(f'+{xoffset}+{yoffset}')
     else:
         win.geometry('600x800')
+
+    win.deiconify()  # Finally show our window
 
 #@+node:tom.20220411201434.1: ** about
 def about(parent = None):
