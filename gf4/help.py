@@ -186,7 +186,7 @@ def msg_window(text, plotmgr=None):
     win.grid_columnconfigure(0, weight=1)
     win.grid_rowconfigure(0, weight=1)
 
-    text_box = Tk.Text(win, wrap = 'word', padx = 15, width = 70, height = 50)
+    text_box = Tk.Text(win, wrap = 'word', padx = 15, width = 70, height = 40)
     text_box.grid(row=0, column=0, sticky='ew')
 
     # Thanks to https://www.pythontutorial.net/tkinter/tkinter-scrollbar/
