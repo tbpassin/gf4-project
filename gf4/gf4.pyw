@@ -2157,9 +2157,9 @@ class PlotManager(AbstractPlotManager):
 
         lab = _ds.figurelabel or ''
         if lab:
-            lab = ' Spline Smooth of %s' % (lab)
+            lab = ' Spline Smooth (%s) of %s' % (dia.result, lab)
         else:
-            lab = ' Spline Smooth'
+            lab = f'Spline Smooth ({dia.result})'
         _ds.figurelabel = lab
 
         self.plot()
