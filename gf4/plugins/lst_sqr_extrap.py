@@ -18,9 +18,7 @@ plotmgr = None
 # mypy: disable-error-code = "attr-defined"
 #@+<< helptext >>
 #@+node:tom.20230106182809.1: ** << helptext >>
-HELPTEXT[
-    'lst-sqr-extrap',
-] = """
+HELPTEXT['lst-sqr-extrap'] = """
 Polynomial Fit
 ===============
 

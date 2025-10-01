@@ -46,6 +46,7 @@ from trend import mann_kendall, YESNO
 
 from cmdwin import cmdwindow
 from utility import ICONPATH, setIcon, config
+from stackview import Stackwin
 
 lowess2_stddev = smoother.lowess2_stddev
 mcolors = matplotlib.colors
@@ -1700,7 +1701,6 @@ class PlotManager(AbstractPlotManager):
         _ds = self.stack[MAIN]
         partial_ac, conf_bands = pacf(_ds.ydata, alpha = .05, method = 'ywm')
 
-        # new_x = [n for n in range(len(partial_ac))]
         new_x = list(range(len(partial_ac)))
         _ds.ydata = partial_ac
         _ds.xdata = new_x
@@ -1709,7 +1709,7 @@ class PlotManager(AbstractPlotManager):
         low, hi = list(zip(*conf_bands))
 
         # Make "error bands" to be centered on axis, as is conventional
-        low = [lo - y for lo, y in zip(low,partial_ac)]
+        low = [lo - y for lo, y in zip(low, partial_ac)]
         hi = [hi - y for hi, y in zip(hi, partial_ac)]
 
         upper = Dataset(new_x, hi)
@@ -2678,6 +2678,8 @@ if __name__ == '__main__':
     cmdwin.deiconify()
 
     fname = ''
+    
+    _stackwin = Stackwin(plotmgr)
 
     # Overplot all files listed on the command line
     _first = True

@@ -43,7 +43,6 @@ def proc():
     upper = Dataset(ds.xdata, hi)
     lower = Dataset(ds.xdata, low)
     ds.errorBands = [upper, lower]
-    ds.ydata = ydata
 
     plotmgr.plot()
     plotmgr.overplot_errorbands()

@@ -45,6 +45,7 @@
 <v t="tom.20220830215645.1"><vh>@clean README.txt</vh>
 <v t="tom.20220830223226.1"><vh>What A Plugin Should Import</vh></v>
 <v t="tom.20220830223435.1"><vh>What A Plugin Must Include</vh></v>
+<v t="tom.20250930232831.1"><vh>How To Add Extended Help</vh></v>
 <v t="tom.20220830224004.1"><vh>How To Specify Which Plugins To Use</vh></v>
 </v>
 <v t="tom.20220830112255.1"><vh>@clean use_plugins.txt</vh></v>
@@ -66,6 +67,9 @@
 <v t="tom.20221115225742.1"><vh>@file local_poly_fit.py</vh></v>
 <v t="tom.20221120044718.1"><vh>@file low_quad.py</vh></v>
 <v t="tom.20221121191416.1"><vh>@file poly_lowess.py</vh></v>
+<v t="tom.20250928143427.1"><vh>@file fox_autocor.py</vh></v>
+<v t="tom.20250928233017.1"><vh>@file sign_runs.py</vh></v>
+<v t="tom.20250930150701.1"><vh>@file ljung_box.py</vh></v>
 <v t="tom.20221124112244.1"><vh>@file show_sigma.py</vh></v>
 </v>
 </v>
@@ -166,17 +170,21 @@ permissions) - see https://riptutorial.com/tkinter/example/3206/installation-or-
 
 </t>
 <t tx="tom.20220829181040.1"></t>
-<t tx="tom.20220830112255.1" _mod_time="4741da349139cbd6ab2e"># The list of plugins to import. Omit the ".py" extension.
+<t tx="tom.20220830112255.1" _mod_time="4741da37255822dbeb2e"># The list of plugins to import. Omit the ".py" extension.
 find_peak
 readout
 calculator
 local_poly_fit
 poly_lowess
-show_sigma
 low_quad
 lst_sqr_extrap
-#find_peak1</t>
-<t tx="tom.20220830215645.1" _mod_time="4741da3431ddc329e72e">GF4 has a plugin mechanism that can load plugin files located in the "plugins"
+#find_peak1
+ljung_box
+show_sigma
+sign_runs
+fox_autocor</t>
+<t tx="tom.20220830215645.1" _mod_time="4741da37286073d97f2e">@language rest
+GF4 has a plugin mechanism that can load plugin files located in the "plugins"
 directory.  This README provides some basic information for developers of plugins.
 
 WHAT A PLUGIN PROVIDES
@@ -339,6 +347,20 @@ Date handling
 14. Date conversion must account for leap years correctly.
 15. If a column is a date, check to see if all the dates in the column are ordered serially. Inform user if not.
 16. If an optional date format has been specified in the data, but that format is invalid, inform user and terminate processing.
+</t>
+<t tx="tom.20250930232831.1">To add an extended help message for a plugin, import `HELPTEXT` as follows::
+
+    from help_cmds import HELPTEXT
+
+In the body of the plugin at the top level, Create the help message like this::
+
+    HELPTEXT['command-name'] = """
+This is the extended help message for this plugin.
+"""
+
+"command-name" is the command's name as included in the button definition.
+
+During program startup, this message will be automatically linked to a right-click on the plugin's button. Button with extended help will turn a cyan color when moused over.
 </t>
 </tnodes>
 </leo_file>
