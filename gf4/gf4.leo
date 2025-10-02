@@ -183,7 +183,7 @@ ljung_box
 show_sigma
 sign_runs
 fox_autocor</t>
-<t tx="tom.20220830215645.1" _mod_time="4741da37286073d97f2e">@language rest
+<t tx="tom.20220830215645.1" _mod_time="4741da374847c45e972e">@language text
 GF4 has a plugin mechanism that can load plugin files located in the "plugins"
 directory.  This README provides some basic information for developers of plugins.
 
@@ -209,9 +209,7 @@ positions. Typically:
 
 from AbstractPlotMgr import MAIN, BUFFER
 
-If you want to make sure there is a dataset in the MAIN or MAIN+BUFFER positions,
-then import these functions from the module "require_dataset" in the plugins
-directory:
+If you want to make sure there is a dataset in the MAIN or MAIN+BUFFER positions, then import these functions from the module "require_dataset" in the plugins directory:
 
 from .require_datasets import has_main
 # or possibly:
@@ -348,19 +346,21 @@ Date handling
 15. If a column is a date, check to see if all the dates in the column are ordered serially. Inform user if not.
 16. If an optional date format has been specified in the data, but that format is invalid, inform user and terminate processing.
 </t>
-<t tx="tom.20250930232831.1">To add an extended help message for a plugin, import `HELPTEXT` as follows::
+<t tx="tom.20250930232831.1">HOW TO ADD EXTENDED HELP
+--------------------------
+To add an extended help message for a plugin, import `HELPTEXT` as follows:
 
-    from help_cmds import HELPTEXT
+from help_cmds import HELPTEXT
 
-In the body of the plugin at the top level, Create the help message like this::
+In the body of the plugin at the top level, Create the help message like this:
 
-    HELPTEXT['command-name'] = """
+HELPTEXT['command-name'] = """
 This is the extended help message for this plugin.
 """
 
-"command-name" is the command's name as included in the button definition.
+"command-name" is the command's name as included in the button definition. The message will be interpreted as ReStructuredText and displayed in the system browser.
 
-During program startup, this message will be automatically linked to a right-click on the plugin's button. Button with extended help will turn a cyan color when moused over.
+During program startup, this message will be automatically linked to a right-click on the plugin's button. A button with extended help will turn a cyan color when moused over.
 </t>
 </tnodes>
 </leo_file>
