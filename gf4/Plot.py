@@ -36,6 +36,17 @@ def plot(self, stackposition=MAIN, clearFirst=True):
 
     _xdata = _dat.xdata
     _ydata = _dat.ydata
+    if len(_xdata) != len(_ydata):
+        self.announce(f'x and y data have different lengths: {len(_xdata)=}, {len(_ydata)=}')
+        self.flashit()
+        if False:
+            try:
+                combined = list(zip(_xdata, _ydata))
+                print(combined[:5], flush=True)
+                print(combined[-5:], flush=True)
+            finally:
+                return
+
 
     f = self.figure
     #@+<< get axes >>
