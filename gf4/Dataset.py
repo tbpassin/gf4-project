@@ -140,6 +140,7 @@ class Dataset:
                 return dt.year + fraction
             except ValueError:
                 continue
+        raise ValueError
 
     #@+node:tom.20211211170820.10: *3* Dataset.setAsciiData
     def setAsciiData(self, lines, filename='', root = None):
@@ -201,15 +202,14 @@ class Dataset:
         _x = []
         _y = []
 
-        #_hasTwoCols = False
         _datalines = 0
-        _firstline = True
         _isSingleCol = False
         _numcols = 0
         _rowcount = 0
         count = 0
         error_count = 0
         retval = ''
+        data_start_line = -1
 
         # Restore default date formats in case they have been changed
         self.date_formats = self.make_date_list(config_date_format)
@@ -221,8 +221,6 @@ class Dataset:
         # Assume that the line just before the first data line contains the column headers.
         is_csv = False
         data_start_line = -1
-        header_start_line = -1
-        headers = []
 
         for i, line in enumerate(lines):
             if not line.strip():
@@ -237,32 +235,82 @@ class Dataset:
                     line = line[:pos]
                     break
             if "," in line and not is_csv:
-                is_csv = True
-            # Assume we are comma-separated, look for first data line
-            if is_csv:
-                # Find first data line and the column headers, if any
                 fields = line.split(',')
                 try:
-                    # we don't actually use val; just seeing if all fields are numeric 
-                    for f in fields:
-                        # val = float(f)
-                        val = self.parse_value(f)
+                    val = self.parse_value(fields[0])
+                    is_csv = True
                     data_start_line = i
-                    header_start_line = data_start_line - 1
-                    if header_start_line > -1:
-                        headers = lines[header_start_line].split(',')
-                    break
                 except ValueError:
                     continue
+            if is_csv:
+                break
 
         # Fix up data so we can use standard whitespace-separated processing
         if is_csv:
-            lines = [line.replace(',', '\t') for line in lines]
-            # Comment out all lines before first data line
-            # for i, line in enumerate(lines[:data_start_line]):
-                # lines[i] = '#' + line
+            startline = data_start_line if data_start_line > -1 else 0
+            lines = [line.replace(',', '\t') for line in lines[startline:]]
+        else:
+            # Not csv data, find first data line
+            for i, line in enumerate(lines):
+                if not line.strip():
+                    continue
+                line = line.lstrip()
+                if line[0] in COMMENTS:
+                    continue
+                # Eliminate trailing comments so we don't get fooled by commas in them
+                for ch in COMMENTS:
+                    pos = line.find(ch)
+                    if pos > -1:
+                        line = line[:pos]
+                        break
+                fields = line.split()
+                try:
+                    val = self.parse_value(fields[0])
+                    data_start_line = i
+                except ValueError:
+                        continue
+                if data_start_line > -1:
+                    break
+
+
 
         #@-<< detect_csv >>
+        #@+<< detect number of data columns >>
+        #@+node:tom.20220821124613.1: *4* << detect number of data columns >>
+        _numcols = 0
+        if data_start_line > -1:
+            fields = lines[data_start_line].split()
+            for j, field in enumerate(fields):
+                try:
+                    val = self.parse_value(field)
+                    _numcols += 1
+                except ValueError:
+                    break
+
+        _isSingleCol = _numcols == 1
+        col1 = 0
+        col2 = 1
+        #@-<< detect number of data columns >>
+        #@+<< choose data columns >>
+        #@+node:tom.20220821124400.1: *4* << choose data columns >>
+
+        _id = 'selectcols'
+        if parmsaver.get(_id):
+            col1, col2 = parmsaver[_id]
+        else:
+            col1, col2 = 0, 1
+        if _numcols - 1 < col2:
+            col2 = 1
+
+        if _numcols > 2:
+            dia = GetTwoInts(root, 'Select Data Columns (zero-based)', 'X', 'Y', col1, col2)
+            if not dia.result:
+                return "No data columns selected"
+            col1, col2 = dia.result
+            parmsaver[_id] = col1, col2
+
+            _isSingleCol = col1 == col2
+        #@-<< choose data columns >>
 
         for line in lines:
             #@+<< process line >>
@@ -343,40 +391,6 @@ class Dataset:
 
             fields = line.split()
 
-            # First Numeric line
-            if _firstline:
-                #@+<< detect number of data columns >>
-                #@+node:tom.20220821124613.1: *6* << detect number of data columns >>
-                try:
-                    _ = self.parse_value(fields[0])
-                    _firstline = False
-                except Exception as e:
-                    print(e)
-                    continue
-
-                _numcols = len(fields)
-                _isSingleCol = _numcols == 1
-                # _hasTwoCols = _numcols == 2
-                col1 = 0
-                col2 = 1
-                #@-<< detect number of data columns >>
-                if _numcols > 2:
-                    #@+<< choose data columns >>
-                    #@+node:tom.20220821124400.1: *6* << choose data columns >>
-                    _id = 'selectcols'
-                    if parmsaver.get(_id):
-                        col1, col2 = parmsaver[_id]
-                    else:
-                        col1, col2 = 0, 1
-                    dia = GetTwoInts(root, 'Select Data Columns (zero-based)', 'X', 'Y', col1, col2)
-                    if not dia.result:
-                        return "No data columns selected"
-                    col1, col2 = dia.result
-                    parmsaver[_id] = col1, col2
-
-                    _isSingleCol = col1 == col2
-                    #@-<< choose data columns >>
-
             try:
                 if _isSingleCol:
                     count = count + 1
@@ -405,12 +419,6 @@ class Dataset:
         if _datalines:
             self.xdata = _x or [0]
             self.ydata = _y or [0]
-            if is_csv and headers:
-                # At this point, we know which data columns are being used, so we
-                # use the corresponding csv headers
-                self.xaxislabel = headers[col1]
-                if len(headers) > col2:
-                    self.yaxislabel = headers[col2]
 
             if error_count > 0:
                 _rows = 'row' if error_count == 1 else 'rows'
