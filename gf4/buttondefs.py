@@ -12,12 +12,13 @@ plugin_modules = import_all_plugins()
 
 #@+node:tom.20211211170819.7: ** Declarations (buttondefs.py)
 # encoding: utf-8
-'''Button definitions for GF4.  Format:
-    (button label, command string, help message)
+"""Button definitions for GF4.  Format:
+
+     (button label, command string, help message)
     
-    The command string is sent to the command interpreter when the
-    button is pressed.
-    '''
+The command string is sent to the command interpreter
+when the button is pressed.
+"""
 
 SPACER = (None, None)
 
@@ -30,13 +31,13 @@ PLOT_BUTTONS = (
     ('Overplot T', 'overplottop', 'Overplot Top'),
     SPACER, SPACER,
     ('Error Bands', 'overploterr', 'Overplot X Error Bands if any'),
-    ('Timehack', 'timehack', 'Vertical Marker At Specified X Position'),
+    ('Timehack', 'timehack', 'Vertical Marker At Specified Horizontal Position'),
 )
 
 AXES_BUTTONS = (
     ('Linear', 'linear', 'Linear Plot'),
-    ('Semilog Y', 'semilogy', 'Semilog Plot on Y Axis'),
-    ('Semilog X', 'semilogx', 'Semilog Plot on X Axis'),
+    ('Semilog y', 'semilogy', 'Semilog Plot on Vertical Axis'),
+    ('Semilog x', 'semilogx', 'Semilog Plot on Horizontal Axis'),
     ('Loglog', 'loglog', 'Log-log Plot'),
 )
 
@@ -57,8 +58,8 @@ STACK_BUTTONS = (
     ('Y → X', 'copyfrom', 'Copy From Y to X'),
     ('T → X', 'copyfromtop', 'Copy from Top to X'),
     SPACER, SPACER,
-    ('Push', 'push', 'Copy X then Push Stack'),
-    ('Drop', 'drop', 'Y -> X'),
+    ('Push', 'push', 'Copy X then Push Stack; X is Unchanged'),
+    ('Drop', 'drop', 'T -> Y, Y -> X; T is Unchanged'),
     ('Rot Up', 'rotateup', 'Rotate Stack Up'),
     ('Rot Down', 'rotatedn', 'Rotate Stack Down')
 )
