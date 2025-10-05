@@ -6,7 +6,7 @@ local_poly_fit
 poly_lowess
 low_quad
 lst_sqr_extrap
-# find_peak1
+find_peak1
 ljung_box
 show_sigma
 sign_runs
