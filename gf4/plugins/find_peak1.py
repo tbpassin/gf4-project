@@ -4,7 +4,6 @@
 The peak must be smooth for this to work.
 X-axis points must be ordered
 """
-from matplotlib.widgets import SpanSelector
 from AbstractPlotMgr import MAIN
 from .require_datasets import has_main
 
@@ -14,30 +13,15 @@ OVERRIDE = False
 
 plotmgr = None  # Suppress pyflake complaints
 
-def onSpanSelect(xmin, xmax):
-    print("Selected:", xmin, xmax, flush=True)
-    plotmgr.SpanSelector = None
-    plotmgr.span = (xmin, xmax)
-    doSomething()
-
-def doSomething():
-    print(f'{plotmgr.span=}', flush=True)
-    plotmgr.span = None
+def getSpan(xmin, xmax):
+    print(f'{(xmin, xmax)=}', flush=True)
 
 # plotmgr will have been injected into the module by the time this is called
 def proc():
     if not has_main(plotmgr):
         return
 
-    ax = plotmgr.axes
-
-    plotmgr.SpanSelector = SpanSelector(
-        ax,
-        onSpanSelect,
-        "horizontal", 
-        useblit=True,
-        interactive=False,
-    )
+    plotmgr.createSpanSelection(getSpan)
 
 #@+at
 #     _ds = plotmgr.stack[MAIN]
@@ -52,7 +36,7 @@ def proc():
 #     # if dia.result is None: return
 #     # plotmgr.parmsaver[_id] = dia.result
 #
-#@+at 
+# +at 
 #     plotmgr.announce(
 #         f'Peak: {peak:0.4f} at {x_peak:0.4f} in ({_x[start]:0.4f}, {_x[end]:0.4f})')
 #@-leo
