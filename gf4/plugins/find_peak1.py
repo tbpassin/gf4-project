@@ -1,42 +1,54 @@
 #@+leo-ver=5-thin
 #@+node:tom.20220905122752.1: * @file find_peak1.py
 """Find a peak near the specified x-axis coordinate
+
 The peak must be smooth for this to work.
-X-axis points must be ordered
+X-axis points must be ordered.
+
+The peak will be marked with a vertical marker.
 """
+
+from numpy import searchsorted, argmax
 from AbstractPlotMgr import MAIN
 from .require_datasets import has_main
 
-SPAN = 10
 BUTTON_DEF  = ('Find Peak1', 'find-peak-1', 'Find the peak near the given x-axis location')
 OVERRIDE = False
 
+# plotmgr will have been injected into the module by the time this is called
 plotmgr = None  # Suppress pyflake complaints
 
 def getSpan(xmin, xmax):
-    print(f'{(xmin, xmax)=}', flush=True)
+    _ds = plotmgr.stack[MAIN]
+    _x = _ds.xdata  # Might be a numpy nd array.
+    _y = _ds.ydata  # Might be a numpy nd array.
 
-# plotmgr will have been injected into the module by the time this is called
+    span = (xmin, xmax)
+    start, end = searchsorted(_x, span)
+    segment = _y[start:end]
+    if len(segment) == 0:
+        plotmgr.announce(f'Computed improper bounds: ){start:0.4f}, {end:0.4f}')
+        plotmgr.flashit()
+        return
+
+    peak = max(segment)
+    peak_index = start + argmax(segment)
+    x_peak = _x[peak_index]
+    # Might have max at end of segment - if so, it's not a peak
+    if (_y[peak_index - 1] > peak) or (_y[peak_index + 1] > peak):
+        plotmgr.announce(f'No peak found in ({_x[start]:0.4f}, {_x[end]:0.4f})')
+        return
+
+    plotmgr.timehack(x_peak)
+    plotmgr.announce(
+        f'Peak: {peak:0.4f} at {x_peak:0.4f})')
+
+# All plugins must define a proc()
 def proc():
     if not has_main(plotmgr):
         return
 
     plotmgr.createSpanSelection(getSpan)
+    plotmgr.announce('Select span with mouse ...')
 
-#@+at
-#     _ds = plotmgr.stack[MAIN]
-#     _x = list(_ds.xdata)
-#     _y = list(_ds.ydata)  # Might be a numpy nd array.
-#
-#     # _id = 'peakfinder'
-#     # lastparm = plotmgr.parmsaver.get(_id, 0.0)
-#     # dia = GetSingleFloat(plotmgr.root,
-#                          # 'Find Peak Near', 'X axis coord',
-#                          # lastparm)
-#     # if dia.result is None: return
-#     # plotmgr.parmsaver[_id] = dia.result
-#
-# +at 
-#     plotmgr.announce(
-#         f'Peak: {peak:0.4f} at {x_peak:0.4f} in ({_x[start]:0.4f}, {_x[end]:0.4f})')
 #@-leo

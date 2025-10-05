@@ -57,8 +57,7 @@
 <v t="tom.20220831132228.1"><vh>@file convolve1.py</vh></v>
 <v t="tom.20220903150123.1"><vh>@file correl1.py</vh></v>
 <v t="tom.20221101105447.1"><vh>@file autocorrel1.py</vh></v>
-<v t="tom.20220904105233.1"><vh>@file find_peak.py</vh></v>
-<v t="tom.20220905122752.1"><vh>@file find_peak1.py</vh></v>
+<v t="tom.20220905122752.1"><vh>@file find_peak.py</vh></v>
 <v t="tom.20230104000405.1"><vh>@file lst_sqr_extrap.py</vh></v>
 <v t="tom.20220909175119.1"><vh>@file readout.py</vh></v>
 <v t="tom.20221105131948.1"><vh>@file undo-save.py</vh></v>
@@ -170,7 +169,7 @@ permissions) - see https://riptutorial.com/tkinter/example/3206/installation-or-
 
 </t>
 <t tx="tom.20220829181040.1"></t>
-<t tx="tom.20220830112255.1" _mod_time="4741da38267fe9350b2e"># The list of plugins to import. Omit the ".py" extension.
+<t tx="tom.20220830112255.1" _mod_time="4741da38b5fc0e866d2e"># The list of plugins to import. Omit the ".py" extension.
 find_peak
 readout
 calculator
@@ -178,7 +177,6 @@ local_poly_fit
 poly_lowess
 low_quad
 lst_sqr_extrap
-find_peak1
 ljung_box
 show_sigma
 sign_runs
