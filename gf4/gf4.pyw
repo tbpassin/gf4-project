@@ -17,6 +17,7 @@ import matplotlib
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from matplotlib.backends.backend_tkagg import NavigationToolbar2Tk
 from matplotlib.figure import Figure
+from matplotlib.widgets import SpanSelector
 
 from numpy import ndarray
 from scipy.stats import spearmanr
@@ -2163,6 +2164,23 @@ class PlotManager(AbstractPlotManager):
         _ds.figurelabel = lab
 
         self.plot()
+    #@+node:tom.20251005100120.1: *3* Span Selection
+    def createSpanSelection(self, callback):
+        def onSpanSelect(xmin, xmax):
+            if self.spanSelector:
+                self.spanSelector.disconnect_events()
+                self.spanSelector = None
+            callback(xmin, xmax)
+
+        self.onSpanSelect = onSpanSelect
+
+        self.spanSelector = SpanSelector(
+                self.axes,
+                self.onSpanSelect,
+                "horizontal", 
+                useblit=True,
+                interactive=False,
+            )
     #@+node:tom.20211207214046.1: *3* Statistics
     #@+node:tom.20211207165051.107: *4* spearman
     @REQUIRE_MAIN_BUFF
