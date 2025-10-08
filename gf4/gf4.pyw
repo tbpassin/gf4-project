@@ -1694,8 +1694,6 @@ class PlotManager(AbstractPlotManager):
         if lab1:
             dm.figurelabel += f' with {lab1}'
 
-        # dm.clearErrorBands()
-
         self.plot()
     #@+node:tom.20211207165051.96: *4* autocorrelate
     @CLEAR_ERROR_BANDS
