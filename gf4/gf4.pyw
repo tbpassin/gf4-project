@@ -1664,20 +1664,37 @@ class PlotManager(AbstractPlotManager):
         dm = self.stack[MAIN]
         lab = dm.figurelabel or ''
         lab1 = self.stack[BUFFER].figurelabel or ''
+        window_width = len(dm.xdata)
 
-        d1 = dm
-        d2 = self.stack[BUFFER]
+        dbuff = self.stack[BUFFER]
 
-        d1.convolve(d2)
+        dm.convolve(dbuff)
 
+        # Convolutions are offset from the original, adjust
+        #@+<< adjust x axis >>
+        #@+node:tom.20251008161512.1: *5* << adjust x axis >>
+        # Set x-axis to match waveform in BUFFER, shift 
+        # to match BUFFER start.
+        xbuff = dbuff.xdata
+        new_delta = xbuff[1] - xbuff[0]
+        new_start = xbuff[0] - window_width / 2  # Offset adjustment
+
+        _xdata = dm.xdata
+        new_x = [0] * len(_xdata)
+        x_ = new_start
+        for i in range(len(_xdata)):
+            x_ += new_delta
+            new_x[i] = x_
+        dm.xdata = new_x
+        #@-<< adjust x axis >>
+
+        dm.figurelabel = 'Convolution'
         if lab:
-            dm.figurelabel = 'Convolution of %s' % (lab)
-            if lab1:
-                dm.figurelabel += ' with %s' % (lab1)
-        else:
-            dm.figurelabel = 'Convolution'
+            dm.figurelabel += f' of {lab}'
+        if lab1:
+            dm.figurelabel += f' with {lab1}'
 
-        dm.clearErrorBands()
+        # dm.clearErrorBands()
 
         self.plot()
     #@+node:tom.20211207165051.96: *4* autocorrelate
