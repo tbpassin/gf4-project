@@ -105,7 +105,7 @@ The result has one less point than the original dataset because there is no poin
 
 ''',
 #@+node:tom.20221108201916.1: *3* diff2
-'diff2': r'''
+'diff2': r"""
 
 Central Diff
 ============
@@ -123,12 +123,12 @@ there are no points for :math:`x_{-1}` and :math:`x_{N+1}`, so the first and las
 the one-sided calculation :math:`(y_N - y_{N-1})/(x_{N} - x_{N-1})`, so the
 number of points equals the original number of points.
 
-Whether to use central or one-sided differencing depends in part on whether
+Central differencing produces a slight smoothing effect since it averages across two points.  Whether to use central or one-sided differencing depends in part on whether
 changes from one point to the next are important. If not, central differencing
 would usually be the better choice.  Also, one-sided differencing produces
 values that are offset by half a step for their index number, while central
 differencing has no such offset.
-''',
+""",
 #@+node:tom.20221108165543.1: ** play-macro
 'play-macro': '''
 

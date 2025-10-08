@@ -1,18 +1,17 @@
 #@+leo-ver=5-thin
 #@+node:tom.20220905122752.1: * @file find_peak.py
-"""Find a peak near the specified x-axis coordinate
+"""Find a peak within the span denoted by dragging the mouse.
 
-The peak must be smooth for this to work.
-X-axis points must be ordered.
-
-The peak will be marked with a vertical marker.
+X-axis points must be ordered. The peak will be the point
+with the highest value in the span. The peak will be marked
+with a vertical marker.
 """
 
 from numpy import searchsorted, argmax
 from AbstractPlotMgr import MAIN
 from .require_datasets import has_main
 
-BUTTON_DEF  = ('Find Peak', 'find-peak', 'Find the peak near the given x-axis location')
+BUTTON_DEF  = ('Find Peak', 'find-peak', 'Find the peak near the given x-axis location. Drag mouse across peak after clicking this button.')
 OVERRIDE = False
 
 # plotmgr will have been injected into the module by the time this is called
