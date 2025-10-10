@@ -3,6 +3,7 @@
 #@@language python
 #@+others
 #@+node:tom.20220411210428.1: ** imports
+from sys import version_info
 import webbrowser
 from versions import APPVERSION, getGitInfo
 
@@ -16,7 +17,10 @@ from utility import ICONPATH, setIcon
 version, (branch, changeset) = APPVERSION, getGitInfo()
 
 BRANCH_STR = f'; Branch: {branch}' if branch else ""
-GIT_STR = f'; Changeset; {changeset}' if changeset else ""
+GIT_STR = f'; Changeset; {changeset.strip()}' if changeset else ""
+
+v1, v2, v3, level, _ = version_info
+PYVERSION = f'{v1}.{v2}.{v3} {level}'
 #@+node:tom.20220505131030.1: ** helpmsg
 #@+others
 #@+node:tom.20220505130330.1: *3* Intro
@@ -28,7 +32,8 @@ Plots 2D curves and performs calculations on them. GF4 is modeled
 after a reverse polish notation (RPN) calculator, where 2D waveforms take 
 the place of plain numbers.
 
-Version: {version}{BRANCH_STR}{GIT_STR}
+GF4 Version: {version}{BRANCH_STR}{GIT_STR}
+Python: {PYVERSION}
 """
 #@+node:tom.20220412003223.1: *3* Data Format
 H1 = """
