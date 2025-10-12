@@ -4,6 +4,9 @@
 """Demo plugin - does nothing useful."""
 
 BUTTON_DEF  = ('Plugin Test', 'plugin-test', 'A dummy plugin for development')
+OVERRIDE = False
+
+plotmgr = None
 
 # plotmgr will have been injected into the module by the time this is called
 def proc():

@@ -40,6 +40,7 @@ def find_closest(value, x):
     return given
 #@-others
 
+# plotmgr will have been injected into the module by the time this is called
 def proc():
     if not needs_main(plotmgr):
         return

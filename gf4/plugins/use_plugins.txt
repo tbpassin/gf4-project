@@ -10,3 +10,4 @@ ljung_box
 show_sigma
 sign_runs
 fox_autocor
+sinc_window

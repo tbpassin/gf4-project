@@ -84,8 +84,7 @@ labels, and a break between data sets:
 ;; ENDDATASET
 
 The special comment key words are case sensitive.  If there is more than one
-dataset, the second one goes into the y position in the stack, and so on up to
-the stack depth.  Beyond that additional data sets are ignored.
+dataset, the second one goes into the "Y" position in the stack, and so on up to the stack depth.  Beyond that additional data sets are ignored.
 """
 #@+node:tom.20220412003352.1: *3* The Waveform Stack
 H2 = '''

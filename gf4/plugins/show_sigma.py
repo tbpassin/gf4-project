@@ -15,6 +15,7 @@ BUTTON_DEF  = ('Show Sigmas', 'show-sigma',
 OVERRIDE = False
 plotmgr = None
 
+# plotmgr will have been injected into the module by the time this is called
 def proc():
     if not has_main(plotmgr):
         return

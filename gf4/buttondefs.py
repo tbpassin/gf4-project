@@ -171,7 +171,7 @@ GENERATOR_BUTTONS = (
 
 TREND_BUTTONS = (
     ('Mann-Kendall', 'mann_kendall', 'Compute Mann-Kendall Trend'),
-    ('Windowed Dev', 'sliding_var', 'Standard Deviations for a LOWESS Fit'),
+    ('Windowed Dev', 'sliding_var', 'Standard Deviation in a LOWESS-Weighted Sliding Window'),
 )
 #@+node:tom.20220829181647.1: ** Plugins
 PLUGIN_BUTTONS = []

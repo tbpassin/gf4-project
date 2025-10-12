@@ -151,8 +151,6 @@ class Dataset:
 
         Data columns are expected to whitespace-separated.  Optionally they can be
         separated by a comma.  All data lines in a file must use the same separator.
-        For comma-separated data, column headers are assumed to be in the line
-        immediately before the first data line.
 
         Blank lines and lines that start with a ';' or '#' are ignored. 
         If the first non-ignorable line has only a single field, then
