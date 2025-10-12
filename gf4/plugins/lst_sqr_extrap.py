@@ -49,7 +49,7 @@ def calc_stats(xdata, ydata, fitted_y):
     # mean = 0.0
     N = len(fitted_y)
 
-    y_mean = 1.0 * sum(ydata) / N
+    # y_mean = 1.0 * sum(ydata) / N
     x_mean = 1.0 * sum(xdata) / N
 
     for ys, y in zip(ydata, fitted_y):
@@ -57,12 +57,12 @@ def calc_stats(xdata, ydata, fitted_y):
 
     var = var / (N - 2)  # Variance of any one fitted point
     # rms = (var**0.5)
-    se = (var / (N - 1)) ** 0.5  # std error of residuals
+    # se = (var / (N - 1)) ** 0.5  # std error of residuals
 
     # Estimated SD of slope from least-squares formula:
     # Var(slope) = (1/(N-2)) * sum(yi_fitted - yi)^2 / sum(xi - x_avg)^2
     # See https://en.wikipedia.org/wiki/Simple_linear_regression#Confidence_intervals
-    y_mean = 1.0 * sum(ydata) / N
+    # y_mean = 1.0 * sum(ydata) / N
     x_mean = 1.0 * sum(xdata) / N
     # var_slope = (1.0/(N-2)) * sum([(y_fit - _y)**2 for y_fit, _y in zip(fitted_y, ydata)]) \
     #            / sum([(xi - x_mean)**2 for xi in xdata])
@@ -83,6 +83,7 @@ def calc_stats(xdata, ydata, fitted_y):
     return upper, lower
 #@-<< def calc_stats >>
 
+# plotmgr will have been injected into the module by the time this is called
 def proc():
     if not has_main(plotmgr):
         return
