@@ -18,6 +18,9 @@ OVERRIDE = False
 plotmgr = None  # Suppress pyflake complaints
 
 def getSpan(xmin, xmax):
+    if not has_main(plotmgr):
+        return
+
     _ds = plotmgr.stack[MAIN]
     _x = _ds.xdata  # Might be a numpy nd array.
     _y = _ds.ydata  # Might be a numpy nd array.
