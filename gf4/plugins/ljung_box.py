@@ -18,9 +18,10 @@ from .require_datasets import has_main
 from help_cmds import HELPTEXT
 
 BUTTON_DEF  = ('Ljung-Box', 'ljung-box',
-               'Assess randomness of [X] using the Ljung-Box test')
+               'Assess randomness of [X] by looking at autocorrelation coefficients using the Ljung-Box test ')
 OVERRIDE = False  # Override default location.
 GRAY_LOW, GRAY_HI = 0.01, 0.08
+BOOL_WORDS = {True: 'yes', False: 'no'}
 
 HELPTEXT['ljung-box'] = """
 Ljung-Box test.
@@ -39,9 +40,23 @@ def proc():
     lj = sm.stats.acorr_ljungbox
     result = lj(ydata, (1,2,5,10,20,30))
     print(result)
-    # print(result[0], flush=True)
-    is_gray = bool(result['lb_pvalue'].between(GRAY_LOW, GRAY_HI, 
+    pvalue = result['lb_pvalue']
+
+    is_random = None
+    is_gray = bool(pvalue.between(GRAY_LOW, GRAY_HI, 
                      inclusive="both").any())
 
-    print(f'{is_gray=}', flush=True)
+    if pvalue.iloc[0] > GRAY_HI and pvalue.iloc[-1] > GRAY_HI:
+        is_random = True
+    elif pvalue.iloc[0] < GRAY_LOW and pvalue.iloc[-1] < GRAY_LOW:
+        is_random = False
+
+    msg = ''
+    if is_random is not None:
+        msg = f'Seems random: {BOOL_WORDS[is_random]}'
+        if is_gray:
+            msg += ' but may be ambiguous'
+    else:
+        msg = 'Randomness: ambiguous'
+    plotmgr.announce(msg)
 #@-leo
