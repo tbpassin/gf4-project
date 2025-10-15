@@ -1032,7 +1032,8 @@ class PlotManager(AbstractPlotManager):
         new_start, new_delta = float(new_start_), float(new_delta_)
         new_x = [0] * len(_xdata)
         x_ = new_start
-        for i in range(len(_xdata)):
+        new_x[0] = x_
+        for i in range(1, len(_xdata)):
             x_ += new_delta
             new_x[i] = x_
         _ds.xdata = new_x
