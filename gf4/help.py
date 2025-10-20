@@ -36,7 +36,7 @@ GF4 Version: {version}{BRANCH_STR}{GIT_STR}
 Python: {PYVERSION}
 """
 #@+node:tom.20220412003223.1: *3* Data Format
-H1 = """
+H1 = """\
    Input Data Format
 ----------------------------------
 
@@ -50,7 +50,7 @@ being consecutive integers beginning with 1. The one (and only) data column
 becomes the "y", or vertical, axis. If there are more than two columns, a dialog
 is displayed so the user can choose the two desired columns. The number of
 columns is derived based on the first non-comment, non-blank line whose
-fields are all legal floating point number.
+fields are all legal floating point numbers.
 
 Data fields must be numeric or dates.  GF4 cannot make use of non-numeric data. 
 Data fields are converted to floating point numbers. The default date format is 
