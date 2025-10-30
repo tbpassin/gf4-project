@@ -81,7 +81,6 @@ def get_valid_color(colors, key, default):
     RETURNS
     The color for given key in the .ini file, or the default value.
     """
-    global confi
     color = colors.get(key, None)
     if color:
         bad_color_msg = f'Invalid .ini file color for {key}: {color}'
@@ -1663,32 +1662,30 @@ class PlotManager(AbstractPlotManager):
     @REQUIRE_MAIN
     def convolveWithBuffer(self):
         dm = self.stack[MAIN]
-        lab = dm.figurelabel or ''
-        lab1 = self.stack[BUFFER].figurelabel or ''
-        window_width = len(dm.xdata)
-
         dbuff = self.stack[BUFFER]
+        window_width = len(dm.xdata)
+        if window_width > len(dbuff.xdata):
+            msg = 'Convolution curve is longer than data; cannot convolve'
+            self.announce(msg)
+            self.flashit()
+            return
 
         dm.convolve(dbuff)
 
         # Convolutions are offset from the original, adjust
         #@+<< adjust x axis >>
         #@+node:tom.20251008161512.1: *5* << adjust x axis >>
-        # Set x-axis to match waveform in BUFFER, shift 
-        # to match BUFFER start.
-        xbuff = dbuff.xdata
-        new_delta = xbuff[1] - xbuff[0]
-        new_start = xbuff[0] - window_width / 2  # Offset adjustment
+        # Set x-axis to match waveform in BUFFER, shift and truncate
+        # to match BUFFER.
+        shift = -window_width // 2
+        dm.shift(shift)
 
-        _xdata = dm.xdata
-        new_x = [0] * len(_xdata)
-        x_ = new_start
-        for i in range(len(_xdata)):
-            x_ += new_delta
-            new_x[i] = x_
-        dm.xdata = new_x
+        length = len(dbuff.xdata)
+        dm.pad_truncate(length)
         #@-<< adjust x axis >>
 
+        lab = dm.figurelabel or ''
+        lab1 = dbuff.figurelabel or ''
         dm.figurelabel = 'Convolution'
         if lab:
             dm.figurelabel += f' of {lab}'
