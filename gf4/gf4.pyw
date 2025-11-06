@@ -1164,7 +1164,7 @@ class PlotManager(AbstractPlotManager):
     def differentiate2(self):
         ds = self.stack[MAIN]
         ds.differentiate2()
-        ds.figurelabel = ' Derivative of %s' % \
+        ds.figurelabel = 'Central Derivative of %s' % \
             (ds.figurelabel)
 
         self.plot()
@@ -1772,6 +1772,12 @@ class PlotManager(AbstractPlotManager):
         _x = _ds.xdata
         _y = _ds.ydata
         _ds.xdata, _ds.ydata = smoother.cspline(_x, _y)
+
+        if _ds.figurelabel:
+            _ds.figurelabel = 'Spline Interpolation of %s' % (_ds.figurelabel)
+        else:
+            _ds.figurelabel = 'Spline Interpolation'
+
         self.plot()
     #@+node:tom.20211207165051.72: *4* fit_piecewise
     @CLEAR_ERROR_BANDS

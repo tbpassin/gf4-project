@@ -76,7 +76,8 @@ CURVE_BUTTONS = (
     ( 'Y vs X', 'YvsX', 'New data set having y data of Y vs y data of X'),
     SPACER, SPACER,
     ('NumPts', 'numpts', 'Change/Set Number of Points When Generating Waveforms'),
-    ('NewX', 'newX', 'Replace x Axis Values')
+    ('NewX', 'newX', 'Replace x Axis Values'),
+    SPACER, SPACER, SPACER,
 )
 
 MATH_BUTTONS = (
@@ -104,7 +105,7 @@ MATH_BUTTONS = (
 )
 
 CURVE_FIT_BUTTONS = (
-    ('Cubic Spline\nInterpolation', 'cubicspln', 'Interpolate Between Points with Cubic Spline'),
+    ('Cubic Spline\nInterpolation', 'cubicspln', 'Interpolate 10 Points Between Points with Cubic Spline'),
     # ('Lst Sqr Lin', 'lstsqrlin', 'Fit Points with Linear Least Squares (2 s.e. error bands)'),
     ('Lst Sqr Poly', 'lstsqrpoly', 'Fit Points with N-degree Polynomial Using Least Squares (2 s.e. error bands)'),
     ('Thiel-Sen', 'thiel_sen', 'Fit Line Robustly Using Thiel-Sen Method (median slopes)'),
@@ -153,7 +154,9 @@ STATS_BUTTONS = (
     ('Pearson', 'pearson', "Calculate the Pearson's Correlation Coefficient r between X and Y"),
     SPACER, SPACER,
     ('Partial Autocorr', 'partial-autocorr',
-               'Partial autocorrelation of the X dataset (assumes stationary data)'))
+               'Partial autocorrelation of the X dataset (assumes stationary data)'),
+    SPACER, SPACER, SPACER,
+)
 
 GENERATOR_BUTTONS = (
     ('Sine', 'sine', 'Generate Sine Wave.  Period is in multiples of x-axis length'),
