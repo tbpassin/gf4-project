@@ -17,7 +17,7 @@ from AbstractPlotMgr import MAIN
 from .require_datasets import has_main
 from stats import pearson_autocorr
 
-BUTTON_DEF  = ('Fox Auto\nCorrelation', 'fox-autocorrel',
+BUTTON_DEF  = ('Fox Auto Correl', 'fox-autocorrel',
                'Lag-1 autocorrelation of the X dataset per Fox and Pearson')
 OVERRIDE = True  # Override default location.
 OWNER_GROUP = 'STATS_BUTTONS'

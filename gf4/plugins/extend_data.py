@@ -45,16 +45,20 @@ def extend_data(ext, ds):
         delta = xdata[1] - xdata[0]
         avg_low = sum(ydata[:KAVG]) / KAVG
         avg_hi = sum(ydata[-KAVG:]) / KAVG
+        xdata, ydata = list(xdata), list(ydata)  #  In case of numpy ndarrays
 
         for _ in range(ext):
             x0 = xdata[0]
             xdata.insert(0, x0 - delta)
             ydata.insert(0, avg_low)
-
         for _ in range(ext):
             xh = xdata[-1]
             xdata += [xh + delta]
             ydata += [avg_hi]
+
+        ds.xdata = xdata
+        ds.ydata = ydata
+
 #@-<< def extend_data >>
 
 # plotmgr will have been injected into the module by the time this is called
