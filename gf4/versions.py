@@ -6,7 +6,7 @@
 import os.path
 from subprocess import run
 
-APPVERSION = '1.62'
+APPVERSION = '1.63'
 ENCODING = 'utf-8'
 
 def getGitInfo():
