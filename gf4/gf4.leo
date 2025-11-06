@@ -45,6 +45,7 @@
 <v t="tom.20220830215645.1"><vh>@clean README.txt</vh>
 <v t="tom.20220830223226.1"><vh>What A Plugin Should Import</vh></v>
 <v t="tom.20220830223435.1"><vh>What A Plugin Must Include</vh></v>
+<v t="tom.20250930232831.1"><vh>How To Add Extended Help</vh></v>
 <v t="tom.20220830224004.1"><vh>How To Specify Which Plugins To Use</vh></v>
 </v>
 <v t="tom.20220830112255.1"><vh>@clean use_plugins.txt</vh></v>
@@ -56,8 +57,7 @@
 <v t="tom.20220831132228.1"><vh>@file convolve1.py</vh></v>
 <v t="tom.20220903150123.1"><vh>@file correl1.py</vh></v>
 <v t="tom.20221101105447.1"><vh>@file autocorrel1.py</vh></v>
-<v t="tom.20220904105233.1"><vh>@file find_peak.py</vh></v>
-<v t="tom.20220905122752.1"><vh>@file find_peak1.py</vh></v>
+<v t="tom.20220905122752.1"><vh>@file find_peak.py</vh></v>
 <v t="tom.20230104000405.1"><vh>@file lst_sqr_extrap.py</vh></v>
 <v t="tom.20220909175119.1"><vh>@file readout.py</vh></v>
 <v t="tom.20221105131948.1"><vh>@file undo-save.py</vh></v>
@@ -66,7 +66,12 @@
 <v t="tom.20221115225742.1"><vh>@file local_poly_fit.py</vh></v>
 <v t="tom.20221120044718.1"><vh>@file low_quad.py</vh></v>
 <v t="tom.20221121191416.1"><vh>@file poly_lowess.py</vh></v>
+<v t="tom.20250928143427.1"><vh>@file fox_autocor.py</vh></v>
+<v t="tom.20250928233017.1"><vh>@file sign_runs.py</vh></v>
+<v t="tom.20250930150701.1"><vh>@file ljung_box.py</vh></v>
 <v t="tom.20221124112244.1"><vh>@file show_sigma.py</vh></v>
+<v t="tom.20251011190146.1"><vh>@file sinc_window.py</vh></v>
+<v t="tom.20251030132231.1"><vh>@file extend_data.py</vh></v>
 </v>
 </v>
 <v t="tom.20221211135219.1"><vh>Config File</vh>
@@ -166,16 +171,23 @@ permissions) - see https://riptutorial.com/tkinter/example/3206/installation-or-
 
 </t>
 <t tx="tom.20220829181040.1"></t>
-<t tx="tom.20220830112255.1" _mod_time="4741da3388babbca762e"># The list of plugins to import. Omit the ".py" extension.
+<t tx="tom.20220830112255.1" _mod_time="4741da40e9f414df742e"># The list of plugins to import. Omit the ".py" extension.
 find_peak
 readout
 calculator
 local_poly_fit
 poly_lowess
-show_sigma
 low_quad
-lst_sqr_extrap</t>
-<t tx="tom.20220830215645.1" _mod_time="4741da1de97a687b8b2e">GF4 has a plugin mechanism that can load plugin files located in the "plugins"
+lst_sqr_extrap
+
+ljung_box
+show_sigma
+sign_runs
+fox_autocor
+sinc_window
+extend_data</t>
+<t tx="tom.20220830215645.1" _mod_time="4741da374847c45e972e">@language text
+GF4 has a plugin mechanism that can load plugin files located in the "plugins"
 directory.  This README provides some basic information for developers of plugins.
 
 WHAT A PLUGIN PROVIDES
@@ -200,9 +212,7 @@ positions. Typically:
 
 from AbstractPlotMgr import MAIN, BUFFER
 
-If you want to make sure there is a dataset in the MAIN or MAIN+BUFFER positions,
-then import these functions from the module "require_dataset" in the plugins
-directory:
+If you want to make sure there is a dataset in the MAIN or MAIN+BUFFER positions, then import these functions from the module "require_dataset" in the plugins directory:
 
 from .require_datasets import has_main
 # or possibly:
@@ -282,7 +292,7 @@ start with a "#" or ";" character will be ignored.
 <t tx="tom.20221121171302.1"></t>
 <t tx="tom.20221128184455.1"></t>
 <t tx="tom.20221211135219.1"></t>
-<t tx="tom.20221211135236.1" _mod_time="4741da3388babb1b7a2e">; GF4 configuration file
+<t tx="tom.20221211135236.1" _mod_time="4741da3431ddc2f9c32e">; GF4 configuration file
 [colors]
 ; Override initial colors using MatPlotLib CSSS4 color names or #xxyyzz hex values.
 ; main-line-color = red
@@ -338,6 +348,22 @@ Date handling
 14. Date conversion must account for leap years correctly.
 15. If a column is a date, check to see if all the dates in the column are ordered serially. Inform user if not.
 16. If an optional date format has been specified in the data, but that format is invalid, inform user and terminate processing.
+</t>
+<t tx="tom.20250930232831.1">HOW TO ADD EXTENDED HELP
+--------------------------
+To add an extended help message for a plugin, import `HELPTEXT` as follows:
+
+from help_cmds import HELPTEXT
+
+In the body of the plugin at the top level, Create the help message like this:
+
+HELPTEXT['command-name'] = """
+This is the extended help message for this plugin.
+"""
+
+"command-name" is the command's name as included in the button definition. The message will be interpreted as ReStructuredText and displayed in the system browser.
+
+During program startup, this message will be automatically linked to a right-click on the plugin's button. A button with extended help will turn a cyan color when moused over.
 </t>
 </tnodes>
 </leo_file>

@@ -4,14 +4,19 @@
 #@+others
 #@+node:tom.20220511095404.1: ** imports
 import tkinter as Tk
+import tkinter.font as tkFont
 
 from AbstractPlotMgr import MAIN, BUFFER, STACKDEPTH
 from utility import ICONPATH, setIcon
 
+#@+node:tom.20250924085520.1: ** declarations
 TOP = STACKDEPTH - 1
-MONO = ('Courier', 10, 'normal')
+# MONO = ('Courier', 10, 'normal')
 SANS = ('sans-serif', 10, 'normal')
 
+X_INTRO = 'X ==>'
+Y_INTRO = 'Y ==>'
+T_INTRO = 'T ==>'
 #@+node:tom.20220511095552.1: ** class Stackwin
 class Stackwin(Tk.Toplevel):
 
@@ -20,55 +25,65 @@ class Stackwin(Tk.Toplevel):
     def __init__(self, plotmgr = None):
         if plotmgr:
             self.parent = parent = plotmgr.root
+            self.plotmgr = plotmgr
         else:
             parent = None
 
         _geom = ''
         Tk.Toplevel.__init__(self, parent)
         if parent:
-            self.transient(plotmgr.root)
-            _geom = plotmgr.root.geometry()
+            self.transient(parent)
         self.protocol("WM_DELETE_WINDOW", self.cancel)
 
         setIcon(self, ICONPATH)
 
         self.stopped = False
         self.last_stack_str = ''
-        self.plotmgr = plotmgr
         self.title("Stack Contents")
 
-        self.text_box = text_box = Tk.Text(self, padx = 15, width = 100, height = 50)
-        self.text_box.height = 3  # lines
+        self.text_box = text_box = Tk.Text(self, padx=15, width=100, height=3)
         self.text_box.pack()
-        text_box.configure(font = SANS, wrap = Tk.NONE)
 
-        if not plotmgr:
-            TEXT = "This is a test\nand now for something completely different"
-            text_box.insert(Tk.END, TEXT)
+        #@+<< configure text box >>
+        #@+node:tom.20250924085744.1: *4* << configure text box >>
+        text_box.configure(font=SANS, wrap=Tk.NONE)
+
+        # Configure a tab stop after the longest into string
+        fnt = tkFont.Font(font=text_box['font'])
+        intros = (X_INTRO, Y_INTRO, T_INTRO)
+        tab_width = max(fnt.measure(s) for s in intros) + fnt.measure(" ")
+        text_box.config(tabs=(tab_width,))
+
+        #@-<< configure text box >>
 
         self.update_idletasks()
-        if plotmgr:
-            plotmgr.root.update_idletasks()
+        if parent:
+            parent.update_idletasks()
+            _geom = parent.geometry()
 
+        #@+<< set initial position >>
+        #@+node:tom.20250924090028.1: *4* << set initial position >>
         # Set initial window position in screen
         if _geom:
-            #902x670+182+182
-            root_dims, root_xoffset, root_yoffset = _geom.split('+')
+            root_dims, root_xoffset, _ = _geom.split('+')
             root_width, root_height = root_dims.split('x')
-            xoffset = int(root_xoffset) + int(root_width) - 50
-            yoffset = 50
+            xoffset = int(root_xoffset) + int(root_width) - 70
+            yoffset = 10
             self.geometry('700x70')
-            self.geometry('+%s+%s' %(xoffset, yoffset))
+            self.geometry(f'+{xoffset}+{yoffset}')
         else:
             self.geometry('600x100')
+        #@-<< set initial position >>
 
-        if plotmgr:
-            # self.timer = Timer(.5, self.getstack, [])
-            # self.timer.start()
+        if parent:
             parent.after(500, self.getstack)
         else:
-            # self testing
+            #@+<< self-test >>
+            #@+node:tom.20250924090604.1: *4* << self-test >>
+            TEXT = "This is a test\nand now for something completely different"
+            text_box.insert(Tk.END, TEXT)
             phrase = 'something completely'
+
             rng = text_box.search(phrase, '1.0')
             l1, idx_1 = rng.split('.')
             idx_1 = int(idx_1)
@@ -79,6 +94,7 @@ class Stackwin(Tk.Toplevel):
             #text_box.tag_add('t2', rng, idx2)
             text_box.tag_config('t1', background = 'red')
             print(idx1, idx2, '===', text_box.get(idx1, idx2))
+            #@-<< self-test >>
     #@+node:tom.20220604115230.1: *3* cancel
     def cancel(self):
         self.destroy()
@@ -87,13 +103,6 @@ class Stackwin(Tk.Toplevel):
         if not self.plotmgr:
             return
 
-        def set_tag(textbox, name, l, r):
-            textbox.tag_add(name, l, r)
-            textbox.tag_config(name, font = MONO)
-
-        X_INTRO = 'X ==> |'
-        Y_INTRO = 'Y ==> |'
-        T_INTRO = 'T ==> |'
         tb = self.text_box
 
         stack_str = ''
@@ -102,9 +111,9 @@ class Stackwin(Tk.Toplevel):
         y_label = stack[BUFFER] and stack[BUFFER].figurelabel or ''
         t_label = stack[TOP] and stack[TOP].figurelabel or ''
 
-        stack_str = (f'{T_INTRO} {t_label}\n'
-                   + f'{Y_INTRO} {y_label}\n'
-                   + f'{X_INTRO} {x_label}')
+        stack_str = (f'{T_INTRO}\t{t_label}\n'
+                   + f'{Y_INTRO}\t{y_label}\n'
+                   + f'{X_INTRO}\t{x_label}')
 
         if self.stopped:
             return
@@ -117,18 +126,10 @@ class Stackwin(Tk.Toplevel):
                 tb['state'] = 'disabled'
                 self.last_stack_str = stack_str
 
-                # Set font to monospaced for "INTRO" part of lines so the "|"s line up
-                for i, phrase in enumerate((X_INTRO, Y_INTRO, T_INTRO)):
-                    left = tb.search(phrase, "1.0")
-                    l, idx_1 = left.split('.')
-                    idx_1 = int(idx_1)
-                    idx2 = idx_1 + len(phrase)
-                    set_tag(tb, f't{i}', left, f'{l}.{idx2}')
             self.parent.after(500, self.getstack)
         # Tk may throw an exception if our window is closing
         except Tk._tkinter.TclError as e:
             print(e)
-            # hope we don't leak resources here
 
     #@-others
 #@-others

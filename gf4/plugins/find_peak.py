@@ -1,82 +1,40 @@
 #@+leo-ver=5-thin
-#@+node:tom.20220904105233.1: * @file find_peak.py
-# Find a peak near the specified x-axis coordinate
-# The peak must be smooth for this to work.
-# X-axis points must be ordered
+#@+node:tom.20220905122752.1: * @file find_peak.py
+"""Find a peak within the span denoted by dragging the mouse.
 
+X-axis points must be ordered. The peak will be the point
+with the highest value in the span. The peak will be marked
+with a vertical marker.
+"""
+
+from numpy import searchsorted, argmax
 from AbstractPlotMgr import MAIN
-from .require_datasets import needs_main
-from entry import GetSingleFloat
+from .require_datasets import has_main
 
-SPAN = 10
-BUTTON_DEF  = ('Find Peak', 'find-peak', 'Find the peak near the given x-axis location')
-# Put our command button into the "Data Processing" goup
-OVERRIDE = True
-OWNER_GROUP = 'DATA_PROCESSING_BUTTONS'
-
-plotmgr = None  # Suppress pyflake complaints
+BUTTON_DEF  = ('Find Peak', 'find-peak', 'Find the peak near the given x-axis location. Drag mouse across peak after clicking this button.')
+OVERRIDE = False
 
 # plotmgr will have been injected into the module by the time this is called
-def proc():
-    if not needs_main(plotmgr):
+plotmgr = None  # Suppress pyflake complaints
+
+def getSpan(xmin, xmax):
+    if not has_main(plotmgr):
         return
 
     _ds = plotmgr.stack[MAIN]
-    _x = list(_ds.xdata)
-    _y = list(_ds.ydata)  # Might be a numpy nd array.
+    _x = _ds.xdata  # Might be a numpy nd array.
+    _y = _ds.ydata  # Might be a numpy nd array.
 
-    _id = 'peakfinder'
-    lastparm = plotmgr.parmsaver.get(_id, 0.0)
-    dia = GetSingleFloat(plotmgr.root,
-                         'Find Peak Near', 'X axis coord',
-                         lastparm)
-    if dia.result is None: return
-    plotmgr.parmsaver[_id] = dia.result
-
-    given = None
-    increasing = _x[1] > _x[0]
-    #@+<< check inbounds >>
-    #@+node:tom.20220904112303.1: ** << check inbounds >>
-    if dia.result < min(_x) or dia.result > max(_x):
-        plotmgr.announce(f'{dia.result} is out of the range')
-        plotmgr.flashit()
-        return
-    #@-<< check inbounds >>
-    # Set given to index of starting point, if found
-    #@+<< find starting point >>
-    #@+node:tom.20220904112345.1: ** << find starting point >>
-    try:
-        given = _x.index(dia.result)
-    except ValueError:
-        # this exact value is not in the list
-        # Scan to get close
-        for i, v in enumerate(_x):
-            if increasing:
-                if v > dia.result:
-                    given = i
-                    break
-            else:
-                if v < dia.result:
-                    given = i
-                    break
-
-    if given is None:
-        plotmgr.announce(f"Can't find {dia.result}")
-        plotmgr.flashit()
-        return
-
-    #@-<< find starting point >>
-
-    start = max(given - SPAN, 0)
-    end = min(given + SPAN, len(_x))
+    span = (xmin, xmax)
+    start, end = searchsorted(_x, span)
     segment = _y[start:end]
-    if not segment:
+    if len(segment) == 0:
         plotmgr.announce(f'Computed improper bounds: ){start:0.4f}, {end:0.4f}')
         plotmgr.flashit()
         return
 
     peak = max(segment)
-    peak_index = _y.index(peak)
+    peak_index = start + argmax(segment)
     x_peak = _x[peak_index]
     # Might have max at end of segment - if so, it's not a peak
     if (_y[peak_index - 1] > peak) or (_y[peak_index + 1] > peak):
@@ -85,5 +43,14 @@ def proc():
 
     plotmgr.timehack(x_peak)
     plotmgr.announce(
-        f'Peak: {peak:0.4f} at {x_peak:0.4f} in ({_x[start]:0.4f}, {_x[end]:0.4f})')
+        f'Peak: {peak:0.4f} at {x_peak:0.4f})')
+
+# All plugins must define a proc()
+def proc():
+    if not has_main(plotmgr):
+        return
+
+    plotmgr.createSpanSelection(getSpan)
+    plotmgr.announce('Select span with mouse ...')
+
 #@-leo

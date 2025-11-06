@@ -3,6 +3,7 @@
 #@@language python
 #@+others
 #@+node:tom.20220411210428.1: ** imports
+from sys import version_info
 import webbrowser
 from versions import APPVERSION, getGitInfo
 
@@ -16,7 +17,10 @@ from utility import ICONPATH, setIcon
 version, (branch, changeset) = APPVERSION, getGitInfo()
 
 BRANCH_STR = f'; Branch: {branch}' if branch else ""
-GIT_STR = f'; Changeset; {changeset}' if changeset else ""
+GIT_STR = f'; Changeset; {changeset.strip()}' if changeset else ""
+
+v1, v2, v3, level, _ = version_info
+PYVERSION = f'{v1}.{v2}.{v3} {level}'
 #@+node:tom.20220505131030.1: ** helpmsg
 #@+others
 #@+node:tom.20220505130330.1: *3* Intro
@@ -28,10 +32,11 @@ Plots 2D curves and performs calculations on them. GF4 is modeled
 after a reverse polish notation (RPN) calculator, where 2D waveforms take 
 the place of plain numbers.
 
-Version: {version}{BRANCH_STR}{GIT_STR}
+GF4 Version: {version}{BRANCH_STR}{GIT_STR}
+Python: {PYVERSION}
 """
 #@+node:tom.20220412003223.1: *3* Data Format
-H1 = """
+H1 = """\
    Input Data Format
 ----------------------------------
 
@@ -45,7 +50,7 @@ being consecutive integers beginning with 1. The one (and only) data column
 becomes the "y", or vertical, axis. If there are more than two columns, a dialog
 is displayed so the user can choose the two desired columns. The number of
 columns is derived based on the first non-comment, non-blank line whose
-fields are all legal floating point number.
+fields are all legal floating point numbers.
 
 Data fields must be numeric or dates.  GF4 cannot make use of non-numeric data. 
 Data fields are converted to floating point numbers. The default date format is 
@@ -79,8 +84,7 @@ labels, and a break between data sets:
 ;; ENDDATASET
 
 The special comment key words are case sensitive.  If there is more than one
-dataset, the second one goes into the y position in the stack, and so on up to
-the stack depth.  Beyond that additional data sets are ignored.
+dataset, the second one goes into the "Y" position in the stack, and so on up to the stack depth.  Beyond that additional data sets are ignored.
 """
 #@+node:tom.20220412003352.1: *3* The Waveform Stack
 H2 = '''
@@ -178,6 +182,7 @@ def msg_window(text, plotmgr=None):
         _geom = plotmgr.root.geometry()
     else:
         win = Tk.Tk()
+    win.withdraw()
 
     win.title("About GF4")
     setIcon(win, ICONPATH)
@@ -185,7 +190,7 @@ def msg_window(text, plotmgr=None):
     win.grid_columnconfigure(0, weight=1)
     win.grid_rowconfigure(0, weight=1)
 
-    text_box = Tk.Text(win, wrap = 'word', padx = 15, width = 100, height = 50)
+    text_box = Tk.Text(win, wrap = 'word', padx = 15, width = 70, height = 40)
     text_box.grid(row=0, column=0, sticky='ew')
 
     # Thanks to https://www.pythontutorial.net/tkinter/tkinter-scrollbar/
@@ -205,17 +210,15 @@ def msg_window(text, plotmgr=None):
 
     # Set initial window position in screen
     if _geom:
-        #902x670+182+182
         root_dims, root_xoffset, root_yoffset = _geom.split('+')
         root_width, root_height = root_dims.split('x')
-        xoffset = int(root_xoffset) + int(root_width) + 5
-        yoffset = int(root_yoffset)
-        #win.geometry(f'600x{root_height}')
-        win.geometry('600x800')
-        # win.geometry('+%s+%s' %(xoffset, yoffset))
+        xoffset = int(root_xoffset) + int(root_width) + 20
+        yoffset = int(root_yoffset) - 20
         win.geometry(f'+{xoffset}+{yoffset}')
     else:
         win.geometry('600x800')
+
+    win.deiconify()  # Finally show our window
 
 #@+node:tom.20220411201434.1: ** about
 def about(parent = None):

@@ -12,12 +12,13 @@ plugin_modules = import_all_plugins()
 
 #@+node:tom.20211211170819.7: ** Declarations (buttondefs.py)
 # encoding: utf-8
-'''Button definitions for GF4.  Format:
-    (button label, command string, help message)
+"""Button definitions for GF4.  Format:
+
+     (button label, command string, help message)
     
-    The command string is sent to the command interpreter when the
-    button is pressed.
-    '''
+The command string is sent to the command interpreter
+when the button is pressed.
+"""
 
 SPACER = (None, None)
 
@@ -30,13 +31,13 @@ PLOT_BUTTONS = (
     ('Overplot T', 'overplottop', 'Overplot Top'),
     SPACER, SPACER,
     ('Error Bands', 'overploterr', 'Overplot X Error Bands if any'),
-    ('Timehack', 'timehack', 'Vertical Marker At Specified X Position'),
+    ('Timehack', 'timehack', 'Vertical Marker At Specified Horizontal Position'),
 )
 
 AXES_BUTTONS = (
     ('Linear', 'linear', 'Linear Plot'),
-    ('Semilog Y', 'semilogy', 'Semilog Plot on Y Axis'),
-    ('Semilog X', 'semilogx', 'Semilog Plot on X Axis'),
+    ('Semilog y', 'semilogy', 'Semilog Plot on Vertical Axis'),
+    ('Semilog x', 'semilogx', 'Semilog Plot on Horizontal Axis'),
     ('Loglog', 'loglog', 'Log-log Plot'),
 )
 
@@ -57,8 +58,8 @@ STACK_BUTTONS = (
     ('Y → X', 'copyfrom', 'Copy From Y to X'),
     ('T → X', 'copyfromtop', 'Copy from Top to X'),
     SPACER, SPACER,
-    ('Push', 'push', 'Copy X then Push Stack'),
-    ('Drop', 'drop', 'Y -> X'),
+    ('Push', 'push', 'Copy X then Push Stack; X is Unchanged'),
+    ('Drop', 'drop', 'T -> Y, Y -> X; T is Unchanged'),
     ('Rot Up', 'rotateup', 'Rotate Stack Up'),
     ('Rot Down', 'rotatedn', 'Rotate Stack Down')
 )
@@ -75,7 +76,8 @@ CURVE_BUTTONS = (
     ( 'Y vs X', 'YvsX', 'New data set having y data of Y vs y data of X'),
     SPACER, SPACER,
     ('NumPts', 'numpts', 'Change/Set Number of Points When Generating Waveforms'),
-    ('NewX', 'newX', 'Replace x Axis Values')
+    ('NewX', 'newX', 'Replace x Axis Values'),
+    SPACER, SPACER, SPACER,
 )
 
 MATH_BUTTONS = (
@@ -103,7 +105,7 @@ MATH_BUTTONS = (
 )
 
 CURVE_FIT_BUTTONS = (
-    ('Cubic Spline\nInterpolation', 'cubicspln', 'Interpolate Between Points with Cubic Spline'),
+    ('Cubic Spline\nInterpolation', 'cubicspln', 'Interpolate 10 Points Between Points with Cubic Spline'),
     # ('Lst Sqr Lin', 'lstsqrlin', 'Fit Points with Linear Least Squares (2 s.e. error bands)'),
     ('Lst Sqr Poly', 'lstsqrpoly', 'Fit Points with N-degree Polynomial Using Least Squares (2 s.e. error bands)'),
     ('Thiel-Sen', 'thiel_sen', 'Fit Line Robustly Using Thiel-Sen Method (median slopes)'),
@@ -152,7 +154,9 @@ STATS_BUTTONS = (
     ('Pearson', 'pearson', "Calculate the Pearson's Correlation Coefficient r between X and Y"),
     SPACER, SPACER,
     ('Partial Autocorr', 'partial-autocorr',
-               'Partial autocorrelation of the X dataset (assumes stationary data)'))
+               'Partial autocorrelation of the X dataset (assumes stationary data)'),
+    SPACER, SPACER, SPACER,
+)
 
 GENERATOR_BUTTONS = (
     ('Sine', 'sine', 'Generate Sine Wave.  Period is in multiples of x-axis length'),
@@ -170,7 +174,7 @@ GENERATOR_BUTTONS = (
 
 TREND_BUTTONS = (
     ('Mann-Kendall', 'mann_kendall', 'Compute Mann-Kendall Trend'),
-    ('Windowed Dev', 'sliding_var', 'Standard Deviations for a LOWESS Fit'),
+    ('Windowed Dev', 'sliding_var', 'Standard Deviation in a LOWESS-Weighted Sliding Window'),
 )
 #@+node:tom.20220829181647.1: ** Plugins
 PLUGIN_BUTTONS = []

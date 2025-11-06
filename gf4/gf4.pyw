@@ -17,6 +17,7 @@ import matplotlib
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from matplotlib.backends.backend_tkagg import NavigationToolbar2Tk
 from matplotlib.figure import Figure
+from matplotlib.widgets import SpanSelector
 
 from numpy import ndarray
 from scipy.stats import spearmanr
@@ -46,6 +47,7 @@ from trend import mann_kendall, YESNO
 
 from cmdwin import cmdwindow
 from utility import ICONPATH, setIcon, config
+from stackview import Stackwin
 
 lowess2_stddev = smoother.lowess2_stddev
 mcolors = matplotlib.colors
@@ -79,7 +81,6 @@ def get_valid_color(colors, key, default):
     RETURNS
     The color for given key in the .ini file, or the default value.
     """
-    global confi
     color = colors.get(key, None)
     if color:
         bad_color_msg = f'Invalid .ini file color for {key}: {color}'
@@ -918,7 +919,7 @@ class PlotManager(AbstractPlotManager):
         '''
 
         _ds = self.stack[MAIN]
-        if _ds is None or not _ds.xdata:
+        if _ds is None or not _ds.xdata.any():
             self.announce("No data to copy")
             self.flashit()
             return
@@ -1030,7 +1031,8 @@ class PlotManager(AbstractPlotManager):
         new_start, new_delta = float(new_start_), float(new_delta_)
         new_x = [0] * len(_xdata)
         x_ = new_start
-        for i in range(len(_xdata)):
+        new_x[0] = x_
+        for i in range(1, len(_xdata)):
             x_ += new_delta
             new_x[i] = x_
         _ds.xdata = new_x
@@ -1162,7 +1164,7 @@ class PlotManager(AbstractPlotManager):
     def differentiate2(self):
         ds = self.stack[MAIN]
         ds.differentiate2()
-        ds.figurelabel = ' Derivative of %s' % \
+        ds.figurelabel = 'Central Derivative of %s' % \
             (ds.figurelabel)
 
         self.plot()
@@ -1660,22 +1662,35 @@ class PlotManager(AbstractPlotManager):
     @REQUIRE_MAIN
     def convolveWithBuffer(self):
         dm = self.stack[MAIN]
+        dbuff = self.stack[BUFFER]
+        window_width = len(dm.xdata)
+        if window_width > len(dbuff.xdata):
+            msg = 'Convolution curve is longer than data; cannot convolve'
+            self.announce(msg)
+            self.flashit()
+            return
+
+        dm.convolve(dbuff)
+
+        # Convolutions are offset from the original, adjust
+        #@+<< adjust x axis >>
+        #@+node:tom.20251008161512.1: *5* << adjust x axis >>
+        # Set x-axis to match waveform in BUFFER, shift and truncate
+        # to match BUFFER.
+        shift = -window_width // 2
+        dm.shift(shift)
+
+        length = len(dbuff.xdata)
+        dm.pad_truncate(length)
+        #@-<< adjust x axis >>
+
         lab = dm.figurelabel or ''
-        lab1 = self.stack[BUFFER].figurelabel or ''
-
-        d1 = dm
-        d2 = self.stack[BUFFER]
-
-        d1.convolve(d2)
-
+        lab1 = dbuff.figurelabel or ''
+        dm.figurelabel = 'Convolution'
         if lab:
-            dm.figurelabel = 'Convolution of %s' % (lab)
-            if lab1:
-                dm.figurelabel += ' with %s' % (lab1)
-        else:
-            dm.figurelabel = 'Convolution'
-
-        dm.clearErrorBands()
+            dm.figurelabel += f' of {lab}'
+        if lab1:
+            dm.figurelabel += f' with {lab1}'
 
         self.plot()
     #@+node:tom.20211207165051.96: *4* autocorrelate
@@ -1700,7 +1715,6 @@ class PlotManager(AbstractPlotManager):
         _ds = self.stack[MAIN]
         partial_ac, conf_bands = pacf(_ds.ydata, alpha = .05, method = 'ywm')
 
-        # new_x = [n for n in range(len(partial_ac))]
         new_x = list(range(len(partial_ac)))
         _ds.ydata = partial_ac
         _ds.xdata = new_x
@@ -1709,7 +1723,7 @@ class PlotManager(AbstractPlotManager):
         low, hi = list(zip(*conf_bands))
 
         # Make "error bands" to be centered on axis, as is conventional
-        low = [lo - y for lo, y in zip(low,partial_ac)]
+        low = [lo - y for lo, y in zip(low, partial_ac)]
         hi = [hi - y for hi, y in zip(hi, partial_ac)]
 
         upper = Dataset(new_x, hi)
@@ -1758,6 +1772,12 @@ class PlotManager(AbstractPlotManager):
         _x = _ds.xdata
         _y = _ds.ydata
         _ds.xdata, _ds.ydata = smoother.cspline(_x, _y)
+
+        if _ds.figurelabel:
+            _ds.figurelabel = 'Spline Interpolation of %s' % (_ds.figurelabel)
+        else:
+            _ds.figurelabel = 'Spline Interpolation'
+
         self.plot()
     #@+node:tom.20211207165051.72: *4* fit_piecewise
     @CLEAR_ERROR_BANDS
@@ -2157,12 +2177,29 @@ class PlotManager(AbstractPlotManager):
 
         lab = _ds.figurelabel or ''
         if lab:
-            lab = ' Spline Smooth of %s' % (lab)
+            lab = ' Spline Smooth (%s) of %s' % (dia.result, lab)
         else:
-            lab = ' Spline Smooth'
+            lab = f'Spline Smooth ({dia.result})'
         _ds.figurelabel = lab
 
         self.plot()
+    #@+node:tom.20251005100120.1: *3* Span Selection
+    def createSpanSelection(self, callback):
+        def onSpanSelect(xmin, xmax):
+            if self.spanSelector:
+                self.spanSelector.disconnect_events()
+                self.spanSelector = None
+            callback(xmin, xmax)
+
+        self.onSpanSelect = onSpanSelect
+
+        self.spanSelector = SpanSelector(
+                self.axes,
+                self.onSpanSelect,
+                "horizontal", 
+                useblit=True,
+                interactive=False,
+            )
     #@+node:tom.20211207214046.1: *3* Statistics
     #@+node:tom.20211207165051.107: *4* spearman
     @REQUIRE_MAIN_BUFF
@@ -2657,7 +2694,7 @@ if __name__ == '__main__':
 
     root_width = root.winfo_reqwidth()
     root_height = root.winfo_reqheight()
-    root_y = 80
+    root_y = 120
     screen_width = root.winfo_screenwidth()
     loffset = 0
     if sys.platform.startswith('linux'):
@@ -2678,6 +2715,8 @@ if __name__ == '__main__':
     cmdwin.deiconify()
 
     fname = ''
+    
+    _stackwin = Stackwin(plotmgr)
 
     # Overplot all files listed on the command line
     _first = True

@@ -4,6 +4,12 @@ readout
 calculator
 local_poly_fit
 poly_lowess
-show_sigma
 low_quad
 lst_sqr_extrap
+
+ljung_box
+show_sigma
+sign_runs
+fox_autocor
+sinc_window
+extend_data

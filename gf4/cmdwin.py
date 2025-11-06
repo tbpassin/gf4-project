@@ -373,7 +373,6 @@ def create_buttons_pack(host, plotmgr):
         # _font will be the font of the group labels and the help text
         _font.config(**NEWFONT.config())
     else:
-        ascender = 9.6
         NEWFONT = tkFont.nametofont(_font.name)
         sz = adjust_font_size(NEWFONT, ascender)
         NEWFONT.config(size = sz, weight = 'bold')
@@ -437,10 +436,9 @@ def create_buttons_pack(host, plotmgr):
 
 #@+node:tom.20211211170819.21: ** cmdwindow
 def cmdwindow(plotmgr=None):
-    _geom = ''
     if plotmgr:
         win = Tk.Toplevel(plotmgr.root)
-        _geom = plotmgr.root.geometry()
+        win.transient(plotmgr.root)
     else:
         win = Tk.Tk()
 
@@ -453,25 +451,6 @@ def cmdwindow(plotmgr=None):
         # plotmgr.root.update_idletasks()
 
     create_buttons_pack(win, plotmgr)
-
-    # Set initial window position in screen
-    #win.geometry('+1250+100')
-    if _geom:
-        ...
-        # Example geometry syntax: '902x670+182+182'
-        # root_dims, root_xoffset, root_yoffset = _geom.split('+')
-        # root_width, root_height = root_dims.split('x')
-        # xoffset = int(root_xoffset) + int(root_width) + 5
-        # yoffset = int(root_yoffset)
-        # w_width = win.winfo_width() + 50
-        # w_height = win.winfo_height()
-        # if w_height < int(root_height):
-            # w_height = int(root_height)
-
-        # win.geometry(f'{w_width}x{w_height}+{xoffset}+{yoffset}')
-        # win.update_idletasks()
-    else:
-        pass
     return win
 
 if __name__ == '__main__':

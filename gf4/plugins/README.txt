@@ -19,9 +19,7 @@ positions. Typically:
 
 from AbstractPlotMgr import MAIN, BUFFER
 
-If you want to make sure there is a dataset in the MAIN or MAIN+BUFFER positions,
-then import these functions from the module "require_dataset" in the plugins
-directory:
+If you want to make sure there is a dataset in the MAIN or MAIN+BUFFER positions, then import these functions from the module "require_dataset" in the plugins directory:
 
 from .require_datasets import has_main
 # or possibly:
@@ -73,6 +71,21 @@ attribute OWNER_GROUP, and set OVERRIDE to True.  Example:
 OVERRIDE = True
 OWNER_GROUP = 'DATA_PROCESSING_BUTTONS'
 
+HOW TO ADD EXTENDED HELP
+--------------------------
+To add an extended help message for a plugin, import `HELPTEXT` as follows:
+
+from help_cmds import HELPTEXT
+
+In the body of the plugin at the top level, Create the help message like this:
+
+HELPTEXT['command-name'] = """
+This is the extended help message for this plugin.
+"""
+
+"command-name" is the command's name as included in the button definition. The message will be interpreted as ReStructuredText and displayed in the system browser.
+
+During program startup, this message will be automatically linked to a right-click on the plugin's button. A button with extended help will turn a cyan color when moused over.
 HOW TO SPECIFY WHICH PLUGINS TO USE
 -----------------------------------
 By default, GF4 will load all plugins (i.e., python files) in the "plugins"
