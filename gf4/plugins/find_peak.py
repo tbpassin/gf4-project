@@ -41,7 +41,7 @@ def getSpan(xmin, xmax):
         plotmgr.announce(f'No peak found in ({_x[start]:0.4f}, {_x[end]:0.4f})')
         return
 
-    plotmgr.timehack(x_peak)
+    # plotmgr.timehack(x_peak)
     plotmgr.announce(
         f'Peak: {peak:0.4f} at {x_peak:0.4f})')
 
