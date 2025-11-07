@@ -1,17 +1,16 @@
-
 <!DOCTYPE html>
 
-<html lang="en">
+<html lang="en" data-content_root="./">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <title>The Plugin System &#8212; GF4  documentation</title>
-    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="_static/pyramid.css" />
-    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-    <script src="_static/doctools.js"></script>
-    <script src="_static/sphinx_highlight.js"></script>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=4848ba22" />
+    <link rel="stylesheet" type="text/css" href="_static/pyramid.css?v=82d6032f" />
+    <script src="_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="_static/doctools.js?v=9bcbadda"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="prev" title="Using Macros" href="macros.html" />
@@ -23,7 +22,7 @@
 
   </head><body>
 
-    <div class="related" role="navigation" aria-label="related navigation">
+    <div class="related" role="navigation" aria-label="Related">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -43,17 +42,18 @@
           <div class="body" role="main">
             
   <section id="the-plugin-system">
-<h1>The Plugin System<a class="headerlink" href="#the-plugin-system" title="Permalink to this heading">¶</a></h1>
+<h1>The Plugin System<a class="headerlink" href="#the-plugin-system" title="Link to this heading">¶</a></h1>
 <p>GF4 has a plugin capability. A plugin is a Python program that defines both a
 new command and a new command button to launch it.  It is also possible to override
 an existing command without creating a new button.</p>
+<p>Plugin commands and their command buttons are treated exactly like other commands.  They use the same command dispatch dictionary and they use the same help message system. Once the <cite>proc()</cite> function has been written and the command’s <cite>BUTTON_DEF</cite> tuple has been defined, the plugin’s command gets installed by the same machinery as native commands.</p>
 <p>Plugins must be placed in the <em>gf4/plugins</em> directory. Their file name must have
 the standard Python extension of “.py”.  This directory also includes a
 <em>README.txt</em> file that explains how the plugin system works.</p>
 <p>A plugin must contain a button definition and a function that does the computation
 and display.</p>
 <section id="defining-a-command-button">
-<h2>Defining a Command Button<a class="headerlink" href="#defining-a-command-button" title="Permalink to this heading">¶</a></h2>
+<h2>Defining a Command Button<a class="headerlink" href="#defining-a-command-button" title="Link to this heading">¶</a></h2>
 <p>The button definition must be a variable named <em>BUTTON_DEF</em>
 that assigns a tuple with three strings, like this:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1">#             Button Label  Cmd name          Help text</span>
@@ -67,12 +67,14 @@ are defined in the GF4 file <em>BuildCommands.py</em>.  For example, the command
 distribution.</p>
 </section>
 <section id="the-implementing-function">
-<h2>The Implementing Function<a class="headerlink" href="#the-implementing-function" title="Permalink to this heading">¶</a></h2>
+<h2>The Implementing Function<a class="headerlink" href="#the-implementing-function" title="Link to this heading">¶</a></h2>
 <p>The function for implementing the new command must be named <em>proc()</em>.
 It takes no arguments.  For example, to rescale an existing curve by the factor
 of two:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">AbstractPlotMgr</span> <span class="kn">import</span> <span class="n">MAIN</span>
 <span class="kn">from</span> <span class="nn">.require_datasets</span> <span class="kn">import</span> <span class="n">needs_main</span>
+
+<span class="n">plotmgr</span> <span class="o">=</span> <span class="kc">None</span>
 
 <span class="c1"># plotmgr will have been injected into the module by the time this is called</span>
 <span class="k">def</span> <span class="nf">proc</span><span class="p">():</span>
@@ -100,7 +102,7 @@ from the <em>AbstractPlotManager</em> class are <em>BUFFER</em> and <em>STACKDEP
 stack, and for plotting the results, as existing commands.</p>
 </section>
 <section id="over-riding-an-existing-command">
-<h2>Over-riding An Existing Command<a class="headerlink" href="#over-riding-an-existing-command" title="Permalink to this heading">¶</a></h2>
+<h2>Over-riding An Existing Command<a class="headerlink" href="#over-riding-an-existing-command" title="Link to this heading">¶</a></h2>
 <p>To override an existing command, you must first know its command string.  Use
 this command name in the <em>BUTTON_DEF</em> declaration. Then add the following declaration
 to the plugin file:</p>
@@ -114,7 +116,7 @@ the command will be created without a matching button.  This leaves you with no
 way to access the new command.</p>
 </section>
 <section id="adding-a-button-to-an-existing-group">
-<h2>Adding a Button To an Existing Group<a class="headerlink" href="#adding-a-button-to-an-existing-group" title="Permalink to this heading">¶</a></h2>
+<h2>Adding a Button To an Existing Group<a class="headerlink" href="#adding-a-button-to-an-existing-group" title="Link to this heading">¶</a></h2>
 <p>A plugin can have its command button added to an existing button group instead
 of the <em>Plugins</em> group.  To do this, look up the name of the group in
 <em>buttondefs.py</em>. Assign that name to the attribute <em>OWNER_GROUP</em>, and set
@@ -125,7 +127,7 @@ of the <em>Plugins</em> group.  To do this, look up the name of the group in
 </div>
 </section>
 <section id="controlling-which-plugins-get-loaded">
-<h2>Controlling Which Plugins Get Loaded<a class="headerlink" href="#controlling-which-plugins-get-loaded" title="Permalink to this heading">¶</a></h2>
+<h2>Controlling Which Plugins Get Loaded<a class="headerlink" href="#controlling-which-plugins-get-loaded" title="Link to this heading">¶</a></h2>
 <p>GF4 will load all plugins listed in the file <em>use_plugins.txt</em> located in the
 <em>plugins</em> directory.  Each plugin’s name must be on a separate line, without
 the “.py” extension.  Blank lines and lines that start with either “;” or “#”
@@ -140,7 +142,7 @@ directory will be loaded.</p>
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
         <div class="sphinxsidebarwrapper">
   <div>
     <h3><a href="GF4_Users_Guide.html">Table of Contents</a></h3>
@@ -168,7 +170,7 @@ directory will be loaded.</p>
             rel="nofollow">Show Source</a></li>
     </ul>
    </div>
-<div id="searchbox" style="display: none" role="search">
+<search id="searchbox" style="display: none" role="search">
   <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="search.html" method="get">
@@ -176,13 +178,13 @@ directory will be loaded.</p>
       <input type="submit" value="Go" />
     </form>
     </div>
-</div>
+</search>
 <script>document.getElementById('searchbox').style.display = "block"</script>
         </div>
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related" role="navigation" aria-label="related navigation">
+    <div class="related" role="navigation" aria-label="Related">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -196,8 +198,8 @@ directory will be loaded.</p>
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright Thomas B. Passin 2022.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 6.1.3.
+    &#169; Copyright Thomas B. Passin 2022.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.2.3.
     </div>
   </body>
 </html>
