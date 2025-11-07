@@ -1,17 +1,16 @@
-
 <!DOCTYPE html>
 
-<html lang="en">
+<html lang="en" data-content_root="./">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <title>Generating And Operating on Waveforms &#8212; GF4  documentation</title>
-    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="_static/pyramid.css" />
-    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-    <script src="_static/doctools.js"></script>
-    <script src="_static/sphinx_highlight.js"></script>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=4848ba22" />
+    <link rel="stylesheet" type="text/css" href="_static/pyramid.css?v=82d6032f" />
+    <script src="_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="_static/doctools.js?v=9bcbadda"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Curve Fitting and Smoothing" href="curvefitting.html" />
@@ -24,7 +23,7 @@
 
   </head><body>
 
-    <div class="related" role="navigation" aria-label="related navigation">
+    <div class="related" role="navigation" aria-label="Related">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -47,19 +46,19 @@
           <div class="body" role="main">
             
   <section id="generating-and-operating-on-waveforms">
-<h1>Generating And Operating on Waveforms<a class="headerlink" href="#generating-and-operating-on-waveforms" title="Permalink to this heading">¶</a></h1>
+<h1>Generating And Operating on Waveforms<a class="headerlink" href="#generating-and-operating-on-waveforms" title="Link to this heading">¶</a></h1>
 <p>Operations on waveforms operate in a pointwise manner. For the most part, the
 actual values of the x-axis (horizontal) are ignored.  Exceptions are differentiation, integration, smoothing, and curve fitting, because the step size is significant.  Some operations such as
 the FFT (Fast Fourier Transform) assume that the points are uniformly spaced.</p>
 <section id="the-waveform-generators">
-<h2>The Waveform Generators<a class="headerlink" href="#the-waveform-generators" title="Permalink to this heading">¶</a></h2>
+<h2>The Waveform Generators<a class="headerlink" href="#the-waveform-generators" title="Link to this heading">¶</a></h2>
 <p>We encountered two of GF4’s waveform generators in the <a class="reference external" href="quickstart.html">Quick Start</a> section.
 There we used the ramp and Gaussian noise generators.  Figure WA-1 depicts the
 generator command buttons:</p>
 <figure class="align-default" id="id3">
 <img alt="_images/generator_buttons.png" src="_images/generator_buttons.png" />
 <figcaption>
-<p><span class="caption-text">Figure WA-1. Waveform Generators.</span><a class="headerlink" href="#id3" title="Permalink to this image">¶</a></p>
+<p><span class="caption-text">Figure WA-1. Waveform Generators.</span><a class="headerlink" href="#id3" title="Link to this image">¶</a></p>
 </figcaption>
 </figure>
 <p>The generated waveforms will contain a number of equally-spaced data points.  The
@@ -69,9 +68,9 @@ waveform can be set using the <em>NumPts</em> button.  There is no specific limi
 the number of points, but if it is too large, some operations on the dataset
 might take a long time.</p>
 <section id="meaning-of-parameters-for-some-waveforms">
-<h3>Meaning of Parameters For Some Waveforms<a class="headerlink" href="#meaning-of-parameters-for-some-waveforms" title="Permalink to this heading">¶</a></h3>
+<h3>Meaning of Parameters For Some Waveforms<a class="headerlink" href="#meaning-of-parameters-for-some-waveforms" title="Link to this heading">¶</a></h3>
 <table class="docutils align-default" id="id4">
-<caption><span class="caption-text">Waveform Generator Parameters</span><a class="headerlink" href="#id4" title="Permalink to this table">¶</a></caption>
+<caption><span class="caption-text">Waveform Generator Parameters</span><a class="headerlink" href="#id4" title="Link to this table">¶</a></caption>
 <colgroup>
 <col style="width: 28.6%" />
 <col style="width: 15.9%" />
@@ -129,7 +128,7 @@ button.</p>
 </section>
 </section>
 <section id="operations-on-one-waveform">
-<h2>Operations On One Waveform<a class="headerlink" href="#operations-on-one-waveform" title="Permalink to this heading">¶</a></h2>
+<h2>Operations On One Waveform<a class="headerlink" href="#operations-on-one-waveform" title="Link to this heading">¶</a></h2>
 <p>All operations on one waveform operate on the <strong>X</strong> (or <em>Main</em>) dataset.
 No other datasets are modified. The new or modified dataset is plotted. Some
 examples, among many others, are</p>
@@ -156,14 +155,14 @@ highlighted with the mouse and copied to the clipboard with &lt;CTRL-C&gt;</p>
 </pre></div>
 </div>
 <aside class="footnote-list brackets">
-<aside class="footnote brackets" id="id2" role="note">
+<aside class="footnote brackets" id="id2" role="doc-footnote">
 <span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id1">1</a><span class="fn-bracket">]</span></span>
 <p>Gives an indication of short-range correlation in the data.</p>
 </aside>
 </aside>
 </section>
 <section id="operations-on-two-waveforms">
-<h2>Operations On Two Waveforms<a class="headerlink" href="#operations-on-two-waveforms" title="Permalink to this heading">¶</a></h2>
+<h2>Operations On Two Waveforms<a class="headerlink" href="#operations-on-two-waveforms" title="Link to this heading">¶</a></h2>
 <p>Operations on two waveforms operate on the <strong>X</strong> and <strong>Y</strong> datasets. The results
 replace the <strong>X</strong> dataset. No other datasets are modified. The result dataset is
 plotted. Currently the two-dataset operations are</p>
@@ -200,7 +199,7 @@ The values can be highlighted with the mouse and copied to the clipboard with
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
         <div class="sphinxsidebarwrapper">
   <div>
     <h3><a href="GF4_Users_Guide.html">Table of Contents</a></h3>
@@ -234,7 +233,7 @@ The values can be highlighted with the mouse and copied to the clipboard with
             rel="nofollow">Show Source</a></li>
     </ul>
    </div>
-<div id="searchbox" style="display: none" role="search">
+<search id="searchbox" style="display: none" role="search">
   <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="search.html" method="get">
@@ -242,13 +241,13 @@ The values can be highlighted with the mouse and copied to the clipboard with
       <input type="submit" value="Go" />
     </form>
     </div>
-</div>
+</search>
 <script>document.getElementById('searchbox').style.display = "block"</script>
         </div>
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related" role="navigation" aria-label="related navigation">
+    <div class="related" role="navigation" aria-label="Related">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -265,8 +264,8 @@ The values can be highlighted with the mouse and copied to the clipboard with
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright Thomas B. Passin 2022.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 6.1.3.
+    &#169; Copyright Thomas B. Passin 2022.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.2.3.
     </div>
   </body>
 </html>
