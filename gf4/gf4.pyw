@@ -919,7 +919,7 @@ class PlotManager(AbstractPlotManager):
         '''
 
         _ds = self.stack[MAIN]
-        if _ds is None or not _ds.xdata.any():
+        if _ds is None or len(_ds.xdata) == 0:
             self.announce("No data to copy")
             self.flashit()
             return
