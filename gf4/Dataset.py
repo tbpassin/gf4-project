@@ -584,7 +584,7 @@ class Dataset:
 
         self.ydata = [c*y for y in self.ydata]
         for ds in self.errorBands:
-            ds.scale(c)
+            ds.ydata = [c*y for y in ds.ydata]
 
     #@+node:tom.20211211170820.20: *3* Dataset.addConstant
     def addConstant(self, c):
@@ -600,7 +600,7 @@ class Dataset:
 
         self.ydata = [c + y for y in self.ydata]
         for ds in self.errorBands:
-            ds.addConstant(c)
+            ds.ydata = [c + y for y in ds.ydata]
     #@+node:tom.20211211170820.21: *3* Dataset.differentiate2
     def differentiate2(self):
         '''Differentiate the data, using central differencing (except at
