@@ -1118,7 +1118,6 @@ class PlotManager(AbstractPlotManager):
         self.plot()
     #@+node:tom.20211207213522.1: *3* Curve Math
     #@+node:tom.20211207165051.76: *4* scale
-    @CLEAR_ERROR_BANDS
     @REQUIRE_MAIN
     def scale(self):
         _id = 'scale'
@@ -1135,8 +1134,6 @@ class PlotManager(AbstractPlotManager):
     #@+node:tom.20211207165051.77: *4* add_constant
     @REQUIRE_MAIN
     def add_constant(self):
-        _ds = self.stack[MAIN]
-
         _id = 'add_constant'
         lastparm = self.parmsaver.get(_id, 0.0)
         dia = GetSingleFloat(self.root,
@@ -1145,6 +1142,7 @@ class PlotManager(AbstractPlotManager):
         if dia.result is None: return
         self.parmsaver[_id] = dia.result
 
+        _ds = self.stack[MAIN]
         _ds.addConstant(dia.result)
 
         self.plot()
@@ -1848,10 +1846,12 @@ class PlotManager(AbstractPlotManager):
         upper = Dataset(_x, upperbound)
         _ds.errorBands = [upper, lower]
 
-        if _ds.figurelabel:
-            _ds.figurelabel = f'Least Squares (deg {deg}) Polynomial Fit to {_ds.figurelabel}' 
+        lab = _ds.figurelabel
+        if lab:
+            lab = f'Least Squares (deg {deg}) Polynomial Fit to {lab}' 
         else:
-            _ds.figurelabel = f'Least Squares (deg {deg}) Polynomial Fit'
+            lab = f'Least Squares (deg {deg}) Polynomial Fit'
+        _ds.figurelabel = lab
 
         self.plot()
         self.announce('Mean=%0.3f, rms=%0.3f, r=%0.3f' % (mean, rms, r))
@@ -2715,7 +2715,7 @@ if __name__ == '__main__':
     cmdwin.deiconify()
 
     fname = ''
-    
+
     _stackwin = Stackwin(plotmgr)
 
     # Overplot all files listed on the command line
