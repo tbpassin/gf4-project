@@ -25,8 +25,8 @@ PYVERSION = f'{v1}.{v2}.{v3} {level}'
 #@+others
 #@+node:tom.20220505130330.1: *3* Intro
 INTRO = f"""
-       GF4 Waveform Calculator/Plotter
---------------------------------------------------------------------
+GF4 Waveform Calculator/Plotter
+----------------------------------------------
 
 Plots 2D curves and performs calculations on them. GF4 is modeled
 after a reverse polish notation (RPN) calculator, where 2D waveforms take 
@@ -34,10 +34,11 @@ the place of plain numbers.
 
 GF4 Version: {version}{BRANCH_STR}{GIT_STR}
 Python: {PYVERSION}
+
 """
 #@+node:tom.20220412003223.1: *3* Data Format
 H1 = """\
-   Input Data Format
+Input Data Format
 ----------------------------------
 
 GF4 accepts text files with whitespace-separated columns, one data point per
@@ -88,8 +89,9 @@ dataset, the second one goes into the "Y" position in the stack, and so on up to
 """
 #@+node:tom.20220412003352.1: *3* The Waveform Stack
 H2 = '''
-    The Waveform Stack
--------------------------------------
+The Waveform Stack
+-------------------------------
+
 The stack is a group of data sets, where new data sets get added to the "bottom"
 or "X" slot, and there are other slots "above" X, namely "Y" (the next one
 "up"), and "T", the "topmost" slot. In computer terms, the stack can be pushed,
@@ -106,8 +108,9 @@ Slots in the stack:
 '''
 #@+node:tom.20220412003444.1: *3* Data Input
 H3 = '''
-    Data Input
-----------------------------
+
+Data Input
+-----------------------------------
 GF4 has two ways to get data:
 
     1. Read a text data file in the format described above;
@@ -126,8 +129,9 @@ new data over the old, which can be convient.
 '''
 #@+node:tom.20220412003456.1: *3* Data Output
 H4 = '''
-    Data Output
--------------------------
+Data Output
+-----------------
+
 Data in the "X" slot can be saved in two ways:
 
     1. By using the File/Save... menu item;
@@ -135,10 +139,11 @@ Data in the "X" slot can be saved in two ways:
 
 Saved data will include the plot title and the axis labels, if any have been
 added.  They are denoted using the special comments described above.
+
 '''
 #@+node:tom.20220412003510.1: *3* Plotting Data
 H5 = '''
-    Plotting Data
+Plotting Data
 -----------------------------
 Data in the X position - the stack bottom - is displayed with the "Plot X"
 command button.  The "Overplot Y" button overlays the data in the Y position
@@ -152,6 +157,7 @@ the screen before showing the data.
 The display auto-scales to accommodate all the data.  The scale boundaries
 can be set using the toolbar controls on the plot window, or by using the
 Pan/Zoom control that is also located on the toolbar.
+
 '''
 #@-others
 helpmsg = (INTRO
