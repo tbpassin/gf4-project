@@ -24,7 +24,7 @@ PYVERSION = f'{v1}.{v2}.{v3} {level}'
 #@+node:tom.20220505131030.1: ** helpmsg
 #@+others
 #@+node:tom.20220505130330.1: *3* Intro
-INTRO = f"""
+INTRO = f"""\
 GF4 Waveform Calculator/Plotter
 ----------------------------------------------
 
@@ -34,13 +34,11 @@ the place of plain numbers.
 
 GF4 Version: {version}{BRANCH_STR}{GIT_STR}
 Python: {PYVERSION}
-
 """
 #@+node:tom.20220412003223.1: *3* Data Format
 H1 = """\
 Input Data Format
 ----------------------------------
-
 GF4 accepts text files with whitespace-separated columns, one data point per
 row.  Optionally they can be separated by a comma.  All data lines in a file 
 must use the same separator. Column headers for csv files are extracted from
@@ -49,9 +47,11 @@ the line immediately before the first data line if possible.
 If there is only one column, GF4 inserts an imputed first column with values
 being consecutive integers beginning with 1. The one (and only) data column
 becomes the "y", or vertical, axis. If there are more than two columns, a dialog
-is displayed so the user can choose the two desired columns. The number of
-columns is derived based on the first non-comment, non-blank line whose
-fields are all legal floating point numbers.
+is displayed so the user can choose the two desired columns. 
+
+Column numbering starts with zero. The number of columns is derived based on
+the first non-comment, non-blank line whose fields are all legal floating point
+numbers.
 
 Data fields must be numeric or dates.  GF4 cannot make use of non-numeric data. 
 Data fields are converted to floating point numbers. The default date format is 
@@ -88,10 +88,9 @@ The special comment key words are case sensitive.  If there is more than one
 dataset, the second one goes into the "Y" position in the stack, and so on up to the stack depth.  Beyond that additional data sets are ignored.
 """
 #@+node:tom.20220412003352.1: *3* The Waveform Stack
-H2 = '''
+H2 = '''\
 The Waveform Stack
--------------------------------
-
+--------------------------
 The stack is a group of data sets, where new data sets get added to the "bottom"
 or "X" slot, and there are other slots "above" X, namely "Y" (the next one
 "up"), and "T", the "topmost" slot. In computer terms, the stack can be pushed,
@@ -107,8 +106,7 @@ Slots in the stack:
     | ---  X  --- |    <--- Stack Bottom
 '''
 #@+node:tom.20220412003444.1: *3* Data Input
-H3 = '''
-
+H3 = '''\
 Data Input
 -----------------------------------
 GF4 has two ways to get data:
@@ -125,13 +123,12 @@ sections beyond this will get ignored.
 
 The first data loaded after startup will be automatically plotted.  Later
 data loads will not be plotted.  This gives the user a chance to overlay the
-new data over the old, which can be convient.
+new data over the old, which can be convenient.
 '''
 #@+node:tom.20220412003456.1: *3* Data Output
-H4 = '''
+H4 = '''\
 Data Output
 -----------------
-
 Data in the "X" slot can be saved in two ways:
 
     1. By using the File/Save... menu item;
@@ -142,7 +139,7 @@ added.  They are denoted using the special comments described above.
 
 '''
 #@+node:tom.20220412003510.1: *3* Plotting Data
-H5 = '''
+H5 = '''\
 Plotting Data
 -----------------------------
 Data in the X position - the stack bottom - is displayed with the "Plot X"
@@ -157,15 +154,15 @@ the screen before showing the data.
 The display auto-scales to accommodate all the data.  The scale boundaries
 can be set using the toolbar controls on the plot window, or by using the
 Pan/Zoom control that is also located on the toolbar.
-
 '''
 #@-others
-helpmsg = (INTRO
-+ H1
-+ H2
-+ H3
-+ H4
-+ H5
+helpmsg = (
+    INTRO,
+    H1,
+    H2,
+    H3,
+    H4,
+    H5
 )
 #@+node:tom.20220411202245.1: ** tutorial
 def tutorial():
@@ -180,7 +177,7 @@ def blog():
     url = 'http://tompassin.net/gf4/blogsite/'
     webbrowser.open_new_tab(url)
 #@+node:tom.20220411210306.1: ** msg_window
-def msg_window(text, plotmgr=None):
+def msg_window(sections, plotmgr=None):
     _geom = ''
     if plotmgr:
         win = Tk.Toplevel(plotmgr.root)
@@ -188,7 +185,7 @@ def msg_window(text, plotmgr=None):
         _geom = plotmgr.root.geometry()
     else:
         win = Tk.Tk()
-    win.withdraw()
+    win.withdraw()  # Hide until completely constructed
 
     win.title("About GF4")
     setIcon(win, ICONPATH)
@@ -207,7 +204,43 @@ def msg_window(text, plotmgr=None):
     font = ('sans-serif', 10, 'normal')
     text_box.configure(font = font)
 
-    text_box.insert(Tk.END, text)
+    #@+others
+    #@+node:tom.20251110043952.1: *3* def insert_with_title()
+    text_box.tag_config("header", font=("sans-serif", 10, "bold"))
+
+    def insert_with_title(textbox, section_text):
+        """Insert text with first line styled as a title.
+        
+        Optionally, the second line may be a string of "-" characters
+        that will not be displayed.
+        
+        A tag_config for the "header" tag must be created before
+        this function. The tag_config sets the style of the title line.
+        Example: 
+            
+            text_box.tag_config("header", font=("sans-serif", 10, "bold"))
+        
+        ARGUMENTS
+        textbox -- an instance of a Tk Text class.
+        section_text -- the text of this section.
+        
+        RETURNS
+        nothing.
+        """
+        lines = section_text.split('\n')
+        textbox.insert(Tk.END, lines[0] + '\n', "header")
+
+        if len(lines) > 1 and lines[1].startswith('---'):
+            remainder = lines[2:]
+        else:
+            remainder = lines[1:]
+
+        for line in remainder:
+            textbox.insert(Tk.END, line + '\n')
+    #@-others
+    for section in sections:
+        insert_with_title(text_box, section)
+
     text_box['state'] = 'disabled'
 
     win.update_idletasks()
