@@ -4,19 +4,23 @@
 #@+others
 #@+node:tom.20220511095404.1: ** imports
 import tkinter as Tk
-import tkinter.font as tkFont
+# import tkinter.font as tkFont
 
 from AbstractPlotMgr import MAIN, BUFFER, STACKDEPTH
 from utility import ICONPATH, setIcon
 
 #@+node:tom.20250924085520.1: ** declarations
 TOP = STACKDEPTH - 1
-# MONO = ('Courier', 10, 'normal')
+MONO = ('Courier', 10, 'normal')
 SANS = ('sans-serif', 10, 'normal')
 
-X_INTRO = 'X ==>'
-Y_INTRO = 'Y ==>'
-T_INTRO = 'T ==>'
+X_INTRO = 'X ==> '
+Y_INTRO = 'Y ==> '
+T_INTRO = 'T ==> '
+STO1_INTRO = 'STO 1 ==> '
+
+MONO_TAG = 'mono'
+NORMAL_TAG = 'normal'
 #@+node:tom.20220511095552.1: ** class Stackwin
 class Stackwin(Tk.Toplevel):
 
@@ -38,21 +42,17 @@ class Stackwin(Tk.Toplevel):
         setIcon(self, ICONPATH)
 
         self.stopped = False
-        self.last_stack_str = ''
+        self.last_stack_labels = ()
         self.title("Stack Contents")
 
-        self.text_box = text_box = Tk.Text(self, padx=15, width=100, height=3)
+        self.text_box = text_box = Tk.Text(self, padx=15, width=100, height=4)
         self.text_box.pack()
 
         #@+<< configure text box >>
         #@+node:tom.20250924085744.1: *4* << configure text box >>
         text_box.configure(font=SANS, wrap=Tk.NONE)
-
-        # Configure a tab stop after the longest into string
-        fnt = tkFont.Font(font=text_box['font'])
-        intros = (X_INTRO, Y_INTRO, T_INTRO)
-        tab_width = max(fnt.measure(s) for s in intros) + fnt.measure(" ")
-        text_box.config(tabs=(tab_width,))
+        text_box.tag_config(NORMAL_TAG, font=SANS)
+        text_box.tag_config(MONO_TAG, font=MONO)
 
         #@-<< configure text box >>
 
@@ -82,54 +82,62 @@ class Stackwin(Tk.Toplevel):
             #@+node:tom.20250924090604.1: *4* << self-test >>
             TEXT = "This is a test\nand now for something completely different"
             text_box.insert(Tk.END, TEXT)
-            phrase = 'something completely'
 
+            phrase = 'something completely'
             rng = text_box.search(phrase, '1.0')
             l1, idx_1 = rng.split('.')
             idx_1 = int(idx_1)
-            print('idx_1:', idx_1)
+
             idx1 = f'{l1}.{idx_1}'
             idx2 = f'{l1}.{idx_1 + len(phrase)}'
             text_box.tag_add('t1', idx1, idx2)
             #text_box.tag_add('t2', rng, idx2)
             text_box.tag_config('t1', background = 'red')
-            print(idx1, idx2, '===', text_box.get(idx1, idx2))
             #@-<< self-test >>
     #@+node:tom.20220604115230.1: *3* cancel
     def cancel(self):
         self.destroy()
-    #@+node:tom.20220511100559.1: *3* getstack
+    #@+node:tom.20251110224102.1: *3* getstack
     def getstack(self):
+        """Display stack positions and their labels."""
         if not self.plotmgr:
             return
 
         tb = self.text_box
 
-        stack_str = ''
+        stack_labels = ()
         stack = self.plotmgr.stack
+
         x_label = stack[MAIN] and stack[MAIN].figurelabel or ''
         y_label = stack[BUFFER] and stack[BUFFER].figurelabel or ''
         t_label = stack[TOP] and stack[TOP].figurelabel or ''
-
-        stack_str = (f'{T_INTRO}\t{t_label}\n'
-                   + f'{Y_INTRO}\t{y_label}\n'
-                   + f'{X_INTRO}\t{x_label}')
+        sto1 = self.plotmgr.storage
+        sto1_label = sto1 and sto1.figurelabel or ''
 
         if self.stopped:
             return
 
+        stack_labels = ((T_INTRO, t_label),
+                        (Y_INTRO, y_label),
+                        (X_INTRO, x_label),
+                        (STO1_INTRO, sto1_label))
+
         try:
-            if stack_str != self.last_stack_str:
+            if stack_labels != self.last_stack_labels:
                 tb['state'] = 'normal'
                 tb.delete('1.0', Tk.END)
-                tb.insert('1.0', stack_str)
-                tb['state'] = 'disabled'
-                self.last_stack_str = stack_str
 
-            self.parent.after(500, self.getstack)
+                for stack_pos, label in stack_labels:
+                    tb.insert(Tk.END, stack_pos, MONO_TAG)
+                    tb.insert(Tk.END, label + '\n', NORMAL_TAG)
+                tb['state'] = 'disabled'
+                self.last_stack_labels = stack_labels
+
+            self.parent.after(250, self.getstack)
         # Tk may throw an exception if our window is closing
-        except Tk._tkinter.TclError as e:
-            print(e)
+        except Tk._tkinter.TclError:
+            ...
+            #print(e)
 
     #@-others
 #@-others
