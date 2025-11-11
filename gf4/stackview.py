@@ -45,7 +45,7 @@ class Stackwin(Tk.Toplevel):
         self.last_stack_labels = ()
         self.title("Stack and Stored Data Sets")
 
-        self.text_box = text_box = Tk.Text(self, padx=15, pady=3,
+        self.text_box = text_box = Tk.Text(self, padx=15, pady=4,
                                     spacing3=2, width=90, height=4)
         self.text_box.pack()
 
