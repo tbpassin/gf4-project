@@ -69,7 +69,7 @@ class Stackwin(Tk.Toplevel):
             root_width, root_height = root_dims.split('x')
             xoffset = int(root_xoffset) + int(root_width) - 70
             yoffset = 10
-            self.geometry('700x70')
+            self.geometry('700x80')
             self.geometry(f'+{xoffset}+{yoffset}')
         else:
             self.geometry('600x100')
