@@ -2689,6 +2689,11 @@ if __name__ == '__main__':
     cmdwin = cmdwindow(plotmgr)  # Withdrawn on creation
     cmdwin.update_idletasks()
 
+    root.deiconify()
+    cmdwin.deiconify()
+
+    #@+<< set geometries >>
+    #@+node:tom.20251111004249.1: *3* << set geometries >>
     cmd_width = cmdwin.winfo_reqwidth()
     cmd_height = cmdwin.winfo_reqheight()
 
@@ -2710,16 +2715,13 @@ if __name__ == '__main__':
     cmd_left = root_left + root_width
     root.geometry(f'{root_width}x{root_height}+{root_left}+{root_y}')
     cmdwin.geometry(f'{cmd_width}x{cmd_height}+{cmd_left}+{root_y}')
-
-    root.deiconify()
-    cmdwin.deiconify()
-
-    fname = ''
+    #@-<< set geometries >>
 
     _stackwin = Stackwin(plotmgr)
 
     # Overplot all files listed on the command line
     _first = True
+    fname = ''
     for fname in sys.argv[1:]:
         try:
             if _first:
