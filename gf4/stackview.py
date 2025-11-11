@@ -43,9 +43,10 @@ class Stackwin(Tk.Toplevel):
 
         self.stopped = False
         self.last_stack_labels = ()
-        self.title("Stack Contents")
+        self.title("Stack and Stored Data Sets")
 
-        self.text_box = text_box = Tk.Text(self, padx=15, width=100, height=4)
+        self.text_box = text_box = Tk.Text(self, padx=15, pady=4,
+                                    spacing3=3, width=90, height=4)
         self.text_box.pack()
 
         #@+<< configure text box >>
@@ -68,15 +69,18 @@ class Stackwin(Tk.Toplevel):
             root_dims, root_xoffset, _ = _geom.split('+')
             root_width, root_height = root_dims.split('x')
             xoffset = int(root_xoffset) + int(root_width) - 70
-            yoffset = 10
-            self.geometry('700x80')
+            yoffset = 6
+
+            self_width = self.winfo_width()  
+            self_height = self.winfo_height() + 4  # extra padding at bottom
+            self.geometry(f'{self_width}x{self_height}')
             self.geometry(f'+{xoffset}+{yoffset}')
         else:
             self.geometry('600x100')
         #@-<< set initial position >>
 
         if parent:
-            parent.after(500, self.getstack)
+            parent.after(250, self.getstack)
         else:
             #@+<< self-test >>
             #@+node:tom.20250924090604.1: *4* << self-test >>
