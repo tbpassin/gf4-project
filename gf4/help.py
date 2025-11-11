@@ -21,6 +21,14 @@ GIT_STR = f'; Changeset; {changeset.strip()}' if changeset else ""
 
 v1, v2, v3, level, _ = version_info
 PYVERSION = f'{v1}.{v2}.{v3} {level}'
+
+MONO_TAG = 'mono'
+HEADER_TAG = 'header'
+NORMAL_TAG = 'normal'
+
+FONT_NORMAL = ("sans-serif", 10, 'normal')
+FONT_HEADER = ("sans-serif", 10, 'bold')
+FONT_MONO = ('Courier', 10, 'normal')
 #@+node:tom.20220505131030.1: ** helpmsg
 #@+others
 #@+node:tom.20220505130330.1: *3* Intro
@@ -29,52 +37,56 @@ GF4 Waveform Calculator/Plotter
 ----------------------------------------------
 
 Plots 2D curves and performs calculations on them. GF4 is modeled
-after a reverse polish notation (RPN) calculator, where 2D waveforms take 
+after a reverse polish notation (RPN) calculator, where 2D waveforms take
 the place of plain numbers.
 
 GF4 Version: {version}{BRANCH_STR}{GIT_STR}
 Python: {PYVERSION}
+
 """
 #@+node:tom.20220412003223.1: *3* Data Format
 H1 = """\
 Input Data Format
 ----------------------------------
 GF4 accepts text files with whitespace-separated columns, one data point per
-row.  Optionally they can be separated by a comma.  All data lines in a file 
+row.  Optionally they can be separated by a comma.  All data lines in a file
 must use the same separator. Column headers for csv files are extracted from
 the line immediately before the first data line if possible.
 
 If there is only one column, GF4 inserts an imputed first column with values
 being consecutive integers beginning with 1. The one (and only) data column
 becomes the "y", or vertical, axis. If there are more than two columns, a dialog
-is displayed so the user can choose the two desired columns. 
+is displayed so the user can choose the two desired columns.
 
 Column numbering starts with zero. The number of columns is derived based on
 the first non-comment, non-blank line whose fields are all legal floating point
 numbers.
 
-Data fields must be numeric or dates.  GF4 cannot make use of non-numeric data. 
-Data fields are converted to floating point numbers. The default date format is 
-"%Y-%m-%d", that is, for example, "2025-03-30". The default date format can be 
-specified in the gf4.ini configuration file.  If date conversion with the default 
+Data fields must be numeric or dates.  GF4 cannot make use of non-numeric data.
+Data fields are converted to floating point numbers. The default date format is
+"%Y-%m-%d", that is, for example, "2025-03-30". The default date format can be
+specified in the gf4.ini configuration file.  If date conversion with the default
 format fails, some other common formats are tried, including "%Y/%m/%d". Dates
 are converted to decimal years.
 
 Here is an example data file:
 
+<mono>
 # A comment line
 ; Another comment line.  Also, blank lines are ignored.
 # x  y
 1  1
 2  4
 3  9
-# etc 
+# etc
+</mono>
 
 Data points do not need to be equally spaced on the x axis.
 
-There are specially formatted (optional) comments to specify a title, axis 
+There are specially formatted (optional) comments to specify a title, axis
 labels, and a break between data sets:
 
+<mono>
 ;; FIGURELABEL: The Title
 ;; XLABEL: The x axis
 ;; YLABEL: the y axis
@@ -83,9 +95,11 @@ labels, and a break between data sets:
 3    6.0
 4    7.0
 ;; ENDDATASET
+</mono>
 
 The special comment key words are case sensitive.  If there is more than one
 dataset, the second one goes into the "Y" position in the stack, and so on up to the stack depth.  Beyond that additional data sets are ignored.
+
 """
 #@+node:tom.20220412003352.1: *3* The Waveform Stack
 H2 = '''\
@@ -100,10 +114,12 @@ New data sets are always loaded into the "X" slot.  The File/Save... menu item
 saves the data in the "X" slot as a text file.
 
 Slots in the stack:
-
+<mono>
     | --- Top --- |
     | ---  Y  --- |
     | ---  X  --- |    <--- Stack Bottom
+</mono>
+
 '''
 #@+node:tom.20220412003444.1: *3* Data Input
 H3 = '''\
@@ -124,6 +140,7 @@ sections beyond this will get ignored.
 The first data loaded after startup will be automatically plotted.  Later
 data loads will not be plotted.  This gives the user a chance to overlay the
 new data over the old, which can be convenient.
+
 '''
 #@+node:tom.20220412003456.1: *3* Data Output
 H4 = '''\
@@ -154,6 +171,7 @@ the screen before showing the data.
 The display auto-scales to accommodate all the data.  The scale boundaries
 can be set using the toolbar controls on the plot window, or by using the
 Pan/Zoom control that is also located on the toolbar.
+
 '''
 #@-others
 helpmsg = (
@@ -187,6 +205,8 @@ def msg_window(sections, plotmgr=None):
         win = Tk.Tk()
     win.withdraw()  # Hide until completely constructed
 
+    #@+<< configure msg_window >>
+    #@+node:tom.20251110175546.1: *3* << configure msg_window >>
     win.title("About GF4")
     setIcon(win, ICONPATH)
 
@@ -201,43 +221,56 @@ def msg_window(sections, plotmgr=None):
     scroll_bar.grid(row=0, column=1, sticky='ns')
     text_box['yscrollcommand'] = scroll_bar.set
 
-    font = ('sans-serif', 10, 'normal')
-    text_box.configure(font = font)
+    text_box.configure(font = FONT_NORMAL)
+    #@-<< configure msg_window >>
 
     #@+others
     #@+node:tom.20251110043952.1: *3* def insert_with_title()
-    text_box.tag_config("header", font=("sans-serif", 10, "bold"))
+    text_box.tag_config(HEADER_TAG, font=FONT_HEADER)
+    text_box.tag_config(NORMAL_TAG, font=FONT_NORMAL)
+    text_box.tag_config(MONO_TAG, font=FONT_MONO)
 
     def insert_with_title(textbox, section_text):
         """Insert text with first line styled as a title.
-        
+
         Optionally, the second line may be a string of "-" characters
         that will not be displayed.
-        
+
         A tag_config for the "header" tag must be created before
         this function. The tag_config sets the style of the title line.
-        Example: 
-            
+        Example:
+
             text_box.tag_config("header", font=("sans-serif", 10, "bold"))
-        
+
+        A group of lines can be rendered in monospaced type by surrounding
+        them with the pseudo-xml tags <mono>/</mono>.  Each tag has to be on
+        its own line.
+
         ARGUMENTS
         textbox -- an instance of a Tk Text class.
         section_text -- the text of this section.
-        
+
         RETURNS
         nothing.
         """
-        lines = section_text.split('\n')
-        textbox.insert(Tk.END, lines[0] + '\n', "header")
+        lines = section_text.splitlines()
+        textbox.insert(Tk.END, lines[0] + '\n', HEADER_TAG)
 
         if len(lines) > 1 and lines[1].startswith('---'):
             remainder = lines[2:]
         else:
             remainder = lines[1:]
 
+        font_tag = NORMAL_TAG
         for line in remainder:
-            textbox.insert(Tk.END, line + '\n')
+            if line.strip().startswith('<mono>'):
+                font_tag = MONO_TAG
+            elif line.strip().startswith('</mono>'):
+                font_tag = NORMAL_TAG
+            else:
+                textbox.insert(Tk.END, line + '\n', font_tag)
     #@-others
+
     for section in sections:
         insert_with_title(text_box, section)
 
