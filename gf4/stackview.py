@@ -121,10 +121,11 @@ class Stackwin(Tk.Toplevel):
         if self.stopped:
             return
 
-        stack_labels = ((T_INTRO, t_label),
+        stack_labels = [(T_INTRO, t_label),
                         (Y_INTRO, y_label),
-                        (X_INTRO, x_label),
-                        (STO1_INTRO, sto1_label))
+                        (X_INTRO, x_label)]
+        if sto1_label:
+            stack_labels.append((STO1_INTRO, sto1_label))
 
         try:
             if stack_labels != self.last_stack_labels:
