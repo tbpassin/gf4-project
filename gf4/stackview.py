@@ -4,7 +4,6 @@
 #@+others
 #@+node:tom.20220511095404.1: ** imports
 import tkinter as Tk
-# import tkinter.font as tkFont
 
 from AbstractPlotMgr import MAIN, BUFFER, STACKDEPTH
 from utility import ICONPATH, setIcon
@@ -47,7 +46,7 @@ class Stackwin(Tk.Toplevel):
 
         self.text_box = text_box = Tk.Text(self, padx=15, pady=4,
                                     spacing3=2, width=90, height=4)
-        self.text_box.pack()
+        text_box.pack()
 
         #@+<< configure text box >>
         #@+node:tom.20250924085744.1: *4* << configure text box >>
