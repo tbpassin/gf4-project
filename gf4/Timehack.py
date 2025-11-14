@@ -17,12 +17,8 @@ def timehack(self, x=118):
     Used to mark a specific x-axis value.
     """
     ax = self.axes
-    # This calculation could be improved.  It should use the graph pane
-    # limits, but instead it uses the data limits.
-    ax.plot((x, x), ax.get_ylim(), CORNFLOWERBLUE, linewidth=LINETHIN)
-    self.canvas.draw()
-
-    return 'break'
+    ax.axvline(x=x, color=CORNFLOWERBLUE, linewidth=LINETHIN)
+    self.canvas.draw_idle()
 #@-others
 #@@language python
 #@@tabwidth -4
