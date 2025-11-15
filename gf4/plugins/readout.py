@@ -3,7 +3,7 @@
 """Display y value at specified point."""
 
 from AbstractPlotMgr import MAIN
-from .require_datasets import needs_main
+from .require_datasets import has_main
 from entry import GetSingleFloat
 
 BUTTON_DEF  = ('Readout Y', 'readout', 'Show the y value of a specified point')
@@ -42,7 +42,7 @@ def find_closest(value, x):
 
 # plotmgr will have been injected into the module by the time this is called
 def proc():
-    if not needs_main(plotmgr):
+    if not has_main(plotmgr):
         return
 
     _id = 'readout'
