@@ -127,8 +127,8 @@ SMOOTHER_FIT_BUTTONS = (
 DATA_PROCESSING_BUTTONS = (
     ('FFT', 'fft', 'Calculate FFT of Data.  Data length need not be a power of 2'),
     ('Convolve', 'convolve', 'Convolve X Data with Y.  Y is unchanged'),
-    ('Correl', 'correl', 'Correlate X Data with Y.  Y is unchanged'),
-    ('Autocorr', 'autocor', 'Autocorrelation of X Data'),
+    ('Correlation', 'correl', 'Correlate X Data with Y.  Y is unchanged'),
+    ('Autocorrelation', 'autocor', 'Autocorrelation of X Data'),
     ('Low Pass', 'lopass', 'Low Pass Filter of X Data.  Time Constant is fraction of x axis'),
     ('Hi Pass', 'hipass','High Pass Filter of X Data.  Time Constant is fraction of x axis'),
     ('Moving Median', 'move-median', 'Moving Median of X Data'),
