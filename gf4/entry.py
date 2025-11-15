@@ -42,7 +42,7 @@ def val_error (except_type, msg1, msg2):
 #@+node:tom.20211211171304.4: ** class Dialog(Tk.Toplevel)
 # pylint: disable = too-many-ancestors
 class Dialog(Tk.Toplevel):
-    """Base class for the dialogs.  From 
+    """Base class for the dialogs.  From
         http://effbot.org/tkinterbook/tkinter-dialog-windows.htm
     """
 
@@ -227,7 +227,7 @@ class GetSingleFloat(GetSingleInt):
     #@+others
     #@+node:tom.20211211171304.23: *3* GetSingleFloat(GetSingleInt).__init__
     def __init__(self, parent, title='', label='Float', initval=0.0):
-        GetSingleInt.__init__(self, parent, title, label, float(initval))  
+        GetSingleInt.__init__(self, parent, title, label, float(initval))
 
     #@+node:tom.20211211171304.24: *3* GetSingleFloat(GetSingleInt).validate
     @val_error(Exception, 'Error ...', "Try again")
@@ -243,7 +243,7 @@ class GetTwoFloats(TwoLineInput):
     #@+others
     #@+node:tom.20211211171304.26: *3* GetTwoFloats(TwoLineInput).__init__
     # pylint: disable = too-many-arguments
-    def __init__(self, parent, title='', label1='Float', label2='Float', 
+    def __init__(self, parent, title='', label1='Float', label2='Float',
             initval1=0.0, initval2=0.0):
         self.initval1 = initval1
         self.initval2 = initval2
@@ -263,7 +263,7 @@ class GetTwoFloats(TwoLineInput):
         self.e2.grid(row=1, column=1)
 
         self.e1.insert(0,str(self.initval1)) # preload values
-        self.e2.insert(0,str(self.initval2)) 
+        self.e2.insert(0,str(self.initval2))
 
         return self.e1 # initial focus
 
@@ -283,7 +283,7 @@ class GetTwoInts(TwoLineInput):
     #@+others
     #@+node:tom.20211211171304.30: *3* GetTwoInts(TwoLineInput).__init__
     # pylint: disable = too-many-arguments
-    def __init__(self, parent, title='', label1='Integer', label2='Integer', 
+    def __init__(self, parent, title='', label1='Integer', label2='Integer',
             initval1=0, initval2=0):
         self.initval1 = initval1
         self.initval2 = initval2
@@ -303,7 +303,7 @@ class GetTwoInts(TwoLineInput):
         self.e2.grid(row=1, column=1)
 
         self.e1.insert(0,str(self.initval1)) # preload values
-        self.e2.insert(0,str(self.initval2)) 
+        self.e2.insert(0,str(self.initval2))
 
         return self.e1 # initial focus
 
@@ -325,7 +325,7 @@ class GetTwoNumbers(TwoLineInput):
     #@+others
     #@+node:tom.20211211171304.34: *3* GetTwoNumbers(TwoLineInput).__init__
     # pylint: disable = too-many-arguments
-    def __init__(self, parent, title='', label1='Integer', label2='Integer', 
+    def __init__(self, parent, title='', label1='Integer', label2='Integer',
             initval1=0, initval2=0):
         self.initval1 = initval1
         self.initval2 = initval2
@@ -346,7 +346,7 @@ class GetTwoNumbers(TwoLineInput):
         self.e2.grid(row=1, column=1)
 
         self.e1.insert(0,str(self.initval1)) # preload values
-        self.e2.insert(0,str(self.initval2)) 
+        self.e2.insert(0,str(self.initval2))
 
         return self.e1 # initial focus
 
@@ -387,7 +387,7 @@ class TextFade(Tk.Text):
     def colr_str(r, g, b):
         """Format an r,g,b color group into the right format to set a Tk.Text widget.
 
-        The color values are each scaled to 0xff.  This is necessary because the 
+        The color values are each scaled to 0xff.  This is necessary because the
         queries self.winfo_rgb(self.cget('fg')) and self.winfo_rgb(self.cget('bg'))
         return tuples that are scaled to 0xFFFF, but the method to set a color
          - configure(fg=fg_base_color_str) for example - requires them to
@@ -400,13 +400,13 @@ class TextFade(Tk.Text):
 
 
     #@+node:tom.20211211171304.40: *3* TextFade(Tk.Text).fade
-    def fade(self, dwell=150):        
-        '''Fade text to invisibility, then delete it. Then restore
+    def fade(self, dwell=250):
+        """Fade text to invisibility, then delete it. Then restore
         the text color.
 
         ARGUMENT
         dwell -- integer dwell time for each increment
-        '''
+        """
 
         #colr_str = lambda r,g,b: '#{:02x}{:02x}{:02x}'.format(r//256, g//256, b//256)
 
