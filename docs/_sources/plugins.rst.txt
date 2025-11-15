@@ -7,6 +7,8 @@ GF4 has a plugin capability. A plugin is a Python program that defines both a
 new command and a new command button to launch it.  It is also possible to override
 an existing command without creating a new button.
 
+Plugin commands and their command buttons are treated exactly like other commands.  They use the same command dispatch dictionary and they use the same help message system. Once the `proc()` function has been written and the command's `BUTTON_DEF` tuple has been defined, the plugin's command gets installed by the same machinery as native commands.
+
 Plugins must be placed in the *gf4/plugins* directory. Their file name must have
 the standard Python extension of ".py".  This directory also includes a
 *README.txt* file that explains how the plugin system works.
@@ -42,6 +44,8 @@ of two:
 
     from AbstractPlotMgr import MAIN
     from .require_datasets import needs_main
+
+    plotmgr = None
 
     # plotmgr will have been injected into the module by the time this is called
     def proc():

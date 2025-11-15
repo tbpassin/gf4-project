@@ -1,17 +1,33 @@
 # The list of plugins to import. Omit the ".py" extension.
+# spacers add visual separators to the "Plugins" group.
+
+# Data
+extend_data
+
+# Randomness
+ljung_box
+sign_runs
+
+# Smoothing
+add_spacer
+add_spacer
+local_poly_fit
+poly_lowess
+lst_sqr_extrap
+
+# Statistics
+fox_autocor
+
+# Utility
+add_spacer
+add_spacer
 find_peak
 readout
 calculator
-local_poly_fit
-poly_lowess
-low_quad
-lst_sqr_extrap
-
-ljung_box
 show_sigma
-sign_runs
-fox_autocor
-sinc_window
-extend_data
 
+# Waveforms
 make_triangle
+
+# Windowing
+sinc_window
