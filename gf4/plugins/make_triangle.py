@@ -6,7 +6,7 @@ from AbstractPlotMgr import MAIN
 from Dataset import Dataset
 
 BUTTON_DEF  = ('Make Triangle', 'make-triangle',
-               'Generate Triangular Curve. Width must be > 2.  Will be adjusted to an odd length')
+               'Generate Triangular Curve. Width must be > 2.  Will be adjusted to an even value.')
 
 OVERRIDE = True
 OWNER_GROUP = 'GENERATOR_BUTTONS'
@@ -25,21 +25,17 @@ def makeTriangle(plotmgr, ds):
     ds.figurelabel = f'Triangle [{actual_width}]'
 
     plotmgr.set_data(ds, MAIN)
-    plotmgr.plot()
-
-    if actual_width < dia.result:
-        plotmgr.announce('Triangle width trimmed to actual_width')
-        plotmgr.fadeit()
+    return actual_width, dia.result
 #@+node:tom.20251114143543.1: ** generateTriangle
 def generateTriangle(N = 256, w = 255):
     """Compute a triangular waveform with evenly spaced points.
-    The non-zero region starts at point 1.
+    The non-zero region starts at index 0.
     
     Return a tuple (xdata, ydata, actual_width).
 
     ARGUMENT
     N -- the total length of the waveform
-    w -- width of non-zero region; w>2.. if w > N - 1, set w = N - 1
+    w -- width of non-zero region; w > 2. if w > N - 1, set w = N - 1
 
     RETURNS
     a tuple (xdata, ydata, actual_width). actual_width is the span,
@@ -57,10 +53,9 @@ def generateTriangle(N = 256, w = 255):
 
     # The actual width of the triangle is one less than the number of points
     # so we need to have w + 1 points in the non-zero region.
-    # _y = [0] + [1] * (w + 1)
     z = 0
     y = [0]
-    apex = w//2 + 1; print(f'{apex=} {w=}', flush=True)
+    apex = w//2 + 1
     for i in range(1, apex, 1):
         z += delta
         y += [z]
@@ -84,6 +79,11 @@ plotmgr = None  # Suppress pyflake complaints
 # plotmgr will have been injected into the module by the time this is called
 def proc():
     ds = Dataset()
-    makeTriangle(plotmgr, ds)
+    actual_width, requested_width = makeTriangle(plotmgr, ds)
+    plotmgr.plot()
+
+    if actual_width < requested_width:
+        plotmgr.announce(f'Triangle width trimmed to {actual_width}')
+        plotmgr.fadeit()
 
 #@-leo
