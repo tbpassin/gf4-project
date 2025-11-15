@@ -32,7 +32,7 @@ def makeTriangle(plotmgr, ds):
         plotmgr.fadeit()
 #@+node:tom.20251114143543.1: ** generateTriangle
 def generateTriangle(N = 256, w = 255):
-    '''Compute a triangular waveform with evenly spaced points.
+    """Compute a triangular waveform with evenly spaced points.
     The non-zero region starts at point 1.
     
     Return a tuple (xdata, ydata, actual_width).
@@ -44,7 +44,7 @@ def generateTriangle(N = 256, w = 255):
     RETURNS
     a tuple (xdata, ydata, actual_width). actual_width is the span,
     which is one less than the number of points.
-    '''
+    """
 
     w = min(w, N - 1)
     w = max(3, w)
