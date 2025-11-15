@@ -70,6 +70,7 @@
 <v t="tom.20250928233017.1"><vh>@file sign_runs.py</vh></v>
 <v t="tom.20250930150701.1"><vh>@file ljung_box.py</vh></v>
 <v t="tom.20251030132231.1"><vh>@file extend_data.py</vh></v>
+<v t="tom.20251114142829.1"><vh>@file make_triangle.py</vh></v>
 </v>
 </v>
 <v t="tom.20221211135219.1"><vh>Config File</vh>
@@ -169,7 +170,7 @@ permissions) - see https://riptutorial.com/tkinter/example/3206/installation-or-
 
 </t>
 <t tx="tom.20220829181040.1"></t>
-<t tx="tom.20220830112255.1" _mod_time="4741da433c60f876a82e"># The list of plugins to import. Omit the ".py" extension.
+<t tx="tom.20220830112255.1" _mod_time="4741da45ea7ef846f52e"># The list of plugins to import. Omit the ".py" extension.
 find_peak
 readout
 calculator
@@ -183,7 +184,9 @@ show_sigma
 sign_runs
 fox_autocor
 sinc_window
-extend_data</t>
+extend_data
+
+make_triangle</t>
 <t tx="tom.20220830215645.1" _mod_time="4741da433c60f813d22e">@language text
 GF4 has a plugin mechanism that can load plugin files located in the "plugins"
 directory.  This README provides some basic information for developers of plugins.

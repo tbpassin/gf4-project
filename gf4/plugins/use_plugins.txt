@@ -13,3 +13,5 @@ sign_runs
 fox_autocor
 sinc_window
 extend_data
+
+make_triangle
