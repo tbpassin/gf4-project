@@ -1,6 +1,5 @@
 #@+leo-ver=5-thin
 #@+node:tom.20251114142829.1: * @file make_triangle.py
-# xpylint: disable = relative-beyond-top-level
 from entry import GetSingleInt
 from AbstractPlotMgr import MAIN
 from Dataset import Dataset
