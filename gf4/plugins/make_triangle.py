@@ -1,6 +1,6 @@
 #@+leo-ver=5-thin
 #@+node:tom.20251114142829.1: * @file make_triangle.py
-# pylint: disable = relative-beyond-top-level
+# xpylint: disable = relative-beyond-top-level
 from entry import GetSingleInt
 from AbstractPlotMgr import MAIN
 from Dataset import Dataset
@@ -18,7 +18,8 @@ def makeTriangle(plotmgr, ds):
     lastparm = plotmgr.parmsaver.get(_id, plotmgr.num)
 
     dia = GetSingleInt(plotmgr.root, 'Width', 'Points', lastparm)
-    if not dia.result: return
+    if not dia.result:
+        return 0, 0
     plotmgr.parmsaver[_id] = dia.result
 
     ds.xdata, ds.ydata, actual_width = generateTriangle(plotmgr.num, dia.result)
@@ -80,6 +81,9 @@ plotmgr = None  # Suppress pyflake complaints
 def proc():
     ds = Dataset()
     actual_width, requested_width = makeTriangle(plotmgr, ds)
+    if actual_width == requested_width == 0:  # User canceled dialog
+        return
+
     plotmgr.plot()
 
     if actual_width < requested_width:
