@@ -16,6 +16,9 @@ poly_lowess
 lst_sqr_extrap
 
 # Statistics
+add_spacer
+add_spacer
+show_sigma
 fox_autocor
 
 # Utility
@@ -24,7 +27,6 @@ add_spacer
 find_peak
 readout
 calculator
-show_sigma
 
 # Waveforms
 make_triangle

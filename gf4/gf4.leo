@@ -65,6 +65,7 @@
 <v t="tom.20221121191416.1"><vh>@file poly_lowess.py</vh></v>
 <v t="tom.20250928143427.1"><vh>@file fox_autocor.py</vh></v>
 <v t="tom.20250928233017.1"><vh>@file sign_runs.py</vh></v>
+<v t="tom.20251011190146.1"><vh>@file sinc_window.py</vh></v>
 <v t="tom.20250930150701.1"><vh>@file ljung_box.py</vh></v>
 <v t="tom.20251030132231.1"><vh>@file extend_data.py</vh></v>
 <v t="tom.20251114142829.1"><vh>@file make_triangle.py</vh></v>
@@ -171,7 +172,7 @@ permissions) - see https://riptutorial.com/tkinter/example/3206/installation-or-
 
 </t>
 <t tx="tom.20220829181040.1"></t>
-<t tx="tom.20220830112255.1" _mod_time="4741da46299e0d320c2e"># The list of plugins to import. Omit the ".py" extension.
+<t tx="tom.20220830112255.1" _mod_time="4741da4632b4841c192e"># The list of plugins to import. Omit the ".py" extension.
 # spacers add visual separators to the "Plugins" group.
 
 # Data
@@ -189,6 +190,9 @@ poly_lowess
 lst_sqr_extrap
 
 # Statistics
+add_spacer
+add_spacer
+show_sigma
 fox_autocor
 
 # Utility
@@ -197,7 +201,6 @@ add_spacer
 find_peak
 readout
 calculator
-show_sigma
 
 # Waveforms
 make_triangle
