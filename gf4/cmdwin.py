@@ -253,7 +253,7 @@ def clear_macro():
 def configure_button_list(parent, button_list, plotmgr):
     global NEWFONT
     for b in button_list:
-        if b is SPACER:
+        if b is SPACER or b == (None, None, None):
             ttk.Separator(parent, style='gf.TSeparator').pack(fill=Tk.BOTH)
         else:
             try:

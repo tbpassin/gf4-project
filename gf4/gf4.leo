@@ -52,6 +52,7 @@
 <v t="tom.20220830184545.1"><vh>@file require_datasets.py</vh></v>
 </v>
 <v t="tom.20220829181057.1"><vh>@file test_plugin.py</vh></v>
+<v t="tom.20251115091050.1"><vh>@file add_spacer.py</vh></v>
 <v t="tom.20220830135417.1"><vh>@file double_x.py</vh></v>
 <v t="tom.20221106223828.1"><vh>@file calculator.py</vh></v>
 <v t="tom.20220831132228.1"><vh>@file convolve1.py</vh></v>
@@ -170,23 +171,39 @@ permissions) - see https://riptutorial.com/tkinter/example/3206/installation-or-
 
 </t>
 <t tx="tom.20220829181040.1"></t>
-<t tx="tom.20220830112255.1" _mod_time="4741da45ea7ef846f52e"># The list of plugins to import. Omit the ".py" extension.
+<t tx="tom.20220830112255.1" _mod_time="4741da4624c41c83ee2e"># The list of plugins to import. Omit the ".py" extension.
+
+# Data
+extend_data
+
+# Randomness
+ljung_box
+sign_runs
+
+# Smoothing
+add_spacer
+add_spacer
+local_poly_fit
+poly_lowess
+lst_sqr_extrap
+
+# Statistics
+fox_autocor
+
+# Utility
+add_spacer
+add_spacer
 find_peak
 readout
 calculator
-local_poly_fit
-poly_lowess
-low_quad
-lst_sqr_extrap
-
-ljung_box
 show_sigma
-sign_runs
-fox_autocor
-sinc_window
-extend_data
 
-make_triangle</t>
+# Waveforms
+make_triangle
+
+# Windowing
+sinc_window
+</t>
 <t tx="tom.20220830215645.1" _mod_time="4741da433c60f813d22e">@language text
 GF4 has a plugin mechanism that can load plugin files located in the "plugins"
 directory.  This README provides some basic information for developers of plugins.
