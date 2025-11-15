@@ -5,7 +5,7 @@ from entry import GetSingleInt
 from AbstractPlotMgr import MAIN
 from Dataset import Dataset
 
-BUTTON_DEF  = ('Make Triangle', 'make-triangle',
+BUTTON_DEF  = ('Make Triangle\n', 'make-triangle',
                'Generate Triangular Curve. Width must be > 2.  Will be adjusted to an even value.')
 
 OVERRIDE = True
