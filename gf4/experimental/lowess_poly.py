@@ -33,7 +33,7 @@ def smoothPointLocalPoly(xdata, ydata, wt, i, degree = 1, cliplevel=2.0, causal=
 
     RETURNS
     a tuple (s, v, se, is_flier), where s is the smoothed value of the point,
-    v is the variance at the point, se is the weighted standard deviation of the
+    v is the variance at the point, se is the weighted standard error of the
     fitted point, and is_flier is a boolean that is True if
     the point lies farther than cliplevel standard deviations
     from the fitted point.
@@ -89,7 +89,6 @@ def smoothPointLocalPoly(xdata, ydata, wt, i, degree = 1, cliplevel=2.0, causal=
     var = (Svar / Swt) *0.5*sz/(.5*sz - 1)
 
     # Approximate standard error of the fitted point
-    #se = ((var * Sww)**0.5) / Swt
     se = sqrt((Svar/Swt) / ((Swt**2 / Sww) - 1))
 
     is_flier = (abs(ydata[i] - y0) > cliplevel * sqrt(var))
