@@ -14,7 +14,7 @@ except ImportError:
 # Downstream code will skip this plugin if the BUTTON_DEF is missing.
 if frechet_ok:
     from AbstractPlotMgr import MAIN, BUFFER
-    from .require_datasets import needs_main_buffer
+    from ..require_datasets import needs_main_buffer
     from Dataset import Dataset
 
     BUTTON_DEF  = ('Frechet Dist', 'frechet', 'Show Frechet distance between X and Y datasets')

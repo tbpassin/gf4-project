@@ -2,7 +2,7 @@
 #@+node:tom.20221104193114.1: * @file take_snapshot.py
 """Capture the current graph and the dataset stack for restoration later."""
 
-from .require_datasets import has_main
+from ..require_datasets import has_main
 
 BUTTON_DEF = ('Snapshot', 'snapshot', 'Save state of the plot')
 OWNER_GROUP = 'PLOT_BUTTONS'

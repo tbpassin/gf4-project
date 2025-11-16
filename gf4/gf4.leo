@@ -51,16 +51,15 @@
 <v t="tom.20220830112255.1"><vh>@clean use_plugins.txt</vh></v>
 <v t="tom.20220830184545.1"><vh>@file require_datasets.py</vh></v>
 </v>
+<v t="tom.20251115200352.1"><vh>Demo</vh>
 <v t="tom.20220829181057.1"><vh>@file test_plugin.py</vh></v>
-<v t="tom.20251115091050.1"><vh>@file add_spacer.py</vh></v>
 <v t="tom.20220830135417.1"><vh>@file double_x.py</vh></v>
+</v>
+<v t="tom.20251115091050.1"><vh>@file add_spacer.py</vh></v>
 <v t="tom.20221106223828.1"><vh>@file calculator.py</vh></v>
 <v t="tom.20220905122752.1"><vh>@file find_peak.py</vh></v>
 <v t="tom.20230104000405.1"><vh>@file lst_sqr_extrap.py</vh></v>
 <v t="tom.20220909175119.1"><vh>@file readout.py</vh></v>
-<v t="tom.20221105131948.1"><vh>@file undo-save.py</vh></v>
-<v t="tom.20221105143807.1"><vh>@file undo.py</vh></v>
-<v t="tom.20221112235319.1"><vh>@file norm_cdf.py</vh></v>
 <v t="tom.20221115225742.1"><vh>@file local_poly_fit.py</vh></v>
 <v t="tom.20221121191416.1"><vh>@file poly_lowess.py</vh></v>
 <v t="tom.20250928143427.1"><vh>@file fox_autocor.py</vh></v>
@@ -71,12 +70,19 @@
 <v t="tom.20251114142829.1"><vh>@file make_triangle.py</vh></v>
 <v t="tom.20221121171302.1"><vh>Experimental</vh>
 <v t="tom.20221128184455.1"><vh>@path experimental</vh>
+<v t="tom.20221105143807.1"><vh>@file undo.py</vh></v>
+<v t="tom.20221105131948.1"><vh>@file undo-save.py</vh></v>
 <v t="tom.20221120044718.1"><vh>@file low_quad.py</vh></v>
 <v t="tom.20220903150123.1"><vh>@file correl1.py</vh></v>
 <v t="tom.20221101105447.1"><vh>@file autocorrel1.py</vh></v>
 <v t="tom.20220831132228.1"><vh>@file convolve1.py</vh></v>
 <v t="tom.20221121171312.1"><vh>@file lowess_poly.py</vh></v>
 <v t="tom.20221128184351.1"><vh>@file lowess_quad.py</vh></v>
+<v t="tom.20221127124842.1"><vh>@file debug_lowess.py</vh></v>
+<v t="tom.20221112235319.1"><vh>@file norm_cdf.py</vh></v>
+<v t="tom.20221104193114.1"><vh>@file take_snapshot.py</vh></v>
+<v t="tom.20221104194114.1"><vh>@file restore_snapshot.py</vh></v>
+<v t="tom.20220911140747.1"><vh>@file frechet.py</vh></v>
 </v>
 </v>
 </v>
@@ -172,7 +178,7 @@ permissions) - see https://riptutorial.com/tkinter/example/3206/installation-or-
 
 </t>
 <t tx="tom.20220829181040.1"></t>
-<t tx="tom.20220830112255.1" _mod_time="4741da4632b4841c192e"># The list of plugins to import. Omit the ".py" extension.
+<t tx="tom.20220830112255.1" _mod_time="4741da4636c33f8e872e"># The list of plugins to import. Omit the ".py" extension.
 # spacers add visual separators to the "Plugins" group.
 
 # Data
@@ -182,18 +188,18 @@ extend_data
 ljung_box
 sign_runs
 
+# Statistics
+add_spacer
+add_spacer
+show_sigma
+fox_autocor
+
 # Smoothing
 add_spacer
 add_spacer
 local_poly_fit
 poly_lowess
 lst_sqr_extrap
-
-# Statistics
-add_spacer
-add_spacer
-show_sigma
-fox_autocor
 
 # Utility
 add_spacer
@@ -388,5 +394,6 @@ This is the extended help message for this plugin.
 
 During program startup, this message will be automatically linked to a right-click on the plugin's button. A button with extended help will turn a cyan color when moused over.
 </t>
+<t tx="tom.20251115200352.1"></t>
 </tnodes>
 </leo_file>

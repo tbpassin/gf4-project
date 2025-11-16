@@ -11,7 +11,7 @@ The history index can never move beyond the head index.
 New snapshots are always added just past the history index, or at index 0
 if the history index == 0.
 """
-from .require_datasets import has_main
+from ..require_datasets import has_main
 
 BUTTON_DEF = ('Capture Plot', 'undo-save', 'Save state of the plot in the Undo stack')
 

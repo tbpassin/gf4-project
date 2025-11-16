@@ -6,7 +6,7 @@ import numpy as np
 from AbstractPlotMgr import MAIN
 from .require_datasets import has_main
 
-BUTTON_DEF  = ('Sinc', 'sinc-window',
+BUTTON_DEF  = ('Sinc (sin(x)/x)', 'sinc-window',
                'Window [X] with Sinc Curve')
 OVERRIDE = True
 OWNER_GROUP = 'WINDOW_BUTTONS'

@@ -11,7 +11,7 @@ from statistics import mean, stdev
 from curve_generators import generateGaussianCdf
 from Dataset import Dataset
 from AbstractPlotMgr import MAIN
-from .require_datasets import has_main
+from ..require_datasets import has_main
 
 BUTTON_DEF  = ('Normal CDF (1)', 'normal-cdf',
                'Fit a Normal CDF to [X] Data')
