@@ -8,18 +8,18 @@ extend_data
 ljung_box
 sign_runs
 
+# Statistics
+add_spacer
+add_spacer
+show_sigma
+fox_autocor
+
 # Smoothing
 add_spacer
 add_spacer
 local_poly_fit
 poly_lowess
 lst_sqr_extrap
-
-# Statistics
-add_spacer
-add_spacer
-show_sigma
-fox_autocor
 
 # Utility
 add_spacer
