@@ -1,9 +1,9 @@
-#@+leo-ver=5-thin
-#@+node:tom.20211211171913.12: * @file smoother.py
-#@@language python
-#@@tabwidth -4
-#@+others
-#@+node:tom.20211211171913.13: ** Imports
+# @+leo-ver=5-thin
+# @+node:tom.20211211171913.12: * @file smoother.py
+# @@language python
+# @@tabwidth -4
+# @+others
+# @+node:tom.20211211171913.13: ** Imports
 """Functions to smooth and fit x,y data."""
 
 import math
@@ -18,8 +18,8 @@ from randnum import gaussian_vals
 from stats import pearson, pearson_autocorr
 MaxSmoothZone = 100
 
-#@+others
-#@-others
+# @+others
+# @-others
 
 
 if __name__ == '__main__':
@@ -27,11 +27,11 @@ if __name__ == '__main__':
     from testing import smoother_tests
     for t in smoother_tests.Tests:
         t()
-#@+node:tom.20211211171913.14: ** sqr
+# @+node:tom.20211211171913.14: ** sqr
 def sqr(x):
     return x**2
 
-#@+node:tom.20211211171913.15: ** cspline
+# @+node:tom.20211211171913.15: ** cspline
 def cspline(x, y):
     '''Fit cubic spline to sequence of points and interpolate between them.
     Return the interpolated points.
@@ -51,7 +51,7 @@ def cspline(x, y):
 
     return (xnew, ynew)
 
-#@+node:tom.20211211171913.16: ** splineSmooth
+# @+node:tom.20211211171913.16: ** splineSmooth
 def splineSmooth(x, y, s=.5):
     """Fit a set of points with a set of spline functions.  Return
     the fitted Y values.
@@ -78,12 +78,12 @@ def splineSmooth(x, y, s=.5):
     ys = csaps(x, y, x, smooth=s)
     return (x, ys)
 
-#@+node:tom.20211211171913.17: ** class WtStats
+# @+node:tom.20211211171913.17: ** class WtStats
 # ========== Auxiliary classes for use in smoothing routines ======
 
 class WtStats:
-    #@+others
-    #@+node:tom.20211211171913.18: *3* WtStats.__init__
+    # @+others
+    # @+node:tom.20211211171913.18: *3* WtStats.__init__
     def __init__(self):
         self.weights = []
         self.smoothzone = 0
@@ -92,7 +92,7 @@ class WtStats:
 
     def __str__(self):
         return f'WtStats: len(weights): {len(self.weights)}, center: {self.center}, width: {self.smoothzone}'
-    #@+node:tom.20211211171913.19: *3* WtStats.MakeGaussianWeights
+    # @+node:tom.20211211171913.19: *3* WtStats.MakeGaussianWeights
     def MakeGaussianWeights(self, smoothwidth=4):
         '''Compute weights to use with smoother. These weights
         form a truncated gaussian curve normalized to 1.0. If 
@@ -123,7 +123,7 @@ class WtStats:
             self.weights.append(math.exp(-1.0 * sqr(i - icenter) * denom))
             self.Swt += self.weights[i]
 
-    #@+node:tom.20211211171913.20: *3* WtStats.omitOne
+    # @+node:tom.20211211171913.20: *3* WtStats.omitOne
     def omitOne(self):
         '''Omit the center point by setting its weight to 0.  This may be used
         in cross-validation studies.
@@ -132,9 +132,9 @@ class WtStats:
         if len(self.weights) > 1:
             center = int(len(self.weights) / 2) # Python now returns floor of integer division
             self.weights[center] = 0.0
-    #@-others
+    # @-others
 
-#@+node:tom.20211211171913.21: ** correlationCoeff
+# @+node:tom.20211211171913.21: ** correlationCoeff
 def correlationCoeff(data, fitted):
     """Given a sequence of data and a sequence of fitted points (e.g.,
     from a least square fit), return the correlation coefficient.
@@ -191,7 +191,7 @@ def correlationCoeff(data, fitted):
         return - 1
     return rsqr**0.5
 
-#@+node:tom.20211211171913.22: ** SmoothPointLowess
+# @+node:tom.20211211171913.22: ** SmoothPointLowess
 def SmoothPointLowess(xdata, ydata, wt, i, cliplevel=2.0, causal=False):
     '''Fit a point in a sequence using a local linear least squares fit.
     Neighboring points contribute to the fit according to weights
@@ -277,7 +277,7 @@ def SmoothPointLowess(xdata, ydata, wt, i, cliplevel=2.0, causal=False):
     is_flier = (abs(ydata[i] - y0) > cliplevel * math.sqrt(SqrDev))
     return (y0, var, se, is_flier)
 
-#@+node:tom.20211211171913.23: ** lowess
+# @+node:tom.20211211171913.23: ** lowess
 def lowess(xdata, ydata, smoothzone=10, omitOne=False):
     '''Smooth sequence of points using Cleveland's LOWESS algorithm.
     Return the smoothed points.  For each point, neighboring points
@@ -317,7 +317,7 @@ def lowess(xdata, ydata, smoothzone=10, omitOne=False):
 
     return (xdata, smooths)
 
-#@+node:tom.20211211171913.24: ** lowess1
+# @+node:tom.20211211171913.24: ** lowess1
 def lowess1(xdata, ydata, smoothzone=10, omitOne=False):
     '''Smooth sequence of points using Cleveland's LOWESS algorithm.
     Return the smoothed points, and the autocorrelation of the residuals
@@ -367,7 +367,7 @@ def lowess1(xdata, ydata, smoothzone=10, omitOne=False):
     r = pearson_autocorr(resid)
     return (xdata, smooths, r)
 
-#@+node:tom.20211211171913.25: ** deriv
+# @+node:tom.20211211171913.25: ** deriv
 def deriv(xdata, ydata):
     '''Estimate the derivative dy/dx for (possibly) unequally-spaced
     data.  Return a tuple (xnew, dy) where xnew is a list of the
@@ -395,7 +395,7 @@ def deriv(xdata, ydata):
 
     return xdata[:-1], derivs
 
-#@+node:tom.20220805142529.1: ** lowess2
+# @+node:tom.20220805142529.1: ** lowess2
 def lowess2(xdata, ydata, smoothzone=10, omitOne=False):
     '''Smooth sequence of points using Cleveland's LOWESS algorithm.
     Return the smoothed points, and the rms of the residuals
@@ -451,7 +451,7 @@ def lowess2(xdata, ydata, smoothzone=10, omitOne=False):
 
     return (xdata, smooths, mean_err, upperlimit, lowerlimit)
 
-#@+node:tom.20220805142822.1: ** lowess2_stddev
+# @+node:tom.20220805142822.1: ** lowess2_stddev
 def lowess2_stddev(xdata, ydata, smoothzone=10, omitOne=False):
     '''Smooth sequence of points using Cleveland's LOWESS algorithm.
     Return the smoothed points, the standard deviations, and the rms of the residuals
@@ -492,9 +492,9 @@ def lowess2_stddev(xdata, ydata, smoothzone=10, omitOne=False):
 
     return (xdata, stddevs)
 
-#@+node:tom.20211211171913.27: ** lowessAdaptive
+# @+node:tom.20211211171913.27: ** lowessAdaptive
 def lowessAdaptive(xdata, ydata, weight=1.0,
-                   spans=(3, 5, 10, 15, 20, 25, 30, 40, 60, 70, 80)):
+                   spans=(3, 5, 10, 15, 20, 25, 30, 35, 40, 50, 60, 70, 80)):
     """Smooth sequence of points using Cleveland's LOWESS algorithm.
     Estimate the best span of points by making multiple LOWESS
     runs with different spans.  This span balances fit with smoothness
@@ -504,7 +504,7 @@ def lowessAdaptive(xdata, ydata, weight=1.0,
     Score each run using a penalty expression (to be minimized) that includes
     the mean squared error and a roughness function, as in Eq. 6.1 of
 
-    "Nonparametric Simple Regression", J. Fox, Sage University, 2000.)
+    "Nonparametric Simple Regression", J. Fox, Sage University, 2000.
 
     The penalty expression is
 
@@ -577,7 +577,7 @@ def lowessAdaptive(xdata, ydata, weight=1.0,
     xi, yi, rms, upperlimit, lowerlimit = lowess2(xdata, ydata, best, False)
     return xi, yi, best, rms, upperlimit, lowerlimit
 
-#@+node:tom.20211211171913.28: ** leastsqr
+# @+node:tom.20211211171913.28: ** leastsqr
 def leastsqr(xdata, ydata, deg=1):
     '''Calculate a least squares fit to a set of x,y points.
     Return a list of the fitted Y values evaluated at the original
@@ -636,7 +636,7 @@ def leastsqr(xdata, ydata, deg=1):
 
     return (fitted_y, y_mean, se, r, upper, lower)
 
-#@+node:tom.20211211171913.29: ** determinant
+# @+node:tom.20211211171913.29: ** determinant
 def determinant(x11, x12, x13, x21, x22, x23,
         x31, x32, x33):
     '''Compute determinant of 3X3 matrix.  Return the value
@@ -652,7 +652,7 @@ def determinant(x11, x12, x13, x21, x22, x23,
     return x11*(x22*x33 - x23*x32) + x12*(x23*x31 - x33*x21) \
                 + x13*(x21*x32 -x22*x31)
 
-#@+node:tom.20211211171913.30: ** SmoothPointLowessQuad
+# @+node:tom.20211211171913.30: ** SmoothPointLowessQuad
 def SmoothPointLowessQuad(xdata, ydata, wt, i, cliplevel=2.0, causal=False):
     '''Fit a point in a sequence using a local quadratic least squares fit.
     Neighboring points contribute to the fit according to weights
@@ -831,7 +831,7 @@ def SmoothPointLowessQuad(xdata, ydata, wt, i, cliplevel=2.0, causal=False):
 
     return (y0, var, se, is_flier)
 
-#@+node:tom.20211211171913.32: ** lowess2Quad
+# @+node:tom.20211211171913.32: ** lowess2Quad
 def lowess2Quad(xdata, ydata, smoothzone=10, omitOne=False):
     '''Smooth sequence of points using Cleveland's LOWESS algorithm.
     Return the smoothed points, and the mean square error of the residuals
@@ -892,7 +892,7 @@ def lowess2Quad(xdata, ydata, smoothzone=10, omitOne=False):
 
     return (xdata, smooths, mean_err, upperlimit, lowerlimit)
 
-#@+node:tom.20211211171913.33: ** xlowessAdaptiveAC
+# @+node:tom.20211211171913.33: ** xlowessAdaptiveAC
 def xlowessAdaptiveAC(xdata, ydata):
     '''Smooth sequence of points using Cleveland's LOWESS algorithm.
     Estimate the best span of points by making multiple LOWESS
@@ -933,7 +933,7 @@ def xlowessAdaptiveAC(xdata, ydata):
 
     return xi, yi, sbest, rms, rmin, upperlimit, lowerlimit
 
-#@+node:tom.20211211171913.34: ** lowessAdaptiveAC
+# @+node:tom.20211211171913.34: ** lowessAdaptiveAC
 def lowessAdaptiveAC(xdata, ydata):
     '''Smooth sequence of points using Cleveland's LOWESS algorithm.
     Estimate the best span of points by making multiple LOWESS
@@ -1021,7 +1021,7 @@ def lowessAdaptiveAC(xdata, ydata):
 
     return xi, yi, smallest_yet[1], rms, smallest_yet[0], upperlimit, lowerlimit
 
-#@+node:tom.20211211171913.35: ** SmoothPointPoisson
+# @+node:tom.20211211171913.35: ** SmoothPointPoisson
 def SmoothPointPoisson(xdata, ydata, i, smoothzone):
     '''Fit a point in a sequence using a local linear least squares fit.
     Neighboring points contribute to the fit according to weights
@@ -1110,7 +1110,7 @@ def SmoothPointPoisson(xdata, ydata, i, smoothzone):
 
     return (y, var, se)
 
-#@+node:tom.20211211171913.36: ** poissonSmooth
+# @+node:tom.20211211171913.36: ** poissonSmooth
 def poissonSmooth(xdata, ydata, smoothzone=10):
     '''Smooth sequence of points using Cleveland's LOWESS algorithm.
     Return the smoothed points.  For each point, neighboring points
@@ -1167,7 +1167,7 @@ def poissonSmooth(xdata, ydata, smoothzone=10):
 
     return (xdata, smooths, mse)
 
-#@+node:tom.20211211171913.37: ** thiel_sen
+# @+node:tom.20211211171913.37: ** thiel_sen
 def thiel_sen(x,y):
     """Fit line robustly to X,Y data using Thiel-Sen algorithm.  Return the
     fitted y points as a sequence.
@@ -1219,7 +1219,7 @@ def thiel_sen(x,y):
 
     return (fitted, med_slope, b, sd_slope)
 
-#@+node:tom.20211211171913.38: ** moving_median
+# @+node:tom.20211211171913.38: ** moving_median
 def moving_median(xdata, ydata, w = 7):
     """Smooth a sequence of data values using a moving median.
 
@@ -1250,5 +1250,5 @@ def moving_median(xdata, ydata, w = 7):
 
     return xdata[offset: -offset], results
 
-#@-others
-#@-leo
+# @-others
+# @-leo
