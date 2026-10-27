@@ -1,12 +1,12 @@
-#@+leo-ver=5-thin
-#@+node:tom.20220506081351.1: * @file versions.py
-#@@language python
+# @+leo-ver=5-thin
+# @+node:tom.20220506081351.1: * @file versions.py
+# @@language python
 """Return the git branch and changeset id as a tuple."""
 
 import os.path
 from subprocess import run
 
-APPVERSION = '1.6.4'
+APPVERSION = '1.6.5'
 ENCODING = 'utf-8'
 
 def getGitInfo():
@@ -32,4 +32,4 @@ gitInfo = getGitInfo()
 if __name__ == '__main__':
     print(gitInfo)
 
-#@-leo
+# @-leo
