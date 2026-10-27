@@ -1,7 +1,7 @@
-#@+leo-ver=5-thin
-#@+node:tom.20211206205420.2: * @file testing/smoother_tests.py
-#@+others
-#@+node:tom.20211210160855.3: ** Imports, Declarations
+# @+leo-ver=5-thin
+# @+node:tom.20211206205420.2: * @file testing/smoother_tests.py
+# @+others
+# @+node:tom.20211210160855.3: ** Imports, Declarations
 import sys
 import os.path
 import random
@@ -38,7 +38,7 @@ rcParams['ytick.direction'] = 'out'
 rcParams['xtick.direction'] = 'out'
 
 # pylint: disable = consider-using-f-string
-#@+node:tom.20211210160855.4: ** self_printer
+# @+node:tom.20211210160855.4: ** self_printer
 def self_printer(f):
     def new_f(*args):
         print()
@@ -47,7 +47,7 @@ def self_printer(f):
         f(*args)
     return new_f
 
-#@+node:tom.20211210160855.5: ** cspline_fit
+# @+node:tom.20211210160855.5: ** cspline_fit
 @self_printer
 def cspline_fit():
     'Test Cubic Spline Fit'
@@ -63,7 +63,7 @@ def cspline_fit():
     figure.canvas.manager.set_window_title('Cubic Spline Smooth')
     plt.show()
 
-#@+node:tom.20211210160855.6: ** spline_smooth
+# @+node:tom.20211210160855.6: ** spline_smooth
 @self_printer
 def spline_smooth():
     '''Test Spline Smoother'''
@@ -92,7 +92,7 @@ def spline_smooth():
     figure.canvas.manager.set_window_title('Spline Smooth')
 
     plt.show()
-#@+node:tom.20211210160855.7: ** lowess_smooth
+# @+node:tom.20211210160855.7: ** lowess_smooth
 @self_printer
 def lowess_smooth():
     'Test LOWESS Smoother lowess()'
@@ -119,7 +119,7 @@ def lowess_smooth():
     figure.canvas.manager.set_window_title('LOWESS Smooth')
 
     plt.show()
-#@+node:tom.20211210160855.8: ** lowess2_smooth
+# @+node:tom.20211210160855.8: ** lowess2_smooth
 @self_printer
 def lowess2_smooth():
     'Test LOWESS2 Smoother'
@@ -151,7 +151,7 @@ def lowess2_smooth():
     figure = gcf()
     figure.canvas.manager.set_window_title('LOWESS Smooth')
     plt.show()
-#@+node:tom.20211210160855.9: ** lowess1_autocorr
+# @+node:tom.20211210160855.9: ** lowess1_autocorr
 @self_printer
 def lowess1_autocorr(func=None):
     'Test LOWESS Adaptive Smoothing Using Residual Autocorrelations'
@@ -196,7 +196,7 @@ def lowess1_autocorr(func=None):
 
     #figure.canvas.manager.set_window_title('LOWESS with residual autocorrelation')
     plt.show()
-#@+node:tom.20211210160855.10: ** test_lowess_adaptive_ac
+# @+node:tom.20211210160855.10: ** test_lowess_adaptive_ac
 @self_printer
 def test_lowess_adaptive_ac(func=None):
     '''Test Lowess Autocorrelation Adaptive Fit - lowessAdaptiveAC()'''
@@ -229,7 +229,7 @@ def test_lowess_adaptive_ac(func=None):
     figure.set_size_inches((8, 6))
     figure.canvas.manager.set_window_title('Adaptive LOWESS with residual autocorrelation')
     plt.show()
-#@+node:tom.20211210160855.11: ** lstsqr
+# @+node:tom.20211210160855.11: ** lstsqr
 @self_printer
 def lstsqr():
     'Test Linear Least Squares'
@@ -284,7 +284,7 @@ def lstsqr():
     figure.canvas.manager.set_window_title('Linear Least Squares')
 
     plt.show()
-#@+node:tom.20211210160855.12: ** lowess2_mse
+# @+node:tom.20211210160855.12: ** lowess2_mse
 @self_printer
 def lowess2_mse(func=None):
     """Test LOWESS Adaptive Smoother: MSE with Roughness Penalty"""
@@ -357,7 +357,7 @@ def lowess2_mse(func=None):
     figure.canvas.manager.set_window_title('LOWESS Adaptive Smooth using Lowess/MSE')
 
     plt.show()
-#@+node:tom.20211210160855.13: ** test_adaptive_lowess
+# @+node:tom.20211210160855.13: ** test_adaptive_lowess
 @self_printer
 def test_adaptive_lowess(w):
     'Test lowessAdaptive()'
@@ -392,7 +392,7 @@ def test_adaptive_lowess(w):
 
     plt.show()
 
-#@+node:tom.20211210160855.14: ** lowess_smooth_quad
+# @+node:tom.20211210160855.14: ** lowess_smooth_quad
 @self_printer
 def lowess_smooth_quad():
     'Test LOWESS Quadratic Smoother'
@@ -426,7 +426,7 @@ def lowess_smooth_quad():
 
     plt.show()
 
-#@+node:tom.20211210160855.15: ** slope_var
+# @+node:tom.20211210160855.15: ** slope_var
 @self_printer
 def slope_var():
     """Calculate mean and standard deviation of least-square slope."""
@@ -500,7 +500,7 @@ def slope_var():
     figure.canvas.manager.set_window_title('Least Squares Slopes')
 
     plt.show()
-#@+node:tom.20211210160855.16: ** test_thiel
+# @+node:tom.20211210160855.16: ** test_thiel
 @self_printer
 def test_thiel():
     N = 50
@@ -522,7 +522,7 @@ def test_thiel():
     plt.title('Thiel-Sen Robust Fitted Line')
     plt.show()
 
-#@+node:tom.20211210160855.17: ** test_lowess_devs
+# @+node:tom.20211210160855.17: ** test_lowess_devs
 @self_printer
 def test_lowess_devs():
     N = 50
@@ -557,7 +557,7 @@ def test_lowess_devs():
 
     plt.title('Lowess2 Smooth')
     plt.show()
-#@+node:tom.20211210160855.18: ** stdErrOfFit
+# @+node:tom.20211210160855.18: ** stdErrOfFit
 @self_printer
 def stdErrOfFit():
     """Test the standard error of a lowess fit.
@@ -621,7 +621,7 @@ def stdErrOfFit():
     plt.title('Standard Error of LOWESS Fit for Smoothing Width = %s, Noise Sigma = %s'\
                 % (SMOOTHZONE, SIGMA))
     plt.show()
-#@+node:tom.20211210160855.19: ** test_moving_median
+# @+node:tom.20211210160855.19: ** test_moving_median
 @self_printer
 def test_moving_median():
     """Test moving median smoothing."""
@@ -648,7 +648,7 @@ def test_moving_median():
 
 # ========================================================
 
-#@+node:tom.20220802121052.1: ** test_lowess_weights
+# @+node:tom.20220802121052.1: ** test_lowess_weights
 @self_printer
 def test_lowess_weights(width = 10):
     """Plot the Lowess weighting curve."""
@@ -666,7 +666,7 @@ def test_lowess_weights(width = 10):
     plt.ylabel('Weight')
     plt.title(f'LOWESS Weights for Window Width = {width}')
     plt.show()
-#@+node:tom.20220802121006.1: ** main
+# @+node:tom.20220802121006.1: ** main
 Tests = (#lstsqr,
          #cspline_fit,
          #spline_smooth,
@@ -688,8 +688,8 @@ Tests = (#lstsqr,
 if __name__ == '__main__':
     for t in Tests:
         t()
-#@-others
-#@@language python
-#@@tabwidth -4
+# @-others
+# @@language python
+# @@tabwidth -4
 
-#@-leo
+# @-leo
