@@ -123,9 +123,9 @@
 <t tx="tom.20211207165011.1"></t>
 <t tx="tom.20211211170510.1"></t>
 <t tx="tom.20211211170532.1"></t>
-<t tx="tom.20220411133313.1" _mod_time="4741d9d712626eaf452e">The software in this GF4 project is writtten by and copyrighted by: Thomas B. Passin 2014 - 2022.
+<t tx="tom.20220411133313.1">The software in this GF4 project is writtten by and copyrighted by: Thomas B. Passin 2014 - 2022.
 </t>
-<t tx="tom.20220411133954.1" _mod_time="4741d9d712626eaf452e">The GF4 software package is covered by the standard MIT license, reproduced below:
+<t tx="tom.20220411133954.1">The GF4 software package is covered by the standard MIT license, reproduced below:
 
 The MIT License (MIT)
 Copyright © 1992 - 2022 Thomas B. Passin
@@ -135,7 +135,7 @@ Permission is hereby granted, free of charge, to any person obtaining a copy of 
 The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.</t>
-<t tx="tom.20220411171338.1" _mod_time="4741d9d712626e8e632e">GF4 is a computer program for visualizing and processing two-dimensional data
+<t tx="tom.20220411171338.1">GF4 is a computer program for visualizing and processing two-dimensional data
 such as X-Y and time series data. The user interface is modeled after a
 reverse-polish notation (RPN) style of desk calculator, with the roles of
 numbers being replaced by 2D data sets.
@@ -178,9 +178,9 @@ permissions) - see https://riptutorial.com/tkinter/example/3206/installation-or-
 
 </t>
 <t tx="tom.20220829181040.1"></t>
-<t tx="tom.20220830112255.1" _mod_time="4741da4636c33f8e872e"># The list of plugins to import. Omit the ".py" extension.
+<t tx="tom.20220830112255.1"># The list of plugins to import. Omit the ".py" extension.
 # spacers add visual separators to the "Plugins" group.
-
+    
 # Data
 extend_data
 
@@ -215,7 +215,7 @@ make_triangle
 sinc_window
 
 </t>
-<t tx="tom.20220830215645.1" _mod_time="4741da433c60f813d22e">@language text
+<t tx="tom.20220830215645.1">@language text
 GF4 has a plugin mechanism that can load plugin files located in the "plugins"
 directory.  This README provides some basic information for developers of plugins.
 
@@ -321,7 +321,7 @@ start with a "#" or ";" character will be ignored.
 <t tx="tom.20221121171302.1"></t>
 <t tx="tom.20221128184455.1"></t>
 <t tx="tom.20221211135219.1"></t>
-<t tx="tom.20221211135236.1" _mod_time="4741da3431ddc2f9c32e">; GF4 configuration file
+<t tx="tom.20221211135236.1">; GF4 configuration file
 [colors]
 ; Override initial colors using MatPlotLib CSSS4 color names or #xxyyzz hex values.
 ; main-line-color = red
@@ -336,7 +336,7 @@ Run pytest from the gf4-project directory -
 py -m pytest -k "not test_smooth and not fit_test"
 """</t>
 <t tx="tom.20230129231146.1"></t>
-<t tx="tom.20230201003427.1" _mod_time="4741d9d712626e8e632e">@language batch
+<t tx="tom.20230201003427.1">@language batch
 :: Run pytest against gf4
 :: This command file must be located in the parent directory of \gf4
 @echo off
