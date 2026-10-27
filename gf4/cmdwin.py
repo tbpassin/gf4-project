@@ -1,10 +1,10 @@
-#@+leo-ver=5-thin
-#@+node:tom.20211211170819.9: * @file cmdwin.py
+# @+leo-ver=5-thin
+# @+node:tom.20211211170819.9: * @file cmdwin.py
 """Auxiliary controller window for gf4."""
 
 # pylint: disable = consider-using-f-string
-#@+others
-#@+node:tom.20211211223207.1: ** Imports
+# @+others
+# @+node:tom.20211211223207.1: ** Imports
 from __future__ import print_function
 from sys import platform
 from os.path import normpath, expanduser
@@ -48,7 +48,7 @@ from buttondefs import (SPACER, CURVE_FIT_BUTTONS, STATS_BUTTONS,
                         AXES_BUTTONS)
 from utility import ICONPATH, setIcon
 from help_cmds import HELPTEXT
-#@+node:tom.20211211170819.10: ** Declarations
+# @+node:tom.20211211170819.10: ** Declarations
 COLS = 6
 BG_KEY = 'bg' if platform.lower().startswith('win') else 'activebackground'
 
@@ -90,21 +90,21 @@ RST_ERROR_MSG_STYLE = ('color:red;'
                        'border:thin solid gray;'
                        'border-radius:.4em;')
 
-#@+others
-#@+node:tom.20221210000710.1: *3* Temp Directory
+# @+others
+# @+node:tom.20221210000710.1: *3* Temp Directory
 # Works for all platforms
 TEMPDIR = normpath(expanduser('~/Downloads'))
 
-#@+node:tom.20221108022001.1: *3* Docutils Params
+# @+node:tom.20221108022001.1: *3* Docutils Params
 MATHJAX_URL = 'https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js'
 RST_NO_WARNINGS = 5
 
 docutil_args = {'output_encoding': 'utf-8',
                 'report_level': RST_NO_WARNINGS,
                 'math_output': 'mathjax ' + MATHJAX_URL}
-#@-others
+# @-others
     # if sys.platform.startswith('win'):
-#@+node:tom.20221108023317.1: ** html_from_rst
+# @+node:tom.20221108023317.1: ** html_from_rst
 def html_from_rst(rst, got_docutils, plotmgr = None):
     """Convert ReStructured Text to HTML.
     
@@ -135,13 +135,13 @@ def html_from_rst(rst, got_docutils, plotmgr = None):
         html = output.encode(ENCODING)
 
     return html
-#@+node:tom.20221108094726.1: ** flash_button
+# @+node:tom.20221108094726.1: ** flash_button
 def flash_button(w):
     """Flash a button more visibly than the Tk default flash()."""
     w.config(relief='sunken')
     w.flash()
     w.config(relief='raised')
-#@+node:tom.20211211170819.11: ** click
+# @+node:tom.20211211170819.11: ** click
 def click(event): 
     global is_recording, macro
     w = event.widget
@@ -157,7 +157,7 @@ def click(event):
             w['text'] = MACRO_RECORDING_TEXT
             macro = ''
 
-#@+node:tom.20211211170819.12: ** on_enter
+# @+node:tom.20211211170819.12: ** on_enter
 def on_enter(event):
     global entry
     global is_recording
@@ -179,7 +179,7 @@ def on_enter(event):
     except Exception:
         pass
 
-#@+node:tom.20211211170819.13: ** on_leave
+# @+node:tom.20211211170819.13: ** on_leave
 def on_leave(event):
     global entry
     global is_recording
@@ -193,7 +193,7 @@ def on_leave(event):
         if not is_recording:
             w[BG_KEY] = BUTTON_BG
 
-#@+node:tom.20221107220544.1: ** on_rclick
+# @+node:tom.20221107220544.1: ** on_rclick
 def on_rclick(event, plotmgr = None):
     """Display help text for cmd in system browser."""
     w = event.widget
@@ -217,7 +217,7 @@ def on_rclick(event, plotmgr = None):
             f.write(html)
         webbrowser.open(f.name)
 
-#@+node:tom.20221212135221.1: ** on_click_help
+# @+node:tom.20221212135221.1: ** on_click_help
 def on_click_help(event):
     global entry
     if got_docutils:
@@ -225,7 +225,7 @@ def on_click_help(event):
     else:
         msg = 'docutils is needed to display extended help on right click'
     entry.configure(text = msg)
-#@+node:tom.20211211170819.14: ** default_command
+# @+node:tom.20211211170819.14: ** default_command
 def default_command(cmd, plotmgr=None):
     global is_recording, macro
     if is_recording:
@@ -235,7 +235,7 @@ def default_command(cmd, plotmgr=None):
     else:
         print (cmd)
 
-#@+node:tom.20211211170819.15: ** play_macro
+# @+node:tom.20211211170819.15: ** play_macro
 def play_macro(plotmgr):
     global macro
     if plotmgr:
@@ -244,12 +244,12 @@ def play_macro(plotmgr):
         print ('Run Macro:')
         print (macro)
 
-#@+node:tom.20211211170819.16: ** clear_macro
+# @+node:tom.20211211170819.16: ** clear_macro
 def clear_macro():
     global macro
     macro = ''
 
-#@+node:tom.20211211170819.17: ** configure_button_list
+# @+node:tom.20211211170819.17: ** configure_button_list
 def configure_button_list(parent, button_list, plotmgr):
     global NEWFONT
     for b in button_list:
@@ -272,7 +272,7 @@ def configure_button_list(parent, button_list, plotmgr):
             _b.bind('<Button-3>', lambda x: on_rclick(x, plotmgr))
             _b.fulltext = fulltext
 
-#@+node:tom.20211211170819.18: ** configure_horizontal_button_list
+# @+node:tom.20211211170819.18: ** configure_horizontal_button_list
 def configure_horizontal_button_list(parent, button_list, plotmgr):
     global NEWFONT
     cols = 0
@@ -294,7 +294,7 @@ def configure_horizontal_button_list(parent, button_list, plotmgr):
 
         cols += 1
 
-#@+node:tom.20211211170819.19: ** configure_macro_buttons
+# @+node:tom.20211211170819.19: ** configure_macro_buttons
 def configure_macro_buttons(parent, plotmgr):
     global NEWFONT
     global macro
@@ -321,7 +321,7 @@ def configure_macro_buttons(parent, plotmgr):
     but_play.fulltext = 'Play Back Macro'
     but_play.cmd = 'play-macro'
 
-#@+node:tom.20221007145433.1: ** adjust_font_size(font, ascender_height)
+# @+node:tom.20221007145433.1: ** adjust_font_size(font, ascender_height)
 def adjust_font_size(font, ascender_height):
     """Adjust TK font size to make the ascender height as specified.
     
@@ -332,13 +332,13 @@ def adjust_font_size(font, ascender_height):
     size = params['size']
 
     return ceil((1. * ascender_height / ascender) * size)
-#@+node:tom.20211211170819.20: ** create_buttons_pack
+# @+node:tom.20211211170819.20: ** create_buttons_pack
 def create_buttons_pack(host, plotmgr):
     # Custom font for smaller button font size
     global entry, NEWFONT
 
-    #@+<< Make new Tk font >>
-    #@+node:tom.20220402001046.1: *3* << Make new Tk font >>
+    # @+<< Make new Tk font >>
+    # @+node:tom.20220402001046.1: *3* << Make new Tk font >>
     available_fonts = tkFont.families()
     phantom = Tk.Button(text='phantom')
     _font =  tkFont.nametofont(phantom['font'])
@@ -379,9 +379,9 @@ def create_buttons_pack(host, plotmgr):
 
     _font_linespace = _font.metrics()['linespace']
     phantom = None
-    #@-<< Make new Tk font >>
-    #@+<< Create Control Containers >>
-    #@+node:tom.20220402001714.1: *3* << Create Control Containers >>
+    # @-<< Make new Tk font >>
+    # @+<< Create Control Containers >>
+    # @+node:tom.20220402001714.1: *3* << Create Control Containers >>
     # Help panel at top
     lineheight = _font_linespace + 10
     entryframe = Tk.Frame(host, height = lineheight, bd = 3,
@@ -403,7 +403,7 @@ def create_buttons_pack(host, plotmgr):
     configure_horizontal_button_list(host, GENERATOR_BUTTONS, plotmgr)
     configure_macro_buttons(host, plotmgr)
 
-    #@-<< Create Control Containers >>
+    # @-<< Create Control Containers >>
 
     def create_button_group(frame, text, button_group, pack = 'side'):
         but_frame = Tk.LabelFrame(frame, text = text, bd=3, bg='lightgrey')
@@ -434,7 +434,7 @@ def create_buttons_pack(host, plotmgr):
     create_button_group(but_frame_fit, 'Statistics', STATS_BUTTONS, 'fill')
 
 
-#@+node:tom.20211211170819.21: ** cmdwindow
+# @+node:tom.20211211170819.21: ** cmdwindow
 def cmdwindow(plotmgr=None):
     if plotmgr:
         win = Tk.Toplevel(plotmgr.root)
@@ -457,7 +457,7 @@ if __name__ == '__main__':
     win = cmdwindow(None)
     win.deiconify()
     Tk.mainloop()
-#@-others
-#@@language python
-#@@tabwidth -4
-#@-leo
+# @-others
+# @@language python
+# @@tabwidth -4
+# @-leo
