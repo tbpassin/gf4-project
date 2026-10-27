@@ -1244,7 +1244,7 @@ class Dataset:
 
     #@+node:tom.20211211170820.41: *3* Dataset.sliding_var
     def sliding_var(self, w):
-        '''Compute the variance of the y data over a window that slide across the data.
+        '''Compute the variance of the y data over a window that slides across the data.
         The x value of the variance is assigned to be the center of the window. Return
         a sequence containing the computed standard deviations, and the s.d. of
         the entire data set.  There will be fewer points than for the original data.
@@ -1255,7 +1255,7 @@ class Dataset:
         w -- the window width in number of data points. Must be < N - 3.
 
         RETURNS
-        (x, s, stddev), where x, vare  sequences where x are the new x values 
+        (x, s, stddev), where x, v are  sequences where x are the new x values 
         and s are the std devs in the window, or None if w is too large.
         '''
 
