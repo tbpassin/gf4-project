@@ -1,5 +1,5 @@
-#@+leo-ver=5-thin
-#@+node:tom.20250928233017.1: * @file sign_runs.py
+# @+leo-ver=5-thin
+# @+node:tom.20250928233017.1: * @file sign_runs.py
 """Apply Wald–Wolfowitz runs test to [X] data.
 
     As N = number of points increases, the number of
@@ -68,4 +68,4 @@ def proc():
     σ = var**0.5
     z = (runs - μ) / σ
     plotmgr.announce(f'Runs: {runs}, Expected: {μ:.2f}, σ: {σ:.2f}, Z: {z:.2f}')
-#@-leo
+# @-leo
